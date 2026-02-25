@@ -1,0 +1,37 @@
+# --- IDE/Editor Settings ---
+.idea/
+.vscode/
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Build/Generated Files ---
+target/
+build/
+bin/
+out/
+*.class
+*.jar
+*.war
+
+# --- Dependencies ---
+node_modules/
+.venv/
+env/
+venv/
+
+# --- Logs/Temp ---
+*.log
+logs/
+temp/
+tmp/
+
+# --- Environment/Secret Files ---
+.env
+.env.local
+.env.*.local
+
