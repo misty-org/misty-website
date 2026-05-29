@@ -11,10 +11,10 @@ const navItems = [
 
 
 const resourcesLinks = [
+  { to: "/plugins", label: "Plugins" },
   { to: "/changelog", label: "Changelog" },
   { to: "/blog", label: "Blog" },
   { to: "/roadmap", label: "Roadmap" },
-  { to: "/forum", label: "Forum" },
 ];
 
 export default function Navbar() {
