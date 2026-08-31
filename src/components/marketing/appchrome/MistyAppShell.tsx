@@ -4,7 +4,7 @@ import { Blocks, Bot, FolderOpen, House } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AppStatusBar } from "./AppWindow";
 
-/** Mirrors `desktopNavItems` in app/src/application/routing/navigation.ts. */
+/** Mirrors `desktopNavItems` in the Misty app's routing configuration. */
 const railItems = [
   { id: "home", label: "Home", Icon: House },
   { id: "files", label: "Files", Icon: FolderOpen },

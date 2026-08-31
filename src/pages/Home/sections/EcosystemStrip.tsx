@@ -1,16 +1,13 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
+import outlookLogo from "@/assets/outlook-fy26.svg";
+
 type BrandItem = {
   name: string;
   src: string;
   href: string;
   invertOnDark?: boolean;
 };
-
-const outlookLogo = new URL(
-  "../../../../../app/src/shared/assets/mail-providers/outlook-fy26.svg",
-  import.meta.url,
-).href;
 
 const openSourceTools: BrandItem[] = [
   {
