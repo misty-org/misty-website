@@ -964,7 +964,7 @@ button:disabled {
  * stacks distinct is most of why a hand-built mockup reads as a real window.
  *
  * The palette below is the desktop app's own charcoal/cream scale, copied
- * verbatim from app/src/styles/styles.css. When the app's palette moves,
+ * verbatim from the Misty app's styles. When the app's palette moves,
  * these move with it.
  */
 .app-chrome {
