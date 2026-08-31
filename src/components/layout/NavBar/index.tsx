@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import { Menu, X } from "lucide-react";
 
@@ -13,6 +13,26 @@ import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 import { resourceLinks } from "./navLinks";
 
+const COMPACT_WIDTH_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
+const EXPAND_WIDTH_EASING = "cubic-bezier(0.8, 0, 0.6, 1)";
+
+function useCompactNav(threshold = 60) {
+  const [compact, setCompact] = useState(
+    () => typeof window !== "undefined" && window.scrollY > threshold,
+  );
+
+  useEffect(() => {
+    function onScroll() {
+      setCompact(window.scrollY > threshold);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [threshold]);
+
+  return compact;
+}
+
 export default function Navbar({
   onOpenSettings,
 }: {
@@ -22,6 +42,7 @@ export default function Navbar({
   const location = useLocation();
   const { user, sessionReady, logout } = useAuth();
   const me = useUserStore((state) => state.me);
+  const compact = useCompactNav(60);
 
   const displayName = me?.name ?? user?.name ?? "";
   const initials = displayName
@@ -30,79 +51,85 @@ export default function Navbar({
   const resourcesActive = resourceLinks.some(({ to }) =>
     location.pathname.startsWith(to),
   );
-  const isHome = location.pathname === "/";
 
   return (
     <Collapsible open={mobileOpen} onOpenChange={setMobileOpen} asChild>
       <nav
         aria-label="Primary navigation"
-        className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/85"
+        className="pointer-events-none sticky inset-x-0 top-0 z-50 flex justify-center px-[var(--site-gutter)] py-3"
       >
         {sessionReady ? (
-          <div className="navbar-transition">
-            {/*
-             * The bar narrows to a centered column on home and expands to full
-             * width on every other route. The reduced-motion rule in index.css
-             * overrides this transition-duration, so the change is instant there.
-             */}
+          <div
+            className="pointer-events-auto w-full will-change-[max-width]"
+            style={{
+              // The expanded border follows the same content edges as every
+              // site container, while the compact state keeps its own width.
+              maxWidth: compact ? "820px" : "var(--site-content-max)",
+              transition: `max-width 0.45s ${
+                compact ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
+              }`,
+            }}
+          >
             <div
-              style={{
-                maxWidth: isHome ? "1060px" : "100%",
-                transition: "max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-              className="mx-auto flex h-16 w-full items-center justify-between px-6 sm:px-10 lg:px-16"
+              className="rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)] backdrop-blur-xl"
             >
-              <NavLink
-                to="/"
-                onClick={() => setMobileOpen(false)}
-                aria-label="Misty home"
-                className="flex items-center gap-4 rounded-md text-lg font-semibold tracking-[-0.025em] text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              <div
+                className="flex h-12 items-center justify-between px-5"
               >
-                <BrandLogo />
-                <span>Misty</span>
-              </NavLink>
+                <NavLink
+                  to="/"
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="Misty home"
+                  className="flex items-center gap-3 rounded-md text-base font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-border-strong)]"
+                >
+                  <BrandLogo />
+                  <span>Misty</span>
+                </NavLink>
 
-              <DesktopNav
-                currentPath={location.pathname}
-                displayName={displayName}
-                email={user?.email ?? ""}
-                initials={initials}
-                resourcesActive={resourcesActive}
-                signedIn={Boolean(user)}
-                onOpenSettings={onOpenSettings}
-                onSignOut={logout}
-              />
+                <DesktopNav
+                  currentPath={location.pathname}
+                  displayName={displayName}
+                  email={user?.email ?? ""}
+                  initials={initials}
+                  resourcesActive={resourcesActive}
+                  signedIn={Boolean(user)}
+                  onOpenSettings={onOpenSettings}
+                  onSignOut={() => logout()}
+                />
 
-              <div className="flex items-center gap-1 md:hidden">
-                <ModeToggle />
-                <CollapsibleTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={
-                      mobileOpen
-                        ? "Close navigation menu"
-                        : "Open navigation menu"
-                    }
-                    aria-controls="mobile-navigation"
-                  >
-                    {mobileOpen ? (
-                      <X aria-hidden="true" />
-                    ) : (
-                      <Menu aria-hidden="true" />
-                    )}
-                  </Button>
-                </CollapsibleTrigger>
+                <div className="flex items-center gap-1 md:hidden">
+                  <ModeToggle />
+                  <CollapsibleTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={
+                        mobileOpen
+                          ? "Close navigation menu"
+                          : "Open navigation menu"
+                      }
+                      aria-controls="mobile-navigation"
+                    >
+                      {mobileOpen ? (
+                        <X aria-hidden="true" />
+                      ) : (
+                        <Menu aria-hidden="true" />
+                      )}
+                    </Button>
+                  </CollapsibleTrigger>
+                </div>
               </div>
-            </div>
 
-            <MobileNav
-              currentPath={location.pathname}
-              signedIn={Boolean(user)}
-              onClose={() => setMobileOpen(false)}
-              onOpenSettings={onOpenSettings}
-              onSignOut={logout}
-            />
+              {!compact && (
+                <MobileNav
+                  currentPath={location.pathname}
+                  signedIn={Boolean(user)}
+                  onClose={() => setMobileOpen(false)}
+                  onOpenSettings={onOpenSettings}
+                  onSignOut={() => logout()}
+                />
+              )}
+            </div>
           </div>
         ) : null}
       </nav>

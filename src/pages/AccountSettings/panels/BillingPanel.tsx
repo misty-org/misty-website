@@ -16,6 +16,17 @@ import {
   Section,
 } from "../components/SettingsRows";
 
+/**
+ * The server returns these period dates as nullable timestamps — a trial with no
+ * recorded end, a subscription mid-transition. `new Date(null)` yields an
+ * Invalid Date and renders as literal "Invalid Date", so guard first.
+ */
+function formatDateOrDash(value: string | null | undefined): string {
+  if (!value) return "—";
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? "—" : parsed.toLocaleDateString();
+}
+
 function PlanRows({
   me,
   usage,
@@ -33,9 +44,7 @@ function PlanRows({
       {trial ? (
         <>
           <Row label="Trial status">{formatStatus(trial.status)}</Row>
-          <Row label="Trial ends">
-            {new Date(trial.ends_at).toLocaleDateString()}
-          </Row>
+          <Row label="Trial ends">{formatDateOrDash(trial.ends_at)}</Row>
         </>
       ) : subscription ? (
         <>
@@ -52,7 +61,7 @@ function PlanRows({
               subscription.cancel_at_period_end ? "Access until" : "Renews"
             }
           >
-            {new Date(subscription.current_period_end).toLocaleDateString()}
+            {formatDateOrDash(subscription.current_period_end)}
           </Row>
         </>
       ) : (
@@ -64,9 +73,11 @@ function PlanRows({
 
 function UpgradeOffer({
   disabled,
+  trialEligible,
   onBillingAction,
 }: {
   disabled: boolean;
+  trialEligible: boolean;
   onBillingAction: (action: () => Promise<{ url: string }>) => void;
 }) {
   return (
@@ -76,9 +87,10 @@ function UpgradeOffer({
         and {PRICING_MODEL.pro.agentUsage}.
       </p>
       <p className="m-0 text-sm leading-6 text-muted-foreground">
-        Start with a one-time {PRICING_MODEL.pro.trialDays}-day trial. A card is
-        required, and your plan automatically renews unless canceled. There are
-        no automatic overages or surprise charges.
+        {trialEligible
+          ? `Start with a one-time ${PRICING_MODEL.pro.trialDays}-day trial. A card is required, and your plan automatically renews unless canceled.`
+          : "Your one-time trial has already been used. Subscribe directly to restore Pro access."}{" "}
+        There are no automatic overages or surprise charges.
       </p>
       <div className="flex flex-wrap gap-2">
         <Button
@@ -88,7 +100,8 @@ function UpgradeOffer({
             onBillingAction(() => createSubscriptionCheckout("pro", "month"))
           }
         >
-          Start Pro trial · {PRICING_MODEL.pro.monthlyPrice}/mo
+          {trialEligible ? "Start Pro trial" : "Subscribe monthly"} ·{" "}
+          {PRICING_MODEL.pro.monthlyPrice}/mo
         </Button>
         <Button
           type="button"
@@ -98,7 +111,8 @@ function UpgradeOffer({
             onBillingAction(() => createSubscriptionCheckout("pro", "year"))
           }
         >
-          Start annual trial · {PRICING_MODEL.pro.yearlyPrice}/yr
+          {trialEligible ? "Start annual trial" : "Subscribe yearly"} ·{" "}
+          {PRICING_MODEL.pro.yearlyPrice}/yr
         </Button>
       </div>
     </div>
@@ -162,6 +176,7 @@ export function BillingPanel({
         ) : (
           <UpgradeOffer
             disabled={billingWorking}
+            trialEligible={me?.trial_eligible === true}
             onBillingAction={onBillingAction}
           />
         )}

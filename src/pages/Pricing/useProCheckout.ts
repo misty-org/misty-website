@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { useAuth } from "@/AuthContext";
 import type { MeResponse } from "@/pages/AccountSettings/api";
 import { useUserStore } from "@/store/userStore";
-import { createSubscriptionCheckout } from "./api";
+import { createSubscriptionCheckout } from "../AccountSettings/api";
 import type { PaidTier, PricingInterval } from "./data";
 
 function effectivePaidTier(me: MeResponse | null): PaidTier | null {
@@ -58,6 +58,7 @@ export function usePaidCheckout(
   const me = useUserStore((store) => store.me);
   const currentPlanTier = effectivePaidTier(me);
   const managedSubscription = hasManagedSubscription(me);
+  const trialEligible = me?.trial_eligible === true;
 
   const openCheckout = useCallback(
     async (tier: PaidTier, selectedInterval: PricingInterval) => {
@@ -80,7 +81,7 @@ export function usePaidCheckout(
       setPendingTier(tier);
       setError("");
       try {
-        const url = await createSubscriptionCheckout(tier, selectedInterval);
+        const { url } = await createSubscriptionCheckout(tier, selectedInterval);
         window.location.assign(url);
       } catch (error) {
         if (shouldRefreshAfterCheckoutError(error)) {
@@ -138,6 +139,7 @@ export function usePaidCheckout(
     error,
     currentPlanTier,
     hasManagedSubscription: managedSubscription,
+    trialEligible,
     checkoutReady: sessionReady,
   };
 }
