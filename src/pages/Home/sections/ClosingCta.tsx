@@ -1,22 +1,26 @@
-import { publicPageContainer } from "@/components/marketing";
+import { useReveal } from "@/hooks/useReveal";
 import type { MarketingCopy } from "@/content/marketingCopy";
-import { JoinNowButton } from "../components/JoinNowButton";
+import { HomeCtaButtons } from "../components/HomeCtaButtons";
 
 export function ClosingCta({ copy }: { copy: MarketingCopy["home"] }) {
+  const ref = useReveal<HTMLElement>();
+
   return (
-    <section className="bg-foreground py-16 text-background sm:py-20">
-      <div
-        className={`${publicPageContainer} grid gap-8 md:grid-cols-[1fr_auto] md:items-end`}
-      >
-        <div className="max-w-3xl">
-          <h2 className="text-balance text-4xl font-medium leading-[1.04] tracking-[-0.045em] sm:text-5xl">
+    <section
+      ref={ref}
+      aria-labelledby="closing-cta-title"
+      className="reveal bg-[#08090a] py-20 sm:py-24"
+    >
+      <div className="site-container">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2
+            id="closing-cta-title"
+            className="text-balance text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl"
+          >
             {copy.ctaTitle}
           </h2>
-          <p className="mt-5 max-w-xl text-base leading-7 text-background/65">
-            {copy.ctaDescription}
-          </p>
+          <HomeCtaButtons className="mt-8 justify-center" dark />
         </div>
-        <JoinNowButton inverted />
       </div>
     </section>
   );

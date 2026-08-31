@@ -1,32 +1,10 @@
 export interface MarketingCopy {
   home: {
-    /**
-     * Split so "Space" renders as a link to the Spaces explainer and the
-     * trailing phrase can type in and out. `phrases[0]` is the resting
-     * headline — it is what screen readers and reduced-motion visitors get,
-     * so it must read as a complete sentence with the stem.
-     */
-    heroTitle: {
-      before: string;
-      link: string;
-      after: string;
-      phrases: readonly string[];
-    };
-    heroDescription: string;
-    proof: string;
-    features: readonly { label: string; title: string; description: string }[];
-    workflowTitle: string;
-    workflowDescription: string;
-    workflow: readonly { title: string; description: string }[];
-    updatesTitle: string;
-    updatesDescription: string;
+    /** The visible headline rotates through each word; the full title remains available to assistive technology. */
+    heroTitle: string;
+    heroTitleLead: string;
+    heroTitleWords: readonly string[];
     ctaTitle: string;
-    ctaDescription: string;
-  };
-  features: {
-    title: string;
-    description: string;
-    itemDescriptions: readonly string[];
   };
   pricing: { title: string; description: string };
   download: { title: string; description: string };
@@ -47,82 +25,18 @@ export interface MarketingCopy {
 
 export const marketingCopy: MarketingCopy = {
   home: {
-    heroTitle: {
-      before: "One shared ",
-      link: "space",
-      after: " for ",
-      phrases: [
-        "everyone.",
-        "chat, tasks, and files.",
-        "custom AI Agents.",
-        "everything the group shares.",
-      ],
-    },
-    heroDescription:
-      "Keep files, conversations, tasks, tools, and Agents together without forcing a small group into an enterprise stack.",
-    proof:
-      "Built for any group that works together — teams, classes, clubs, and collaborators.",
-    features: [
-      {
-        label: "Agents",
-        title: "Build agents around shared context.",
-        description:
-          "Create custom Agents that work from the files and conversations each member is allowed to access.",
-      },
-      {
-        label: "Spaces",
-        title: "Keep everything in one place.",
-        description:
-          "conversations, tasks, and shared resources into a Space everyone can follow.",
-      },
-      {
-        label: "Private files",
-        title: "Share only what the group needs.",
-        description:
-          "Browse local and connected files privately, then add the useful material to the shared Space.",
-      },
+    heroTitle: "The space for organizing, creating, and collaborating.",
+    heroTitleLead: "The space for",
+    heroTitleWords: [
+      "organizing.",
+      "creating.",
+      "collaborating.",
+      "sharing.",
+      "working.",
+      "planning.",
+      "building.",
     ],
-    workflowTitle: "Start working together in minutes.",
-    workflowDescription:
-      "Open a Space, bring in the group, and keep the work moving without stitching together another pile of apps.",
-    workflow: [
-      {
-        title: "Create a Space",
-        description:
-          "Give the work one home for people, files, conversations, and tools.",
-      },
-      {
-        title: "Invite the group",
-        description:
-          "Bring everyone into the same work without separate storage charges.",
-      },
-      {
-        title: "Add Agents",
-        description:
-          "Use automatic model routing and the shared context already in the Space.",
-      },
-    ],
-    updatesTitle: "Follow what Misty ships next.",
-    updatesDescription:
-      "Read product notes and see the public roadmap without digging through release threads.",
-    ctaTitle: "Move the work out of scattered tabs.",
-    ctaDescription:
-      "Give your group one Space for the files, conversations, tools, and Agents that move the work forward.",
-  },
-  features: {
-    title: "Everything your group needs, inside one Space.",
-    description:
-      "Misty keeps collaborative work close together while your private files remain under your control.",
-    // Positional: index-matched against `mainFeatures` in src/pages/Features/featureData.tsx.
-    // Adding or reordering a feature there requires the same change here.
-    itemDescriptions: [
-      "One shared Space holds the people, conversations, tasks, Library, and Agents that belong together.",
-      "Bring members, conversations, and tasks together so everyone sees the same state of the work.",
-      "Collect the files and references your group needs without exposing everything on your device.",
-      "Connect the tools your group already uses and keep the useful context close to the work.",
-      "Create custom Agents that work from permitted Space context with automatic model routing.",
-      "Browse local and connected files privately, then choose exactly what belongs in the Space.",
-    ],
+    ctaTitle: "Ready to build your space with Misty?",
   },
   pricing: {
     title: "Start together for free. Upgrade when your work grows.",
@@ -130,24 +44,23 @@ export const marketingCopy: MarketingCopy = {
       "Every plan includes Misty’s core collaboration experience. Choose a plan based on how many Spaces you need and how much you use AI agents.",
   },
   download: {
-    title: "Lorem ipsum dolor sit amet.",
+    title: "Get Misty for your desktop.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas faucibus mollis interdum.",
+      "The current beta download is 44 MB on macOS and 70 MB on Windows, with Browser included.",
   },
   blog: {
-    title: "Lorem ipsum dolor sit amet.",
+    title: "Notes on building Misty.",
     description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+      "What we’re building, what changed our minds, and where the product is heading.",
   },
   changelog: {
-    title: "Lorem ipsum dolor sit amet.",
-    description:
-      "Sed posuere consectetur est at lobortis. Donec id elit non mi porta gravida.",
+    title: "What shipped, and when.",
+    description: "Every release of Misty, with the changes that came with it.",
   },
   roadmap: {
-    title: "Lorem ipsum dolor sit amet.",
+    title: "What we’re building next.",
     description:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+      "What’s available in beta today, what’s in pilot, and what’s still planned.",
   },
   waitlist: {
     title: "Join Misty",
@@ -155,30 +68,26 @@ export const marketingCopy: MarketingCopy = {
       "Sign in to join your group and start working together in one shared Space.",
   },
   auth: {
-    signInDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    signInDescription: "Sign in to pick up where you left off in Misty.",
     forgotDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+      "Enter your email and we’ll send you a link to reset your password.",
     registerTitle: "Create an account",
     registerDescription: "Sign up to get started with Misty.",
-    resetDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    resetDescription: "Choose a new password for your Misty account.",
     notFoundDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.",
+      "That page doesn’t exist. Check the link, or head back to the homepage.",
   },
   metadata: {
-    home: "Misty gives any group that works together one shared Space for files, conversations, tools, tasks, and AI Agents.",
-    features:
-      "Keep files, conversations, tasks, tools, and custom Agents together in one shared Misty Space.",
+    home: "Misty is a fast, lightweight workspace with built-in apps for organizing, creating, and collaborating.",
     pricing:
       "Compare Misty Basic, Pro, and Max plans by Space limits, AI agent usage, and monthly or annual pricing.",
     download:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis.",
-    blog: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+      "Download the Misty public beta for macOS and Windows. Both current downloads are under 100 MB with Browser included.",
+    blog: "Notes from the team building Misty — what we’re making, what changed our minds, and what’s next.",
     changelog:
-      "Sed posuere consectetur est at lobortis. Donec ullamcorper nulla non metus auctor fringilla.",
+      "Every Misty release and the changes that shipped with it, newest first.",
     roadmap:
-      "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cras mattis consectetur purus.",
+      "What’s available in the Misty beta today, what’s in pilot, and what’s still planned.",
     waitlist:
       "Sign in to Misty and join your group in one shared Space for files, conversations, tools, tasks, and Agents.",
   },

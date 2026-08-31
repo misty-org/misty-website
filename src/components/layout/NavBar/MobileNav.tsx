@@ -82,19 +82,14 @@ export default function MobileNav({
               </Button>
             </>
           ) : (
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <Button asChild variant="outline">
+            <div className="mt-5">
+              <Button asChild className="w-full">
                 <NavLink
                   to="/signin"
                   state={{ from: currentPath }}
                   onClick={onClose}
                 >
                   Sign in
-                </NavLink>
-              </Button>
-              <Button asChild>
-                <NavLink to="/signin" onClick={onClose}>
-                  Join now
                 </NavLink>
               </Button>
             </div>

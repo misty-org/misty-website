@@ -1,14 +1,31 @@
 import { useEffect, useRef, useState } from "react";
-import { Outlet, useLocation, useMatches, ScrollRestoration, useNavigate } from "react-router";
+import {
+  Outlet,
+  useLocation,
+  useMatches,
+  ScrollRestoration,
+  useNavigate,
+} from "react-router";
 import { AuthProvider } from "./AuthContext";
 import Navbar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
 import { AccountSettingsDialog } from "./pages/AccountSettings";
+import {
+  isSettingsPathname,
+  settingsPathForTab,
+  settingsTabFromPathname,
+} from "./pages/AccountSettings/settingsRoute";
+import { TABS } from "./pages/AccountSettings/tabs";
 import { SITE_URL } from "./lib/site";
 
 type Handle = { title?: string; description?: string };
 
-function setMeta(selector: string, attribute: "name" | "property", key: string, content: string) {
+function setMeta(
+  selector: string,
+  attribute: "name" | "property",
+  key: string,
+  content: string,
+) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
   if (!element) {
     element = document.createElement("meta");
@@ -18,7 +35,6 @@ function setMeta(selector: string, attribute: "name" | "property", key: string, 
   element.content = content;
 }
 
-
 export default function App() {
   const matches = useMatches();
   const navigate = useNavigate();
@@ -26,6 +42,9 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const previousPathRef = useRef(location.pathname);
+
+  const onSettingsRoute = isSettingsPathname(location.pathname);
+  const routeTab = settingsTabFromPathname(location.pathname);
 
   useEffect(() => {
     const match = [...matches]
@@ -37,22 +56,34 @@ export default function App() {
       new URLSearchParams(location.search).get("checkout") === "success";
     const title = checkoutSucceeded
       ? "Plan upgraded — Misty"
-      : (handle?.title ?? "Misty — One shared Space for everyone");
+      : (handle?.title ?? "Misty — Organize, create, and collaborate");
     const description = checkoutSucceeded
       ? "Your Misty plan and billing details have been updated."
       : (handle?.description ??
-        "Misty combines members, chat, tasks, a shared Library, and AI Agents in one shared Space. Private Files stay private until shared.");
+        "Misty is a fast, lightweight workspace with built-in apps for organizing, creating, and collaborating.");
     const canonicalUrl = new URL(location.pathname, SITE_URL).toString();
 
     document.title = title;
     setMeta('meta[name="description"]', "name", "description", description);
     setMeta('meta[property="og:title"]', "property", "og:title", title);
-    setMeta('meta[property="og:description"]', "property", "og:description", description);
+    setMeta(
+      'meta[property="og:description"]',
+      "property",
+      "og:description",
+      description,
+    );
     setMeta('meta[property="og:url"]', "property", "og:url", canonicalUrl);
     setMeta('meta[name="twitter:title"]', "name", "twitter:title", title);
-    setMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
+    setMeta(
+      'meta[name="twitter:description"]',
+      "name",
+      "twitter:description",
+      description,
+    );
 
-    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    let canonical = document.head.querySelector<HTMLLinkElement>(
+      'link[rel="canonical"]',
+    );
     if (!canonical) {
       canonical = document.createElement("link");
       canonical.rel = "canonical";
@@ -61,7 +92,7 @@ export default function App() {
     canonical.href = canonicalUrl;
   }, [location.pathname, location.search, matches]);
 
-  // Cross-page anchors (e.g. "/features#spaces" from the home hero). Router
+  // Cross-page anchors (e.g. "/#features" from another page). Router
   // navigation does not scroll to the hash on its own, so do it once the target
   // route has rendered.
   useEffect(() => {
@@ -79,7 +110,9 @@ export default function App() {
     const previousPath = previousPathRef.current;
     previousPathRef.current = location.pathname;
 
-    if (previousPath === location.pathname || location.pathname === "/settings") return;
+    // The dialog owns its own focus trap, so never steal focus to the page h1
+    // underneath it.
+    if (previousPath === location.pathname || onSettingsRoute) return;
 
     const frame = window.requestAnimationFrame(() => {
       const heading = mainRef.current?.querySelector<HTMLElement>("h1");
@@ -89,7 +122,7 @@ export default function App() {
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [location.pathname]);
+  }, [location.pathname, onSettingsRoute]);
 
   useEffect(() => {
     const { hash } = window.location;
@@ -100,14 +133,25 @@ export default function App() {
     navigate(hash.slice(1), { replace: true });
   }, [navigate]);
 
+  // A settings URL drives the dialog directly: the path stays put so the page is
+  // shareable, reloadable, and a valid desktop hand-off target. An unknown tab
+  // falls back to the default rather than rendering an empty page.
   useEffect(() => {
-    if (location.pathname !== "/settings") return;
+    if (!onSettingsRoute || routeTab !== null) return;
 
-    void Promise.resolve().then(() => {
+    navigate(settingsPathForTab(TABS[0].id), { replace: true });
+  }, [onSettingsRoute, routeTab, navigate]);
+
+  function handleSettingsOpenChange(next: boolean) {
+    if (next) {
       setSettingsOpen(true);
-      navigate("/", { replace: true });
-    });
-  }, [location.pathname, navigate]);
+      return;
+    }
+    setSettingsOpen(false);
+    // Closing a settings URL has to leave the URL too, or the dialog reopens on
+    // the next render.
+    if (onSettingsRoute) navigate("/", { replace: true });
+  }
 
   return (
     <AuthProvider>
@@ -122,25 +166,33 @@ export default function App() {
           Skip to content
         </a>
         <Navbar onOpenSettings={() => setSettingsOpen(true)} />
-        
+
         <main
           id="main-content"
           ref={mainRef}
           tabIndex={-1}
-          className="relative z-10 min-h-[100svh] flex-1 outline-none"
+          className="relative z-10 min-h-[100svh] w-full min-w-0 flex-1 outline-none"
         >
           <div
             key={location.pathname}
             data-page-transition={location.pathname}
-            className="page-transition"
+            className="page-transition w-full min-w-0"
           >
             <Outlet />
           </div>
         </main>
 
         <Footer />
-        <AccountSettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
-
+        <AccountSettingsDialog
+          open={settingsOpen || routeTab !== null}
+          onOpenChange={handleSettingsOpenChange}
+          tab={routeTab ?? undefined}
+          onTabChange={
+            routeTab !== null
+              ? (tab) => navigate(settingsPathForTab(tab), { replace: true })
+              : undefined
+          }
+        />
       </div>
     </AuthProvider>
   );
