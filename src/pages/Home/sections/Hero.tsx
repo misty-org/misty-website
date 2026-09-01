@@ -135,7 +135,10 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
   } as CSSProperties;
 
   return (
-    <section className="home-content-rail relative overflow-x-clip">
+    <section
+      id="overview"
+      className="home-content-rail relative scroll-mt-24 overflow-x-clip"
+    >
       <div ref={scrollRef} className="hero-scroll-track">
         <div className="hero-scroll-stage">
           <div

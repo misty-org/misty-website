@@ -12,6 +12,26 @@ dist
 dist-ssr
 *.local
 
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Generated artifacts and large media/package outputs
+artifacts/
+*.mp4
+*.mov
+*.m4v
+*.avi
+*.mkv
+*.wav
+*.aiff
+*.zip
+*.tgz
+*.dmg
+*.exe
+*.msi
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
