@@ -48,18 +48,19 @@ export default defineConfig(({ command, mode }) => {
       (command === "serve" ? "http://127.0.0.1:8081" : undefined),
   );
   const apiBase =
+    env.MISTY_PUBLIC_API_URL?.trim() ||
     env.VITE_API_BASE?.trim() ||
     (command === "serve" ? "/v1" : undefined);
   if (command === "build" && mode === "production" && isLocalApiBase(apiBase)) {
     throw new Error(
-      "Production builds cannot use a localhost VITE_API_BASE. Set VITE_API_BASE to the deployed API URL or omit it to use /api.",
+      "Production builds cannot use a localhost MISTY_PUBLIC_API_URL. Set MISTY_PUBLIC_API_URL to the deployed API URL or omit it to use /api.",
     );
   }
 
   return {
     plugins: [react(), tailwindcss(), sites()],
     define: {
-      "import.meta.env.VITE_API_BASE": JSON.stringify(apiBase ?? ""),
+      "import.meta.env.MISTY_PUBLIC_API_URL": JSON.stringify(apiBase ?? ""),
     },
     server: {
       port: 5174,

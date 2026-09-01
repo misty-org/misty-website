@@ -17,7 +17,7 @@ import {
   TasksPreview,
 } from "@/components/marketing/previews";
 import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
-import { useScrollProgress } from "@/hooks/useScrollProgress";
+import { usePinnedStoryProgress } from "@/hooks/usePinnedStoryProgress";
 import { cn } from "@/lib/utils";
 
 type PreviewKind = "mockup" | "tasks" | "connections" | "chat";
@@ -204,6 +204,28 @@ const cards: ShowcaseCard[] = [
     sceneClassName: "feature-logo-card-7",
   },
 ];
+
+const FEATURE_INTRO_UNITS = 2.6;
+const FEATURE_INTRO_ENTER_END = 0.36;
+const FEATURE_INTRO_EXIT_START = 0.58;
+
+function smoothstep(start: number, end: number, value: number) {
+  const progress = Math.min(1, Math.max(0, (value - start) / (end - start)));
+  return progress * progress * (3 - 2 * progress);
+}
+
+function FeatureIntro() {
+  return (
+    <div className="mx-auto max-w-3xl text-center">
+      <h2 className="text-balance text-3xl font-medium tracking-[-0.03em] text-[var(--marketing-foreground)] sm:text-5xl">
+        A closer look at Misty.
+      </h2>
+      <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[var(--marketing-muted)] sm:text-xl">
+        Follow Misty through the workspace.
+      </p>
+    </div>
+  );
+}
 
 function activeCardAt(progress: number) {
   const checkpoints = [0.12, 0.24, 0.37, 0.51, 0.64, 0.76, 0.88];
@@ -408,26 +430,51 @@ function MistyProgressScene({ progress }: { progress: number }) {
 }
 
 export function FeatureShowcase() {
-  const { ref: storyRef, progress } = useScrollProgress<HTMLDivElement>();
+  const {
+    ref: storyRef,
+    approach: approachProgress,
+    progress,
+  } = usePinnedStoryProgress();
+  const storyUnits = FEATURE_INTRO_UNITS + cards.length;
+  const storyPosition = progress * storyUnits;
+  const isIntroScene = storyPosition < FEATURE_INTRO_UNITS;
+  const introWithin = isIntroScene
+    ? storyPosition / FEATURE_INTRO_UNITS
+    : 1;
+  const showcaseProgress = Math.min(
+    1,
+    Math.max(0, (storyPosition - FEATURE_INTRO_UNITS) / cards.length),
+  );
+  const handoff = smoothstep(
+    FEATURE_INTRO_EXIT_START,
+    1,
+    introWithin,
+  );
+  const pinnedEntrance = isIntroScene
+    ? smoothstep(0, FEATURE_INTRO_ENTER_END, introWithin)
+    : 1;
+  const introEntrance =
+    approachProgress < 1
+      ? approachProgress * 0.45
+      : 0.45 + pinnedEntrance * 0.55;
+  const introStyle = {
+    opacity: isIntroScene ? 1 : 0,
+    pointerEvents: isIntroScene ? undefined : "none",
+    transform: `translate3d(${-100 * (1 - introEntrance) + 100 * handoff}vw, 0, 0)`,
+  } as CSSProperties;
+  const panelsStyle = {
+    transform: `translate3d(${isIntroScene ? -100 * (1 - handoff) : 0}vw, 0, 0)`,
+    willChange: "transform",
+  } as CSSProperties;
 
   return (
     <section
       id="features"
-      aria-labelledby="feature-bento-title"
+      aria-label="A closer look at Misty"
       className="relative z-10 scroll-mt-24 bg-background"
     >
       <div className="site-container feature-bento-intro">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2
-            id="feature-bento-title"
-            className="text-balance text-3xl font-medium tracking-[-0.03em] text-[var(--marketing-foreground)] sm:text-5xl"
-          >
-            A closer look at Misty.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[var(--marketing-muted)] sm:text-xl">
-            Follow Misty through the workspace.
-          </p>
-        </div>
+        <FeatureIntro />
       </div>
 
       <div
@@ -435,14 +482,25 @@ export function FeatureShowcase() {
         className="feature-bento-story"
         style={
           {
-            "--feature-bento-story-height": `${(cards.length + 1) * 100}svh`,
+            "--feature-bento-story-height": `${(storyUnits + 1) * 100}svh`,
           } as CSSProperties
         }
       >
         <div className="feature-bento-stage">
           <div className="site-container feature-bento-stage-inner">
-            <div className="feature-logo-scene-window">
-              <MistyProgressScene progress={progress} />
+            <div
+              aria-hidden={!isIntroScene || handoff >= 0.5}
+              className="feature-bento-pinned-intro"
+              style={introStyle}
+            >
+              <FeatureIntro />
+            </div>
+            <div
+              aria-hidden={isIntroScene && handoff < 0.5}
+              className="feature-logo-scene-window"
+              style={panelsStyle}
+            >
+              <MistyProgressScene progress={showcaseProgress} />
             </div>
           </div>
         </div>

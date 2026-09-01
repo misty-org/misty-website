@@ -280,6 +280,10 @@ body {
   padding-block: 0;
 }
 
+.feature-bento-pinned-intro {
+  display: none;
+}
+
 .feature-logo-scene-window {
   position: relative;
   height: 100%;
@@ -362,6 +366,21 @@ body {
 @media (min-width: 1024px) {
   .feature-bento-stage-inner {
     --site-gutter: clamp(2rem, 2.5vw, 2.5rem);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-intro {
+    display: none;
+  }
+
+  .feature-bento-pinned-intro {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    will-change: transform;
   }
 }
 
@@ -450,6 +469,7 @@ body {
     inset: auto;
     height: auto;
     overflow: visible;
+    transform: none !important;
   }
 
   .feature-logo-scene {
@@ -523,6 +543,7 @@ body {
 
   .feature-logo-scene-window {
     height: auto;
+    transform: none !important;
   }
 
   .feature-logo-scene {
@@ -934,6 +955,56 @@ button:disabled {
   .reveal.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .resource-scrub [data-resource-header] {
+    opacity: var(--resource-header-opacity, 0);
+    transform: translateY(var(--resource-header-y, 0.75rem));
+    will-change: opacity, transform;
+  }
+
+  .resource-scrub [data-resource-shell] {
+    opacity: var(--resource-shell-opacity, 0);
+    clip-path: inset(
+      0 0 var(--resource-shell-clip, 8%) 0 round 0.75rem
+    );
+    translate: 0 0;
+    transform: translateY(var(--resource-shell-y, 1.5rem))
+      scale(var(--resource-shell-scale, 0.985));
+    transition:
+      translate 240ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 240ms ease,
+      box-shadow 240ms ease;
+    will-change: opacity, clip-path, transform;
+  }
+
+  .resource-scrub [data-resource-part="1"] {
+    --resource-part-opacity: var(--resource-part-1-opacity, 0);
+    --resource-part-y: var(--resource-part-1-y, 0.75rem);
+  }
+
+  .resource-scrub [data-resource-part="2"] {
+    --resource-part-opacity: var(--resource-part-2-opacity, 0);
+    --resource-part-y: var(--resource-part-2-y, 0.75rem);
+  }
+
+  .resource-scrub [data-resource-part="3"] {
+    --resource-part-opacity: var(--resource-part-3-opacity, 0);
+    --resource-part-y: var(--resource-part-3-y, 0.75rem);
+  }
+
+  .resource-scrub [data-resource-part] {
+    opacity: var(--resource-part-opacity, 0);
+    transform: translateY(var(--resource-part-y, 0.75rem));
+    will-change: opacity, transform;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .resource-scrub [data-resource-shell]:hover {
+    border-color: var(--marketing-border-strong);
+    box-shadow: 0 18px 48px rgb(0 0 0 / 12%);
+    translate: 0 -2px;
   }
 }
 

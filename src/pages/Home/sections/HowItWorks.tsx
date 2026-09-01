@@ -1,9 +1,4 @@
-import {
-  type CSSProperties,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type CSSProperties } from "react";
 
 import {
   MistyAppMockup,
@@ -12,7 +7,8 @@ import {
 import { ScreenshotSlot, VideoSlot } from "@/components/marketing/previews";
 import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
 import type { ProductVideoSlotId } from "@/content/productVideoSlots";
-import { beatPosition, useScrollProgress } from "@/hooks/useScrollProgress";
+import { usePinnedStoryProgress } from "@/hooks/usePinnedStoryProgress";
+import { beatPosition } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
 
 type Beat = {
@@ -61,48 +57,16 @@ const beats: Beat[] = [
 /* Beats stack in a single grid cell so the container sizes to the tallest one
    and nothing gets clipped when copy lengths differ. */
 const STACKED = "[grid-area:1/1]";
-const SCROLL_SMOOTHING_MS = 80;
 const FADE_START = 0.8;
 const FADE_END = 1;
+const INTRO_UNITS = 2.6;
+const INTRO_ENTER_END = 0.36;
+const INTRO_EXIT_START = 0.58;
+const STORY_UNITS = INTRO_UNITS + beats.length;
 
 function smoothstep(start: number, end: number, value: number) {
   const progress = Math.min(1, Math.max(0, (value - start) / (end - start)));
   return progress * progress * (3 - 2 * progress);
-}
-
-function useSmoothedProgress(target: number) {
-  const [value, setValue] = useState(target);
-  const valueRef = useRef(target);
-
-  useEffect(() => {
-    const start = valueRef.current;
-    const distance = target - start;
-
-    if (Math.abs(distance) < 0.0001) {
-      valueRef.current = target;
-      setValue(target);
-      return;
-    }
-
-    const startedAt = performance.now();
-    let frame = 0;
-
-    const update = (now: number) => {
-      const elapsed = Math.min(1, (now - startedAt) / SCROLL_SMOOTHING_MS);
-      const eased = 1 - Math.pow(1 - elapsed, 3);
-      const next = start + distance * eased;
-
-      valueRef.current = next;
-      setValue(next);
-
-      if (elapsed < 1) frame = window.requestAnimationFrame(update);
-    };
-
-    frame = window.requestAnimationFrame(update);
-    return () => window.cancelAnimationFrame(frame);
-  }, [target]);
-
-  return value;
 }
 
 function beatMotion(
@@ -177,6 +141,21 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
   );
 }
 
+function SpaceIntro() {
+  return (
+    <div className="mx-auto max-w-3xl text-center">
+      <h2 className="text-balance text-3xl font-medium leading-tight tracking-[-0.035em] text-[var(--marketing-foreground)] sm:text-5xl">
+        What is a Space?
+      </h2>
+      <p className="mx-auto mt-6 max-w-3xl text-pretty text-base leading-relaxed text-[var(--marketing-muted)] sm:text-xl">
+        A Space is your own configurable place to work, containing whichever
+        apps and tools you want. It begins as yours, and becomes collaborative
+        when you invite others.
+      </p>
+    </div>
+  );
+}
+
 /**
  * A scroll-pinned walk through the product.
  *
@@ -189,24 +168,41 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
  * only inside the animation.
  */
 export function HowItWorks() {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>();
-  const smoothedProgress = useSmoothedProgress(progress);
-  const { index: active, within } = beatPosition(
-    smoothedProgress,
-    beats.length,
+  const { ref, approach: approachProgress, progress } =
+    usePinnedStoryProgress();
+  const sceneCount = beats.length + 1;
+  const storyPosition = progress * STORY_UNITS;
+  const isIntroScene = storyPosition < INTRO_UNITS;
+  const walkthroughPosition = Math.min(
+    1,
+    Math.max(0, (storyPosition - INTRO_UNITS) / beats.length),
   );
-  const incoming = Math.min(beats.length - 1, active + 1);
+  const walkthroughBeat = beatPosition(walkthroughPosition, beats.length);
+  const activeScene = isIntroScene ? 0 : walkthroughBeat.index + 1;
+  const within = isIntroScene
+    ? storyPosition / INTRO_UNITS
+    : walkthroughBeat.within;
+  const incomingScene = Math.min(sceneCount - 1, activeScene + 1);
   const transition =
-    active === beats.length - 1
+    activeScene === sceneCount - 1
       ? 0
-      : smoothstep(FADE_START, FADE_END, within);
-  const visibleBeat = transition >= 0.5 ? incoming : active;
+      : smoothstep(
+          activeScene === 0 ? INTRO_EXIT_START : FADE_START,
+          FADE_END,
+          within,
+        );
+  const visibleScene = transition >= 0.5 ? incomingScene : activeScene;
+
+  // Scene zero introduces Spaces. The four-step walkthrough — and its
+  // indicator — begin only after that introductory scene has completed.
+  const walkthroughActive = Math.max(0, activeScene - 1);
+  const walkthroughWithin = activeScene === 0 ? 0 : within;
 
   // Hand the indicator to the incoming beat as soon as its crossfade starts.
   // The first beat uses the shorter pre-transition interval; every following
   // beat then owns one full segment, so the fill remains continuous across
   // the underlying `within` reset at each beat boundary.
-  const narrativePosition = active + within;
+  const narrativePosition = walkthroughActive + walkthroughWithin;
   const indicatorPosition =
     narrativePosition <= FADE_START
       ? narrativePosition / FADE_START
@@ -228,64 +224,105 @@ export function HowItWorks() {
       : index === indicatorActive
         ? indicatorWithin
         : 0;
+  const pinnedEntrance =
+    activeScene === 0 ? smoothstep(0, INTRO_ENTER_END, within) : 1;
+  const introEntrance =
+    approachProgress < 1
+      ? approachProgress * 0.45
+      : 0.45 + pinnedEntrance * 0.55;
+  const introStyle = {
+    opacity: activeScene === 0 ? 1 : 0,
+    pointerEvents: activeScene === 0 ? undefined : "none",
+    transform: `translate3d(${100 * (1 - introEntrance) - 100 * transition}vw, 0, 0)`,
+  } as CSSProperties;
+  const walkthroughStyle = {
+    transform: `translate3d(${activeScene === 0 ? 100 * (1 - transition) : 0}vw, 0, 0)`,
+    willChange: "transform",
+  } as CSSProperties;
+  const walkthroughBeatMotion = (index: number, media = false) =>
+    activeScene === 0 && index === 1
+      ? ({
+          opacity: 1,
+          filter: "none",
+          pointerEvents: transition < 0.5 ? "none" : undefined,
+          transform: "translate3d(0, 0, 0) scale(1)",
+        } as CSSProperties)
+      : beatMotion(
+          index,
+          activeScene,
+          incomingScene,
+          transition,
+          media,
+        );
 
   return (
     <section
+      id="spaces"
       aria-label="How Misty works"
-      className="marketing-dark my-3 overflow-x-clip sm:my-4 lg:-mt-[14svh] lg:-mb-[8svh]"
+      className="marketing-dark relative mb-3 scroll-mt-24 overflow-x-clip before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:z-10 before:h-24 before:bg-gradient-to-b before:from-background before:to-transparent sm:mb-4 lg:-mb-[8svh]"
     >
-      {/* Track height sets the pace: one viewport of scroll per beat, plus one
-          more to hold the last beat before the section releases. */}
+      {/* The Space introduction gets extra scroll distance for its slow entry,
+          hold, and exit. Each walkthrough step then gets one viewport, plus
+          one final viewport to hold the last step before release. */}
       <div
         ref={ref}
         className="pin-track relative hidden lg:block"
-        style={{ height: `${(beats.length + 1) * 100}svh` }}
+        style={{ height: `${(STORY_UNITS + 1) * 100}svh` }}
       >
         <div className="pin-stage">
           <div className="site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12">
-            <div className="col-start-1 row-start-1 flex h-full items-center justify-center">
-              <div className="grid w-full max-w-lg text-center">
+            <div
+              aria-hidden={visibleScene !== 0}
+              className="pin-beat col-start-1 col-end-3 row-start-1"
+              style={introStyle}
+            >
+              <SpaceIntro />
+            </div>
+
+            <div
+              className="col-start-1 row-start-1 flex h-full items-center justify-center"
+              style={walkthroughStyle}
+            >
+              <div className="grid w-full max-w-lg text-left">
                 {beats.map((beat, index) => (
                   <div
                     key={beat.title}
-                    aria-hidden={index !== visibleBeat}
+                    aria-hidden={index + 1 !== visibleScene}
                     className={cn("pin-beat", STACKED)}
-                    style={beatMotion(
-                      index,
-                      active,
-                      incoming,
-                      transition,
-                    )}
+                    style={walkthroughBeatMotion(index + 1)}
                   >
-                    <BeatCopy beat={beat} centered />
+                    <BeatCopy beat={beat} />
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="relative col-start-2 row-start-1 w-full place-self-center">
+            <div
+              className="relative col-start-2 row-start-1 w-full place-self-center"
+              style={walkthroughStyle}
+            >
               <div className="grid aspect-[8/5] min-h-0 overflow-hidden rounded-xl">
                 {beats.map((beat, index) => (
                   <div
                     key={beat.title}
-                    aria-hidden={index !== visibleBeat}
+                    aria-hidden={index + 1 !== visibleScene}
                     className={cn("pin-beat h-full min-h-0", STACKED)}
-                    style={beatMotion(
-                      index,
-                      active,
-                      incoming,
-                      transition,
-                      true,
-                    )}
+                    style={walkthroughBeatMotion(index + 1, true)}
                   >
-                    <BeatMedia beat={beat} active={index === visibleBeat} />
+                    <BeatMedia
+                      beat={beat}
+                      active={index + 1 === visibleScene}
+                    />
                   </div>
                 ))}
               </div>
 
-              {/* Keep the indicator visually attached without letting it
-                  shift the media frame away from the viewport center. */}
-              <div className="absolute inset-x-0 top-full mt-8 flex gap-2.5">
+              {/* Keep the indicator in normal flow so the left-hand copy is
+                  centered against the preview and progress bar together. */}
+              <div
+                aria-hidden={visibleScene === 0}
+                className="mt-8 flex gap-2.5"
+              >
                 {beats.map((beat, index) => (
                   <span
                     key={beat.title}
@@ -306,6 +343,7 @@ export function HowItWorks() {
       {/* Small screens — and reduced motion at any width — get the same beats
           as an ordinary stacked list. */}
       <div className="site-container pin-stacked space-y-14 py-16 lg:hidden">
+        <SpaceIntro />
         {beats.map((beat) => (
           <div key={beat.title}>
             <BeatCopy beat={beat} />
