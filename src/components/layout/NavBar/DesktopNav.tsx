@@ -14,13 +14,25 @@ import AccountMenu from "./AccountMenu";
 import NavbarSocials from "./NavbarSocials";
 import { navItems, resourceLinks } from "./navLinks";
 
-function DesktopNavLink({ to, label }: { to: string; label: string }) {
+const desktopLinkClass =
+  "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
+function websiteHref(to: string, siteOrigin?: string) {
+  if (!siteOrigin || /^https?:\/\//.test(to)) return to;
+  return new URL(to, siteOrigin).toString();
+}
+
+function DesktopNavLink({ to, label, siteOrigin }: { to: string; label: string; siteOrigin?: string }) {
+  if (siteOrigin) {
+    return <a href={websiteHref(to, siteOrigin)} className={desktopLinkClass}>{label}</a>;
+  }
+
   return (
     <NavLink
       to={to}
       className={({ isActive }) =>
         cn(
-          "px-2 py-1 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          desktopLinkClass,
           isActive && "text-foreground",
         )
       }
@@ -39,6 +51,7 @@ export default function DesktopNav({
   signedIn,
   onOpenSettings,
   onSignOut,
+  siteOrigin,
 }: {
   currentPath: string;
   displayName: string;
@@ -48,6 +61,7 @@ export default function DesktopNav({
   signedIn: boolean;
   onOpenSettings: () => void;
   onSignOut: () => void;
+  siteOrigin?: string;
 }) {
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -81,7 +95,7 @@ export default function DesktopNav({
   return (
     <div className="hidden items-center gap-1 md:flex">
       {navItems.map((item) => (
-        <DesktopNavLink key={item.to} {...item} />
+        <DesktopNavLink key={item.to} {...item} siteOrigin={siteOrigin} />
       ))}
 
       <DropdownMenu open={resourcesOpen} modal={false}>
@@ -93,7 +107,7 @@ export default function DesktopNav({
             onPointerDown={(event) => event.preventDefault()}
             onClick={(event) => event.preventDefault()}
             className={cn(
-              "h-auto rounded-md bg-transparent px-2 py-1 text-sm font-normal text-muted-foreground hover:bg-transparent hover:text-foreground aria-expanded:bg-transparent dark:hover:bg-transparent",
+              "h-auto rounded-md bg-transparent px-2 py-1 text-sm font-normal text-muted-foreground hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
               resourcesActive && "text-foreground",
             )}
           >
@@ -102,20 +116,30 @@ export default function DesktopNav({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="center"
-          sideOffset={0}
+          sideOffset={8}
           onPointerEnter={openResources}
           onPointerLeave={scheduleClose}
           onCloseAutoFocus={(event) => event.preventDefault()}
           className="w-40"
         >
-          {resourceLinks.map(({ to, label }) => (
+          {resourceLinks.map(({ to, label, external }) => (
             <DropdownMenuItem
               key={to}
               asChild
               onSelect={() => setResourcesOpen(false)}
               className="py-1"
             >
-              <NavLink to={to}>{label}</NavLink>
+              {external || siteOrigin ? (
+                <a
+                  href={websiteHref(to, siteOrigin)}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                >
+                  {label}
+                </a>
+              ) : (
+                <NavLink to={to}>{label}</NavLink>
+              )}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
@@ -134,12 +158,11 @@ export default function DesktopNav({
           />
         ) : (
           <Button asChild size="sm" className="rounded-full px-4">
-            <NavLink
-              to="/signin"
-              state={{ from: currentPath }}
-            >
-              Sign in
-            </NavLink>
+            {siteOrigin ? (
+              <a href={websiteHref("/signin", siteOrigin)}>Sign in</a>
+            ) : (
+              <NavLink to="/signin" state={{ from: currentPath }}>Sign in</NavLink>
+            )}
           </Button>
         )}
 

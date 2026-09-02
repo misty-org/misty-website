@@ -4,9 +4,11 @@ Documentation for the Misty CLI, extension platform, and server contract.
 
 ## Development
 
+From the repository root:
+
 ```sh
 npm install
-npm run dev
+npm run dev:docs
 ```
 
 The local site runs at `http://127.0.0.1:5175`. Production builds use
@@ -16,9 +18,12 @@ The local site runs at `http://127.0.0.1:5175`. Production builds use
 ## Validate
 
 ```sh
-npm run typecheck
-npm run build
+npm run build:docs
 ```
+
+Deploy the docs Worker independently with `npm run deploy:docs`. The website
+and documentation share the root dependencies, theme, navigation, footer, and
+public assets while retaining separate Vite and Wrangler entry points.
 
 ## Content sources
 
@@ -29,4 +34,4 @@ npm run build
   self-host feature gate in `misty-server`.
 
 When a source contract changes, update the corresponding page in
-`src/content.ts` in the same change.
+`docs/src/content.ts` in the same change.

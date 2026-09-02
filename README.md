@@ -9,10 +9,32 @@ From the repository root:
 
 ```sh
 npm install
-npm run dev:website
-npm run test:website
-npm run build:website
+npm run dev
+npm test
+npm run build
 ```
+
+## Extension catalog
+
+The public `/extensions` catalog is generated from the canonical manifests in
+`misty-extensions/catalog`. Its product-neutral TypeScript contract, artwork,
+verification treatment, filtering, slugs, and platform labels are synchronized
+from `misty-extensions/interface`; the website does not maintain a second
+hand-written extension interface. `npm run dev` and `npm run build` refresh the
+generated sources automatically. To refresh or verify them directly:
+
+```sh
+npm run sync:extensions
+npm run check:extensions
+```
+
+When the repositories are not adjacent, set `MISTY_EXTENSIONS_DIR` to a local
+`misty-extensions` checkout. Otherwise the sync script reads the published
+catalog from GitHub.
+
+Updates merged to `misty-extensions/main` dispatch the website sync workflow.
+That workflow validates and commits the refreshed generated catalog and shared
+interface, causing the usual website deployment to rebuild from the new source.
 
 The ignored `.env` is the real local configuration. Browser API requests use
 the `/v1` path locally; the Vite development server can proxy that path to a
@@ -26,7 +48,7 @@ The Worker is declared in `wrangler.jsonc` as `misty-website`. It serves the
 Configure Cloudflare Workers Builds with:
 
 - Production branch: your default branch.
-- Root directory: `website`.
+- Root directory: the repository root.
 - Build command: `npm run build`.
 - Deploy command: `npx wrangler deploy`.
 - Build environment variable: `VITE_API_BASE=https://api.mistysys.com/v1`.

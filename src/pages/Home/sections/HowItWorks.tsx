@@ -1,9 +1,4 @@
-import {
-  type CSSProperties,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 import {
   MistyAppMockup,
@@ -14,6 +9,9 @@ import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
 import type { ProductVideoSlotId } from "@/content/productVideoSlots";
 import { beatPosition, useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
+import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
+
+const SCROLL_BEAT_HEIGHT_SVH = 130;
 
 type Beat = {
   title: string;
@@ -183,10 +181,10 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
  * The window pins to the viewport while roughly one screen of scroll is spent
  * on each beat, so scrolling drives a demo rather than paging past cards.
  *
- * The pinned track is desktop-only, and `prefers-reduced-motion` swaps it for
- * the stacked list (see `.pin-track` / `.pin-stacked` in index.css). Every
- * beat is therefore reachable without animating anything — no content lives
- * only inside the animation.
+ * The pinned track starts at the same medium-screen breakpoint as the hero.
+ * `prefers-reduced-motion` swaps it for the stacked list (see `.pin-track` /
+ * `.pin-stacked` in index.css). Every beat is therefore reachable without
+ * animating anything — no content lives only inside the animation.
  */
 export function HowItWorks() {
   const { ref, progress } = useScrollProgress<HTMLDivElement>();
@@ -197,9 +195,7 @@ export function HowItWorks() {
   );
   const incoming = Math.min(beats.length - 1, active + 1);
   const transition =
-    active === beats.length - 1
-      ? 0
-      : smoothstep(FADE_START, FADE_END, within);
+    active === beats.length - 1 ? 0 : smoothstep(FADE_START, FADE_END, within);
   const visibleBeat = transition >= 0.5 ? incoming : active;
 
   // Hand the indicator to the incoming beat as soon as its crossfade starts.
@@ -232,14 +228,24 @@ export function HowItWorks() {
   return (
     <section
       aria-label="How Misty works"
-      className="marketing-dark my-3 overflow-x-clip sm:my-4 lg:-mt-[14svh] lg:-mb-[8svh]"
+      className="marketing-dark overflow-x-clip"
     >
-      {/* Track height sets the pace: one viewport of scroll per beat, plus one
-          more to hold the last beat before the section releases. */}
+      <ScrollSceneIntro
+        title="What is a Space?"
+        description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
+        direction="left"
+        entrance="slide"
+        className="-mt-[30svh]"
+      />
+
+      {/* Each beat gets 130svh of travel, plus one viewport to hold the last
+          beat before the sticky section releases. */}
       <div
         ref={ref}
-        className="pin-track relative hidden lg:block"
-        style={{ height: `${(beats.length + 1) * 100}svh` }}
+        className="pin-track relative hidden md:block"
+        style={{
+          height: `${beats.length * SCROLL_BEAT_HEIGHT_SVH + 100}svh`,
+        }}
       >
         <div className="pin-stage">
           <div className="site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12">
@@ -250,12 +256,7 @@ export function HowItWorks() {
                     key={beat.title}
                     aria-hidden={index !== visibleBeat}
                     className={cn("pin-beat", STACKED)}
-                    style={beatMotion(
-                      index,
-                      active,
-                      incoming,
-                      transition,
-                    )}
+                    style={beatMotion(index, active, incoming, transition)}
                   >
                     <BeatCopy beat={beat} centered />
                   </div>
@@ -305,7 +306,7 @@ export function HowItWorks() {
 
       {/* Small screens — and reduced motion at any width — get the same beats
           as an ordinary stacked list. */}
-      <div className="site-container pin-stacked space-y-14 py-16 lg:hidden">
+      <div className="site-container pin-stacked space-y-14 py-16 md:hidden">
         {beats.map((beat) => (
           <div key={beat.title}>
             <BeatCopy beat={beat} />

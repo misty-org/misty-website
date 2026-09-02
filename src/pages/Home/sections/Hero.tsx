@@ -1,9 +1,12 @@
 import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 import { MistyAppMockup } from "@/components/marketing/appchrome";
 import { ScreenshotSlot } from "@/components/marketing/previews";
+import { Button } from "@/components/ui/button";
 import type { MarketingCopy } from "@/content/marketingCopy";
 import { easeOut, useScrollProgress } from "@/hooks/useScrollProgress";
+import { WEB_APP_URL } from "@/lib/site";
 import { HomeCtaButtons } from "../components/HomeCtaButtons";
 
 const TYPE_DELAY_MS = 110;
@@ -16,6 +19,23 @@ function clamp(value: number) {
 }
 
 type TypingPhase = "typing" | "holding" | "deleting";
+
+function useEnhancedHeroMotion() {
+  const query = "(min-width: 768px) and (prefers-reduced-motion: no-preference)";
+  const [enabled, setEnabled] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(query).matches,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const handleChange = (event: MediaQueryListEvent) => setEnabled(event.matches);
+
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
+  }, []);
+
+  return enabled;
+}
 
 function useTypingRotation(words: readonly string[]) {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -113,6 +133,7 @@ function useTypingRotation(words: readonly string[]) {
 
 export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
   const { ref: scrollRef, progress } = useScrollProgress<HTMLDivElement>();
+  const enhancedMotion = useEnhancedHeroMotion();
   const { headingRef, isWordComplete, typedWord } = useTypingRotation(
     copy.heroTitleWords,
   );
@@ -120,61 +141,66 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
     (longest, word) => (word.length > longest.length ? word : longest),
     "",
   );
-  const copyProgress = easeOut(clamp(progress / 0.06));
-  // Finish the screenshot expansion before the sticky hero releases so the
-  // completed product view has a short, deliberate hold as scrolling continues.
-  const expansionProgress = clamp((progress - 0.02) / 0.78);
-  const copyOpacity = 1 - copyProgress;
+  const copyProgress = easeOut(clamp((progress - 0.02) / 0.42));
+  const copyOpacityProgress = easeOut(clamp((progress - 0.08) / 0.36));
+  // Keep the product hidden on arrival, then crossfade it in as the headline
+  // fades so the opening viewport belongs entirely to the hero copy.
+  const expansionProgress = easeOut(clamp((progress - 0.08) / 0.74));
+  const productRevealProgress = copyOpacityProgress;
+  const copyOpacity = 1 - copyOpacityProgress;
+  const copyHidden = enhancedMotion && copyOpacity < 0.05;
+  const productHidden = enhancedMotion && productRevealProgress < 0.05;
   const scrollStyle = {
-    "--hero-copy-column": `${38 * (1 - expansionProgress)}%`,
     "--hero-copy-opacity": copyOpacity,
-    "--hero-copy-shift": `${-1.25 * copyProgress}rem`,
-    "--hero-grid-gap": `${3.5 * (1 - expansionProgress)}rem`,
-    "--hero-shot-width": `${112 - 12 * expansionProgress}%`,
-    "--hero-shot-scale": 0.98 + 0.02 * expansionProgress,
+    "--hero-copy-scale": 1 + 2.4 * copyProgress,
+    "--hero-copy-shift": `${-8 - 6 * copyProgress}svh`,
+    "--hero-shot-top": `${64 - 58.5 * expansionProgress}svh`,
+    "--hero-shot-height": `${44 + 28 * expansionProgress}svh`,
+    "--hero-shot-radius": `${18 - 8 * expansionProgress}px`,
+    "--hero-product-opacity": productRevealProgress,
+    "--hero-shot-scale": 0.72 + 0.24 * expansionProgress,
   } as CSSProperties;
 
   return (
     <section className="home-content-rail relative overflow-x-clip">
       <div ref={scrollRef} className="hero-scroll-track">
         <div className="hero-scroll-stage">
-          <div
-            className="hero-scroll-layout site-container grid min-h-[calc(100svh-var(--site-nav-height))] items-center gap-10 py-4 md:grid-cols-[minmax(0,0.76fr)_minmax(0,1.24fr)] md:py-6 lg:gap-14"
-            style={scrollStyle}
-          >
+          <div className="hero-scroll-layout site-container" style={scrollStyle}>
             <div
-              className="hero-scroll-copy relative z-10 flex min-w-0 flex-col items-start text-left"
-              aria-hidden={copyOpacity < 0.05}
-              inert={copyOpacity < 0.05 ? true : undefined}
+              className="hero-scroll-copy relative z-10 flex min-w-0 flex-col items-center text-center"
+              aria-hidden={copyHidden}
+              inert={copyHidden ? true : undefined}
             >
-              <h1
-                ref={headingRef}
-                aria-label={copy.heroTitle}
-                className="hero-animate w-fit max-w-full text-[clamp(2.25rem,5.2vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.035em] text-[var(--marketing-foreground)]"
-              >
-                <span aria-hidden="true">
-                  <span className="block text-[var(--marketing-muted)]">
-                    {copy.heroTitleLead}
-                  </span>
-                  <span className="mt-1 inline-grid max-w-full text-left text-[var(--marketing-foreground)] [grid-template-areas:'word']">
-                    <span
-                      className="invisible [grid-area:word]"
-                      aria-hidden="true"
-                    >
-                      {longestWord}
+              <div className="hero-scroll-zoom-group flex flex-col items-center">
+                <h1
+                  ref={headingRef}
+                  aria-label={copy.heroTitle}
+                  className="hero-animate w-fit max-w-full text-[clamp(2.65rem,6vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-[var(--marketing-foreground)]"
+                >
+                  <span aria-hidden="true">
+                    <span className="block text-center text-[var(--marketing-muted)]">
+                      {copy.heroTitleLead}
                     </span>
-                    <span className="whitespace-nowrap [grid-area:word]">
-                      {typedWord}
+                    <span className="mt-2 inline-grid max-w-full text-center text-[var(--marketing-foreground)] [grid-template-areas:'word']">
                       <span
-                        className={`typing-cursor${isWordComplete ? " typing-cursor-blinking" : ""}`}
+                        className="invisible [grid-area:word]"
                         aria-hidden="true"
-                      />
+                      >
+                        {longestWord}
+                      </span>
+                      <span className="whitespace-nowrap [grid-area:word]">
+                        {typedWord}
+                        <span
+                          className={`typing-cursor${isWordComplete ? " typing-cursor-blinking" : ""}`}
+                          aria-hidden="true"
+                        />
+                      </span>
                     </span>
                   </span>
-                </span>
-              </h1>
+                </h1>
 
-              <HomeCtaButtons className="hero-animate hero-animate-delay-2 mt-8 justify-start" />
+                <HomeCtaButtons className="hero-animate hero-animate-delay-2 mt-8 justify-center" />
+              </div>
             </div>
 
             <div className="hero-scroll-shot pointer-events-none min-w-0">
@@ -184,6 +210,23 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
                   bodyClass="h-[300px] sm:h-[380px] lg:h-[440px]"
                 />
               </ScreenshotSlot>
+            </div>
+
+            <div
+              className="hero-scroll-final-cta relative z-20"
+              aria-hidden={productHidden}
+              inert={productHidden ? true : undefined}
+            >
+              <Button
+                asChild
+                size="lg"
+                className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] shadow-lg shadow-black/10 hover:opacity-85"
+              >
+                <a href={WEB_APP_URL}>
+                  Try the web app
+                  <ArrowRight aria-hidden="true" />
+                </a>
+              </Button>
             </div>
           </div>
         </div>

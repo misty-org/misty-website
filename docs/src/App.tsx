@@ -2,16 +2,17 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Highlight, themes, type Language } from "prism-react-renderer";
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, Blocks, BookOpen, Check, ChevronDown, Copy,
-  ExternalLink, FileText, Github, Search, ServerCog, Sparkles, SquareTerminal,
+  ExternalLink, FileText, Search, ServerCog, Sparkles, SquareTerminal,
   ThumbsDown, ThumbsUp, X, type LucideIcon,
 } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import { Link, NavLink, Navigate, useLocation, useNavigate } from "react-router";
-import { navigation, pageByPath, pages, type ContentBlock, type DocsPage } from "@/content";
-import { SiteFooter } from "@/components/docs/site-footer";
-import { WebsiteNavbar } from "@/components/docs/website-navbar";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import Footer from "@/components/layout/Footer";
+import { DocsNavbar } from "@/components/layout/NavBar/DocsNavbar";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@docs/components/ui/dialog";
+import { Input } from "@docs/components/ui/input";
+import { navigation, pageByPath, pages, type ContentBlock, type DocsPage } from "@docs/content";
 
 function Sidebar({ onNavigate, onSearch }: { onNavigate?: () => void; onSearch: () => void }) {
   const location = useLocation();
@@ -139,7 +140,7 @@ function ArticleActions({ page }: { page: DocsPage }) {
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
   };
-  return <div className="article-actions"><button type="button" onClick={copyPage}>{copied ? <Check /> : <Copy />}<span>{copied ? "Copied" : "Copy page"}</span></button>{page.source && <a href={page.source.href} target="_blank" rel="noreferrer"><Github /><span>View source</span></a>}</div>;
+  return <div className="article-actions"><button type="button" onClick={copyPage}>{copied ? <Check /> : <Copy />}<span>{copied ? "Copied" : "Copy page"}</span></button>{page.source && <a href={page.source.href} target="_blank" rel="noreferrer"><FaGithub /><span>View source</span></a>}</div>;
 }
 
 function RelatedPages({ page }: { page: DocsPage }) {
@@ -255,5 +256,5 @@ export function App(): ReactNode {
     window.addEventListener("keydown", openSearch);
     return () => window.removeEventListener("keydown", openSearch);
   }, []);
-  return <><a className="skip-link" href="#docs-content">Skip to content</a><div className={cn("site-shell", isLanding && "is-landing")}><WebsiteNavbar onOpenSearch={() => setSearchOpen(true)} onOpenDocsMenu={() => setMobileOpen((open) => !open)} docsMenuOpen={mobileOpen} /><aside className="left-sidebar"><Sidebar onSearch={() => setSearchOpen(true)} /></aside>{mobileOpen && <div className="mobile-drawer"><button className="drawer-backdrop" onClick={() => setMobileOpen(false)} aria-label="Close navigation" /><aside><div className="drawer-header"><span>Documentation</span><button onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X /></button></div><Sidebar onNavigate={() => setMobileOpen(false)} onSearch={() => { setMobileOpen(false); setSearchOpen(true); }} /></aside></div>}<main id="docs-content" className="main-content"><DocumentRoute /></main>{!isLanding && <aside className="right-sidebar"><TableOfContents page={page} /></aside>}<SiteFooter /></div><SearchDialog open={searchOpen} onOpenChange={setSearchOpen} /></>;
+  return <><a className="skip-link" href="#docs-content">Skip to content</a><div className="site-shell"><DocsNavbar onOpenSearch={() => setSearchOpen(true)} onOpenDocsMenu={() => setMobileOpen((open) => !open)} docsMenuOpen={mobileOpen} /><div className={cn("docs-layout", isLanding && "is-landing")}><aside className="left-sidebar"><Sidebar onSearch={() => setSearchOpen(true)} /></aside>{mobileOpen && <div className="mobile-drawer"><button className="drawer-backdrop" onClick={() => setMobileOpen(false)} aria-label="Close navigation" /><aside><div className="drawer-header"><span>Documentation</span><button onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X /></button></div><Sidebar onNavigate={() => setMobileOpen(false)} onSearch={() => { setMobileOpen(false); setSearchOpen(true); }} /></aside></div>}<main id="docs-content" className="main-content"><DocumentRoute /></main>{!isLanding && <aside className="right-sidebar"><TableOfContents page={page} /></aside>}</div><Footer className="docs-site-footer" siteOrigin="https://mistysys.com" /></div><SearchDialog open={searchOpen} onOpenChange={setSearchOpen} /></>;
 }
