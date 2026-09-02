@@ -7,7 +7,7 @@
 
 :root {
   --site-container-max: 1280px;
-  --site-gutter: 1.5rem;
+  --site-gutter: clamp(1.5rem, 4vw, 4rem);
   --site-nav-height: calc(4.5rem + 2px);
   --site-content-max: calc(
     var(--site-container-max) - var(--site-gutter) - var(--site-gutter)
@@ -57,6 +57,9 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+  --misty-extension-artwork-background: var(--muted);
+  --misty-extension-artwork-border: var(--border);
+  --misty-extension-artwork-foreground: var(--foreground);
 }
 
 .dark {
@@ -256,10 +259,30 @@ body {
   --site-gutter: clamp(1.5rem, 4vw, 4rem);
 }
 
-.feature-bento-intro {
+.story-intro-track {
+  position: relative;
+  /* 100svh is the sticky viewport; the remaining 104svh is scroll travel.
+     This makes the chapter entrances 30% longer than their previous 80svh. */
+  height: 204svh;
+}
+
+.story-intro-stage {
+  position: sticky;
+  top: 0;
   display: grid;
+  height: 100svh;
   place-items: center;
-  padding-block: clamp(4.5rem, 8svh, 6.5rem) clamp(1.5rem, 3svh, 2.25rem);
+  overflow: hidden;
+}
+
+.story-intro-copy {
+  opacity: var(--story-intro-opacity, 0);
+  text-align: center;
+  transform: translate3d(var(--story-intro-x, 34vw), 0, 0)
+    scale(var(--story-intro-scale, 0.94));
+  filter: blur(var(--story-intro-blur, 8px));
+  transform-origin: center;
+  will-change: opacity, transform, filter;
 }
 
 .feature-bento-story {
@@ -291,7 +314,14 @@ body {
   width: 100%;
   height: clamp(110rem, 240svh, 150rem);
   margin-bottom: 0;
-  transform: translate3d(0, var(--feature-bento-camera-shift, 5%), 0);
+  transform: translate3d(
+    0,
+    calc(
+      clamp(7rem, 50svh, calc(100svh - 7rem)) -
+        var(--feature-bento-marker-y, 15.75%)
+    ),
+    0
+  );
   will-change: transform;
 }
 
@@ -359,7 +389,7 @@ body {
   height: 17.5%;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .feature-bento-stage-inner {
     --site-gutter: clamp(2rem, 2.5vw, 2.5rem);
   }
@@ -425,10 +455,6 @@ body {
 }
 
 @media (max-width: 1023px) {
-  .feature-bento-intro {
-    padding-block: 5rem 2.5rem;
-  }
-
   .feature-bento-story {
     height: auto;
   }
@@ -856,42 +882,115 @@ button:disabled {
   }
 }
 
-/* The desktop hero uses scroll to hand the page from the message to the
-   product. Collapsing the grid column keeps the expanded screenshot aligned
-   to the same responsive content rail as every section below it. */
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+/* The static layout is also the reduced-motion and narrow-screen fallback:
+   centered message, product directly below it, then the web-app action. */
+.hero-scroll-layout {
+  display: flex;
+  min-height: calc(100svh - var(--site-nav-height));
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2.5rem, 7svh, 5rem);
+  padding-bottom: clamp(2.5rem, 6svh, 4.5rem);
+}
+
+.hero-scroll-copy {
+  display: flex;
+  width: min(100%, 62rem);
+  min-height: calc(100svh - var(--site-nav-height));
+  justify-content: center;
+  padding-block: clamp(3.5rem, 9svh, 7rem);
+}
+
+.hero-scroll-shot {
+  width: min(100%, 72rem);
+}
+
+.hero-scroll-shot [data-screenshot-status="capture"] > figure {
+  border-radius: var(--hero-shot-radius, 18px);
+}
+
+.hero-scroll-final-cta {
+  display: flex;
+  justify-content: center;
+}
+
+/* On larger screens, the hero becomes a pinned camera move. The headline
+   scales toward the viewer while the product rises from below, expands into
+   the available viewport, and leaves a dedicated action shelf at the bottom. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   .hero-scroll-track {
-    height: 300svh;
+    /* Preserve the sticky viewport and lengthen the 220svh camera move by 30%. */
+    height: 386svh;
   }
 
   .hero-scroll-stage {
     position: sticky;
     top: var(--site-nav-height);
-    display: flex;
     height: calc(100svh - var(--site-nav-height));
-    align-items: center;
+    overflow: hidden;
   }
 
   .hero-scroll-layout {
-    grid-template-columns:
-      minmax(0, var(--hero-copy-column, 38%))
-      minmax(0, 1fr);
-    gap: var(--hero-grid-gap, 3.5rem);
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 0;
+    max-width: none;
+    padding: 0;
   }
 
   .hero-scroll-copy {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(calc(100vw - (2 * var(--site-gutter))), 62rem);
+    min-height: 0;
+    padding-block: 0;
     opacity: var(--hero-copy-opacity, 1);
-    transform: translate3d(0, var(--hero-copy-shift, 0), 0);
+    transform: translate3d(-50%, calc(-50% + var(--hero-copy-shift, 0)), 0);
+    transform-origin: center;
     will-change: opacity, transform;
   }
 
-  .hero-scroll-shot {
-    width: var(--hero-shot-width, 100%);
-    align-self: center;
-    justify-self: center;
-    transform: scale(var(--hero-shot-scale, 0.98));
+  .hero-scroll-zoom-group {
+    transform: scale(var(--hero-copy-scale, 1));
     transform-origin: center;
     will-change: transform;
+  }
+
+  .hero-scroll-shot {
+    position: absolute;
+    top: var(--hero-shot-top, 47svh);
+    left: 50%;
+    width: min(calc(100vw - (2 * var(--site-gutter))), var(--site-content-max));
+    height: var(--hero-shot-height, 44svh);
+    opacity: var(--hero-product-opacity, 0);
+    transform: translateX(-50%) scale(var(--hero-shot-scale, 0.72));
+    transform-origin: center top;
+    will-change: top, height, opacity, transform;
+  }
+
+  .hero-scroll-shot [data-screenshot-slot],
+  .hero-scroll-shot [data-screenshot-status="capture"] > figure {
+    height: 100%;
+  }
+
+  .hero-scroll-shot [data-screenshot-status="capture"] > figure {
+    overflow: hidden;
+  }
+
+  .hero-scroll-shot [data-screenshot-status="capture"] img {
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+  }
+
+  .hero-scroll-final-cta {
+    position: absolute;
+    inset-inline: 0;
+    bottom: clamp(4.5rem, 9svh, 8rem);
+    opacity: var(--hero-product-opacity, 0);
+    will-change: opacity;
   }
 }
 
@@ -1051,5 +1150,20 @@ button:disabled {
 
   .pin-stacked {
     display: block !important;
+  }
+
+  .story-intro-track {
+    height: auto;
+  }
+
+  .story-intro-stage {
+    position: relative;
+    min-height: 70svh;
+  }
+
+  .story-intro-copy {
+    opacity: 1;
+    transform: none;
+    filter: none;
   }
 }

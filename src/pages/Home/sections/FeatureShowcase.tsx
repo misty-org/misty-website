@@ -19,6 +19,9 @@ import {
 import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
+import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
+
+const SCROLL_BEAT_HEIGHT_SVH = 130;
 
 type PreviewKind = "mockup" | "tasks" | "connections" | "chat";
 
@@ -53,17 +56,6 @@ const ROUTE_START = { x: PANEL_LEFT, y: FIRST_PANEL_MIDDLE };
 const ROUTE_END = { x: PANEL_LEFT, y: LAST_PANEL_BOTTOM };
 const ROW_TURNS = [267.5, 487.5, 707.5] as const;
 
-const CAMERA_STOPS = [
-  { progress: 0, shift: 5 },
-  { progress: 0.18, shift: 5 },
-  { progress: 0.25, shift: -17 },
-  { progress: 0.44, shift: -17 },
-  { progress: 0.5, shift: -39 },
-  { progress: 0.69, shift: -39 },
-  { progress: 0.75, shift: -55 },
-  { progress: 1, shift: -55 },
-] as const;
-
 /* The SVG stretches to a tall scene, so x/y radii are calculated separately
  * to keep every rendered bend circular instead of vertically distorted. */
 function buildBentoRoute(radiusX: number, radiusY: number) {
@@ -94,28 +86,6 @@ function buildBentoRoute(radiusX: number, radiusY: number) {
     `L ${leftRail} ${LAST_PANEL_BOTTOM - radiusY}`,
     `Q ${leftRail} ${LAST_PANEL_BOTTOM} ${ROUTE_END.x} ${ROUTE_END.y}`,
   ].join(" ");
-}
-
-function cameraShiftAt(progress: number) {
-  const clampedProgress = Math.min(1, Math.max(0, progress));
-  const nextIndex = CAMERA_STOPS.findIndex(
-    (stop) => clampedProgress <= stop.progress,
-  );
-
-  if (nextIndex <= 0) return CAMERA_STOPS[0].shift;
-  if (nextIndex === -1) {
-    return CAMERA_STOPS[CAMERA_STOPS.length - 1].shift;
-  }
-
-  const previous = CAMERA_STOPS[nextIndex - 1];
-  const next = CAMERA_STOPS[nextIndex];
-  const interval = next.progress - previous.progress;
-  const position = interval
-    ? (clampedProgress - previous.progress) / interval
-    : 1;
-  const eased = position * position * (3 - 2 * position);
-
-  return previous.shift + (next.shift - previous.shift) * eased;
 }
 
 /*
@@ -282,7 +252,10 @@ function MistyProgressScene({ progress }: { progress: number }) {
   });
   const activeCard = activeCardAt(progress);
   const sceneStyle = {
-    "--feature-bento-camera-shift": `${cameraShiftAt(progress)}%`,
+    // Move the scene by the exact inverse of Misty's route position. The CSS
+    // adds a viewport-relative target, so Misty remains inside the pinned
+    // stage instead of slipping above or below it between hand-tuned stops.
+    "--feature-bento-marker-y": `${(routeFrame.marker.y / SCENE_HEIGHT) * 100}%`,
   } as CSSProperties;
 
   useLayoutEffect(() => {
@@ -377,11 +350,7 @@ function MistyProgressScene({ progress }: { progress: number }) {
       </svg>
 
       {cards.map((card, index) => (
-        <ShowcaseCard
-          key={card.id}
-          card={card}
-          active={index === activeCard}
-        />
+        <ShowcaseCard key={card.id} card={card} active={index === activeCard} />
       ))}
 
       <div
@@ -416,26 +385,19 @@ export function FeatureShowcase() {
       aria-labelledby="feature-bento-title"
       className="relative z-10 scroll-mt-24 bg-background"
     >
-      <div className="site-container feature-bento-intro">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2
-            id="feature-bento-title"
-            className="text-balance text-3xl font-medium tracking-[-0.03em] text-[var(--marketing-foreground)] sm:text-5xl"
-          >
-            A closer look at Misty.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[var(--marketing-muted)] sm:text-xl">
-            Follow Misty through the workspace.
-          </p>
-        </div>
-      </div>
+      <ScrollSceneIntro
+        id="feature-bento-title"
+        title="A closer look at Misty."
+        description="Follow Misty through the workspace."
+        direction="right"
+      />
 
       <div
         ref={storyRef}
         className="feature-bento-story"
         style={
           {
-            "--feature-bento-story-height": `${(cards.length + 1) * 100}svh`,
+            "--feature-bento-story-height": `${cards.length * SCROLL_BEAT_HEIGHT_SVH + 100}svh`,
           } as CSSProperties
         }
       >

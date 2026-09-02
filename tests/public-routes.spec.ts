@@ -15,6 +15,16 @@ const publicRoutes = [
     title: "Download Misty — macOS and Windows beta",
   },
   {
+    name: "extensions",
+    path: "/extensions",
+    title: "Extensions — Add focused capabilities to Misty",
+  },
+  {
+    name: "extension detail",
+    path: "/extensions/storage-report",
+    title: "Extension details — Misty",
+  },
+  {
     name: "pricing",
     path: "/pricing",
     title: "Pricing — Basic, Pro, and Max plans | Misty",

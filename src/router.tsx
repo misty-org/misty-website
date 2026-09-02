@@ -12,6 +12,7 @@ import Settings from "./pages/AccountSettings";
 import Changelog from "./pages/Changelog";
 import Blog from "./pages/Blog";
 import Roadmap from "./pages/Roadmap";
+import Extensions, { ExtensionDetailPage } from "./pages/Extensions";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
@@ -54,6 +55,24 @@ export const router = createBrowserRouter([
         handle: {
           title: "Download Misty — macOS and Windows beta",
           description: marketingCopy.metadata.download,
+        },
+      },
+      {
+        path: "extensions",
+        element: <Extensions />,
+        handle: {
+          title: "Extensions — Add focused capabilities to Misty",
+          description:
+            "Browse verified Misty extensions, including their capabilities, permissions, tools, and supported desktop platforms.",
+        },
+      },
+      {
+        path: "extensions/:extensionId",
+        element: <ExtensionDetailPage />,
+        handle: {
+          title: "Extension details — Misty",
+          description:
+            "Review an extension's capabilities, permissions, included tools, and supported platforms before installing it in Misty.",
         },
       },
       {

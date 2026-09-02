@@ -1,12 +1,18 @@
 import { NavLink, useLocation } from "react-router";
 
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { cn } from "@/lib/utils";
 import { columns, legalLinks, socialLinks } from "./footerLinks";
 
 const linkClass =
   "w-fit text-sm leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-function FooterColumns() {
+function siteHref(to: string, siteOrigin?: string) {
+  if (!siteOrigin || /^https?:\/\//.test(to)) return to;
+  return new URL(to, siteOrigin).toString();
+}
+
+function FooterColumns({ siteOrigin }: { siteOrigin?: string }) {
   return (
     <>
       {columns.map((column) => (
@@ -19,10 +25,10 @@ function FooterColumns() {
             {column.label}
           </h2>
           {column.links.map((link) =>
-            link.external ? (
+            link.external || siteOrigin ? (
               <a
                 key={link.text}
-                href={link.to}
+                href={siteHref(link.to, siteOrigin)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={linkClass}
@@ -62,30 +68,45 @@ function FooterSocials() {
   );
 }
 
-export default function Footer() {
+export default function Footer({ className, siteOrigin }: { className?: string; siteOrigin?: string } = {}) {
   const location = useLocation();
 
   return (
     <footer
-      className={`relative z-10 border-t border-border bg-background${location.pathname === "/" ? " home-content-rail" : ""}`}
+      className={cn(
+        "relative z-10 border-t border-border bg-background",
+        !siteOrigin && location.pathname === "/" && "home-content-rail",
+        className,
+      )}
     >
       <div className="site-container py-6">
         <div className="px-1.5">
           <div className="grid gap-y-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-20">
             <div>
-              <NavLink
-                to="/"
-                aria-label="Misty footer"
-                className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <BrandLogo />
-                <span>Misty</span>
-              </NavLink>
+              {siteOrigin ? (
+                <a
+                  href={siteOrigin}
+                  aria-label="Misty footer"
+                  className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <BrandLogo />
+                  <span>Misty</span>
+                </a>
+              ) : (
+                <NavLink
+                  to="/"
+                  aria-label="Misty footer"
+                  className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <BrandLogo />
+                  <span>Misty</span>
+                </NavLink>
+              )}
               <FooterSocials />
             </div>
 
             <div className="grid grid-cols-2 gap-x-12 sm:gap-x-20 lg:gap-x-24">
-              <FooterColumns />
+              <FooterColumns siteOrigin={siteOrigin} />
             </div>
           </div>
 
@@ -97,7 +118,15 @@ export default function Footer() {
               aria-label="Legal"
               className="flex flex-wrap items-center gap-x-5 gap-y-1"
             >
-              {legalLinks.map((link) => (
+              {legalLinks.map((link) => siteOrigin ? (
+                <a
+                  key={link.to}
+                  href={siteHref(link.to, siteOrigin)}
+                  className="text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  {link.text}
+                </a>
+              ) : (
                 <NavLink
                   key={link.to}
                   to={link.to}

@@ -51,7 +51,7 @@ test("the desktop theme toggle follows the sign-in control", async ({
   expect(toggleBox?.x).toBeGreaterThan(signInBox?.x ?? Number.POSITIVE_INFINITY);
 });
 
-test("the primary links are limited to Download and Pricing", async ({
+test("the primary links include the public extension catalog", async ({
   page,
 }, testInfo) => {
   const mobile = testInfo.project.name === "mobile-chromium";
@@ -67,10 +67,10 @@ test("the primary links are limited to Download and Pricing", async ({
   ).toBeVisible();
   const labels = await linkContainer
     .locator("a")
-    .filter({ hasText: /^(Download|Pricing)$/ })
+    .filter({ hasText: /^(Download|Extensions|Pricing)$/ })
     .allTextContents();
 
-  expect(labels).toEqual(["Download", "Pricing"]);
+  expect(labels).toEqual(["Download", "Extensions", "Pricing"]);
   await expect(
     linkContainer.getByRole("link", { name: "Features", exact: true }),
   ).toHaveCount(0);
