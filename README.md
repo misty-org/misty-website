@@ -39,7 +39,7 @@ interface, causing the usual website deployment to rebuild from the new source.
 The ignored `.env` is the real local configuration. Browser API requests use
 the `/v1` path locally; the Vite development server can proxy that path to a
 local server through `VITE_API_PROXY_TARGET`. Keep this file limited to public
-browser configuration because every `VITE_*` value is bundled into the site.
+browser configuration because `MISTY_PUBLIC_API_URL` is bundled into the site.
 
 ## Cloudflare Workers
 
@@ -51,5 +51,5 @@ Configure Cloudflare Workers Builds with:
 - Root directory: the repository root.
 - Build command: `npm run build`.
 - Deploy command: `npx wrangler deploy`.
-- Build environment variable: `VITE_API_BASE=https://api.mistysys.com/v1`.
+- Build environment variable: `MISTY_PUBLIC_API_URL=https://api.mistysys.com/v1`.
 - Custom domain: `mistysys.com`.
