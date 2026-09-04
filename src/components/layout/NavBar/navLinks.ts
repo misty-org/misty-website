@@ -8,7 +8,7 @@ export interface NavLinkEntry {
 
 export const navItems: NavLinkEntry[] = [
   { to: "/download", label: "Download" },
-  { to: "/extensions", label: "Extensions" },
+  { to: "/store", label: "Store" },
   { to: "/pricing", label: "Pricing" },
 ];
 

@@ -145,7 +145,10 @@ export function BillingPanel({
 
   return (
     <div>
-      <Section title="Plan">
+      <Section
+        title="Plan details"
+        description="Your current Misty plan and renewal status."
+      >
         {loading && !me ? <LoadingRow label="Loading plan details" /> : null}
 
         {loadError && !me ? (
@@ -155,7 +158,10 @@ export function BillingPanel({
         {me ? <PlanRows me={me} usage={usage} /> : null}
       </Section>
 
-      <Section title="Billing">
+      <Section
+        title="Subscription"
+        description="Change your plan or manage payment details."
+      >
         {canManageBilling ? (
           <>
             <Row label="Current plan">

@@ -42,7 +42,10 @@ export function AccountPanel({
 
   return (
     <div>
-      <Section title="Profile">
+      <Section
+        title="Profile"
+        description="Manage the identity shown across Misty."
+      >
         <div className={`${customRowClass} flex flex-col gap-4 py-5`}>
           <AvatarUpload me={me} onUploaded={onAvatarUploaded} />
 
@@ -108,32 +111,36 @@ export function AccountPanel({
         </Row>
       </Section>
 
-      <Section title="License">
+      <Section
+        title="Device license"
+        description="Control which computer is linked to this license."
+      >
         <LicenseDevice me={me} />
       </Section>
 
-      <Section title="Security">
-        <div
-          className={`${customRowClass} flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-6`}
-        >
-          <div>
-            <p className="text-sm text-foreground">Password</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Reset via email link.
-            </p>
-          </div>
+      <Section
+        title="Security"
+        description="Manage how you sign in and protect your account."
+      >
+        <Row label="Password" description="Reset your password by email.">
           <Button asChild variant="link" className="h-auto p-0">
             <a href="/signin">Reset</a>
           </Button>
-        </div>
+        </Row>
         <GhostRow label="Two-factor authentication" value="Coming soon" />
       </Section>
 
-      <Section title="Your data">
+      <Section
+        title="Your data"
+        description="Download a portable copy of the information tied to your account."
+      >
         <DataExport />
       </Section>
 
-      <Section title="Danger zone">
+      <Section
+        title="Danger zone"
+        description="Actions here affect your entire Misty account."
+      >
         <DangerZone onDeleted={onDeleted} />
       </Section>
     </div>

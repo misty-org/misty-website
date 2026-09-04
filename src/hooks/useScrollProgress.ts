@@ -11,7 +11,18 @@ import { useEffect, useRef, useState } from "react";
  * Returns 0 under `prefers-reduced-motion`, where the section renders as a
  * plain stacked list and progress has nothing to drive.
  */
-export function useScrollProgress<T extends HTMLElement = HTMLElement>() {
+type ScrollProgressOptions = {
+  /**
+   * `top` starts when the track reaches the top of the viewport. `enter`
+   * starts while the track's sticky stage is first coming into view, which
+   * avoids an empty viewport before slide-in scenes begin moving.
+   */
+  start?: "top" | "enter";
+};
+
+export function useScrollProgress<T extends HTMLElement = HTMLElement>({
+  start = "top",
+}: ScrollProgressOptions = {}) {
   const ref = useRef<T>(null);
   const [progress, setProgress] = useState(0);
 
@@ -27,14 +38,19 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>() {
     const measure = () => {
       frame = 0;
       const rect = el.getBoundingClientRect();
-      // The sticky child is one viewport tall, so that much of the track is
-      // spent holding the last beat rather than travelling between beats.
-      const travel = rect.height - window.innerHeight;
+      const viewportHeight = window.innerHeight;
+      // A top-starting sticky track travels for its height minus the pinned
+      // viewport. An entering track includes the approach from the bottom of
+      // the viewport, so its complete visible journey is the track's height.
+      const travel =
+        start === "enter" ? rect.height : rect.height - viewportHeight;
       if (travel <= 0) {
         setProgress(0);
         return;
       }
-      setProgress(Math.min(1, Math.max(0, -rect.top / travel)));
+      const travelled =
+        start === "enter" ? viewportHeight - rect.top : -rect.top;
+      setProgress(Math.min(1, Math.max(0, travelled / travel)));
     };
 
     const onScroll = () => {
@@ -56,7 +72,7 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>() {
       document.removeEventListener("scroll", onScroll, { capture: true });
       window.removeEventListener("resize", onScroll);
     };
-  }, []);
+  }, [start]);
 
   return { ref, progress };
 }

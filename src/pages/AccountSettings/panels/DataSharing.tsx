@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Spinner } from "@/components/ui/spinner";
 import { Switch } from "@/components/ui/switch";
+import { DesktopSettingsRow } from "@/components/settings";
 import {
   fetchAccountSettings,
   updateAccountSettings,
@@ -106,23 +107,18 @@ export function DataSharing() {
   return (
     <>
       {PREFERENCES.map((preference) => (
-        <div
+        <DesktopSettingsRow
           key={preference.key}
-          className={`${customRowClass} flex items-center justify-between gap-6`}
+          label={preference.label}
+          description={preference.description}
         >
-          <div className="min-w-0">
-            <p className="text-sm text-foreground">{preference.label}</p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              {preference.description}
-            </p>
-          </div>
           <Switch
             checked={settings[preference.key]}
             disabled={saving}
             aria-label={preference.label}
             onCheckedChange={(value) => void toggle(preference.key, value)}
           />
-        </div>
+        </DesktopSettingsRow>
       ))}
       {saveError ? (
         <p className="px-5 pb-3 text-xs text-destructive" role="status">

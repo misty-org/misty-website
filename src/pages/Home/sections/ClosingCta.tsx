@@ -7,9 +7,10 @@ export function ClosingCta({ copy }: { copy: MarketingCopy["home"] }) {
 
   return (
     <section
+      id="get-started"
       ref={ref}
       aria-labelledby="closing-cta-title"
-      className="reveal bg-[#08090a] py-20 sm:py-24"
+      className="reveal flex min-h-[calc(100svh-var(--site-nav-height,72px))] scroll-mt-24 flex-col justify-center bg-[#08090a] py-20 sm:py-24"
     >
       <div className="site-container">
         <div className="mx-auto max-w-3xl text-center">

@@ -196,10 +196,10 @@ function RoadmapPreview() {
 
 export function ResourcePreview() {
   return (
-    <div className="grid gap-8 py-8">
+    <section id="resources" aria-label="Misty resources" className="grid scroll-mt-24 gap-8 py-8">
       <BlogPreview />
       <ChangelogPreview />
       <RoadmapPreview />
-    </div>
+    </section>
   );
 }

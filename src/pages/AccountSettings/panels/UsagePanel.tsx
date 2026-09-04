@@ -81,7 +81,10 @@ export function UsagePanel({
 
   return (
     <div>
-      <Section title="Storage">
+      <Section
+        title="Storage"
+        description="Pooled storage shared by the Spaces you own."
+      >
         {state === "loading" || state === "idle" ? (
           <LoadingRow label="Loading usage" />
         ) : null}
@@ -118,7 +121,10 @@ export function UsagePanel({
         ) : null}
       </Section>
 
-      <Section title="Agent usage">
+      <Section
+        title="Agent usage"
+        description="Your weekly allowance for hosted agent work."
+      >
         {state === "ready" && usage ? (
           <>
             <Row label="This week">{agentUsedPercent}% used</Row>

@@ -6,7 +6,9 @@
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@misty/store/*": ["./vendor/misty-store/interface/*"],
+      "@misty/store": ["./vendor/misty-store/interface/store.tsx"]
     },
     "skipLibCheck": true,
     "moduleResolution": "bundler",

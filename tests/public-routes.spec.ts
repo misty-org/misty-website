@@ -15,14 +15,14 @@ const publicRoutes = [
     title: "Download Misty — macOS and Windows beta",
   },
   {
-    name: "extensions",
-    path: "/extensions",
-    title: "Extensions — Add focused capabilities to Misty",
+    name: "store",
+    path: "/store",
+    title: "Store — Discover tools for the way you work",
   },
   {
-    name: "extension detail",
-    path: "/extensions/storage-report",
-    title: "Extension details — Misty",
+    name: "store app detail",
+    path: "/store/storage-report",
+    title: "Store app details — Misty",
   },
   {
     name: "pricing",

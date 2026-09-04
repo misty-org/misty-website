@@ -20,8 +20,7 @@ import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
 import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
-
-const SCROLL_BEAT_HEIGHT_SVH = 130;
+import { scrollTrackHeight, splitEntranceProgress } from "../scrollMotion";
 
 type PreviewKind = "mockup" | "tasks" | "connections" | "chat";
 
@@ -377,13 +376,21 @@ function MistyProgressScene({ progress }: { progress: number }) {
 }
 
 export function FeatureShowcase() {
-  const { ref: storyRef, progress } = useScrollProgress<HTMLDivElement>();
+  const { ref: storyRef, progress } = useScrollProgress<HTMLDivElement>({
+    start: "enter",
+  });
+  const { entranceProgress, contentProgress } = splitEntranceProgress(
+    progress,
+    cards.length,
+  );
+  const sceneEntranceStyle = {
+    "--feature-bento-entry-x": `${100 * (1 - entranceProgress)}vw`,
+  } as CSSProperties;
 
   return (
     <section
-      id="features"
       aria-labelledby="feature-bento-title"
-      className="relative z-10 scroll-mt-24 bg-background"
+      className="relative z-10 bg-background"
     >
       <ScrollSceneIntro
         id="feature-bento-title"
@@ -394,17 +401,21 @@ export function FeatureShowcase() {
 
       <div
         ref={storyRef}
-        className="feature-bento-story"
+        className="feature-bento-story relative"
         style={
           {
-            "--feature-bento-story-height": `${cards.length * SCROLL_BEAT_HEIGHT_SVH + 100}svh`,
+            "--feature-bento-story-height": `${scrollTrackHeight(cards.length)}svh`,
           } as CSSProperties
         }
       >
+        <div id="features" className="pointer-events-none absolute top-[130svh] -translate-y-16" />
         <div className="feature-bento-stage">
-          <div className="site-container feature-bento-stage-inner">
+          <div
+            className="site-container feature-bento-stage-inner"
+            style={sceneEntranceStyle}
+          >
             <div className="feature-logo-scene-window">
-              <MistyProgressScene progress={progress} />
+              <MistyProgressScene progress={contentProgress} />
             </div>
           </div>
         </div>

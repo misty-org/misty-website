@@ -4,7 +4,10 @@ import { DataSharing } from "./DataSharing";
 export function PrivacyPanel() {
   return (
     <div>
-      <Section title="Privacy">
+      <Section
+        title="Data handling"
+        description="How Misty treats private and shared content."
+      >
         <div className={`${customRowClass} flex flex-col gap-2`}>
           <p className="text-sm font-medium text-foreground">
             Private Files and shared Space content are handled differently.
@@ -18,11 +21,17 @@ export function PrivacyPanel() {
         </div>
       </Section>
 
-      <Section title="Data sharing">
+      <Section
+        title="Data sharing"
+        description="Choose what non-content information you share with Misty."
+      >
         <DataSharing />
       </Section>
 
-      <Section title="Legal">
+      <Section
+        title="Policies"
+        description="Read the agreements that apply to your Misty account."
+      >
         <Row label="Privacy Policy">
           <a className="underline underline-offset-4" href="/privacy">
             Read

@@ -219,8 +219,9 @@ function BrandMarquee({
 export function EcosystemStrip() {
   return (
     <section
+      id="ecosystem"
       aria-label="Misty ecosystem"
-      className="relative z-10 overflow-x-clip bg-background pb-6 pt-8 sm:pb-8 sm:pt-10 lg:-mt-[2svh] lg:pt-14"
+      className="relative z-10 flex min-h-[calc(100svh-var(--site-nav-height,72px))] scroll-mt-16 flex-col justify-center overflow-x-clip bg-background py-16 sm:py-20"
     >
       <div className="site-container min-w-0">
         <div>

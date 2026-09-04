@@ -5,6 +5,54 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
+test("slide-in stories start moving as soon as their tracks enter the viewport", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.reload();
+
+  for (const { track, scene, property } of [
+    {
+      track: ".story-intro-track",
+      scene: ".story-intro-copy",
+      property: "--story-intro-x",
+    },
+    {
+      track: ".pin-track",
+      scene: ".pin-scene",
+      property: "--pin-scene-x",
+    },
+    {
+      track: ".feature-bento-story",
+      scene: ".feature-bento-stage-inner",
+      property: "--feature-bento-entry-x",
+    },
+  ]) {
+    const storyTrack = page.locator(track).first();
+    await storyTrack.evaluate((element) => {
+      const top = window.scrollY + element.getBoundingClientRect().top;
+      window.scrollTo({
+        top: top - window.innerHeight * 0.75,
+        behavior: "instant",
+      });
+    });
+
+    const storyScene = page.locator(scene).first();
+    await expect
+      .poll(async () => {
+        const value = await storyScene.evaluate(
+          (element, customProperty) =>
+            Number.parseFloat(
+              (element as HTMLElement).style.getPropertyValue(customProperty),
+            ),
+          property,
+        );
+        return Math.abs(value);
+      })
+      .toBeLessThan(95);
+  }
+});
+
 test("the homepage tells the complete collaboration story", async ({
   page,
 }) => {
@@ -147,9 +195,9 @@ test("the footer keeps product resources and community links focused", async ({
   await expect(
     footer.getByRole("heading", { name: "Resources" }),
   ).toBeVisible();
-  await expect(
-    footer.getByRole("heading", { name: "Subscribe" }),
-  ).toHaveCount(0);
+  await expect(footer.getByRole("heading", { name: "Subscribe" })).toHaveCount(
+    0,
+  );
   await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute(
     "href",
     "https://github.com/misty-org",
