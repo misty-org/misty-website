@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Blocks, Bot, FolderOpen, House } from "lucide-react";
+import { Bot, FolderOpen, House, Store } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { AppStatusBar } from "./AppWindow";
@@ -9,7 +9,7 @@ const railItems = [
   { id: "home", label: "Home", Icon: House },
   { id: "files", label: "Files", Icon: FolderOpen },
   { id: "agents", label: "Agents", Icon: Bot },
-  { id: "extensions", label: "Extensions", Icon: Blocks },
+  { id: "store", label: "Store", Icon: Store },
 ] as const;
 
 export type RailId = (typeof railItems)[number]["id"];

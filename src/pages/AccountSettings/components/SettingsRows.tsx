@@ -9,29 +9,36 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 /** Padding for rows that hold custom content instead of a label/value pair. */
-export const customRowClass = "border-b border-border/60 px-5 py-4 last:border-b-0";
+export const customRowClass =
+  "border-b border-border/70 px-5 py-4 last:border-b-0";
 
 export function Section({
   title,
+  description,
   children,
 }: {
   title: string;
+  description?: string;
   children: ReactNode;
 }) {
   return (
-    <DesktopSettingsSection title={title}>{children}</DesktopSettingsSection>
+    <DesktopSettingsSection title={title} description={description}>
+      {children}
+    </DesktopSettingsSection>
   );
 }
 
 export function Row({
   label,
+  description,
   children,
 }: {
   label: string;
+  description?: string;
   children: ReactNode;
 }) {
   return (
-    <DesktopSettingsRow label={label}>
+    <DesktopSettingsRow label={label} description={description}>
       <span className="text-right text-sm text-foreground max-[760px]:text-left">
         {children}
       </span>

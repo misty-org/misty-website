@@ -14,25 +14,25 @@ npm test
 npm run build
 ```
 
-## Extension catalog
+## Store catalog
 
-The public `/extensions` catalog is generated from the canonical manifests in
-`misty-extensions/catalog`. Its product-neutral TypeScript contract, artwork,
+The public `/store` catalog is generated from the canonical manifests in
+`misty-store/catalog`. Its product-neutral TypeScript contract, artwork,
 verification treatment, filtering, slugs, and platform labels are synchronized
-from `misty-extensions/interface`; the website does not maintain a second
-hand-written extension interface. `npm run dev` and `npm run build` refresh the
+from `misty-store/interface`; the website does not maintain a second
+hand-written Store interface. `npm run dev` and `npm run build` refresh the
 generated sources automatically. To refresh or verify them directly:
 
 ```sh
-npm run sync:extensions
-npm run check:extensions
+npm run sync:store
+npm run check:store
 ```
 
-When the repositories are not adjacent, set `MISTY_EXTENSIONS_DIR` to a local
-`misty-extensions` checkout. Otherwise the sync script reads the published
+When the repositories are not adjacent, set `MISTY_STORE_DIR` to a local
+`misty-store` checkout. Otherwise the sync script reads the published
 catalog from GitHub.
 
-Updates merged to `misty-extensions/main` dispatch the website sync workflow.
+Updates merged to the published catalog repository's `main` branch dispatch the website sync workflow.
 That workflow validates and commits the refreshed generated catalog and shared
 interface, causing the usual website deployment to rebuild from the new source.
 

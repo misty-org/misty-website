@@ -10,8 +10,7 @@ import type { ProductVideoSlotId } from "@/content/productVideoSlots";
 import { beatPosition, useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
 import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
-
-const SCROLL_BEAT_HEIGHT_SVH = 130;
+import { scrollTrackHeight, splitEntranceProgress } from "../scrollMotion";
 
 type Beat = {
   title: string;
@@ -187,12 +186,15 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
  * animating anything — no content lives only inside the animation.
  */
 export function HowItWorks() {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>();
+  const { ref, progress } = useScrollProgress<HTMLDivElement>({
+    start: "enter",
+  });
   const smoothedProgress = useSmoothedProgress(progress);
-  const { index: active, within } = beatPosition(
+  const { entranceProgress, contentProgress } = splitEntranceProgress(
     smoothedProgress,
     beats.length,
   );
+  const { index: active, within } = beatPosition(contentProgress, beats.length);
   const incoming = Math.min(beats.length - 1, active + 1);
   const transition =
     active === beats.length - 1 ? 0 : smoothstep(FADE_START, FADE_END, within);
@@ -224,6 +226,9 @@ export function HowItWorks() {
       : index === indicatorActive
         ? indicatorWithin
         : 0;
+  const sceneEntranceStyle = {
+    "--pin-scene-x": `${-100 * (1 - entranceProgress)}vw`,
+  } as CSSProperties;
 
   return (
     <section
@@ -234,21 +239,23 @@ export function HowItWorks() {
         title="What is a Space?"
         description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
         direction="left"
-        entrance="slide"
-        className="-mt-[30svh]"
       />
 
-      {/* Each beat gets 130svh of travel, plus one viewport to hold the last
-          beat before the sticky section releases. */}
+      {/* One long phase slides the full walkthrough in from the left. The
+          internal beats begin only after that entrance has settled. */}
       <div
         ref={ref}
         className="pin-track relative hidden md:block"
         style={{
-          height: `${beats.length * SCROLL_BEAT_HEIGHT_SVH + 100}svh`,
+          height: `${scrollTrackHeight(beats.length)}svh`,
         }}
       >
+        <div id="how-it-works" className="pointer-events-none absolute top-[130svh] -translate-y-16" />
         <div className="pin-stage">
-          <div className="site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12">
+          <div
+            className="pin-scene site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12"
+            style={sceneEntranceStyle}
+          >
             <div className="col-start-1 row-start-1 flex h-full items-center justify-center">
               <div className="grid w-full max-w-lg text-center">
                 {beats.map((beat, index) => (

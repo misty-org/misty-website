@@ -29,7 +29,7 @@ public assets while retaining separate Vite and Wrangler entry points.
 
 - CLI pages follow `misty-cli/src/cli.rs` and its command implementations.
 - Extension pages follow the manifests, catalog, and typed host bridge in
-  `misty-extensions`.
+  `misty-store`.
 - Server pages follow the public route mounts, instance descriptor, and
   self-host feature gate in `misty-server`.
 

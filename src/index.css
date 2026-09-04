@@ -124,6 +124,8 @@
   --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
   --border: oklch(0.92 0.004 286.32 / 78%);
   --input: oklch(0.92 0.004 286.32);
+  --settings-nav-hover: #e8e8ec;
+  --settings-nav-selected: #d8d8de;
   --settings-info: oklch(0.45 0.17 248.18);
   --settings-success: oklch(0.47 0.15 149.214);
   --settings-warning: oklch(0.554 0.135 66.442);
@@ -131,18 +133,30 @@
 }
 
 .dark .account-settings {
-  --sidebar: oklch(0.18 0.006 285.9);
-  --sidebar-foreground: oklch(0.705 0.015 286.067);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 6.5%);
-  --input: oklch(1 0 0 / 10%);
+  --background: #131313;
+  --foreground: #e0e0e0;
+  --card: #191919;
+  --card-foreground: #e0e0e0;
+  --sidebar: #161616;
+  --sidebar-foreground: #8c8c8c;
+  --sidebar-accent: #3e3e3e;
+  --sidebar-accent-foreground: #f1f1f1;
+  --muted: #2b2b2b;
+  --muted-foreground: #8c8c8c;
+  --accent: #2b2b2b;
+  --accent-foreground: #f1f1f1;
+  --border: #262626;
+  --input: #2f2f2f;
+  --settings-nav-hover: #2b2b2b;
+  --settings-nav-selected: #3e3e3e;
   --settings-info: oklch(0.685 0.169 237.323);
   --settings-success: oklch(0.723 0.219 149.579);
   --settings-warning: oklch(0.795 0.184 86.047);
   --settings-danger: oklch(0.704 0.191 22.216);
 }
 
+/* The public Store is a faithful, read-only rendering of the desktop Store.
+   These local tokens keep its app chrome independent from marketing themes. */
 @theme inline {
   --font-sans: "Inter Variable", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -276,13 +290,11 @@ body {
 }
 
 .story-intro-copy {
-  opacity: var(--story-intro-opacity, 0);
+  opacity: 1;
   text-align: center;
-  transform: translate3d(var(--story-intro-x, 34vw), 0, 0)
-    scale(var(--story-intro-scale, 0.94));
-  filter: blur(var(--story-intro-blur, 8px));
+  transform: translate3d(var(--story-intro-x, 0vw), 0, 0);
   transform-origin: center;
-  will-change: opacity, transform, filter;
+  will-change: transform;
 }
 
 .feature-bento-story {
@@ -301,6 +313,13 @@ body {
   position: relative;
   height: 100%;
   padding-block: 0;
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-stage-inner {
+    transform: translate3d(var(--feature-bento-entry-x, 0), 0, 0);
+    will-change: transform;
+  }
 }
 
 .feature-logo-scene-window {
@@ -901,17 +920,26 @@ button:disabled {
   padding-block: clamp(3.5rem, 9svh, 7rem);
 }
 
+.hero-scroll-product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, var(--site-content-max));
+}
+
 .hero-scroll-shot {
-  width: min(100%, 72rem);
+  width: 100%;
 }
 
 .hero-scroll-shot [data-screenshot-status="capture"] > figure {
-  border-radius: var(--hero-shot-radius, 18px);
+  border-radius: var(--hero-shot-radius, 14px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
 }
 
-.hero-scroll-final-cta {
+.hero-scroll-product-cta {
   display: flex;
   justify-content: center;
+  margin-top: 1.5rem;
 }
 
 /* On larger screens, the hero becomes a pinned camera move. The headline
@@ -958,39 +986,53 @@ button:disabled {
     will-change: transform;
   }
 
-  .hero-scroll-shot {
+  .hero-scroll-product {
     position: absolute;
-    top: var(--hero-shot-top, 47svh);
+    top: 50%;
     left: 50%;
     width: min(calc(100vw - (2 * var(--site-gutter))), var(--site-content-max));
-    height: var(--hero-shot-height, 44svh);
     opacity: var(--hero-product-opacity, 0);
-    transform: translateX(-50%) scale(var(--hero-shot-scale, 0.72));
-    transform-origin: center top;
-    will-change: top, height, opacity, transform;
+    transform: translate3d(-50%, calc(-50% + var(--hero-product-shift, 0px)), 0) scale(var(--hero-product-scale, 0.94));
+    transform-origin: center center;
+    will-change: opacity, transform;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .hero-scroll-shot [data-screenshot-slot],
-  .hero-scroll-shot [data-screenshot-status="capture"] > figure {
-    height: 100%;
+  .hero-scroll-shot {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-scroll-shot [data-screenshot-slot] {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .hero-scroll-shot [data-screenshot-status="capture"] > figure {
+    width: fit-content;
+    max-width: 100%;
+    border-radius: var(--hero-shot-radius, 14px);
     overflow: hidden;
+    margin-inline: auto;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
   .hero-scroll-shot [data-screenshot-status="capture"] img {
-    height: 100%;
-    object-fit: cover;
-    object-position: top left;
+    width: 100%;
+    height: auto;
+    max-height: calc(100svh - var(--site-nav-height) - 6.5rem);
+    object-fit: contain;
+    object-position: top center;
   }
 
-  .hero-scroll-final-cta {
-    position: absolute;
-    inset-inline: 0;
-    bottom: clamp(4.5rem, 9svh, 8rem);
-    opacity: var(--hero-product-opacity, 0);
-    will-change: opacity;
+  .hero-scroll-product-cta {
+    margin-top: clamp(0.75rem, 2svh, 1.25rem);
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -1130,6 +1172,11 @@ button:disabled {
   height: 100svh;
   align-items: center;
   overflow: hidden;
+}
+
+.pin-scene {
+  transform: translate3d(var(--pin-scene-x, 0), 0, 0);
+  will-change: transform;
 }
 
 .pin-beat {

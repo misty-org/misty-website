@@ -18,21 +18,21 @@ import { resourceLinks } from "./navLinks";
 const COMPACT_WIDTH_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
 const EXPAND_WIDTH_EASING = "cubic-bezier(0.8, 0, 0.6, 1)";
 
-function useCompactNav(threshold = 60) {
-  const [compact, setCompact] = useState(
+function useScrolledNav(threshold = 60) {
+  const [scrolled, setScrolled] = useState(
     () => typeof window !== "undefined" && window.scrollY > threshold,
   );
 
   useEffect(() => {
     function onScroll() {
-      setCompact(window.scrollY > threshold);
+      setScrolled(window.scrollY > threshold);
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [threshold]);
 
-  return compact;
+  return scrolled;
 }
 
 export default function Navbar({
@@ -50,7 +50,7 @@ export default function Navbar({
   const location = useLocation();
   const { user, sessionReady, logout } = useAuth();
   const me = useUserStore((state) => state.me);
-  const compact = useCompactNav(60);
+  const scrolled = useScrolledNav(60);
 
   const displayName = me?.name ?? user?.name ?? "";
   const initials = displayName
@@ -73,13 +73,12 @@ export default function Navbar({
           <div
             className="pointer-events-auto w-full will-change-[max-width]"
             style={{
-              // The expanded border follows the same content edges as every
-              // site container, while the compact state keeps its own width.
-              maxWidth: docs || !compact ? "var(--site-content-max)" : "820px",
+              // Normal mode is the smaller width (820px), while scrolled mode expands to full container width.
+              maxWidth: docs || scrolled ? "var(--site-content-max)" : "820px",
               transition: docs
                 ? undefined
                 : `max-width 0.45s ${
-                    compact ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
+                    scrolled ? EXPAND_WIDTH_EASING : COMPACT_WIDTH_EASING
                   }`,
             }}
           >
@@ -169,18 +168,16 @@ export default function Navbar({
                 </div>
               </div>
 
-              {(docs || !compact) && (
-                <MobileNav
-                  currentPath={docs ? "/" : location.pathname}
-                  signedIn={docs ? false : Boolean(user)}
-                  onClose={() => setMobileOpen(false)}
-                  onOpenSettings={onOpenSettings}
-                  onSignOut={() => logout()}
-                  siteOrigin={docs ? SITE_URL : undefined}
-                  docsMenuOpen={docs?.menuOpen}
-                  onOpenDocsMenu={docs?.onOpenMenu}
-                />
-              )}
+              <MobileNav
+                currentPath={docs ? "/" : location.pathname}
+                signedIn={docs ? false : Boolean(user)}
+                onClose={() => setMobileOpen(false)}
+                onOpenSettings={onOpenSettings}
+                onSignOut={() => logout()}
+                siteOrigin={docs ? SITE_URL : undefined}
+                docsMenuOpen={docs?.menuOpen}
+                onOpenDocsMenu={docs?.onOpenMenu}
+              />
             </div>
           </div>
         ) : null}

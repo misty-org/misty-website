@@ -12,7 +12,10 @@ import Settings from "./pages/AccountSettings";
 import Changelog from "./pages/Changelog";
 import Blog from "./pages/Blog";
 import Roadmap from "./pages/Roadmap";
-import Extensions, { ExtensionDetailPage } from "./pages/Extensions";
+import StorePage, {
+  LegacyExtensionRedirect,
+  StoreAppDetailPage,
+} from "./pages/Store";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
@@ -58,22 +61,30 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: "extensions",
-        element: <Extensions />,
+        path: "store",
+        element: <StorePage />,
         handle: {
-          title: "Extensions — Add focused capabilities to Misty",
+          title: "Store — Discover tools for the way you work",
           description:
-            "Browse verified Misty extensions, including their capabilities, permissions, tools, and supported desktop platforms.",
+            "Browse verified apps in the Misty Store, including their capabilities, permissions, tools, and supported desktop platforms.",
         },
       },
       {
-        path: "extensions/:extensionId",
-        element: <ExtensionDetailPage />,
+        path: "store/:appId",
+        element: <StoreAppDetailPage />,
         handle: {
-          title: "Extension details — Misty",
+          title: "Store app details — Misty",
           description:
-            "Review an extension's capabilities, permissions, included tools, and supported platforms before installing it in Misty.",
+            "Review an app's capabilities, permissions, included tools, and supported platforms before installing it from the Misty Store.",
         },
+      },
+      {
+        path: "extensions",
+        element: <LegacyExtensionRedirect />,
+      },
+      {
+        path: "extensions/:extensionId",
+        element: <LegacyExtensionRedirect />,
       },
       {
         path: "pricing",

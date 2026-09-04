@@ -154,15 +154,14 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
     "--hero-copy-opacity": copyOpacity,
     "--hero-copy-scale": 1 + 2.4 * copyProgress,
     "--hero-copy-shift": `${-8 - 6 * copyProgress}svh`,
-    "--hero-shot-top": `${64 - 58.5 * expansionProgress}svh`,
-    "--hero-shot-height": `${44 + 28 * expansionProgress}svh`,
-    "--hero-shot-radius": `${18 - 8 * expansionProgress}px`,
     "--hero-product-opacity": productRevealProgress,
-    "--hero-shot-scale": 0.72 + 0.24 * expansionProgress,
+    "--hero-product-scale": 0.94 + 0.06 * expansionProgress,
+    "--hero-product-shift": `${4 * (1 - expansionProgress)}svh`,
+    "--hero-shot-radius": `${16 - 4 * expansionProgress}px`,
   } as CSSProperties;
 
   return (
-    <section className="home-content-rail relative overflow-x-clip">
+    <section id="hero" className="home-content-rail relative overflow-x-clip scroll-mt-24">
       <div ref={scrollRef} className="hero-scroll-track">
         <div className="hero-scroll-stage">
           <div className="hero-scroll-layout site-container" style={scrollStyle}>
@@ -203,30 +202,32 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
               </div>
             </div>
 
-            <div className="hero-scroll-shot pointer-events-none min-w-0">
-              <ScreenshotSlot slot="home-dashboard" eager>
-                <MistyAppMockup
-                  view="space"
-                  bodyClass="h-[300px] sm:h-[380px] lg:h-[440px]"
-                />
-              </ScreenshotSlot>
-            </div>
-
             <div
-              className="hero-scroll-final-cta relative z-20"
+              className="hero-scroll-product relative z-20 min-w-0"
               aria-hidden={productHidden}
               inert={productHidden ? true : undefined}
             >
-              <Button
-                asChild
-                size="lg"
-                className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] shadow-lg shadow-black/10 hover:opacity-85"
-              >
-                <a href={WEB_APP_URL}>
-                  Try the web app
-                  <ArrowRight aria-hidden="true" />
-                </a>
-              </Button>
+              <div className="hero-scroll-shot pointer-events-none min-w-0">
+                <ScreenshotSlot slot="home-dashboard" eager>
+                  <MistyAppMockup
+                    view="space"
+                    bodyClass="h-[300px] sm:h-[380px] lg:h-[440px]"
+                  />
+                </ScreenshotSlot>
+              </div>
+
+              <div className="hero-scroll-product-cta">
+                <Button
+                  asChild
+                  size="lg"
+                  className="pointer-events-auto h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] shadow-lg shadow-black/10 hover:opacity-85"
+                >
+                  <a href={WEB_APP_URL}>
+                    Try the web app
+                    <ArrowRight aria-hidden="true" />
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

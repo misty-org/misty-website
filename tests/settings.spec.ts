@@ -32,6 +32,7 @@ const baseMe: MeResponse = {
 const freeMe: MeResponse = {
   ...baseMe,
   tier: "basic",
+  trial_eligible: true,
   billing: {
     kind: "free",
     interval: null,
@@ -191,12 +192,40 @@ for (const theme of ["light", "dark"] as const) {
     await expect(
       dialog.getByRole("navigation", { name: "Account settings sections" }),
     ).toBeVisible();
-    await expect(
-      dialog.getByRole("button", { name: "Account", exact: true }),
-    ).toHaveAttribute("aria-current", "page");
-    await expect(
-      dialog.getByRole("button", { name: "Usage", exact: true }),
-    ).toBeVisible();
+    const accountNavButton = dialog.getByRole("button", {
+      name: "Account",
+      exact: true,
+    });
+    await expect(accountNavButton).toHaveAttribute("aria-current", "page");
+    const accountNavSurface = accountNavButton.locator(
+      '[data-settings-nav-surface="true"]',
+    );
+    await expect(accountNavButton).toHaveCSS(
+      "background-color",
+      "rgba(0, 0, 0, 0)",
+    );
+    await expect(accountNavSurface).toHaveCSS(
+      "background-color",
+      theme === "dark" ? "rgb(62, 62, 62)" : "rgb(216, 216, 222)",
+    );
+    const usageNavButton = dialog.getByRole("button", {
+      name: "Usage",
+      exact: true,
+    });
+    await expect(usageNavButton).toBeVisible();
+    if ((page.viewportSize()?.width ?? 1440) >= 768) {
+      await usageNavButton.hover();
+      await expect(usageNavButton).toHaveCSS(
+        "background-color",
+        "rgba(0, 0, 0, 0)",
+      );
+      await expect(
+        usageNavButton.locator('[data-settings-nav-surface="true"]'),
+      ).toHaveCSS(
+        "background-color",
+        theme === "dark" ? "rgb(43, 43, 43)" : "rgb(232, 232, 236)",
+      );
+    }
     await expect(
       dialog.getByRole("button", { name: "Billing", exact: true }),
     ).toBeVisible();
@@ -206,7 +235,7 @@ for (const theme of ["light", "dark"] as const) {
     await expect(dialog.getByText("Maya Chen", { exact: true })).toBeVisible();
     await expect(dialog.getByLabel("Display name")).toHaveValue("Maya Chen");
 
-    await dialog.getByRole("button", { name: "Usage", exact: true }).click();
+    await usageNavButton.click();
     await expect(
       dialog.getByRole("heading", { level: 1, name: "Usage" }),
     ).toBeVisible();

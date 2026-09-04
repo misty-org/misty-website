@@ -2,10 +2,10 @@ import type { CSSProperties } from "react";
 
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
+import { slowSlideProgress } from "../scrollMotion";
 
-function smoothstep(start: number, end: number, value: number) {
-  const progress = Math.min(1, Math.max(0, (value - start) / (end - start)));
-  return progress * progress * (3 - 2 * progress);
+function clamp(value: number) {
+  return Math.min(1, Math.max(0, value));
 }
 
 type ScrollSceneIntroProps = {
@@ -19,34 +19,33 @@ type ScrollSceneIntroProps = {
 
 /**
  * A viewport-height chapter card between the homepage's pinned stories.
- *
- * Keeping the entrance in its own scroll track prevents changes to the hero's
- * track length from consuming the progress used by later chapters.
+ * Pure horizontal slide motion with zero opacity fading or blur.
  */
 export function ScrollSceneIntro({
   title,
   description,
   id,
   direction = "right",
-  entrance = "fade-slide",
   className,
 }: ScrollSceneIntroProps) {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>();
-  const entranceWindow = Math.min(1, Math.max(0, progress / 0.8));
-  const slideOnlyProgress = 1 - Math.pow(1 - entranceWindow, 3);
-  const enters =
-    entrance === "slide"
-      ? slideOnlyProgress
-      : smoothstep(0.04, 0.42, progress);
-  const exits = smoothstep(0.82, 1, progress);
+  const { ref, progress } = useScrollProgress<HTMLDivElement>({
+    start: "enter",
+  });
+
+  // Pure horizontal slide:
+  // 0.00 -> 0.35: slides into the center
+  // 0.35 -> 0.65: rests comfortably in the center
+  // 0.65 -> 1.00: slides out across
+  const inProgress = clamp(progress / 0.35);
+  const inEase = slowSlideProgress(inProgress);
+  const outProgress = clamp((progress - 0.65) / 0.35);
+  const outEase = slowSlideProgress(outProgress);
+
   const directionSign = direction === "right" ? 1 : -1;
-  const entranceDistance = entrance === "slide" ? 100 : 34;
+  const x = directionSign * ((1 - inEase) * 100 - outEase * 100);
+
   const style = {
-    "--story-intro-opacity":
-      entrance === "slide" ? 1 - exits : enters * (1 - exits),
-    "--story-intro-x": `${directionSign * ((1 - enters) * entranceDistance + exits * -14)}vw`,
-    "--story-intro-scale": 0.94 + enters * 0.06 + exits * 0.025,
-    "--story-intro-blur": `${entrance === "slide" ? exits * 3 : (1 - enters) * 8 + exits * 3}px`,
+    "--story-intro-x": `${x}vw`,
   } as CSSProperties;
 
   return (

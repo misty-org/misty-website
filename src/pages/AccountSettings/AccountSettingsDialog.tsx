@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { DesktopSettingsFrame } from "@/components/settings";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -13,7 +13,7 @@ import { AccountPanel } from "./panels/AccountPanel";
 import { BillingPanel } from "./panels/BillingPanel";
 import { PrivacyPanel } from "./panels/PrivacyPanel";
 import { UsagePanel } from "./panels/UsagePanel";
-import { TABS, TAB_DESCRIPTIONS, type Tab } from "./tabs";
+import { TABS, type Tab } from "./tabs";
 import { useAccountSettings } from "./useAccountSettings";
 
 export function AccountSettingsDialog({
@@ -32,6 +32,7 @@ export function AccountSettingsDialog({
   onTabChange?: (tab: Tab) => void;
 }) {
   const [localTab, setLocalTab] = useState<Tab>("account");
+  const dialogRef = useRef<HTMLDivElement>(null);
   const tab = controlledTab ?? localTab;
 
   function setTab(next: Tab) {
@@ -59,8 +60,13 @@ export function AccountSettingsDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        ref={dialogRef}
         showCloseButton={false}
-        className="h-[min(760px,calc(100dvh-64px))] w-[min(980px,calc(100vw-64px))] max-w-none gap-0 overflow-hidden rounded-[18px] border border-border bg-card p-0 shadow-[0_28px_90px_rgba(0,0,0,0.62)] ring-0 max-[640px]:h-[calc(100dvh-24px)] max-[640px]:w-[calc(100vw-24px)] sm:max-w-none"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          dialogRef.current?.focus({ preventScroll: true });
+        }}
+        className="h-[min(760px,calc(100dvh-64px))] w-[min(980px,calc(100vw-64px))] max-w-none gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-[0_28px_90px_rgba(0,0,0,0.62)] ring-0 dark:border-[#262626] dark:bg-[#191919] max-[640px]:h-[calc(100dvh-24px)] max-[640px]:w-[calc(100vw-24px)] sm:max-w-none"
       >
         <DialogTitle className="sr-only">Account settings</DialogTitle>
         <DialogDescription className="sr-only">
@@ -70,10 +76,8 @@ export function AccountSettingsDialog({
         <DesktopSettingsFrame
           activeId={tab}
           ariaLabel="Account settings"
-          description={TAB_DESCRIPTIONS[tab]}
           items={TABS}
           navigationLabel="Account settings sections"
-          navigationTitle="Misty account"
           onClose={() => onOpenChange(false)}
           onSelect={setTab}
           presentation="overlay"
