@@ -1,5 +1,5 @@
 import { marketingCopy } from "@/content/marketingCopy";
-import { AnchorDrawer } from "./components/AnchorDrawer";
+import { SectionJumper } from "./components/SectionJumper";
 import { ClosingCta } from "./sections/ClosingCta";
 import { EcosystemStrip } from "./sections/EcosystemStrip";
 import { FeatureShowcase } from "./sections/FeatureShowcase";
@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <div>
-      <AnchorDrawer />
+      <SectionJumper />
       <Hero copy={copy} />
       <div className="home-content-rail">
         <EcosystemStrip />

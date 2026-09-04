@@ -196,7 +196,11 @@ function RoadmapPreview() {
 
 export function ResourcePreview() {
   return (
-    <section id="resources" aria-label="Misty resources" className="grid scroll-mt-24 gap-8 py-8">
+    <section
+      id="updates"
+      aria-label="Updates and resources"
+      className="grid scroll-mt-24 gap-8 py-8"
+    >
       <BlogPreview />
       <ChangelogPreview />
       <RoadmapPreview />

@@ -250,7 +250,10 @@ export function HowItWorks() {
           height: `${scrollTrackHeight(beats.length)}svh`,
         }}
       >
-        <div id="how-it-works" className="pointer-events-none absolute top-[130svh] -translate-y-16" />
+        <div
+          id="spaces"
+          className="pointer-events-none absolute top-[130svh] -translate-y-16"
+        />
         <div className="pin-stage">
           <div
             className="pin-scene site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12"
