@@ -80,26 +80,6 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: [
         { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
-        {
-          find: /^@misty\/store\/catalog$/,
-          replacement: fileURLToPath(new URL("./vendor/misty-store/interface/catalog.ts", import.meta.url)),
-        },
-        {
-          find: /^@misty\/store\/react$/,
-          replacement: fileURLToPath(new URL("./vendor/misty-store/interface/react.tsx", import.meta.url)),
-        },
-        {
-          find: /^@misty\/store\/store\.css$/,
-          replacement: fileURLToPath(new URL("./vendor/misty-store/interface/store.css", import.meta.url)),
-        },
-        {
-          find: /^@misty\/store\/store$/,
-          replacement: fileURLToPath(new URL("./vendor/misty-store/interface/store.tsx", import.meta.url)),
-        },
-        {
-          find: /^@misty\/store$/,
-          replacement: fileURLToPath(new URL("./vendor/misty-store/interface/store.tsx", import.meta.url)),
-        },
       ],
       preserveSymlinks: true,
     },

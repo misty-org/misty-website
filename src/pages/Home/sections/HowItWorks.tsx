@@ -9,8 +9,10 @@ import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
 import type { ProductVideoSlotId } from "@/content/productVideoSlots";
 import { beatPosition, useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
+import { chapterSequence } from "../scrollMotion";
+import { FitPreview } from "../components/FitPreview";
 import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
-import { scrollTrackHeight, splitEntranceProgress } from "../scrollMotion";
+
 
 type Beat = {
   title: string;
@@ -34,7 +36,7 @@ const beats: Beat[] = [
     description:
       "Arrange apps into tabs, windows, and panels that fit the task. Move between focused and multi-app layouts without losing your place.",
     view: "space",
-    fallbackSlot: "space-overview",
+    fallbackSlot: "home-dashboard",
     videoSlot: "workspace-layouts",
   },
   {
@@ -117,15 +119,14 @@ function beatMotion(
       ? 1
       : 0
     : isOutgoing
-      ? 1 - transition
+      ? media ? 1 - transition : 1 - smoothstep(0, 0.5, transition)
       : isIncoming
-        ? transition
+        ? media ? transition : smoothstep(0.5, 1, transition)
         : 0;
   const scale = media ? 0.992 + opacity * 0.008 : 1;
 
   return {
     opacity,
-    filter: `blur(${(1 - opacity) * 1.5}px)`,
     pointerEvents: opacity < 0.5 ? "none" : undefined,
     transform: `translate3d(0, 0, 0) scale(${scale})`,
   };
@@ -163,12 +164,12 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
         fill
         imageClassName="object-contain object-center"
       >
-        <MistyAppMockup
+        <FitPreview><MistyAppMockup
           view={beat.view}
           fill
           shadow={false}
           className="ring-1 ring-white/[0.07]"
-        />
+        /></FitPreview>
       </ScreenshotSlot>
     </VideoSlot>
   );
@@ -186,14 +187,11 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
  * animating anything — no content lives only inside the animation.
  */
 export function HowItWorks() {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>({
-    start: "enter",
+  const { ref, progress, approachProgress } = useScrollProgress<HTMLDivElement>({
+    start: "top",
   });
   const smoothedProgress = useSmoothedProgress(progress);
-  const { entranceProgress, contentProgress } = splitEntranceProgress(
-    smoothedProgress,
-    beats.length,
-  );
+  const { titleProgress, entranceProgress, contentProgress } = chapterSequence(smoothedProgress, approachProgress);
   const { index: active, within } = beatPosition(contentProgress, beats.length);
   const incoming = Math.min(beats.length - 1, active + 1);
   const transition =
@@ -226,38 +224,33 @@ export function HowItWorks() {
       : index === indicatorActive
         ? indicatorWithin
         : 0;
-  const sceneEntranceStyle = {
-    "--pin-scene-x": `${-100 * (1 - entranceProgress)}vw`,
-  } as CSSProperties;
 
   return (
     <section
+      id="how-it-works"
       aria-label="How Misty works"
-      className="marketing-dark overflow-x-clip"
+      className="bg-background text-[var(--marketing-foreground)] overflow-x-clip scroll-mt-24"
     >
+      <span id="spaces" className="block scroll-mt-24" />
+      <div
+        ref={ref}
+        className="pin-track relative hidden md:block"
+        style={{
+          height: "324svh",
+        }}
+      >
+        <div className="pin-stage">
       <ScrollSceneIntro
+        progress={titleProgress}
         title="What is a Space?"
         description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
         direction="left"
       />
 
-      {/* One long phase slides the full walkthrough in from the left. The
-          internal beats begin only after that entrance has settled. */}
-      <div
-        ref={ref}
-        className="pin-track relative hidden md:block"
-        style={{
-          height: `${scrollTrackHeight(beats.length)}svh`,
-        }}
-      >
-        <div
-          id="spaces"
-          className="pointer-events-none absolute top-[130svh] -translate-y-16"
-        />
-        <div className="pin-stage">
+
           <div
+            style={{ "--pin-scene-x": `${-100 * (1 - entranceProgress)}vw` } as CSSProperties}
             className="pin-scene site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12"
-            style={sceneEntranceStyle}
           >
             <div className="col-start-1 row-start-1 flex h-full items-center justify-center">
               <div className="grid w-full max-w-lg text-center">
@@ -317,6 +310,13 @@ export function HowItWorks() {
       {/* Small screens — and reduced motion at any width — get the same beats
           as an ordinary stacked list. */}
       <div className="site-container pin-stacked space-y-14 py-16 md:hidden">
+      <ScrollSceneIntro
+        title="What is a Space?"
+        description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
+        direction="left"
+      />
+
+
         {beats.map((beat) => (
           <div key={beat.title}>
             <BeatCopy beat={beat} />

@@ -221,7 +221,7 @@ export function EcosystemStrip() {
     <section
       id="ecosystem"
       aria-label="Misty ecosystem"
-      className="relative z-10 flex min-h-[calc(100svh-var(--site-nav-height,72px))] scroll-mt-16 flex-col justify-center overflow-x-clip bg-background py-16 sm:py-20"
+      className="relative z-10 flex scroll-mt-16 flex-col justify-center overflow-x-clip bg-background py-10 sm:py-12"
     >
       <div className="site-container min-w-0">
         <div>

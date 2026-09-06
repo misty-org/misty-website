@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { NavLink, useLocation } from "react-router";
 import { Menu, Search, X } from "lucide-react";
 
@@ -60,12 +61,12 @@ export default function Navbar({
     location.pathname.startsWith(to),
   );
 
-  return (
+  const navigation = (
     <Collapsible open={mobileOpen} onOpenChange={setMobileOpen} asChild>
       <nav
         aria-label="Primary navigation"
         className={cn(
-          "pointer-events-none sticky inset-x-0 top-0 z-50 flex justify-center px-[var(--site-gutter)] py-3",
+          "site-pinned-navbar pointer-events-none fixed inset-x-0 z-50 flex justify-center px-[var(--site-gutter)]",
           docs && "docs-navbar",
         )}
       >
@@ -183,5 +184,12 @@ export default function Navbar({
         ) : null}
       </nav>
     </Collapsible>
+  );
+
+  return (
+    <>
+      <div aria-hidden="true" className="h-[calc(var(--site-nav-height)+env(safe-area-inset-top,0px))] shrink-0" />
+      {createPortal(navigation, document.body)}
+    </>
   );
 }

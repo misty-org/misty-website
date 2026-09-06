@@ -3,39 +3,17 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type ReactNode,
 } from "react";
 
-import {
-  MistyAppMockup,
-  type MockupView,
-} from "@/components/marketing/appchrome";
-import {
-  ChatPreview,
-  ConnectionsPreview,
-  ScreenshotSlot,
-  TasksPreview,
-} from "@/components/marketing/previews";
-import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
+import { workspaceShowcase } from "@/content/workspaceShowcase";
+import { useReveal } from "@/hooks/useReveal";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
 import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
-import { scrollTrackHeight, splitEntranceProgress } from "../scrollMotion";
+import { chapterSequence } from "../scrollMotion";
 
-type PreviewKind = "mockup" | "tasks" | "connections" | "chat";
-
-type ShowcaseMoment = {
-  id: string;
-  title: string;
-  description: string;
-  view: MockupView;
-  slot: ProductScreenshotSlotId;
-  preview: PreviewKind;
-};
-
-type ShowcaseCard = {
-  sceneClassName: string;
-} & ShowcaseMoment;
+type ShowcaseMoment = (typeof workspaceShowcase)[number];
+type ShowcaseCard = ShowcaseMoment;
 
 type Point = { x: number; y: number };
 type RouteFrame = {
@@ -50,10 +28,9 @@ const PANEL_LEFT = 42;
 const PANEL_RIGHT = 1158;
 const FIRST_PANEL_TOP = 70;
 const FIRST_PANEL_MIDDLE = 157.5;
-const LAST_PANEL_BOTTOM = 905;
+const LAST_PANEL_BOTTOM = 685;
 const ROUTE_START = { x: PANEL_LEFT, y: FIRST_PANEL_MIDDLE };
-const ROUTE_END = { x: PANEL_LEFT, y: LAST_PANEL_BOTTOM };
-const ROW_TURNS = [267.5, 487.5, 707.5] as const;
+const ROW_TURNS = [267.5, 487.5] as const;
 
 /* The SVG stretches to a tall scene, so x/y radii are calculated separately
  * to keep every rendered bend circular instead of vertically distorted. */
@@ -61,7 +38,9 @@ function buildBentoRoute(radiusX: number, radiusY: number) {
   const topRail = FIRST_PANEL_TOP - radiusY;
   const leftRail = PANEL_LEFT - radiusX;
   const rightRail = PANEL_RIGHT + radiusX;
-  const [firstTurn, secondTurn, thirdTurn] = ROW_TURNS;
+  const [firstTurn, secondTurn] = ROW_TURNS;
+  // Cross the straight side of the panel, above its rounded bottom corner.
+  const finishY = LAST_PANEL_BOTTOM - radiusY * (24 / 32);
 
   return [
     `M ${ROUTE_START.x} ${ROUTE_START.y}`,
@@ -78,12 +57,9 @@ function buildBentoRoute(radiusX: number, radiusY: number) {
     `Q ${leftRail} ${secondTurn} ${PANEL_LEFT} ${secondTurn}`,
     `L ${PANEL_RIGHT} ${secondTurn}`,
     `Q ${rightRail} ${secondTurn} ${rightRail} ${secondTurn + radiusY}`,
-    `L ${rightRail} ${thirdTurn - radiusY}`,
-    `Q ${rightRail} ${thirdTurn} ${PANEL_RIGHT} ${thirdTurn}`,
-    `L ${PANEL_LEFT} ${thirdTurn}`,
-    `Q ${leftRail} ${thirdTurn} ${leftRail} ${thirdTurn + radiusY}`,
-    `L ${leftRail} ${LAST_PANEL_BOTTOM - radiusY}`,
-    `Q ${leftRail} ${LAST_PANEL_BOTTOM} ${ROUTE_END.x} ${ROUTE_END.y}`,
+    `L ${rightRail} ${finishY - radiusY}`,
+    `Q ${rightRail} ${finishY} ${PANEL_RIGHT} ${finishY}`,
+
   ].join(" ");
 }
 
@@ -91,135 +67,48 @@ function buildBentoRoute(radiusX: number, radiusY: number) {
  * Every card resolves through the shared screenshot inventory. Missing
  * captures stay as responsive DOM previews until the matching file is added.
  */
-const cards: ShowcaseCard[] = [
-  {
-    id: "apps",
-    title: "Start with the apps you need",
-    description:
-      "Keep Misty focused with Notes or Planner, or open a complete set of apps around the work.",
-    view: "space",
-    slot: "space-overview",
-    preview: "mockup",
-    sceneClassName: "feature-logo-card-0",
-  },
-  {
-    id: "planner",
-    title: "Plan shared work",
-    description:
-      "Track owners, priorities, due dates, and completed work without leaving the Space.",
-    view: "space",
-    slot: "tasks-board",
-    preview: "tasks",
-    sceneClassName: "feature-logo-card-1",
-  },
-  {
-    id: "files",
-    title: "Browser and Files, built in",
-    description:
-      "Browse local and connected files while private work stays beside the apps that need it.",
-    view: "files",
-    slot: "private-files",
-    preview: "mockup",
-    sceneClassName: "feature-logo-card-2",
-  },
-  {
-    id: "connections",
-    title: "Connect the right services",
-    description:
-      "Add a connection when it earns a place in the workspace, with availability kept clear.",
-    view: "files",
-    slot: "connections",
-    preview: "connections",
-    sceneClassName: "feature-logo-card-3",
-  },
-  {
-    id: "library",
-    title: "Share context when you want to",
-    description:
-      "Spaces and Libraries bring selected resources into the same working context.",
-    view: "library",
-    slot: "space-library",
-    preview: "mockup",
-    sceneClassName: "feature-logo-card-4",
-  },
-  {
-    id: "chat",
-    title: "Keep conversation beside the work",
-    description:
-      "Talk through decisions with the people, Agent, and context that move them forward.",
-    view: "space",
-    slot: "space-chat",
-    preview: "chat",
-    sceneClassName: "feature-logo-card-5",
-  },
-  {
-    id: "agents",
-    title: "Agents work beside you",
-    description:
-      "Add an Agent for help planning, researching, or executing across the workspace.",
-    view: "agent",
-    slot: "agent-workspace",
-    preview: "mockup",
-    sceneClassName: "feature-logo-card-6",
-  },
-  {
-    id: "home",
-    title: "Return to a clear view of the day",
-    description:
-      "Come back to your apps, agenda, work rhythm, and Spaces without losing the thread.",
-    view: "space",
-    slot: "home-dashboard",
-    preview: "mockup",
-    sceneClassName: "feature-logo-card-7",
-  },
-];
+const cards = workspaceShowcase;
 
 function activeCardAt(progress: number) {
-  const checkpoints = [0.12, 0.24, 0.37, 0.51, 0.64, 0.76, 0.88];
+  const checkpoints = [0.16, 0.32, 0.5, 0.66, 0.84];
   const nextCheckpoint = checkpoints.findIndex(
     (checkpoint) => progress < checkpoint,
   );
-  return nextCheckpoint === -1 ? 7 : nextCheckpoint;
+  return nextCheckpoint === -1 ? cards.length - 1 : nextCheckpoint;
 }
 
 function ShowcaseVisual({ moment }: { moment: ShowcaseMoment }) {
-  let fallback: ReactNode;
-
-  if (moment.preview === "tasks") {
-    fallback = <TasksPreview />;
-  } else if (moment.preview === "connections") {
-    fallback = <ConnectionsPreview />;
-  } else if (moment.preview === "chat") {
-    fallback = <ChatPreview />;
-  } else {
-    fallback = <MistyAppMockup view={moment.view} fill shadow={false} />;
-  }
-
+  const [loaded, setLoaded] = useState(false);
   return (
-    <ScreenshotSlot
-      slot={moment.slot}
-      fill
-      className="feature-bento-preview min-h-0 overflow-hidden"
-      imageClassName="object-contain object-top"
-    >
-      {fallback}
-    </ScreenshotSlot>
+    <div className="feature-bento-preview relative h-full min-h-0 overflow-hidden rounded-lg border border-dashed border-[var(--marketing-border-strong)]" data-screenshot-filename={moment.screenshot}>
+      <img src={moment.screenshot} alt={moment.captureBrief} loading="lazy"
+        onLoad={() => setLoaded(true)} onError={() => setLoaded(false)}
+        className={cn("absolute inset-0 h-full w-full object-contain", !loaded && "invisible")} />
+      {!loaded && <div className="flex h-full items-center justify-center p-6 text-center">
+        <span className="text-sm text-[var(--marketing-muted)]">{moment.title}</span>
+      </div>}
+    </div>
   );
 }
 
 function ShowcaseCard({
   card,
   active,
+  mobileActive,
 }: {
   card: ShowcaseCard;
   active: boolean;
+  mobileActive: boolean;
 }) {
+  const revealRef = useReveal<HTMLElement>(0.15);
   return (
     <article
+      ref={revealRef}
       data-bento-card
       data-active={active}
+      data-mobile-active={mobileActive}
       className={cn(
-        "feature-bento-card feature-logo-card z-10 flex min-h-0 flex-col overflow-hidden rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)]",
+        "feature-bento-card feature-logo-card mobile-card-reveal z-10 flex min-h-0 flex-col overflow-hidden rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)]",
         card.sceneClassName,
       )}
     >
@@ -228,9 +117,7 @@ function ShowcaseCard({
           <h3 className="text-lg font-medium tracking-[-0.025em] text-[var(--marketing-foreground)] sm:text-xl">
             {card.title}
           </h3>
-          <p className="mt-2 text-xs leading-relaxed text-[var(--marketing-muted)] sm:text-sm">
-            {card.description}
-          </p>
+
         </div>
         <div className="feature-bento-card-media mt-4 flex min-h-0 flex-1 flex-col px-4 pb-4 sm:px-5 sm:pb-5">
           <ShowcaseVisual moment={card} />
@@ -241,7 +128,7 @@ function ShowcaseCard({
 }
 
 function MistyProgressScene({ progress }: { progress: number }) {
-  const sceneRef = useRef<HTMLDivElement>(null);
+  const { ref: sceneRef, progress: mobileProgress } = useScrollProgress<HTMLDivElement>({ start: "center" });
   const pathRef = useRef<SVGPathElement>(null);
   const [route, setRoute] = useState(() => buildBentoRoute(30, 30));
   const [routeFrame, setRouteFrame] = useState<RouteFrame>({
@@ -249,12 +136,55 @@ function MistyProgressScene({ progress }: { progress: number }) {
     dashOffset: 1,
     marker: ROUTE_START,
   });
+  const [cameraSize, setCameraSize] = useState({ scene: 0, viewport: 0 });
   const activeCard = activeCardAt(progress);
+  const [mobileActiveCard, setMobileActiveCard] = useState(0);
+  useLayoutEffect(() => {
+    const panels = sceneRef.current?.querySelectorAll<HTMLElement>("[data-bento-card]");
+    if (!panels?.length) return;
+    let closest = 0;
+    let distance = Infinity;
+    panels.forEach((panel, index) => {
+      const rect = panel.getBoundingClientRect();
+      const nextDistance = Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2);
+      if (nextDistance < distance) { closest = index; distance = nextDistance; }
+    });
+    setMobileActiveCard(closest);
+  }, [mobileProgress]);
+  // Frame each pair, rather than centering the cloud on the rail above it.
+  const rowCenters = [0.1575, 0.3775, 0.5975];
+  const rowTransitions = [[245, ROW_TURNS[0]], [465, ROW_TURNS[1]]];
+  const offsets = rowCenters.map((center, row) => row === 0 ? 0 :
+    Math.min(0, cameraSize.viewport * 0.5 + 36 - cameraSize.scene * center));
+  let cameraY = 0;
+  // Complete each pan when the cloud reaches the next horizontal rail.
+  // Keep the incoming row centered throughout the horizontal crossing.
+  rowTransitions.forEach(([start, end], row) => {
+    const t = Math.min(1, Math.max(0, (routeFrame.marker.y - start) / (end - start)));
+    const eased = t * t * (3 - 2 * t);
+    cameraY += (offsets[row + 1] - offsets[row]) * eased;
+  });
+  // Use the same circular bends for the rail and the marker's travel.
+  const mobileHeight = Math.max(96, cameraSize.scene);
+  const bendLength = 24 * Math.PI / 2;
+  const straightLength = mobileHeight - 96;
+  const distance = mobileProgress * (2 * bendLength + straightLength);
+  let mobileX = 0;
+  let mobileY = 48 + distance - bendLength;
+  if (distance < bendLength) {
+    const angle = -Math.PI / 2 - distance / 24;
+    mobileX = 24 + 24 * Math.cos(angle);
+    mobileY = 48 + 24 * Math.sin(angle);
+  } else if (distance > bendLength + straightLength) {
+    const angle = Math.PI - (distance - bendLength - straightLength) / 24;
+    mobileX = 24 + 24 * Math.cos(angle);
+    mobileY = mobileHeight - 48 + 24 * Math.sin(angle);
+  }
+  const mobileRoute = `M 24 24 A 24 24 0 0 0 0 48 L 0 ${mobileHeight - 48} A 24 24 0 0 0 24 ${mobileHeight - 24}`;
   const sceneStyle = {
-    // Move the scene by the exact inverse of Misty's route position. The CSS
-    // adds a viewport-relative target, so Misty remains inside the pinned
-    // stage instead of slipping above or below it between hand-tuned stops.
-    "--feature-bento-marker-y": `${(routeFrame.marker.y / SCENE_HEIGHT) * 100}%`,
+    "--feature-camera-y": `${cameraY}px`,
+    "--mobile-marker-x": `${mobileX}px`,
+    "--mobile-marker-y": `${mobileY}px`,
   } as CSSProperties;
 
   useLayoutEffect(() => {
@@ -264,6 +194,7 @@ function MistyProgressScene({ progress }: { progress: number }) {
     const updateRoute = () => {
       const rect = scene.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
+      setCameraSize({ scene: rect.height, viewport: scene.closest(".feature-bento-stage")?.clientHeight ?? window.innerHeight });
 
       const radius = 32;
       const radiusX = radius / (rect.width / SCENE_WIDTH);
@@ -274,6 +205,8 @@ function MistyProgressScene({ progress }: { progress: number }) {
     updateRoute();
     const observer = new ResizeObserver(updateRoute);
     observer.observe(scene);
+    const stage = scene.closest(".feature-bento-stage");
+    if (stage) observer.observe(stage);
     return () => observer.disconnect();
   }, []);
 
@@ -298,6 +231,8 @@ function MistyProgressScene({ progress }: { progress: number }) {
 
   return (
     <div ref={sceneRef} className="feature-logo-scene" style={sceneStyle}>
+      <svg className="mobile-path-rail" aria-hidden="true"><path d={mobileRoute} fill="none" stroke="var(--marketing-border-strong)" strokeWidth="1" /></svg>
+      <div className="mobile-path-marker" aria-hidden="true"><img src="/misty-cloud-expression-cycle.webp" alt="" width="32" height="32" /></div>
       <svg
         aria-hidden="true"
         className="feature-logo-route pointer-events-none absolute inset-0 size-full overflow-visible"
@@ -349,7 +284,7 @@ function MistyProgressScene({ progress }: { progress: number }) {
       </svg>
 
       {cards.map((card, index) => (
-        <ShowcaseCard key={card.id} card={card} active={index === activeCard} />
+        <ShowcaseCard key={card.id} card={card} active={index === activeCard} mobileActive={index === mobileActiveCard} />
       ))}
 
       <div
@@ -376,40 +311,39 @@ function MistyProgressScene({ progress }: { progress: number }) {
 }
 
 export function FeatureShowcase() {
-  const { ref: storyRef, progress } = useScrollProgress<HTMLDivElement>({
-    start: "enter",
+  const { ref: storyRef, progress, approachProgress } = useScrollProgress<HTMLDivElement>({
+    start: "top",
   });
-  const { entranceProgress, contentProgress } = splitEntranceProgress(
-    progress,
-    cards.length,
-  );
+  const { titleProgress, entranceProgress, contentProgress } = chapterSequence(progress, approachProgress);
   const sceneEntranceStyle = {
     "--feature-bento-entry-x": `${100 * (1 - entranceProgress)}vw`,
   } as CSSProperties;
 
   return (
     <section
+      id="features"
       aria-labelledby="feature-bento-title"
       className="relative z-10 bg-background"
     >
-      <ScrollSceneIntro
-        id="feature-bento-title"
-        title="A closer look at Misty."
-        description="Follow Misty through the workspace."
-        direction="right"
-      />
-
       <div
         ref={storyRef}
         className="feature-bento-story relative"
         style={
           {
-            "--feature-bento-story-height": `${scrollTrackHeight(cards.length)}svh`,
+            "--feature-bento-story-height": "366svh",
           } as CSSProperties
         }
       >
-        <div id="features" className="pointer-events-none absolute top-[130svh] -translate-y-16" />
-        <div className="feature-bento-stage">
+        <div className="feature-bento-stage" style={{ "--chapter-expansion": entranceProgress } as CSSProperties}>
+      <ScrollSceneIntro
+        progress={titleProgress}
+        id="feature-bento-title"
+        title="A closer look at Misty."
+        description="A few ways to make a space your own."
+        direction="right"
+      />
+
+
           <div
             className="site-container feature-bento-stage-inner"
             style={sceneEntranceStyle}

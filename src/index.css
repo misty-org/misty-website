@@ -277,14 +277,14 @@ body {
   position: relative;
   /* 100svh is the sticky viewport; the remaining 104svh is scroll travel.
      This makes the chapter entrances 30% longer than their previous 80svh. */
-  height: 204svh;
+  height: 140svh;
 }
 
 .story-intro-stage {
   position: sticky;
   top: 0;
   display: grid;
-  height: 100svh;
+  height: 70svh;
   place-items: center;
   overflow: hidden;
 }
@@ -333,14 +333,7 @@ body {
   width: 100%;
   height: clamp(110rem, 240svh, 150rem);
   margin-bottom: 0;
-  transform: translate3d(
-    0,
-    calc(
-      clamp(7rem, 50svh, calc(100svh - 7rem)) -
-        var(--feature-bento-marker-y, 15.75%)
-    ),
-    0
-  );
+  transform: translate3d(0, var(--feature-camera-y, 0px), 0);
   will-change: transform;
 }
 
@@ -452,8 +445,8 @@ body {
 }
 
 .feature-bento-card[data-active="false"] .feature-bento-card-media {
-  filter: brightness(0.78) saturate(0.86);
-  opacity: 0.66;
+  filter: brightness(0.94) saturate(0.96);
+  opacity: 0.9;
 }
 
 .feature-bento-card[data-active="true"] {
@@ -470,7 +463,7 @@ body {
   height: clamp(4rem, 5vw, 5rem);
   max-width: none;
   transform: translate(-50%, -50%);
-  filter: drop-shadow(0 10px 18px rgb(0 0 0 / 22%));
+  filter: none;
 }
 
 @media (max-width: 1023px) {
@@ -638,6 +631,80 @@ body {
     height: auto;
   }
 }
+
+
+
+.foundation-section {
+  position: relative;
+  scroll-margin-top: var(--site-nav-height, 72px);
+}
+
+.foundation-stage {
+  padding-block: clamp(2.5rem, 4vw, 4rem);
+  overflow: clip;
+}
+
+.foundation-panel {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--marketing-border);
+  border-radius: 12px;
+  background: var(--marketing-surface);
+  color: var(--marketing-foreground);
+}
+
+.foundation-section h2 {
+  margin: 0 0 1.5rem;
+  color: var(--marketing-foreground);
+  font-size: clamp(2rem, 3.8vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+
+.foundation-columns {
+  display: grid;
+  gap: 0;
+}
+
+.foundation-columns p {
+  margin: 0;
+  padding: clamp(1.5rem, 2.5vw, 2rem);
+  color: var(--marketing-muted);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.foundation-columns p + p {
+  border-top: 1px solid var(--marketing-border);
+}
+
+@media (min-width: 1024px) {
+  .foundation-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .foundation-columns p {
+    padding-inline: clamp(1.5rem, 2.5vw, 2.5rem);
+  }
+
+  .foundation-columns p + p {
+    border-top: 0;
+    border-left: 1px solid var(--marketing-border);
+  }
+}
+
+.feature-grid { display: grid; gap: 1.5rem; }
+.feature-grid-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--marketing-border); border-radius: 12px; background: var(--marketing-surface); }
+.feature-grid-media { height: 320px; margin-top: 1.5rem; padding: 0 1.5rem 1.5rem; overflow: hidden; }
+.feature-grid-media > * { height: 100%; min-height: 0; }
+@media (min-width: 1024px) {
+  .feature-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .feature-grid-wide { grid-column: span 7; }
+  .feature-grid-narrow { grid-column: span 5; }
+}
+@media (max-width: 767px) { .feature-grid-media { height: 250px; } }
 
 .brand-marquee-panel {
   margin-top: 1rem;
@@ -947,8 +1014,7 @@ button:disabled {
    the available viewport, and leaves a dedicated action shelf at the bottom. */
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   .hero-scroll-track {
-    /* Preserve the sticky viewport and lengthen the 220svh camera move by 30%. */
-    height: 386svh;
+    height: 180svh;
   }
 
   .hero-scroll-stage {
@@ -1167,16 +1233,15 @@ button:disabled {
  */
 .pin-stage {
   position: sticky;
-  top: 0;
+  top: var(--site-nav-height, 72px);
   display: flex;
-  height: 100svh;
+  height: calc(100svh - var(--site-nav-height, 72px));
   align-items: center;
   overflow: hidden;
 }
 
 .pin-scene {
-  transform: translate3d(var(--pin-scene-x, 0), 0, 0);
-  will-change: transform;
+  padding-block: 2rem 4rem;
 }
 
 .pin-beat {
@@ -1205,7 +1270,7 @@ button:disabled {
 
   .story-intro-stage {
     position: relative;
-    min-height: 70svh;
+    min-height: 0;
   }
 
   .story-intro-copy {
@@ -1213,4 +1278,158 @@ button:disabled {
     transform: none;
     filter: none;
   }
+}
+
+@media (max-height: 699px) {
+  .pin-track { display: none !important; }
+  .pin-stacked { display: block !important; }
+}
+
+/* Keep chapter motion compact and give the camera bounded start/end frames. */
+.story-intro-stage { top: var(--site-nav-height, 72px); }
+.feature-bento-stage-inner { padding-block: 0; }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-stage-inner { transform: translate3d(var(--feature-bento-entry-x, 0), 0, 0); }
+  .feature-logo-scene {
+    height: max(110rem, 220svh);
+    /* Smooth scroll-driven camera targets without delaying the path itself. */
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .story-intro-track { height: auto; padding-block: 3rem 1.5rem; }
+  .story-intro-stage { position: relative; top: auto; height: auto; }
+  .story-intro-copy { transform: none; }
+  .feature-bento-stage-inner { padding-block: 1.5rem 2rem; }
+  .feature-logo-scene { gap: 2rem; }
+  .feature-bento-card-media { height: 300px; }
+  .feature-bento-preview, .feature-bento-preview > * { height: 100%; }
+}
+
+@media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  .pin-stage { height: clamp(34rem, 72svh, 48rem); }
+  .pin-scene { padding-block: 1.5rem 3rem; }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .story-intro-track { height: 160svh; }
+  .story-intro-stage { position: sticky; top: 0; height: 100svh; }
+  .pin-scene { transform: translate3d(var(--pin-scene-x, 0), 0, 0); will-change: transform; }
+}
+
+/* One pinned stage owns both the chapter heading and its incoming content. */
+.chapter-overlay { padding-block: 3rem 1.5rem; }
+.chapter-overlay-inner { display: grid; place-items: center; height: 100%; }
+@media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  .pin-stage { height: calc(100svh - var(--site-nav-height, 72px)); }
+  .pin-stage > .chapter-overlay { position: absolute; inset: 0; padding: 0; pointer-events: none; }
+  .pin-stage .story-intro-copy { transform: translate3d(var(--story-intro-x), 0, 0); }
+  .pin-scene { transform: translate3d(var(--pin-scene-x), 0, 0); }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-stage > .chapter-overlay { position: absolute; inset: 0; padding: 0; pointer-events: none; }
+}
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .feature-bento-stage .story-intro-copy { transform: none; }
+}
+
+/* A compact centered stage balances the logo gap with the chapter framing. */
+#how-it-works .pin-stacked { padding-top: 2rem; }
+@media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  #how-it-works .pin-stage {
+    height: clamp(25.5rem, 57svh, 36rem);
+    top: calc(var(--site-nav-height, 72px) + (100svh - var(--site-nav-height, 72px) - clamp(25.5rem, 57svh, 36rem)) / 2);
+  }
+  #how-it-works .chapter-overlay-inner { align-items: center; }
+}
+
+/* Consistent reading sizes across the explanatory and resource panels. */
+.feature-bento-card-copy p,
+#resources article > p,
+#resources .divide-y p { font-size: 16px; line-height: 1.6; }
+#resources aside p { font-size: 14px; line-height: 1.6; }
+#resources article > h3 { font-size: 24px; line-height: 1.25; }
+#resources .divide-y h3 { font-size: 16px; line-height: 1.4; }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-stage {
+    --chapter-stage-height: clamp(25.5rem, 57svh, 36rem);
+    height: calc(var(--chapter-stage-height) + (100svh - var(--chapter-stage-height)) * var(--chapter-expansion, 1));
+    top: calc((100svh - var(--chapter-stage-height)) * (1 - var(--chapter-expansion, 1)) / 2);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  /* Remove the unused viewport below the final centered row (17.5% tall).
+     Keep the goal section's regular padding as the visible section gap. */
+  .foundation-section {
+    margin-top: calc(24px + min(0px, calc(36px - 50svh + max(9.625rem, 19.25svh))));
+    z-index: 20;
+    /* Keep the overlap transparent so the exiting cloud is not cropped. */
+    background: transparent;
+  }
+}
+
+.resource-flat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.resource-flat-card { display: block; min-height: 108px; padding: 16px; border: 1px solid var(--marketing-border); border-radius: 4px; background: var(--marketing-surface); transition: background-color 160ms; }
+.resource-flat-card:hover { background: var(--marketing-border); }
+.resource-flat-card:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: 3px; }
+@media (max-width: 1023px) { .resource-flat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) { .resource-flat-grid { grid-template-columns: 1fr; } }
+
+@media (max-width: 767px) {
+  .hero-scroll-layout { min-height: 0; gap: 1.5rem; padding-bottom: 2rem; }
+  .hero-scroll-copy { min-height: 0; padding-block: 3rem 1rem; }
+  .hero-scroll-product-cta { display: none; }
+  .feature-bento-card-media { height: auto; aspect-ratio: 3 / 2; margin-bottom: 1rem; padding-bottom: 0; }
+  .feature-bento-preview, .feature-bento-preview > * { height: 100%; }
+  .feature-bento-preview img { height: 100%; object-fit: contain; }
+  aside[aria-label="Page section navigation"] { top: auto; bottom: 1.5rem; translate: var(--tw-translate-x) 0; --tw-translate-y: 0; }
+  aside[aria-label="Page section navigation"] > button { width: 44px; height: 48px; top: auto; bottom: 0; translate: none; --tw-translate-y: 0; }
+  [aria-label="Primary navigation"] button[aria-label] { min-width: 44px; min-height: 44px; }
+}
+
+.mobile-path-marker, .mobile-path-rail { display: none; }
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  [data-resource-preview].reveal { opacity: 1; transform: none; transition: none; }
+  .mobile-chapter-reveal { opacity: 0; translate: -28px 0; transition: opacity 550ms ease, translate 650ms cubic-bezier(.22,1,.36,1); }
+  .mobile-chapter-reveal.visible { opacity: 1; translate: 0 0; }
+  .mobile-card-reveal { opacity: 0; translate: 0 20px; transition: opacity 450ms ease, translate 600ms cubic-bezier(.22,1,.36,1); }
+  .mobile-card-reveal.visible { opacity: 1; translate: 0 0; }
+  .mobile-more-reveal { scale: .95; transition: scale 650ms cubic-bezier(.22,1,.36,1); }
+  .mobile-more-reveal.visible { scale: 1; }
+  .feature-logo-scene { padding-left: 24px; }
+  .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
+
+  @supports (animation-timeline: view()) {
+    .hero-scroll-zoom-group { animation: mobile-hero-exit linear both; animation-timeline: view(); animation-range: exit 0% exit 90%; }
+    .hero-scroll-product { animation: mobile-product-enter linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  }
+}
+@keyframes mobile-hero-exit { from { scale: 1; opacity: 1; } to { scale: 1.1; opacity: 0; } }
+@keyframes mobile-product-enter { from { translate: 0 24px; opacity: .5; } to { translate: 0 0; opacity: 1; } }
+
+/* Keep one example in focus while retaining the surrounding context. */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-card[data-active="false"] > div { opacity: .42; }
+  .feature-bento-card[data-active="true"] > div { opacity: 1; }
+}
+.feature-bento-card > div { transition: opacity 450ms ease; }
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-card[data-mobile-active="false"] > div { opacity: .42; }
+  .feature-bento-card[data-mobile-active="true"] > div { opacity: 1; }
+  .feature-bento-card[data-mobile-active="true"] { border-color: var(--marketing-foreground); }
+  .feature-bento-card[data-mobile-active="false"] { border-color: var(--marketing-border); }
+}
+
+/* The floating bar owns its viewport offset at every responsive width.
+   Keeping the gap outside a sticky box avoids Firefox scrolling its padding. */
+.site-pinned-navbar {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  padding-top: 0;
+  padding-bottom: 0;
+}
+@media (max-width: 767px) {
+  .site-pinned-navbar > div { max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 1.5rem); overflow-y: auto; }
 }
