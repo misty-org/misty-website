@@ -17,7 +17,7 @@ type ScrollProgressOptions = {
    * starts while the track's sticky stage is first coming into view, which
    * avoids an empty viewport before slide-in scenes begin moving.
    */
-  start?: "top" | "enter";
+  start?: "top" | "enter" | "center";
 };
 
 export function useScrollProgress<T extends HTMLElement = HTMLElement>({
@@ -25,6 +25,7 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>({
 }: ScrollProgressOptions = {}) {
   const ref = useRef<T>(null);
   const [progress, setProgress] = useState(0);
+  const [approachProgress, setApproachProgress] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -39,16 +40,21 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>({
       frame = 0;
       const rect = el.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
+      // Let headings enter during the approach without advancing pinned content.
+      setApproachProgress(Math.min(1, Math.max(0,
+        (viewportHeight * 0.8125 - rect.top) / (viewportHeight * 0.8125),
+      )));
       // A top-starting sticky track travels for its height minus the pinned
       // viewport. An entering track includes the approach from the bottom of
       // the viewport, so its complete visible journey is the track's height.
       const travel =
-        start === "enter" ? rect.height : rect.height - viewportHeight;
+        start !== "top" ? rect.height : rect.height - viewportHeight;
       if (travel <= 0) {
         setProgress(0);
         return;
       }
       const travelled =
+        start === "center" ? viewportHeight * 0.5 - rect.top :
         start === "enter" ? viewportHeight - rect.top : -rect.top;
       setProgress(Math.min(1, Math.max(0, travelled / travel)));
     };
@@ -74,7 +80,7 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>({
     };
   }, [start]);
 
-  return { ref, progress };
+  return { ref, progress, approachProgress };
 }
 
 /**

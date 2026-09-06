@@ -5,7 +5,9 @@ import { defineConfig } from "vite";
 
 const docsRoot = fileURLToPath(new URL(".", import.meta.url));
 
-export default defineConfig({
+export default defineConfig(({ command }) => {
+  if (command === "build") throw new Error("Docs are WIP and blocked from production. Use npm run dev:docs for the local preview.");
+  return {
   root: docsRoot,
   cacheDir: fileURLToPath(new URL("../node_modules/.vite-docs", import.meta.url)),
   plugins: [react(), tailwindcss()],
@@ -19,4 +21,5 @@ export default defineConfig({
   server: {
     port: 5175,
   },
+  };
 });

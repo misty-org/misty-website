@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 
-import { useScrollProgress } from "@/hooks/useScrollProgress";
+import { useReveal } from "@/hooks/useReveal";
 import { cn } from "@/lib/utils";
 import { slowSlideProgress } from "../scrollMotion";
 
@@ -10,6 +10,7 @@ function clamp(value: number) {
 
 type ScrollSceneIntroProps = {
   title: string;
+  progress?: number;
   description?: string;
   id?: string;
   direction?: "left" | "right";
@@ -23,23 +24,21 @@ type ScrollSceneIntroProps = {
  */
 export function ScrollSceneIntro({
   title,
+  progress = 0.5,
   description,
   id,
   direction = "right",
   className,
 }: ScrollSceneIntroProps) {
-  const { ref, progress } = useScrollProgress<HTMLDivElement>({
-    start: "enter",
-  });
-
+  const revealRef = useReveal<HTMLDivElement>(0.15);
   // Pure horizontal slide:
   // 0.00 -> 0.35: slides into the center
   // 0.35 -> 0.65: rests comfortably in the center
   // 0.65 -> 1.00: slides out across
-  const inProgress = clamp(progress / 0.35);
+  const inProgress = clamp(progress / 0.25);
   const inEase = slowSlideProgress(inProgress);
   const outProgress = clamp((progress - 0.65) / 0.35);
-  const outEase = slowSlideProgress(outProgress);
+  const outEase = outProgress * outProgress * (3 - 2 * outProgress);
 
   const directionSign = direction === "right" ? 1 : -1;
   const x = directionSign * ((1 - inEase) * 100 - outEase * 100);
@@ -49,10 +48,10 @@ export function ScrollSceneIntro({
   } as CSSProperties;
 
   return (
-    <div ref={ref} className={cn("story-intro-track", className)}>
-      <div className="story-intro-stage">
+    <div className={cn("chapter-overlay", className)}>
+      <div className="chapter-overlay-inner">
         <div className="site-container">
-          <div className="story-intro-copy" style={style}>
+          <div ref={revealRef} className="story-intro-copy mobile-chapter-reveal" style={style}>
             <h2
               id={id}
               className="text-balance text-[clamp(2.75rem,7vw,6.75rem)] font-medium leading-[0.98] tracking-[-0.055em] text-[var(--marketing-foreground)]"

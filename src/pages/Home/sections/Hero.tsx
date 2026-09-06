@@ -132,7 +132,9 @@ function useTypingRotation(words: readonly string[]) {
 }
 
 export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
-  const { ref: scrollRef, progress } = useScrollProgress<HTMLDivElement>();
+  const { ref: scrollRef, progress: scrollProgress } = useScrollProgress<HTMLDivElement>();
+  // End the sticky track at the completed expansion, without a final hold.
+  const progress = scrollProgress * 0.8;
   const enhancedMotion = useEnhancedHeroMotion();
   const { headingRef, isWordComplete, typedWord } = useTypingRotation(
     copy.heroTitleWords,
@@ -141,18 +143,18 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
     (longest, word) => (word.length > longest.length ? word : longest),
     "",
   );
-  const copyProgress = easeOut(clamp((progress - 0.02) / 0.42));
-  const copyOpacityProgress = easeOut(clamp((progress - 0.08) / 0.36));
-  // Keep the product hidden on arrival, then crossfade it in as the headline
-  // fades so the opening viewport belongs entirely to the hero copy.
-  const expansionProgress = easeOut(clamp((progress - 0.08) / 0.74));
-  const productRevealProgress = copyOpacityProgress;
+  const copyProgress = easeOut(clamp((progress - 0.02) / 0.34));
+  // Adjacent phases avoid both overlapping surfaces and an empty scroll hold.
+  const copyOpacityProgress = progress >= 0.42 ? 1 : clamp((progress - 0.32) / 0.1);
+  const expansionProgress = easeOut(clamp((progress - 0.42) / 0.38));
+  const productRevealProgress = easeOut(clamp((progress - 0.42) / 0.14));
   const copyOpacity = 1 - copyOpacityProgress;
+  const buttonsOpacity = enhancedMotion ? 1 - clamp(progress / 0.02) : 1;
   const copyHidden = enhancedMotion && copyOpacity < 0.05;
   const productHidden = enhancedMotion && productRevealProgress < 0.05;
   const scrollStyle = {
     "--hero-copy-opacity": copyOpacity,
-    "--hero-copy-scale": 1 + 2.4 * copyProgress,
+    "--hero-copy-scale": 1 + 3.8 * copyProgress,
     "--hero-copy-shift": `${-8 - 6 * copyProgress}svh`,
     "--hero-product-opacity": productRevealProgress,
     "--hero-product-scale": 0.94 + 0.06 * expansionProgress,
@@ -201,6 +203,9 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
                   </span>
                 </h1>
 
+              </div>
+              <div className="hero-scroll-buttons" style={{ opacity: buttonsOpacity }}
+                aria-hidden={buttonsOpacity === 0} inert={buttonsOpacity < 1 ? true : undefined}>
                 <HomeCtaButtons className="hero-animate hero-animate-delay-2 mt-8 justify-center" />
               </div>
             </div>

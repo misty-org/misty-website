@@ -4,7 +4,7 @@ import { NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { JOIN_HREF } from "@/lib/site";
+import { JOIN_HREF, WEB_APP_URL } from "@/lib/site";
 import {
   currentRelease,
   type PlatformName,
@@ -65,7 +65,7 @@ export function HomeCtaButtons({
         asChild
         size="lg"
         className={cn(
-          "h-11 rounded-full px-6 text-sm hover:opacity-85",
+          "hidden md:inline-flex h-11 rounded-full px-6 text-sm hover:opacity-85",
           dark
             ? "bg-white text-[#09090b] hover:bg-white"
             : "bg-[var(--marketing-foreground)] text-[var(--marketing-surface)]",
@@ -86,6 +86,9 @@ export function HomeCtaButtons({
         ) : (
           <NavLink to={JOIN_HREF}>Get started</NavLink>
         )}
+      </Button>
+      <Button asChild size="lg" className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] md:hidden">
+        <a href={WEB_APP_URL}>Try the web app</a>
       </Button>
       <Button
         asChild

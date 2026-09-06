@@ -8,12 +8,11 @@ export interface NavLinkEntry {
 
 export const navItems: NavLinkEntry[] = [
   { to: "/download", label: "Download" },
-  { to: "/store", label: "Store" },
   { to: "/pricing", label: "Pricing" },
 ];
 
 export const resourceLinks: NavLinkEntry[] = [
-  { to: DOCS_URL, label: "Docs", external: true },
+  ...(import.meta.env.DEV ? [{ to: DOCS_URL, label: "Docs", external: true }] : []),
   { to: "/blog", label: "Blog" },
   { to: "/changelog", label: "Changelog" },
   { to: "/roadmap", label: "Roadmap" },

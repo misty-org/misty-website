@@ -31,3 +31,14 @@ export function splitEntranceProgress(
 export function scrollTrackHeight(contentPhaseCount: number) {
   return (Math.max(0, contentPhaseCount) + 1) * SCROLL_PHASE_HEIGHT_SVH + 100;
 }
+
+/** Heading and content overlap their horizontal handoff in either scroll direction. */
+export function chapterSequence(progress: number, approachProgress = 0) {
+  return {
+    titleProgress: progress > 0
+      ? 0.25 + 0.75 * clamp(progress / 0.225)
+      : 0.25 * clamp(approachProgress),
+    entranceProgress: slowSlideProgress(clamp((progress - 0.15) / 0.125)),
+    contentProgress: clamp((progress - 0.275) / 0.725),
+  };
+}
