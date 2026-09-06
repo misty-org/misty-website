@@ -10,17 +10,13 @@ import { useReveal } from "@/hooks/useReveal";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
 import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
-import { chapterSequence } from "../scrollMotion";
+import { SHOWCASE_PANEL_ENDS, showcaseCameraFrame, sampleShowcaseRail, showcasePanelMotion, showcaseTravelDistance, type RailSample } from "../scrollMotion";
 
 type ShowcaseMoment = (typeof workspaceShowcase)[number];
 type ShowcaseCard = ShowcaseMoment;
 
 type Point = { x: number; y: number };
-type RouteFrame = {
-  dashLength: number;
-  dashOffset: number;
-  marker: Point;
-};
+
 
 const SCENE_WIDTH = 1200;
 const SCENE_HEIGHT = 1000;
@@ -68,14 +64,6 @@ function buildBentoRoute(radiusX: number, radiusY: number) {
  * captures stay as responsive DOM previews until the matching file is added.
  */
 const cards = workspaceShowcase;
-
-function activeCardAt(progress: number) {
-  const checkpoints = [0.16, 0.32, 0.5, 0.66, 0.84];
-  const nextCheckpoint = checkpoints.findIndex(
-    (checkpoint) => progress < checkpoint,
-  );
-  return nextCheckpoint === -1 ? cards.length - 1 : nextCheckpoint;
-}
 
 function ShowcaseVisual({ moment }: { moment: ShowcaseMoment }) {
   const [loaded, setLoaded] = useState(false);
@@ -127,17 +115,23 @@ function ShowcaseCard({
   );
 }
 
-function MistyProgressScene({ progress }: { progress: number }) {
+function MistyProgressScene({ progress: contentProgress }: { progress: number }) {
   const { ref: sceneRef, progress: mobileProgress } = useScrollProgress<HTMLDivElement>({ start: "center" });
   const pathRef = useRef<SVGPathElement>(null);
   const [route, setRoute] = useState(() => buildBentoRoute(30, 30));
-  const [routeFrame, setRouteFrame] = useState<RouteFrame>({
-    dashLength: 1,
-    dashOffset: 1,
-    marker: ROUTE_START,
+  const [panelDistances, setPanelDistances] = useState<readonly number[]>(SHOWCASE_PANEL_ENDS);
+  const [railGeometry, setRailGeometry] = useState<{ length: number; samples: RailSample[] }>({
+    length: 1,
+    samples: [{ ...ROUTE_START, rail: 0, distance: 0 }, { ...ROUTE_START, rail: 1, distance: 1 }],
   });
+  const marker = sampleShowcaseRail(contentProgress, railGeometry.samples);
+  const { active: activeCard, progress } = showcasePanelMotion(marker.rail, panelDistances);
+  const routeFrame = {
+    dashLength: railGeometry.length,
+    dashOffset: railGeometry.length * (1 - progress),
+    marker,
+  };
   const [cameraSize, setCameraSize] = useState({ scene: 0, viewport: 0 });
-  const activeCard = activeCardAt(progress);
   const [mobileActiveCard, setMobileActiveCard] = useState(0);
   useLayoutEffect(() => {
     const panels = sceneRef.current?.querySelectorAll<HTMLElement>("[data-bento-card]");
@@ -150,20 +144,10 @@ function MistyProgressScene({ progress }: { progress: number }) {
       if (nextDistance < distance) { closest = index; distance = nextDistance; }
     });
     setMobileActiveCard(closest);
-  }, [mobileProgress]);
-  // Frame each pair, rather than centering the cloud on the rail above it.
-  const rowCenters = [0.1575, 0.3775, 0.5975];
-  const rowTransitions = [[245, ROW_TURNS[0]], [465, ROW_TURNS[1]]];
-  const offsets = rowCenters.map((center, row) => row === 0 ? 0 :
-    Math.min(0, cameraSize.viewport * 0.5 + 36 - cameraSize.scene * center));
-  let cameraY = 0;
-  // Complete each pan when the cloud reaches the next horizontal rail.
-  // Keep the incoming row centered throughout the horizontal crossing.
-  rowTransitions.forEach(([start, end], row) => {
-    const t = Math.min(1, Math.max(0, (routeFrame.marker.y - start) / (end - start)));
-    const eased = t * t * (3 - 2 * t);
-    cameraY += (offsets[row + 1] - offsets[row]) * eased;
-  });
+  }, [mobileProgress, sceneRef]);
+  // The cloud, painted line, and camera all use this frame's same rail sample.
+  // Camera easing is measured along the route, not delayed behind the cloud.
+  const cameraY = showcaseCameraFrame(contentProgress, railGeometry.samples, cameraSize.scene, cameraSize.viewport);
   // Use the same circular bends for the rail and the marker's travel.
   const mobileHeight = Math.max(96, cameraSize.scene);
   const bendLength = 24 * Math.PI / 2;
@@ -192,13 +176,20 @@ function MistyProgressScene({ progress }: { progress: number }) {
     if (!scene) return;
 
     const updateRoute = () => {
-      const rect = scene.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      setCameraSize({ scene: rect.height, viewport: scene.closest(".feature-bento-stage")?.clientHeight ?? window.innerHeight });
+      // Layout dimensions stay stable while the camera is transformed.
+      // Ignore tiny rounding changes in transformed bounds so the route
+      // and marker stay steady while the camera moves.
+      const width = scene.clientWidth;
+      const height = scene.clientHeight;
+      if (!width || !height) return;
+      setCameraSize({
+        scene: height,
+        viewport: scene.closest(".feature-bento-stage")?.clientHeight ?? window.innerHeight,
+      });
 
       const radius = 32;
-      const radiusX = radius / (rect.width / SCENE_WIDTH);
-      const radiusY = radius / (rect.height / SCENE_HEIGHT);
+      const radiusX = radius / (width / SCENE_WIDTH);
+      const radiusY = radius / (height / SCENE_HEIGHT);
       setRoute(buildBentoRoute(radiusX, radiusY));
     };
 
@@ -208,30 +199,65 @@ function MistyProgressScene({ progress }: { progress: number }) {
     const stage = scene.closest(".feature-bento-stage");
     if (stage) observer.observe(stage);
     return () => observer.disconnect();
-  }, []);
+  }, [sceneRef]);
 
   useLayoutEffect(() => {
     const path = pathRef.current;
-    if (!path) return;
-
+    const scene = sceneRef.current;
+    if (!path || !scene) return;
+    const radiusX = 32 / (scene.clientWidth / SCENE_WIDTH);
+    const radiusY = 32 / (scene.clientHeight / SCENE_HEIGHT);
+    const targets = [
+      { x: 759, y: FIRST_PANEL_TOP - radiusY },
+      { x: PANEL_RIGHT + radiusX, y: ROW_TURNS[0] - radiusY },
+      { x: 441, y: ROW_TURNS[0] },
+      { x: PANEL_LEFT - radiusX, y: ROW_TURNS[1] - radiusY },
+      { x: 759, y: ROW_TURNS[1] },
+    ];
     const length = path.getTotalLength();
-    const clampedProgress = Math.min(1, Math.max(0, progress));
-    const point = path.getPointAtLength(length * clampedProgress);
-
-    // Measure the route once in its own coordinate space, then use that same
-    // distance for both the painted stroke and Misty's position. Normalizing
-    // the dash to pathLength="1" can drift after this SVG is stretched to the
-    // tall scene because its x and y scales are intentionally different.
-    setRouteFrame({
-      dashLength: length,
-      dashOffset: length * (1 - clampedProgress),
-      marker: { x: point.x, y: point.y },
-    });
-  }, [progress, route]);
+    const samples: RailSample[] = [];
+    let distance = 0;
+    let previous = path.getPointAtLength(0);
+    for (let i = 0; i <= 1024; i++) {
+      const point = path.getPointAtLength(length * i / 1024);
+      distance += showcaseTravelDistance(
+        (point.x - previous.x) * scene.clientWidth / SCENE_WIDTH,
+        (point.y - previous.y) * scene.clientHeight / SCENE_HEIGHT,
+      );
+      samples.push({ x: point.x, y: point.y, rail: i / 1024, distance });
+      previous = point;
+    }
+    setRailGeometry({ length, samples });
+    // Match each panel's edge to the actual rounded rail after resizing.
+    const distanceTo = (fraction: number, target: Point) => {
+      const point = path.getPointAtLength(length * fraction);
+      return Math.hypot(point.x - target.x, point.y - target.y);
+    };
+    const measureTarget = (target: Point) => {
+      let closest = 0;
+      for (let i = 1; i <= 256; i++) {
+        if (distanceTo(i / 256, target) < distanceTo(closest, target)) closest = i / 256;
+      }
+      let low = Math.max(0, closest - 1 / 256);
+      let high = Math.min(1, closest + 1 / 256);
+      for (let i = 0; i < 18; i++) {
+        const a = low + (high - low) / 3;
+        const b = high - (high - low) / 3;
+        if (distanceTo(a, target) < distanceTo(b, target)) high = b;
+        else low = a;
+      }
+      return (low + high) / 2;
+    };
+    setPanelDistances([...targets.map(measureTarget), 1]);
+  }, [route, sceneRef]);
 
   return (
     <div ref={sceneRef} className="feature-logo-scene" style={sceneStyle}>
-      <svg className="mobile-path-rail" aria-hidden="true"><path d={mobileRoute} fill="none" stroke="var(--marketing-border-strong)" strokeWidth="1" /></svg>
+      <svg className="mobile-path-rail" aria-hidden="true">
+        <path d={mobileRoute} fill="none" stroke="var(--marketing-border-strong)" strokeWidth="1" />
+        <path data-mobile-trail d={mobileRoute} fill="none" stroke="var(--marketing-foreground)" strokeWidth="2"
+          pathLength="1" strokeDasharray="1" strokeDashoffset={1 - mobileProgress} strokeLinecap="round" />
+      </svg>
       <div className="mobile-path-marker" aria-hidden="true"><img src="/misty-cloud-expression-cycle.webp" alt="" width="32" height="32" /></div>
       <svg
         aria-hidden="true"
@@ -310,14 +336,12 @@ function MistyProgressScene({ progress }: { progress: number }) {
   );
 }
 
+
 export function FeatureShowcase() {
-  const { ref: storyRef, progress, approachProgress } = useScrollProgress<HTMLDivElement>({
+  const { ref: storyRef, progress } = useScrollProgress<HTMLDivElement>({
     start: "top",
+    motion: "spring",
   });
-  const { titleProgress, entranceProgress, contentProgress } = chapterSequence(progress, approachProgress);
-  const sceneEntranceStyle = {
-    "--feature-bento-entry-x": `${100 * (1 - entranceProgress)}vw`,
-  } as CSSProperties;
 
   return (
     <section
@@ -325,31 +349,27 @@ export function FeatureShowcase() {
       aria-labelledby="feature-bento-title"
       className="relative z-10 bg-background"
     >
+      <ScrollSceneIntro
+        id="feature-bento-title"
+        title="A closer look at Misty."
+        description="A few ways to make a space your own."
+      />
       <div
         ref={storyRef}
         className="feature-bento-story relative"
         style={
           {
-            "--feature-bento-story-height": "366svh",
+            "--feature-bento-story-height": "620svh",
           } as CSSProperties
         }
       >
-        <div className="feature-bento-stage" style={{ "--chapter-expansion": entranceProgress } as CSSProperties}>
-      <ScrollSceneIntro
-        progress={titleProgress}
-        id="feature-bento-title"
-        title="A closer look at Misty."
-        description="A few ways to make a space your own."
-        direction="right"
-      />
-
-
+        <div className="feature-bento-stage">
           <div
+
             className="site-container feature-bento-stage-inner"
-            style={sceneEntranceStyle}
           >
             <div className="feature-logo-scene-window">
-              <MistyProgressScene progress={contentProgress} />
+              <MistyProgressScene progress={progress} />
             </div>
           </div>
         </div>

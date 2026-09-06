@@ -1,4 +1,4 @@
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useRef, useState } from "react";
 
 import {
   MistyAppMockup,
@@ -9,7 +9,7 @@ import type { ProductScreenshotSlotId } from "@/content/productScreenshotSlots";
 import type { ProductVideoSlotId } from "@/content/productVideoSlots";
 import { beatPosition, useScrollProgress } from "@/hooks/useScrollProgress";
 import { cn } from "@/lib/utils";
-import { chapterSequence } from "../scrollMotion";
+import { MobileScreenshotPreview } from "../components/MobileScreenshotPreview";
 import { FitPreview } from "../components/FitPreview";
 import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
 
@@ -60,48 +60,13 @@ const beats: Beat[] = [
 /* Beats stack in a single grid cell so the container sizes to the tallest one
    and nothing gets clipped when copy lengths differ. */
 const STACKED = "[grid-area:1/1]";
-const SCROLL_SMOOTHING_MS = 80;
+
 const FADE_START = 0.8;
 const FADE_END = 1;
 
 function smoothstep(start: number, end: number, value: number) {
   const progress = Math.min(1, Math.max(0, (value - start) / (end - start)));
   return progress * progress * (3 - 2 * progress);
-}
-
-function useSmoothedProgress(target: number) {
-  const [value, setValue] = useState(target);
-  const valueRef = useRef(target);
-
-  useEffect(() => {
-    const start = valueRef.current;
-    const distance = target - start;
-
-    if (Math.abs(distance) < 0.0001) {
-      valueRef.current = target;
-      setValue(target);
-      return;
-    }
-
-    const startedAt = performance.now();
-    let frame = 0;
-
-    const update = (now: number) => {
-      const elapsed = Math.min(1, (now - startedAt) / SCROLL_SMOOTHING_MS);
-      const eased = 1 - Math.pow(1 - elapsed, 3);
-      const next = start + distance * eased;
-
-      valueRef.current = next;
-      setValue(next);
-
-      if (elapsed < 1) frame = window.requestAnimationFrame(update);
-    };
-
-    frame = window.requestAnimationFrame(update);
-    return () => window.cancelAnimationFrame(frame);
-  }, [target]);
-
-  return value;
 }
 
 function beatMotion(
@@ -156,9 +121,8 @@ function BeatCopy({
   );
 }
 
-function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
-  return (
-    <VideoSlot slot={beat.videoSlot} active={active} fill>
+function BeatMedia({ beat, active, screenshotOnly = false }: { beat: Beat; active?: boolean; screenshotOnly?: boolean }) {
+  const preview = (
       <ScreenshotSlot
         slot={beat.fallbackSlot}
         fill
@@ -171,7 +135,55 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
           className="ring-1 ring-white/[0.07]"
         /></FitPreview>
       </ScreenshotSlot>
-    </VideoSlot>
+  );
+  return screenshotOnly ? <MobileScreenshotPreview slot={beat.fallbackSlot}>{preview}</MobileScreenshotPreview> : <VideoSlot slot={beat.videoSlot} active={active} fill>{preview}</VideoSlot>;
+}
+
+const mobileCaptions = [
+  "Keep your favorite apps together in one Space.",
+  "Arrange tabs and panels around the way you work.",
+  "Let Agents help with workflows and recurring tasks.",
+  "Bring people, files, and conversations into your Space.",
+];
+
+function MobileWalkthrough() {
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const goTo = (index: number) => {
+    const gallery = galleryRef.current!;
+    const card = gallery.children[index] as HTMLElement;
+    gallery.scrollTo({
+      left: card.offsetLeft - (gallery.children[0] as HTMLElement).offsetLeft,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  };
+
+  return (
+    <div className="mobile-walkthrough" role="region" aria-roledescription="carousel" aria-label="Explore Misty">
+      <div ref={galleryRef} className="mobile-walkthrough-track" onScroll={() => {
+        const gallery = galleryRef.current!;
+        const first = gallery.children[0] as HTMLElement;
+        const second = gallery.children[1] as HTMLElement;
+        setActive(Math.max(0, Math.min(beats.length - 1, Math.round(gallery.scrollLeft / (second.offsetLeft - first.offsetLeft)))));
+      }}>
+        {beats.map((beat, index) => (
+          <article key={beat.title} id={`mobile-walkthrough-${index}`} className="mobile-walkthrough-card"
+            role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${beats.length}: ${beat.title}`}>
+            <div className="mobile-walkthrough-media"><BeatMedia beat={beat} screenshotOnly /></div>
+            <h3>{beat.title}</h3>
+            <p>{mobileCaptions[index]}</p>
+          </article>
+        ))}
+      </div>
+      <div className="mobile-walkthrough-controls site-container">
+        <p aria-live="polite">{active + 1} / {beats.length}<span aria-hidden="true"> · Swipe to explore</span></p>
+        <div className="flex" role="group" aria-label="Choose a walkthrough slide">
+          {beats.map((beat, index) => <button key={beat.title} type="button"
+            aria-label={`Show ${beat.title}`} aria-controls={`mobile-walkthrough-${index}`}
+            aria-current={active === index ? "true" : undefined} onClick={() => goTo(index)}><span /></button>)}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -182,48 +194,27 @@ function BeatMedia({ beat, active }: { beat: Beat; active?: boolean }) {
  * on each beat, so scrolling drives a demo rather than paging past cards.
  *
  * The pinned track starts at the same medium-screen breakpoint as the hero.
- * `prefers-reduced-motion` swaps it for the stacked list (see `.pin-track` /
- * `.pin-stacked` in index.css). Every beat is therefore reachable without
- * animating anything — no content lives only inside the animation.
+ * Desktop reduced motion uses a stacked list; phones use native horizontal
+ * scrolling with explicit slide buttons, also available without animation.
  */
+
 export function HowItWorks() {
-  const { ref, progress, approachProgress } = useScrollProgress<HTMLDivElement>({
+  const { ref, progress } = useScrollProgress<HTMLDivElement>({
     start: "top",
   });
-  const smoothedProgress = useSmoothedProgress(progress);
-  const { titleProgress, entranceProgress, contentProgress } = chapterSequence(smoothedProgress, approachProgress);
-  const { index: active, within } = beatPosition(contentProgress, beats.length);
+  // Restore the committed scroll-position crossfade. The shared scroll hook
+  // already smooths progress, so no second follower or wheel interception is needed.
+  const { index: active, within } = beatPosition(progress, beats.length);
   const incoming = Math.min(beats.length - 1, active + 1);
-  const transition =
-    active === beats.length - 1 ? 0 : smoothstep(FADE_START, FADE_END, within);
+  const transition = active === beats.length - 1 ? 0 : smoothstep(FADE_START, FADE_END, within);
   const visibleBeat = transition >= 0.5 ? incoming : active;
-
-  // Hand the indicator to the incoming beat as soon as its crossfade starts.
-  // The first beat uses the shorter pre-transition interval; every following
-  // beat then owns one full segment, so the fill remains continuous across
-  // the underlying `within` reset at each beat boundary.
-  const narrativePosition = active + within;
-  const indicatorPosition =
-    narrativePosition <= FADE_START
-      ? narrativePosition / FADE_START
-      : 1 + narrativePosition - FADE_START;
-  const indicatorActive = Math.min(
-    beats.length - 1,
-    Math.floor(indicatorPosition),
-  );
-  const indicatorWithin = Math.min(
-    1,
-    Math.max(0, indicatorPosition - indicatorActive),
-  );
-
-  // The bar follows the same damped progress and transition boundary as the
-  // content, rather than letting one bar visually own two different beats.
-  const fill = (index: number) =>
-    index < indicatorActive
-      ? 1
-      : index === indicatorActive
-        ? indicatorWithin
-        : 0;
+  // Fill the first segment before its crossfade, then hand progress to the
+  // incoming panel. The same scroll follower drives both fills and content.
+  const position = active + within;
+  const indicatorPosition = position <= FADE_START
+    ? position / FADE_START
+    : 1 + position - FADE_START;
+  const fill = (index: number) => Math.max(0, Math.min(1, indicatorPosition - index));
 
   return (
     <section
@@ -232,28 +223,24 @@ export function HowItWorks() {
       className="bg-background text-[var(--marketing-foreground)] overflow-x-clip scroll-mt-24"
     >
       <span id="spaces" className="block scroll-mt-24" />
+      <ScrollSceneIntro
+        title="What is a Space?"
+        description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
+      />
       <div
         ref={ref}
         className="pin-track relative hidden md:block"
         style={{
-          height: "324svh",
+          height: "calc(100svh + 162.4svh * var(--home-scroll-travel-scale, 1))",
         }}
       >
         <div className="pin-stage">
-      <ScrollSceneIntro
-        progress={titleProgress}
-        title="What is a Space?"
-        description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
-        direction="left"
-      />
-
-
           <div
-            style={{ "--pin-scene-x": `${-100 * (1 - entranceProgress)}vw` } as CSSProperties}
+
             className="pin-scene site-container grid grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] items-center gap-x-10 xl:grid-cols-[minmax(0,0.6fr)_minmax(0,1.4fr)] xl:gap-x-12"
           >
             <div className="col-start-1 row-start-1 flex h-full items-center justify-center">
-              <div className="grid w-full max-w-lg text-center">
+              <div className="grid w-full max-w-lg overflow-hidden text-center">
                 {beats.map((beat, index) => (
                   <div
                     key={beat.title}
@@ -289,7 +276,7 @@ export function HowItWorks() {
 
               {/* Keep the indicator visually attached without letting it
                   shift the media frame away from the viewport center. */}
-              <div className="absolute inset-x-0 top-full mt-8 flex gap-2.5">
+              <div className="absolute inset-x-0 top-full mt-8 flex gap-2.5" data-walkthrough-progress>
                 {beats.map((beat, index) => (
                   <span
                     key={beat.title}
@@ -298,6 +285,7 @@ export function HowItWorks() {
                     <span
                       className="block h-full rounded-full bg-[var(--marketing-foreground)]"
                       style={{ width: `${fill(index) * 100}%` }}
+                      data-segment-fill={index}
                     />
                   </span>
                 ))}
@@ -307,16 +295,9 @@ export function HowItWorks() {
         </div>
       </div>
 
-      {/* Small screens — and reduced motion at any width — get the same beats
-          as an ordinary stacked list. */}
-      <div className="site-container pin-stacked space-y-14 py-16 md:hidden">
-      <ScrollSceneIntro
-        title="What is a Space?"
-        description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
-        direction="left"
-      />
-
-
+      {/* Touch screens get a native swipe gallery; desktop retains its static fallback. */}
+      <MobileWalkthrough />
+      <div className="site-container pin-stacked walkthrough-static space-y-14 py-16 hidden">
         {beats.map((beat) => (
           <div key={beat.title}>
             <BeatCopy beat={beat} />

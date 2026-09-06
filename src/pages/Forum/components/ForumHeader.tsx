@@ -7,8 +7,8 @@ export default function ForumHeader({
 }) {
   return (
     <div className="mb-10">
-      <h1 className="text-3xl md:text-5xl font-bold text-text mb-4">Forum</h1>
-      <p className="text-text-muted leading-relaxed">
+      <h1 className="marketing-heading text-text mb-4">Forum</h1>
+      <p className="marketing-description text-text-muted">
         Ask questions, share ideas, and connect with the Misty community.
       </p>
       <div className="flex items-center gap-5 mt-4">

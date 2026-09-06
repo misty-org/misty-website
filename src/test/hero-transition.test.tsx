@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { marketingCopy } from "@/content/marketingCopy";
 import { Hero } from "@/pages/Home/sections/Hero";
@@ -15,6 +15,10 @@ vi.mock("@/pages/Home/components/HomeCtaButtons", () => ({ HomeCtaButtons: () =>
 
 beforeEach(() => {
   scroll.progress = 0;
+  vi.stubGlobal("ResizeObserver", class {
+    observe() {}
+    disconnect() {}
+  });
   vi.stubGlobal("IntersectionObserver", class {
     observe() {}
     disconnect() {}
@@ -25,7 +29,42 @@ beforeEach(() => {
     removeEventListener() {},
   }));
 });
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+});
+
+it("delays the first hover reveal, then restores the idle action immediately on movement", () => {
+  vi.useFakeTimers();
+  scroll.progress = 1;
+  const view = render(<Hero copy={marketingCopy.home} />);
+  const product = view.container.querySelector(".hero-scroll-product")!;
+  const action = view.container.querySelector(".hero-scroll-product-cta")!;
+  expect(action).toHaveAttribute("data-visible", "false");
+  fireEvent.pointerEnter(product);
+  act(() => vi.advanceTimersByTime(500));
+  fireEvent.pointerMove(product);
+  act(() => vi.advanceTimersByTime(499));
+  expect(action).toHaveAttribute("data-visible", "false");
+  act(() => vi.advanceTimersByTime(1));
+  expect(action).toHaveAttribute("data-visible", "true");
+  act(() => vi.advanceTimersByTime(2_500));
+  fireEvent.pointerMove(product);
+  act(() => vi.advanceTimersByTime(2_500));
+  expect(action).toHaveAttribute("data-visible", "true");
+  act(() => vi.advanceTimersByTime(500));
+  expect(action).toHaveAttribute("data-visible", "false");
+  fireEvent.pointerMove(product);
+  expect(action).toHaveAttribute("data-visible", "true");
+  fireEvent.pointerLeave(product);
+  expect(action).toHaveAttribute("data-visible", "false");
+  fireEvent.pointerEnter(product);
+  act(() => vi.advanceTimersByTime(500));
+  fireEvent.pointerLeave(product);
+  act(() => vi.advanceTimersByTime(1_000));
+  expect(action).toHaveAttribute("data-visible", "false");
+  view.unmount();
+});
 
 it("never blends the headline with the screenshot when scrolling forward or backward", () => {
   const view = render(<Hero copy={marketingCopy.home} />);

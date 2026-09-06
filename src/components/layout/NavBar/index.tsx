@@ -74,12 +74,12 @@ export default function Navbar({
           <div
             className="pointer-events-auto w-full will-change-[max-width]"
             style={{
-              // Normal mode is the smaller width (820px), while scrolled mode expands to full container width.
-              maxWidth: docs || scrolled ? "var(--site-content-max)" : "820px",
+              // Start at full container width and compact the bar after scrolling.
+              maxWidth: docs || !scrolled ? "var(--site-content-max)" : "820px",
               transition: docs
                 ? undefined
                 : `max-width 0.45s ${
-                    scrolled ? EXPAND_WIDTH_EASING : COMPACT_WIDTH_EASING
+                    scrolled ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
                   }`,
             }}
           >

@@ -16,7 +16,7 @@ export function ClosingCta({ copy }: { copy: MarketingCopy["home"] }) {
         <div className="mx-auto max-w-3xl text-center">
           <h2
             id="closing-cta-title"
-            className="text-balance text-3xl font-semibold tracking-[-0.03em] text-[var(--marketing-foreground)] sm:text-4xl"
+            className="marketing-heading text-[var(--marketing-foreground)]"
           >
             {copy.ctaTitle}
           </h2>

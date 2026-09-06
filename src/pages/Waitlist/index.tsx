@@ -15,11 +15,11 @@ export default function Waitlist() {
           <p className="mb-5 text-sm text-muted-foreground">Misty account</p>
           <h1
             id="waitlist-title"
-            className="max-w-2xl text-4xl font-semibold tracking-[-0.04em] text-foreground sm:text-5xl"
+            className="max-w-2xl marketing-heading text-foreground"
           >
             {marketingCopy.waitlist.title}
           </h1>
-          <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">
+          <p className="mt-5 max-w-lg marketing-description text-muted-foreground">
             {marketingCopy.waitlist.description}
           </p>
         </section>

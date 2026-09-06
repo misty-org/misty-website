@@ -64,7 +64,7 @@ export default function Download() {
   return (
     <PublicPage>
       <header className="pb-8 text-center sm:pb-10">
-        <h1 className="text-5xl font-semibold tracking-[-0.04em] text-foreground">
+        <h1 className="marketing-heading text-foreground">
           Download
         </h1>
       </header>
@@ -73,7 +73,7 @@ export default function Download() {
         <div className="flex items-center justify-between gap-5">
           <h2
             id="releases-title"
-            className="text-xl font-semibold text-foreground"
+            className="marketing-heading text-foreground"
           >
             Releases
           </h2>
