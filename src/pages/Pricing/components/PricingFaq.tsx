@@ -9,7 +9,7 @@ import { pricingFaqs } from "../data";
 export default function PricingFaq() {
   return (
     <div>
-      <h2 className="mb-6 text-2xl font-medium tracking-[-0.03em] text-foreground">
+      <h2 className="mb-6 marketing-heading text-foreground">
         Questions and answers
       </h2>
       <Accordion type="multiple">

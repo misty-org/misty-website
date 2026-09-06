@@ -12,8 +12,9 @@ export default function Home() {
   const copy = marketingCopy.home;
 
   return (
-    <div>
+    <div className="home-page">
       <AnchorDrawer />
+      <div className="home-scroll-edge-fade" aria-hidden="true" />
       <Hero copy={copy} />
       <div className="home-content-rail">
         <EcosystemStrip />

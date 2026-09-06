@@ -24,11 +24,11 @@ export function PageHeader({
     >
       <div className="max-w-3xl">
         <p className="mb-5 text-sm text-muted-foreground">{label}</p>
-        <h1 className="text-balance text-4xl font-medium leading-[1.02] tracking-[-0.045em] text-foreground sm:text-5xl lg:text-6xl">
+        <h1 className="marketing-heading text-foreground">
           {title}
         </h1>
         {description ? (
-          <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
+          <p className="mt-5 max-w-2xl marketing-description text-muted-foreground">
             {description}
           </p>
         ) : null}

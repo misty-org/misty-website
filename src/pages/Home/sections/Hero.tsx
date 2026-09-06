@@ -1,3 +1,4 @@
+import { useScrollContinuation } from "@/hooks/useScrollContinuation";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 
@@ -5,14 +6,18 @@ import { MistyAppMockup } from "@/components/marketing/appchrome";
 import { ScreenshotSlot } from "@/components/marketing/previews";
 import { Button } from "@/components/ui/button";
 import type { MarketingCopy } from "@/content/marketingCopy";
-import { easeOut, useScrollProgress } from "@/hooks/useScrollProgress";
+import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { WEB_APP_URL } from "@/lib/site";
+import { MobileScreenshotPreview } from "../components/MobileScreenshotPreview";
 import { HomeCtaButtons } from "../components/HomeCtaButtons";
+import { heroZoomMotion, HERO_ZOOM_DURATION_SCALE } from "../scrollMotion";
 
 const TYPE_DELAY_MS = 110;
 const DELETE_DELAY_MS = 70;
 const WORD_HOLD_MS = 2_200;
 const WORD_SWAP_MS = 320;
+const PRODUCT_CTA_REVEAL_MS = 1_000;
+const PRODUCT_CTA_IDLE_MS = 3_000;
 
 function clamp(value: number) {
   return Math.min(1, Math.max(0, value));
@@ -131,8 +136,92 @@ function useTypingRotation(words: readonly string[]) {
   };
 }
 
+const HERO_STOPS = [0, 1] as const;
+
 export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
+  const [productCtaVisible, setProductCtaVisible] = useState(false);
+  const productRef = useRef<HTMLDivElement>(null);
+  const [productInView, setProductInView] = useState(false);
+
+  const mobileHeadingRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const heading = mobileHeadingRef.current!;
+    const copy = heading.closest<HTMLElement>(".hero-scroll-copy")!;
+    const media = window.matchMedia("(max-width: 767px) and (prefers-reduced-motion: no-preference)");
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const navBottom = document.querySelector(".site-pinned-navbar")?.getBoundingClientRect().bottom ?? 72;
+      // Measure the unscaled parent so the exit motion cannot feed back into itself.
+      const top = copy.getBoundingClientRect().top + heading.offsetTop;
+      const exit = media.matches ? clamp((navBottom - top) / Math.max(1, heading.offsetHeight * 0.9)) : 0;
+      heading.style.setProperty("--mobile-hero-exit", String(exit));
+    };
+    const update = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    media.addEventListener("change", update);
+    const observer = new ResizeObserver(update);
+    observer.observe(copy);
+    observer.observe(heading);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      media.removeEventListener("change", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setProductInView(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.2 });
+    if (productRef.current) observer.observe(productRef.current);
+    return () => observer.disconnect();
+  }, []);
+  const productCtaTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const productCtaRevealTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const productCtaHasRevealed = useRef(false);
+
+  function showProductCta() {
+    if (!productCtaHasRevealed.current) {
+      // Movement during the first hover must not restart the preview delay.
+      if (productCtaRevealTimer.current === undefined) {
+        productCtaRevealTimer.current = setTimeout(() => {
+          productCtaRevealTimer.current = undefined;
+          productCtaHasRevealed.current = true;
+          showProductCta();
+        }, PRODUCT_CTA_REVEAL_MS);
+      }
+      return;
+    }
+    clearTimeout(productCtaTimer.current);
+    setProductCtaVisible(true);
+    productCtaTimer.current = setTimeout(() => setProductCtaVisible(false), PRODUCT_CTA_IDLE_MS);
+  }
+
+  function hideProductCta() {
+    clearTimeout(productCtaRevealTimer.current);
+    productCtaRevealTimer.current = undefined;
+    productCtaHasRevealed.current = false;
+    clearTimeout(productCtaTimer.current);
+    setProductCtaVisible(false);
+  }
+
+  useEffect(() => () => {
+    clearTimeout(productCtaTimer.current);
+    clearTimeout(productCtaRevealTimer.current);
+  }, []);
+
   const { ref: scrollRef, progress: scrollProgress } = useScrollProgress<HTMLDivElement>();
+  useScrollContinuation(scrollRef, HERO_STOPS, "(min-width: 768px)", Infinity, HERO_ZOOM_DURATION_SCALE);
   // End the sticky track at the completed expansion, without a final hold.
   const progress = scrollProgress * 0.8;
   const enhancedMotion = useEnhancedHeroMotion();
@@ -143,23 +232,22 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
     (longest, word) => (word.length > longest.length ? word : longest),
     "",
   );
-  const copyProgress = easeOut(clamp((progress - 0.02) / 0.34));
-  // Adjacent phases avoid both overlapping surfaces and an empty scroll hold.
-  const copyOpacityProgress = progress >= 0.42 ? 1 : clamp((progress - 0.32) / 0.1);
-  const expansionProgress = easeOut(clamp((progress - 0.42) / 0.38));
-  const productRevealProgress = easeOut(clamp((progress - 0.42) / 0.14));
-  const copyOpacity = 1 - copyOpacityProgress;
+  // The shared scroll follower supplies easing in time; distance stays
+  // responsive throughout the zoom instead of accelerating in a burst.
+  const motion = heroZoomMotion(progress);
+  const copyOpacity = motion.copyOpacity;
+  const productRevealProgress = motion.contentOpacity;
   const buttonsOpacity = enhancedMotion ? 1 - clamp(progress / 0.02) : 1;
   const copyHidden = enhancedMotion && copyOpacity < 0.05;
   const productHidden = enhancedMotion && productRevealProgress < 0.05;
   const scrollStyle = {
     "--hero-copy-opacity": copyOpacity,
-    "--hero-copy-scale": 1 + 3.8 * copyProgress,
-    "--hero-copy-shift": `${-8 - 6 * copyProgress}svh`,
+    "--hero-copy-scale": motion.copyScale,
+    "--hero-copy-shift": `${motion.copyShift}svh`,
     "--hero-product-opacity": productRevealProgress,
-    "--hero-product-scale": 0.94 + 0.06 * expansionProgress,
-    "--hero-product-shift": `${4 * (1 - expansionProgress)}svh`,
-    "--hero-shot-radius": `${16 - 4 * expansionProgress}px`,
+    "--hero-product-scale": motion.contentScale,
+    "--hero-product-shift": `${motion.contentShift}svh`,
+    "--hero-shot-radius": `${motion.radius}px`,
   } as CSSProperties;
 
   return (
@@ -175,11 +263,11 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
               aria-hidden={copyHidden}
               inert={copyHidden ? true : undefined}
             >
-              <div className="hero-scroll-zoom-group flex flex-col items-center">
+              <div ref={mobileHeadingRef} className="hero-scroll-zoom-group flex flex-col items-center">
                 <h1
                   ref={headingRef}
                   aria-label={copy.heroTitle}
-                  className="hero-animate w-fit max-w-full text-[clamp(2.65rem,6vw,5.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-[var(--marketing-foreground)]"
+                  className="hero-animate w-fit max-w-full text-[clamp(2.65rem,7.5vw,7.25rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-[var(--marketing-foreground)]"
                 >
                   <span aria-hidden="true">
                     <span className="block text-center text-[var(--marketing-muted)]">
@@ -211,24 +299,31 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
             </div>
 
             <div
+              ref={productRef}
+              data-in-view={productInView}
               className="hero-scroll-product relative z-20 min-w-0"
               aria-hidden={productHidden}
               inert={productHidden ? true : undefined}
+              onPointerEnter={showProductCta}
+              onPointerMove={showProductCta}
+              onPointerLeave={hideProductCta}
             >
               <div className="hero-scroll-shot pointer-events-none min-w-0">
+                <MobileScreenshotPreview slot="home-dashboard">
                 <ScreenshotSlot slot="home-dashboard" eager>
                   <MistyAppMockup
                     view="space"
                     bodyClass="h-[300px] sm:h-[380px] lg:h-[440px]"
                   />
                 </ScreenshotSlot>
+                </MobileScreenshotPreview>
               </div>
 
-              <div className="hero-scroll-product-cta">
+              <div className="hero-scroll-product-cta" data-visible={productCtaVisible}>
                 <Button
                   asChild
                   size="lg"
-                  className="pointer-events-auto h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] shadow-lg shadow-black/10 hover:opacity-85"
+                  className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] shadow-lg shadow-black/10 hover:opacity-85"
                 >
                   <a href={WEB_APP_URL}>
                     Try the web app

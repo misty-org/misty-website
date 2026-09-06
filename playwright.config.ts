@@ -26,6 +26,14 @@ export default defineConfig({
       },
     },
     {
+      name: "desktop-firefox",
+      testMatch: "scroll-motion.spec.ts",
+      use: {
+        browserName: "firefox",
+        viewport: { width: 1440, height: 900 },
+      },
+    },
+    {
       name: "mobile-chromium",
       use: {
         browserName: "chromium",

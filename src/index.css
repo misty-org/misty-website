@@ -273,33 +273,68 @@ body {
   --site-gutter: clamp(1.5rem, 4vw, 4rem);
 }
 
-.story-intro-track {
-  position: relative;
-  /* 100svh is the sticky viewport; the remaining 104svh is scroll travel.
-     This makes the chapter entrances 30% longer than their previous 80svh. */
-  height: 140svh;
+.home-content-rail > section + section {
+  margin-top: clamp(3rem, 7svh, 6rem);
 }
 
-.story-intro-stage {
-  position: sticky;
+.home-content-rail > #foundation {
+  margin-top: 2rem;
+}
+
+#resources {
+  row-gap: clamp(4rem, 8svh, 6rem);
+}
+
+/* The content scrolls normally through a fixed, direction-independent fade.
+   These overlays never intercept input or change the layout. */
+.home-page {
+  /* Shorten scroll travel uniformly; keep viewport sizes and phase ratios intact. */
+  --home-scroll-travel-scale: 0.91;
+  --scroll-edge-depth: clamp(120px, 21svh, 240px);
+  --scroll-fade-ratio: 0.75;
+  --scroll-fade-depth: calc(var(--scroll-edge-depth) * var(--scroll-fade-ratio));
+}
+.home-scroll-edge-fade::before,
+.home-scroll-edge-fade::after {
+  content: "";
+  position: fixed;
+  inset-inline: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+.home-scroll-edge-fade::before {
   top: 0;
-  display: grid;
-  height: 70svh;
-  place-items: center;
-  overflow: hidden;
+  height: calc(var(--site-nav-height, 72px) + var(--scroll-edge-depth));
+  background: linear-gradient(to bottom, var(--background) calc(var(--site-nav-height, 72px) + 16px), transparent calc(var(--site-nav-height, 72px) + var(--scroll-fade-depth)));
+}
+.home-scroll-edge-fade::after {
+  bottom: 0;
+  height: var(--scroll-edge-depth);
+  background: linear-gradient(to top, var(--background) 16px, transparent var(--scroll-fade-depth));
 }
 
-.story-intro-copy {
-  opacity: 1;
-  text-align: center;
-  transform: translate3d(var(--story-intro-x, 0vw), 0, 0);
-  transform-origin: center;
-  will-change: transform;
+.chapter-intro { padding-block: clamp(3rem, 8svh, 6rem); }
+.chapter-intro-copy { text-align: center; }
+
+.chapter-intro-copy,
+.foundation-intro {
+  position: relative;
+  animation: none;
+  transition: none;
+  transform: none;
+  scale: none;
+}
+
+#features > .chapter-intro {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  padding-bottom: 2rem;
 }
 
 .feature-bento-story {
   position: relative;
-  height: var(--feature-bento-story-height, 900svh);
+  height: calc(100svh + (var(--feature-bento-story-height, 900svh) - 100svh) * var(--home-scroll-travel-scale, 1));
 }
 
 .feature-bento-stage {
@@ -313,13 +348,6 @@ body {
   position: relative;
   height: 100%;
   padding-block: 0;
-}
-
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .feature-bento-stage-inner {
-    transform: translate3d(var(--feature-bento-entry-x, 0), 0, 0);
-    will-change: transform;
-  }
 }
 
 .feature-logo-scene-window {
@@ -634,64 +662,168 @@ body {
 
 
 
+/* Shared public heading scale stays below the hero at every viewport width. */
+.marketing-heading {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+#ecosystem .marketing-heading {
+  font-size: clamp(1rem, 2vw, 1.75rem);
+}
+
+.marketing-description {
+  font-size: 1rem;
+  line-height: 1.625;
+}
+
+/* A compact reading stage keeps the intro, explanation, and goal connected. */
 .foundation-section {
   position: relative;
+  z-index: 11;
   scroll-margin-top: var(--site-nav-height, 72px);
+  overflow-x: clip;
 }
 
-.foundation-stage {
-  padding-block: clamp(2.5rem, 4vw, 4rem);
-  overflow: clip;
+.foundation-intro,
+.foundation-outro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: clamp(1.5rem, 4svh, 3rem);
+  text-align: center;
 }
 
-.foundation-panel {
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid var(--marketing-border);
-  border-radius: 12px;
-  background: var(--marketing-surface);
-  color: var(--marketing-foreground);
-}
-
-.foundation-section h2 {
-  margin: 0 0 1.5rem;
-  color: var(--marketing-foreground);
-  font-size: clamp(2rem, 3.8vw, 3.5rem);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.045em;
-}
-
-.foundation-columns {
-  display: grid;
-  gap: 0;
-}
-
-.foundation-columns p {
+.foundation-intro p,
+.foundation-goal {
   margin: 0;
-  padding: clamp(1.5rem, 2.5vw, 2rem);
+  color: var(--marketing-foreground);
+}
+
+.foundation-stage { padding-block: 1.5rem; }
+.foundation-arrival { position: relative; isolation: isolate; }
+.foundation-content { position: relative; z-index: 1; }
+.foundation-word-rain { display: none; }
+
+.foundation-title {
+  margin: 0;
+  text-align: center;
+}
+
+.foundation-title-light {
+  /* A local beam stays attached to the headline during sticky entry/exit. */
+  --foundation-dim: color-mix(in srgb, var(--marketing-foreground) 22%, var(--background));
+  display: inline-block;
+  background-image: linear-gradient(90deg,
+    var(--foundation-dim) calc(var(--foundation-light-position) - 20%),
+    var(--marketing-foreground) calc(var(--foundation-light-position) - 8%),
+    var(--marketing-foreground) calc(var(--foundation-light-position) + 8%),
+    var(--foundation-dim) calc(var(--foundation-light-position) + 20%));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.foundation-adjective { color: inherit; }
+.foundation-content[data-scroll-enabled="false"] .foundation-title-light {
+  background: none;
   color: var(--marketing-muted);
-  font-size: 16px;
-  line-height: 1.65;
 }
-
-.foundation-columns p + p {
-  border-top: 1px solid var(--marketing-border);
-}
-
-@media (min-width: 1024px) {
-  .foundation-columns {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0;
+@media (max-width: 1023px) and (min-height: 480px) and (prefers-reduced-motion: no-preference), (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  .home-content-rail > section:has(~ #foundation) {
+    translate: var(--foundation-previous-shift, 0px) 0;
   }
-
-  .foundation-columns p {
-    padding-inline: clamp(1.5rem, 2.5vw, 2.5rem);
+  .foundation-section {
+    --foundation-stage-height: clamp(240px, 30svh, 320px);
+    /* Reserve the viewport during the hold, then close that space on exit. */
+    padding-bottom: calc(max(0px, (100svh - var(--site-nav-height, 72px) - var(--foundation-stage-height)) / 2) * (1 - var(--foundation-release, 0)));
+    overflow-anchor: none;
   }
-
-  .foundation-columns p + p {
-    border-top: 0;
-    border-left: 1px solid var(--marketing-border);
+  .home-content-rail > #resources {
+    margin-top: calc(clamp(3rem, 7svh, 6rem) - var(--foundation-release, 0) * var(--foundation-tail-space, 0px));
+    overflow-anchor: none;
+  }
+  .foundation-story {
+    height: calc(var(--foundation-stage-height) + var(--foundation-travel, var(--foundation-scroll-height)) * var(--home-scroll-travel-scale, 1));
+  }
+  .foundation-stage {
+    position: sticky;
+    top: calc(var(--site-nav-height, 72px) + (100svh - var(--site-nav-height, 72px) - var(--foundation-stage-height)) / 2);
+    display: grid;
+    height: var(--foundation-stage-height);
+    align-items: center;
+    padding-block: 0;
+  }
+  .foundation-stage > .foundation-intro,
+  .foundation-stage > .foundation-arrival,
+  .foundation-stage > .foundation-outro {
+    grid-area: 1 / 1;
+    width: 100%;
+    will-change: transform;
+  }
+  .foundation-stage > .foundation-intro {
+    transform: translate3d(calc(-100vw * var(--foundation-slide, 0)), 0, 0);
+  }
+  .foundation-arrival {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    transform: translate3d(calc(100vw * (1 - var(--foundation-slide, 0) - var(--foundation-exit-slide, 0))), 0, 0);
+  }
+  .foundation-stage > .foundation-outro {
+    transform: translate3d(calc(100vw * (1 - var(--foundation-goal-slide, 0))), 0, 0);
+  }
+  .foundation-title {
+    position: relative;
+    isolation: isolate;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+  .foundation-word-rain {
+    display: block;
+    position: absolute;
+    z-index: 0;
+    inset-inline: 0;
+    top: 50%;
+    height: calc(100svh - var(--site-nav-height, 72px));
+    transform: translateY(-50%);
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    opacity: var(--foundation-slide, 0);
+  }
+  .foundation-word-rain:not([data-layout-ready]) { visibility: hidden; }
+  .foundation-word-rain > [data-rain-item] {
+    position: absolute;
+    left: var(--word-x);
+    top: var(--word-top, -4rem);
+    animation: foundation-word-fall var(--word-duration, 120s) linear infinite;
+    animation-delay: var(--word-delay);
+    animation-play-state: var(--foundation-rain-state, paused);
+  }
+  .foundation-rain-screenshot {
+    width: calc(clamp(260px, 28vw, 420px) * var(--screenshot-size, 1));
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 20%);
+    border-radius: 10px;
+    background: #111;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
+    opacity: 0.75;
+  }
+  .foundation-rain-screenshot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @keyframes foundation-word-fall {
+    from { transform: translate3d(-50%, -50%, 0) rotate(var(--word-angle)); }
+    to { transform: translate3d(-50%, calc(-50% + var(--word-travel, 400svh)), 0) rotate(var(--word-angle)); }
   }
 }
 
@@ -1004,17 +1136,39 @@ button:disabled {
 }
 
 .hero-scroll-product-cta {
+  position: absolute;
+  inset: 0;
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 1.5rem;
+  border-radius: var(--hero-shot-radius, 14px);
+  background: rgb(0 0 0 / 45%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-scroll-product-cta {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+  }
+
+  .hero-scroll-product-cta[data-visible="true"],
+  .hero-scroll-product-cta:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-product-cta { transition: none; }
 }
 
 /* On larger screens, the hero becomes a pinned camera move. The headline
-   scales toward the viewer while the product rises from below, expands into
-   the available viewport, and leaves a dedicated action shelf at the bottom. */
+   scales toward the viewer while the product rises from below and expands
+   into the shared content rail. */
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   .hero-scroll-track {
-    height: 180svh;
+    height: calc(100svh + 80svh * var(--home-scroll-travel-scale, 1));
   }
 
   .hero-scroll-stage {
@@ -1053,10 +1207,11 @@ button:disabled {
   }
 
   .hero-scroll-product {
+    --hero-cta-height: 2.75rem;
     position: absolute;
     top: 50%;
     left: 50%;
-    width: min(calc(100vw - (2 * var(--site-gutter))), var(--site-content-max));
+    width: calc(min(100%, var(--site-container-max)) - (2 * var(--site-gutter)));
     opacity: var(--hero-product-opacity, 0);
     transform: translate3d(-50%, calc(-50% + var(--hero-product-shift, 0px)), 0) scale(var(--hero-product-scale, 0.94));
     transform-origin: center center;
@@ -1079,7 +1234,7 @@ button:disabled {
   }
 
   .hero-scroll-shot [data-screenshot-status="capture"] > figure {
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
     border-radius: var(--hero-shot-radius, 14px);
     overflow: hidden;
@@ -1090,15 +1245,16 @@ button:disabled {
   .hero-scroll-shot [data-screenshot-status="capture"] img {
     width: 100%;
     height: auto;
-    max-height: calc(100svh - var(--site-nav-height) - 6.5rem);
+    /* Match the shared content rail; preserve the capture's aspect ratio. */
+    max-height: none;
     object-fit: contain;
     object-position: top center;
   }
 
-  .hero-scroll-product-cta {
-    margin-top: clamp(0.75rem, 2svh, 1.25rem);
-    display: flex;
-    justify-content: center;
+  .hero-scroll-product-cta > a {
+    height: var(--hero-cta-height);
+    padding-inline: 1.75rem;
+    font-size: 1rem;
   }
 }
 
@@ -1264,20 +1420,7 @@ button:disabled {
     display: block !important;
   }
 
-  .story-intro-track {
-    height: auto;
-  }
 
-  .story-intro-stage {
-    position: relative;
-    min-height: 0;
-  }
-
-  .story-intro-copy {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
 }
 
 @media (max-height: 699px) {
@@ -1285,21 +1428,17 @@ button:disabled {
   .pin-stacked { display: block !important; }
 }
 
-/* Keep chapter motion compact and give the camera bounded start/end frames. */
-.story-intro-stage { top: var(--site-nav-height, 72px); }
+/* Keep the path camera in a stable viewport. */
 .feature-bento-stage-inner { padding-block: 0; }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .feature-bento-stage-inner { transform: translate3d(var(--feature-bento-entry-x, 0), 0, 0); }
   .feature-logo-scene {
-    height: max(110rem, 220svh);
-    /* Smooth scroll-driven camera targets without delaying the path itself. */
-    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    /* Fit a complete row, its rail bends, and Misty in the clear viewport. */
+    height: var(--feature-scene-height);
+    /* The camera and rail share the same damped scroll clock. */
+    will-change: transform;
   }
 }
 @media (max-width: 1023px), (prefers-reduced-motion: reduce) {
-  .story-intro-track { height: auto; padding-block: 3rem 1.5rem; }
-  .story-intro-stage { position: relative; top: auto; height: auto; }
-  .story-intro-copy { transform: none; }
   .feature-bento-stage-inner { padding-block: 1.5rem 2rem; }
   .feature-logo-scene { gap: 2rem; }
   .feature-bento-card-media { height: 300px; }
@@ -1311,36 +1450,15 @@ button:disabled {
   .pin-scene { padding-block: 1.5rem 3rem; }
 }
 
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .story-intro-track { height: 160svh; }
-  .story-intro-stage { position: sticky; top: 0; height: 100svh; }
-  .pin-scene { transform: translate3d(var(--pin-scene-x, 0), 0, 0); will-change: transform; }
-}
 
-/* One pinned stage owns both the chapter heading and its incoming content. */
-.chapter-overlay { padding-block: 3rem 1.5rem; }
-.chapter-overlay-inner { display: grid; place-items: center; height: 100%; }
-@media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
-  .pin-stage { height: calc(100svh - var(--site-nav-height, 72px)); }
-  .pin-stage > .chapter-overlay { position: absolute; inset: 0; padding: 0; pointer-events: none; }
-  .pin-stage .story-intro-copy { transform: translate3d(var(--story-intro-x), 0, 0); }
-  .pin-scene { transform: translate3d(var(--pin-scene-x), 0, 0); }
-}
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  .feature-bento-stage > .chapter-overlay { position: absolute; inset: 0; padding: 0; pointer-events: none; }
-}
-@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
-  .feature-bento-stage .story-intro-copy { transform: none; }
-}
-
-/* A compact centered stage balances the logo gap with the chapter framing. */
+/* Center the walkthrough panels within the available viewport. */
 #how-it-works .pin-stacked { padding-top: 2rem; }
 @media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
   #how-it-works .pin-stage {
-    height: clamp(25.5rem, 57svh, 36rem);
-    top: calc(var(--site-nav-height, 72px) + (100svh - var(--site-nav-height, 72px) - clamp(25.5rem, 57svh, 36rem)) / 2);
+    --walkthrough-stage-height: min(calc(100svh - var(--site-nav-height, 72px) - 2rem), max(36rem, 68svh));
+    height: var(--walkthrough-stage-height);
+    top: calc(var(--site-nav-height, 72px) + (100svh - var(--site-nav-height, 72px) - var(--walkthrough-stage-height)) / 2);
   }
-  #how-it-works .chapter-overlay-inner { align-items: center; }
 }
 
 /* Consistent reading sizes across the explanatory and resource panels. */
@@ -1351,23 +1469,22 @@ button:disabled {
 #resources article > h3 { font-size: 24px; line-height: 1.25; }
 #resources .divide-y h3 { font-size: 16px; line-height: 1.4; }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .feature-bento-story {
+    /* The shared page overlays own the only top and bottom fades. */
+    --feature-stage-height: calc(100svh - var(--site-nav-height, 72px));
+    /* Larger rows use the available space instead of a small centered island. */
+    --feature-scene-height: min(max(125rem, 260svh), calc((var(--feature-stage-height) - 2 * var(--scroll-fade-depth) - 32px) / 0.22));
+    /* Trim the camera's empty framing before the first and after the last row. */
+    margin-top: -48px;
+    margin-bottom: calc(32px - var(--feature-stage-height) / 2 + var(--feature-scene-height) * 0.0875);
+  }
+
   .feature-bento-stage {
-    --chapter-stage-height: clamp(25.5rem, 57svh, 36rem);
-    height: calc(var(--chapter-stage-height) + (100svh - var(--chapter-stage-height)) * var(--chapter-expansion, 1));
-    top: calc((100svh - var(--chapter-stage-height)) * (1 - var(--chapter-expansion, 1)) / 2);
+    height: var(--feature-stage-height);
+    top: var(--site-nav-height, 72px);
   }
 }
 
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-  /* Remove the unused viewport below the final centered row (17.5% tall).
-     Keep the goal section's regular padding as the visible section gap. */
-  .foundation-section {
-    margin-top: calc(24px + min(0px, calc(36px - 50svh + max(9.625rem, 19.25svh))));
-    z-index: 20;
-    /* Keep the overlap transparent so the exiting cloud is not cropped. */
-    background: transparent;
-  }
-}
 
 .resource-flat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .resource-flat-card { display: block; min-height: 108px; padding: 16px; border: 1px solid var(--marketing-border); border-radius: 4px; background: var(--marketing-surface); transition: background-color 160ms; }
@@ -1379,7 +1496,10 @@ button:disabled {
 @media (max-width: 767px) {
   .hero-scroll-layout { min-height: 0; gap: 1.5rem; padding-bottom: 2rem; }
   .hero-scroll-copy { min-height: 0; padding-block: 3rem 1rem; }
-  .hero-scroll-product-cta { display: none; }
+  .home-page { --scroll-edge-depth: clamp(48px, 8svh, 72px); }
+  .home-content-rail > section + section { margin-top: 2.5rem; }
+  .chapter-intro { padding-block: 2.5rem; }
+  .hero-scroll-product-cta { position: static; display: flex; margin-top: 1.5rem; background: transparent; opacity: 1; pointer-events: auto; }
   .feature-bento-card-media { height: auto; aspect-ratio: 3 / 2; margin-bottom: 1rem; padding-bottom: 0; }
   .feature-bento-preview, .feature-bento-preview > * { height: 100%; }
   .feature-bento-preview img { height: 100%; object-fit: contain; }
@@ -1390,24 +1510,18 @@ button:disabled {
 
 .mobile-path-marker, .mobile-path-rail { display: none; }
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-  [data-resource-preview].reveal { opacity: 1; transform: none; transition: none; }
-  .mobile-chapter-reveal { opacity: 0; translate: -28px 0; transition: opacity 550ms ease, translate 650ms cubic-bezier(.22,1,.36,1); }
-  .mobile-chapter-reveal.visible { opacity: 1; translate: 0 0; }
+  .hero-scroll-product { opacity: .6; transform: translateY(24px) scale(.96); transition: opacity 650ms ease, transform 800ms cubic-bezier(.22,1,.36,1); }
+  .hero-scroll-product[data-in-view="true"] { opacity: 1; transform: translateY(0) scale(1); }
   .mobile-card-reveal { opacity: 0; translate: 0 20px; transition: opacity 450ms ease, translate 600ms cubic-bezier(.22,1,.36,1); }
   .mobile-card-reveal.visible { opacity: 1; translate: 0 0; }
-  .mobile-more-reveal { scale: .95; transition: scale 650ms cubic-bezier(.22,1,.36,1); }
-  .mobile-more-reveal.visible { scale: 1; }
   .feature-logo-scene { padding-left: 24px; }
   .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
 
-  @supports (animation-timeline: view()) {
-    .hero-scroll-zoom-group { animation: mobile-hero-exit linear both; animation-timeline: view(); animation-range: exit 0% exit 90%; }
-    .hero-scroll-product { animation: mobile-product-enter linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
-  }
+  .hero-scroll-zoom-group { opacity: calc(1 - var(--mobile-hero-exit, 0)); scale: calc(1 + .1 * var(--mobile-hero-exit, 0)); }
 }
-@keyframes mobile-hero-exit { from { scale: 1; opacity: 1; } to { scale: 1.1; opacity: 0; } }
-@keyframes mobile-product-enter { from { translate: 0 24px; opacity: .5; } to { translate: 0 0; opacity: 1; } }
+
+
 
 /* Keep one example in focus while retaining the surrounding context. */
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
@@ -1425,11 +1539,89 @@ button:disabled {
 /* The floating bar owns its viewport offset at every responsive width.
    Keeping the gap outside a sticky box avoids Firefox scrolling its padding. */
 .site-pinned-navbar {
+  --navbar-edge-gap: 12px;
   position: fixed;
-  top: calc(12px + env(safe-area-inset-top, 0px));
+  top: var(--navbar-edge-gap);
+  top: calc(var(--navbar-edge-gap) + env(safe-area-inset-top, 0px));
   padding-top: 0;
   padding-bottom: 0;
 }
 @media (max-width: 767px) {
-  .site-pinned-navbar > div { max-height: calc(100dvh - env(safe-area-inset-top, 0px) - 1.5rem); overflow-y: auto; }
+  .site-pinned-navbar > div {
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 2 * var(--navbar-edge-gap));
+    overflow-y: auto;
+  }
+}
+
+
+/* Keep the phone story compact, with screenshots falling behind readable type. */
+@media (max-width: 1023px) and (min-height: 480px) and (prefers-reduced-motion: no-preference) {
+  .foundation-section { --foundation-stage-height: clamp(180px, 30svh, 240px); }
+  .foundation-story { --foundation-travel: 150svh; }
+  .foundation-title-light { --foundation-dim: color-mix(in srgb, var(--marketing-foreground) 65%, var(--background)); }
+  .foundation-rain-screenshot { width: calc(clamp(210px, 76vw, 360px) * var(--screenshot-size, 1)); opacity: .65; --rain-crop: 1.12; }
+}
+
+.mobile-walkthrough { display: none; }
+@media (max-width: 767px) {
+  #how-it-works .walkthrough-static { display: none !important; }
+  .mobile-walkthrough { display: block; padding-block: 1rem 2rem; }
+  .mobile-walkthrough-track {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--site-gutter);
+    padding-inline: var(--site-gutter);
+    scrollbar-width: none;
+  }
+  .mobile-walkthrough-track::-webkit-scrollbar { display: none; }
+  .mobile-walkthrough-card { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; }
+  .mobile-walkthrough-media { aspect-ratio: 8 / 5; overflow: hidden; border-radius: 12px; }
+  .mobile-walkthrough-card h3 { margin-top: 1.5rem; font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -.03em; }
+  .mobile-walkthrough-card p { margin-top: .75rem; font-size: 1rem; line-height: 1.6; color: var(--marketing-muted); }
+  .mobile-walkthrough-controls { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: 1rem; }
+  .mobile-walkthrough-controls p { font-size: .75rem; color: var(--marketing-muted); }
+  .mobile-walkthrough-controls button { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; }
+  .mobile-walkthrough-controls button span { width: 6px; height: 6px; border-radius: 50%; background: var(--marketing-muted); opacity: .4; transition: width 180ms, opacity 180ms; }
+  .mobile-walkthrough-controls button[aria-current="true"] span { width: 18px; border-radius: 4px; background: var(--marketing-foreground); opacity: 1; }
+  .mobile-walkthrough-controls button:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: -4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-walkthrough-controls button span { transition: none; }
+}
+
+
+.mobile-screenshot-preview { position: relative; width: 100%; height: 100%; }
+.mobile-screenshot-trigger { display: none; }
+.mobile-screenshot-dialog {
+  width: calc(100% - 2rem);
+  max-width: 60rem;
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 2rem);
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: .75rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+.mobile-screenshot-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.mobile-screenshot-toolbar button { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; }
+.mobile-screenshot-canvas { min-height: 0; overflow: auto; overscroll-behavior: contain; border-radius: 8px; }
+.mobile-screenshot-canvas img { display: block; width: 100%; height: auto; max-width: none; }
+.mobile-screenshot-canvas[data-zoomed="true"] img { width: max(100%, 900px); }
+.mobile-screenshot-zoom { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border: 1px solid var(--marketing-border-strong); border-radius: 8px; }
+.mobile-screenshot-dialog button:focus-visible, .mobile-screenshot-canvas:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: -2px; }
+@media (max-width: 767px) {
+  .feature-logo-scene { gap: 2.5rem; }
+  .mobile-screenshot-trigger { position: absolute; inset: 0; display: flex; align-items: end; justify-content: end; padding: .5rem; border-radius: 12px; pointer-events: auto; }
+  .mobile-screenshot-trigger span { display: inline-flex; align-items: center; gap: .35rem; padding: .4rem .55rem; border-radius: 6px; background: rgb(0 0 0 / 75%); color: white; font-size: .7rem; }
+  .mobile-screenshot-trigger:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: -2px; }
+}
+@media (min-width: 768px) and (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .feature-logo-scene { padding-left: 24px; }
+  .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-screenshot-dialog { animation: none !important; }
 }
