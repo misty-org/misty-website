@@ -10,8 +10,7 @@ export type HomeSection = {
 export const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "overview", label: "Overview" },
   { id: "ecosystem", label: "Ecosystem" },
-  { id: "how-it-works", label: "How it works" },
-  { id: "features", label: "Features" },
+  { id: "features", label: "How it works" },
   { id: "foundation", label: "Our goal" },
   { id: "resources", label: "Resources" },
   { id: "get-started", label: "Get started" },

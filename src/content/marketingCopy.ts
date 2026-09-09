@@ -3,6 +3,7 @@ export interface MarketingCopy {
     /** The visible headline rotates through each word; the full title remains available to assistive technology. */
     heroTitle: string;
     heroTitleLead: string;
+    heroDescription: string;
     heroTitleWords: readonly string[];
     ctaTitle: string;
   };
@@ -27,6 +28,7 @@ export const marketingCopy: MarketingCopy = {
   home: {
     heroTitle: "The space for organizing, creating, and collaborating.",
     heroTitleLead: "The space for",
+    heroDescription: "Misty brings your apps, information, and AI together in one workspace built around how you work.",
     heroTitleWords: [
       "organizing.",
       "creating.",

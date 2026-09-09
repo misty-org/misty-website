@@ -727,7 +727,6 @@ body {
   color: transparent;
 }
 
-.foundation-adjective { color: inherit; }
 .foundation-content[data-scroll-enabled="false"] .foundation-title-light {
   background: none;
   color: var(--marketing-muted);

@@ -5,6 +5,9 @@ import {
   type CSSProperties,
 } from "react";
 
+import { ScreenshotSlot, VideoSlot } from "@/components/marketing/previews";
+import { MistyAppMockup } from "@/components/marketing/appchrome";
+import { FitPreview } from "../components/FitPreview";
 import { workspaceShowcase } from "@/content/workspaceShowcase";
 import { useReveal } from "@/hooks/useReveal";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
@@ -66,15 +69,13 @@ function buildBentoRoute(radiusX: number, radiusY: number) {
 const cards = workspaceShowcase;
 
 function ShowcaseVisual({ moment }: { moment: ShowcaseMoment }) {
-  const [loaded, setLoaded] = useState(false);
   return (
-    <div className="feature-bento-preview relative h-full min-h-0 overflow-hidden rounded-lg border border-dashed border-[var(--marketing-border-strong)]" data-screenshot-filename={moment.screenshot}>
-      <img src={moment.screenshot} alt={moment.captureBrief} loading="lazy"
-        onLoad={() => setLoaded(true)} onError={() => setLoaded(false)}
-        className={cn("absolute inset-0 h-full w-full object-contain", !loaded && "invisible")} />
-      {!loaded && <div className="flex h-full items-center justify-center p-6 text-center">
-        <span className="text-sm text-[var(--marketing-muted)]">{moment.title}</span>
-      </div>}
+    <div className="feature-bento-preview h-full min-h-0 overflow-hidden rounded-lg">
+      <VideoSlot slot={moment.videoSlot} fill>
+        <ScreenshotSlot slot={moment.fallbackSlot} fill imageClassName="object-contain object-center">
+          <FitPreview><MistyAppMockup view={moment.view} fill shadow={false} /></FitPreview>
+        </ScreenshotSlot>
+      </VideoSlot>
     </div>
   );
 }
@@ -103,9 +104,9 @@ function ShowcaseCard({
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="feature-bento-card-copy px-5 pt-5 sm:px-6 sm:pt-6">
           <h3 className="text-lg font-medium tracking-[-0.025em] text-[var(--marketing-foreground)] sm:text-xl">
-            {card.title}
+            {cards.indexOf(card) + 1}. {card.title}
           </h3>
-
+          <p className="mt-2 text-base leading-relaxed text-[var(--marketing-muted)]">{card.description}</p>
         </div>
         <div className="feature-bento-card-media mt-4 flex min-h-0 flex-1 flex-col px-4 pb-4 sm:px-5 sm:pb-5">
           <ShowcaseVisual moment={card} />
@@ -349,10 +350,12 @@ export function FeatureShowcase() {
       aria-labelledby="feature-bento-title"
       className="relative z-10 bg-background"
     >
+      <span id="how-it-works" className="block scroll-mt-24" />
+      <span id="spaces" className="block scroll-mt-24" />
       <ScrollSceneIntro
         id="feature-bento-title"
         title="A closer look at Misty."
-        description="A few ways to make a space your own."
+        description="Create a Space, make it yours, and bring in AI or friends whenever it helps."
       />
       <div
         ref={storyRef}
