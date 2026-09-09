@@ -49,8 +49,8 @@ test('walkthrough supports touch swiping and keyboard-accessible slide controls'
   const gallery = page.locator('.mobile-walkthrough');
   await gallery.scrollIntoViewIfNeeded();
   const images = gallery.locator('img');
-  await expect(gallery.locator("[data-screenshot-slot]")).toHaveCount(4);
-  await expect(images).toHaveCount(3);
+  await expect(gallery.locator("[data-screenshot-slot]")).toHaveCount(6);
+  await expect(images).toHaveCount(4);
   await expect.poll(() => images.evaluateAll(images => images.every(img => (img as HTMLImageElement).naturalWidth > 0))).toBe(true);
   const track = gallery.locator('.mobile-walkthrough-track');
   const rect = (await track.boundingBox())!;
@@ -67,7 +67,7 @@ test('walkthrough supports touch swiping and keyboard-accessible slide controls'
   await last.focus();
   await page.keyboard.press('Enter');
   await expect(last).toHaveAttribute('aria-current', 'true');
-  await expect(gallery.getByText('Share your Space with others', { exact: true })).toBeInViewport();
+  await expect(gallery.getByText('Invite your friends', { exact: true })).toBeInViewport();
   const before = await page.evaluate(() => scrollY);
   await page.mouse.move(195, y);
   await page.mouse.wheel(0, 160);

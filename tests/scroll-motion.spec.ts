@@ -122,10 +122,10 @@ test("walkthrough fades follow scroll position and reverse without moving the pa
   const track = page.locator('.pin-track');
   const media = track.locator('.pin-scene > div:nth-child(2) .pin-beat');
   // Stop halfway through each of the original crossfades, then reverse it.
-  for (const panel of [0, 1, 2]) {
+  for (const panel of [0, 1, 2, 3, 4]) {
     await track.evaluate((el, index) => {
       const rect = el.getBoundingClientRect();
-      scrollTo(0, scrollY + rect.top + (index + 0.9) / 4 * (rect.height - innerHeight));
+      scrollTo(0, scrollY + rect.top + (index + 0.9) / 6 * (rect.height - innerHeight));
     }, panel);
     await page.waitForTimeout(600);
     const incoming = media.nth(panel + 1);
@@ -260,8 +260,8 @@ test("walkthrough progress fills continuously and drains on small reverse scroll
     await page.waitForTimeout(500);
   };
   await place(0);
-  expect(await fills()).toEqual([0, 0, 0, 0]);
-  for (const [index, progress] of [0.1, 0.325, 0.575, 0.825].entries()) {
+  expect(await fills()).toEqual([0, 0, 0, 0, 0, 0]);
+  for (const [index, progress] of [0, 1, 2, 3, 4, 5].map(index => (index + 0.3) / 6).entries()) {
     await place(progress);
     const before = await fills();
     expect(before[index]).toBeGreaterThan(20);
@@ -278,7 +278,7 @@ test("walkthrough progress fills continuously and drains on small reverse scroll
     expect((await fills())[index]).toBeCloseTo(reversed, 1);
   }
   await place(1);
-  expect(await fills()).toEqual([100, 100, 100, 100]);
+  expect(await fills()).toEqual([100, 100, 100, 100, 100, 100]);
 });
 
 

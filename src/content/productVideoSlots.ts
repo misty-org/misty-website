@@ -1,4 +1,6 @@
 export type ProductVideoSlotId =
+  | "create-space"
+  | "choose-integrations"
   | "choose-apps"
   | "workspace-layouts"
   | "agent-workflows"
@@ -16,6 +18,16 @@ export type ProductVideoSlot = {
  * Until then, the scroll story renders its existing product preview.
  */
 export const productVideoSlots: Record<ProductVideoSlotId, ProductVideoSlot> = {
+  "create-space": {
+    filename: "misty-create-space.mp4",
+    label: "Creating a Misty Space",
+    desiredState: "Create and name a Space for one project, then open it.",
+  },
+  "choose-integrations": {
+    filename: "misty-choose-integrations.mp4",
+    label: "Choosing integrations inside a Misty app",
+    desiredState: "Open an app’s integrations, choose a supported service, and show it open inside Misty. Skip sign-in screens.",
+  },
   "choose-apps": {
     filename: "misty-choose-apps.mp4",
     label: "Adding apps to the Misty navigation",
@@ -26,18 +38,18 @@ export const productVideoSlots: Record<ProductVideoSlotId, ProductVideoSlot> = {
     filename: "misty-workspace-layouts.mp4",
     label: "Building and switching between flexible workspace layouts",
     desiredState:
-      "Switch rapidly between tabs, then arrange multiple apps into windows and panels.",
+      "Arrange apps into panels, create a virtual window, and switch between the two layouts.",
   },
   "agent-workflows": {
     filename: "misty-agent-workflows.mp4",
     label: "Asking a Misty Agent to manage a workflow",
     desiredState:
-      "Ask Misty to manage an automation or workflow and show the successful result.",
+      "Add or select an Agent, show its permitted context, and ask for help with a real supported task. Hold on the result.",
   },
   "share-space": {
     filename: "misty-share-space.mp4",
     label: "Sharing a Misty Space with other people",
     desiredState:
-      "Invite another person and show that the Space, apps, files, and context are ready to share.",
+      "Invite a collaborator into the Space and show shared work. Keep private website sessions and personal files out of the shared context.",
   },
 };

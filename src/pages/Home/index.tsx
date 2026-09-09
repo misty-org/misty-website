@@ -5,7 +5,6 @@ import { EcosystemStrip } from "./sections/EcosystemStrip";
 import { FeatureShowcase } from "./sections/FeatureShowcase";
 import { Foundation } from "./sections/Foundation";
 import { Hero } from "./sections/Hero";
-import { HowItWorks } from "./sections/HowItWorks";
 import { ResourcePreview } from "./sections/ResourcePreview";
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
       <Hero copy={copy} />
       <div className="home-content-rail">
         <EcosystemStrip />
-        <HowItWorks />
         <FeatureShowcase />
         <Foundation />
         <ResourcePreview />

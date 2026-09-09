@@ -294,6 +294,9 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
               </div>
               <div className="hero-scroll-buttons" style={{ opacity: buttonsOpacity }}
                 aria-hidden={buttonsOpacity === 0} inert={buttonsOpacity < 1 ? true : undefined}>
+                <p className="hero-animate hero-animate-delay-2 mx-auto mt-6 max-w-xl text-base leading-relaxed text-[var(--marketing-muted)] sm:text-lg">
+                  {copy.heroDescription}
+                </p>
                 <HomeCtaButtons className="hero-animate hero-animate-delay-2 mt-8 justify-center" />
               </div>
             </div>

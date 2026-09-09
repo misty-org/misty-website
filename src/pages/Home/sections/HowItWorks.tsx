@@ -17,6 +17,7 @@ import { ScrollSceneIntro } from "../components/ScrollSceneIntro";
 type Beat = {
   title: string;
   description: string;
+  caption: string;
   view: MockupView;
   fallbackSlot: ProductScreenshotSlotId;
   videoSlot: ProductVideoSlotId;
@@ -24,33 +25,49 @@ type Beat = {
 
 const beats: Beat[] = [
   {
-    title: "Choose your favorite apps",
-    description:
-      "Add Notes, Planner, Browser, Files, Code, and more from one menu. Keep the apps you use close and leave the rest out of the way.",
+    title: "Create a Space",
+    description: "Start with something you want to do: plan a trip, study a subject, or build something new. Give it a Space to keep the work together.",
+    caption: "Give whatever you’re working on a Space of its own.",
+    view: "space",
+    fallbackSlot: "space-overview",
+    videoSlot: "create-space",
+  },
+  {
+    title: "Add your apps",
+    description: "Choose the apps you need, from Notes and Planner to Browser and Files. Start with a few and add more as your work grows.",
+    caption: "Choose the apps you need. Add more as you go.",
     view: "space",
     fallbackSlot: "space-overview",
     videoSlot: "choose-apps",
   },
   {
-    title: "Build layouts for flexible workspaces",
-    description:
-      "Arrange apps into tabs, windows, and panels that fit the task. Move between focused and multi-app layouts without losing your place.",
+    title: "Choose your integrations",
+    description: "Bring familiar services into your apps. Open supported websites inside Misty or connect supported storage, keeping the tools you already use close.",
+    caption: "Bring supported websites and services into your apps.",
+    view: "space",
+    fallbackSlot: "connections",
+    videoSlot: "choose-integrations",
+  },
+  {
+    title: "Make the layout yours",
+    description: "Arrange apps into tabs, panels, and virtual windows. Keep useful tools side by side and switch layouts as your task changes.",
+    caption: "Arrange tabs, panels, and virtual windows around your work.",
     view: "space",
     fallbackSlot: "home-dashboard",
     videoSlot: "workspace-layouts",
   },
   {
-    title: "Talk to Agents to manage automations and workflows",
-    description:
-      "Tell Misty what you want to happen in plain language. Agents can help coordinate automations, manage recurring work, and keep workflows moving.",
+    title: "Bring in AI collaborators",
+    description: "Add an Agent when you want a hand. Give it access to the context and tools it needs, then ask for help with the work.",
+    caption: "Bring in an Agent and choose what it can work with.",
     view: "agent",
     fallbackSlot: "agent-workspace",
     videoSlot: "agent-workflows",
   },
   {
-    title: "Share your Space with others",
-    description:
-      "Invite people into a Space with the apps, files, conversations, and context already in place. Everyone can start contributing without rebuilding the setup.",
+    title: "Invite your friends",
+    description: "Work on your own or invite friends into your Space when you’re ready. Collaborate on shared work while personal accounts and files stay private unless you choose to share.",
+    caption: "Invite friends when you’re ready. Personal accounts and files stay private unless shared.",
     view: "library",
     fallbackSlot: "space-library",
     videoSlot: "share-space",
@@ -136,15 +153,8 @@ function BeatMedia({ beat, active, screenshotOnly = false }: { beat: Beat; activ
         /></FitPreview>
       </ScreenshotSlot>
   );
-  return screenshotOnly ? <MobileScreenshotPreview slot={beat.fallbackSlot}>{preview}</MobileScreenshotPreview> : <VideoSlot slot={beat.videoSlot} active={active} fill>{preview}</VideoSlot>;
+  return <VideoSlot slot={beat.videoSlot} active={active} fill>{screenshotOnly ? <MobileScreenshotPreview slot={beat.fallbackSlot}>{preview}</MobileScreenshotPreview> : preview}</VideoSlot>;
 }
-
-const mobileCaptions = [
-  "Keep your favorite apps together in one Space.",
-  "Arrange tabs and panels around the way you work.",
-  "Let Agents help with workflows and recurring tasks.",
-  "Bring people, files, and conversations into your Space.",
-];
 
 function MobileWalkthrough() {
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -169,9 +179,9 @@ function MobileWalkthrough() {
         {beats.map((beat, index) => (
           <article key={beat.title} id={`mobile-walkthrough-${index}`} className="mobile-walkthrough-card"
             role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${beats.length}: ${beat.title}`}>
-            <div className="mobile-walkthrough-media"><BeatMedia beat={beat} screenshotOnly /></div>
+            <div className="mobile-walkthrough-media"><BeatMedia beat={beat} active={index === active} screenshotOnly /></div>
             <h3>{beat.title}</h3>
-            <p>{mobileCaptions[index]}</p>
+            <p>{beat.caption}</p>
           </article>
         ))}
       </div>
@@ -224,14 +234,14 @@ export function HowItWorks() {
     >
       <span id="spaces" className="block scroll-mt-24" />
       <ScrollSceneIntro
-        title="What is a Space?"
-        description="A Space is your own configurable place to work, containing whichever apps and tools you want. It begins as yours, and becomes collaborative when you invite others."
+        title="Make a Space your own."
+        description="Start with what you want to do. Add the tools you need, arrange them your way, and bring in AI or friends whenever it helps."
       />
       <div
         ref={ref}
         className="pin-track relative hidden md:block"
         style={{
-          height: "calc(100svh + 162.4svh * var(--home-scroll-travel-scale, 1))",
+          height: `calc(100svh + ${40.6 * beats.length}svh * var(--home-scroll-travel-scale, 1))`,
         }}
       >
         <div className="pin-stage">

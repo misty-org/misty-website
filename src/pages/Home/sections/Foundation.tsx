@@ -136,9 +136,7 @@ export function Foundation() {
           <div className="site-container foundation-content" data-scroll-enabled={scrollEnabled}>
             <h2 id="foundation-title" className="marketing-heading foundation-title">
               <span className="foundation-title-light">
-                <span className="foundation-adjective" data-adjective="simple">Simple</span>
-                <span className="foundation-conjunction"> and </span>
-                <span className="foundation-adjective" data-adjective="powerful">powerful.</span>
+                Less setup.<br />More progress.
               </span>
             </h2>
 
