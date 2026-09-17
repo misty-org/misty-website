@@ -105,3 +105,20 @@ it("hides hero actions before the heading starts zooming", () => {
   expect(buttons.style.opacity).toBe("1");
   expect(buttons).not.toHaveAttribute("inert");
 });
+
+it("functions smoothly in embedded browser environments without scroll hijacking", () => {
+  const win = window as unknown as Record<string, unknown>;
+  win.__MISTY_APP_SHORTCUTS__ = new Map();
+
+  scroll.progress = 0;
+  const view = render(<Hero copy={marketingCopy.home} />);
+  const layout = view.container.querySelector<HTMLElement>(".hero-scroll-layout")!;
+  expect(Number(layout.style.getPropertyValue("--hero-copy-opacity"))).toBe(1);
+
+  scroll.progress = 1;
+  view.rerender(<Hero copy={marketingCopy.home} />);
+  expect(Number(layout.style.getPropertyValue("--hero-product-opacity"))).toBe(1);
+  expect(Number(layout.style.getPropertyValue("--hero-copy-opacity"))).toBe(0);
+
+  delete win.__MISTY_APP_SHORTCUTS__;
+});

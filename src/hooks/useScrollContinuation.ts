@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from "react";
+import { isEmbeddedBrowser } from "@/lib/browser";
 
 /** Complete a scene or one debounced panel per gesture, starting immediately. */
 export function useScrollContinuation(
@@ -10,6 +11,11 @@ export function useScrollContinuation(
   sceneRange?: readonly [number, number],
 ) {
   useEffect(() => {
+    // In embedded browsers (such as Misty's in-app WKWebView, Tauri, WebView2, or in-app webviews),
+    // programmatic scroll hijacking fights the host application's asynchronous compositor
+    // momentum scrolling, causing rapid back-and-forth scroll jitters. Let native scrolling handle it.
+    if (isEmbeddedBrowser()) return;
+
     const media = window.matchMedia(`${query} and (prefers-reduced-motion: no-preference)`);
     let frame = 0;
     let previousTime = 0;
