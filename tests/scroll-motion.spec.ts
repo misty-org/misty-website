@@ -58,6 +58,20 @@ test("reversing redirects the hero immediately and Escape stops the follow-throu
   expect(await page.evaluate(() => scrollY)).toBe(stopped);
 });
 
+test("embedded browser environments disable scroll continuation to eliminate jitter", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("desktop-"), "Desktop pinned motion");
+  await page.addInitScript(() => {
+    (window as unknown as Record<string, unknown>).__MISTY_APP_SHORTCUTS__ = new Map();
+  });
+  await page.goto("/");
+  await page.mouse.wheel(0, 80);
+  await page.waitForTimeout(250);
+  const position = await page.evaluate(() => scrollY);
+  // Without scroll continuation auto-advancing, scrollY only reflects the direct wheel delta (~80px),
+  // rather than continuing to auto-scroll through the hero track.
+  expect(position).toBeLessThan(120);
+});
+
 test("mobile and reduced motion keep all showcase panels available", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
