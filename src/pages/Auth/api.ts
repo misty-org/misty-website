@@ -1,3 +1,4 @@
+import { sessionFetch } from "../../lib/sessionFetch";
 import { apiBase } from "../../lib/apiBase";
 
 export interface AuthUser {
@@ -17,7 +18,7 @@ interface LoginResponse {
 }
 
 async function request<T>(path: string, body: unknown): Promise<T> {
-  const response = await fetch(`${apiBase}${path}`, {
+  const response = await sessionFetch(`${apiBase}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -42,7 +43,7 @@ async function request<T>(path: string, body: unknown): Promise<T> {
 }
 
 async function getRequest<T>(path: string): Promise<T> {
-  const response = await fetch(`${apiBase}${path}`, {
+  const response = await sessionFetch(`${apiBase}${path}`, {
     method: "GET",
     credentials: "include",
   });
@@ -64,7 +65,10 @@ async function getRequest<T>(path: string): Promise<T> {
   return payload as T;
 }
 
-export async function signInRequest(email: string, password: string): Promise<AuthUser> {
+export async function signInRequest(
+  email: string,
+  password: string,
+): Promise<AuthUser> {
   const data = await request<LoginResponse>("/login", { email, password });
   return {
     id: data.user_id,
@@ -79,7 +83,10 @@ export function registerRequest(name: string, email: string, password: string) {
 
 export async function forgotPasswordRequest(email: string): Promise<string> {
   const data = await request<ForgotPasswordResponse>("/auth/forgot", { email });
-  return data.message ?? "If the account exists, a password reset email will be sent shortly.";
+  return (
+    data.message ??
+    "If the account exists, a password reset email will be sent shortly."
+  );
 }
 
 export function validateResetTokenRequest() {

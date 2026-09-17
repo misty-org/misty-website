@@ -1,3 +1,4 @@
+import { sessionFetch } from "../../lib/sessionFetch";
 import { apiBase } from "../../lib/apiBase";
 import type { BillingInterval, PaidTier } from "@/pages/Pricing/data";
 
@@ -63,7 +64,7 @@ export interface BillingUsageResponse {
 }
 
 async function apiFetch(path: string, init?: RequestInit) {
-  const res = await fetch(`${apiBase}${path}`, {
+  const res = await sessionFetch(`${apiBase}${path}`, {
     credentials: "include",
     ...init,
   });
@@ -120,7 +121,10 @@ export async function updateDevice(device: string): Promise<void> {
 }
 
 export async function logoutRequest(): Promise<void> {
-  await fetch(`${apiBase}/logout`, { method: "POST", credentials: "include" });
+  await sessionFetch(`${apiBase}/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
 }
 
 export interface AccountSettingsResponse {
@@ -221,7 +225,9 @@ export interface AccountDeletionResponse {
 
 export class AccountDeletionBlockedError extends Error {
   constructor(readonly spaces: { id: string; name: string }[]) {
-    super("Hand over or delete the Spaces you own before deleting the account.");
+    super(
+      "Hand over or delete the Spaces you own before deleting the account.",
+    );
     this.name = "AccountDeletionBlockedError";
   }
 }
@@ -232,7 +238,7 @@ export async function beginAccountDeletion(
 ): Promise<AccountDeletionResponse> {
   // Not apiFetch: a 409 carries a JSON blocker list that must survive, and
   // apiFetch collapses every non-2xx into a text Error.
-  const res = await fetch(`${apiBase}/me/deletion`, {
+  const res = await sessionFetch(`${apiBase}/me/deletion`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
