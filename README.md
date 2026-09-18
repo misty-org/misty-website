@@ -31,3 +31,7 @@ Configure Cloudflare Workers Builds with:
 - Deploy command: `npx wrangler deploy`.
 - Build environment variable: `MISTY_PUBLIC_API_URL=https://api.mistysys.com/v1`.
 - Custom domain: `mistysys.com`.
+
+## Documentation site
+
+The canonical docs source lives in `docs/` in this repository. Run `npm run dev:docs` for the separate Vite server on port 5175, `npm run build:docs` for `docs/dist/`, and `npm run deploy:docs` for its own Worker and docs subdomain. Website and docs share the root dependencies and React 19; their outputs and deployments are independent. The former standalone docs repository is retired.
