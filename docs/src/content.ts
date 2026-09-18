@@ -20,8 +20,8 @@ export type DocsPage = {
   }>;
 };
 
-const cliSource = "https://github.com/misty-org/misty-cli";
-const extensionsSource = "https://github.com/misty-org/misty-extensions";
+const cliSource = "https://github.com/misty-org/misty";
+const extensionsSource = "https://github.com/misty-org/misty";
 const serverSource = "https://github.com/misty-org/misty-server";
 
 export const pages: DocsPage[] = [
@@ -49,7 +49,7 @@ export const pages: DocsPage[] = [
         title: "Quick start",
         blocks: [
           { type: "p", text: "The `misty` CLI is the supported development interface for the sibling repositories in `~/misty-org`." },
-          { type: "code", filename: "Terminal", language: "shell", code: "cargo install --path ~/misty-org/misty-cli --locked --force\nmisty doctor\nmisty desktop dev" },
+          { type: "code", filename: "Terminal", language: "shell", code: "cargo install --path ~/misty-org/misty/cli --locked\nmisty setup\nmisty doctor\nmisty desktop dev" },
         ],
       },
       {
@@ -68,7 +68,7 @@ export const pages: DocsPage[] = [
     description: "Prepare the Misty workspace and run your first local development session.",
     group: "Overview",
     keywords: ["install", "workspace", "doctor", "first run"],
-    source: { label: "misty-cli README", href: cliSource + "/blob/main/README.md" },
+    source: { label: "misty-cli README", href: cliSource + "/blob/main/cli/README.md" },
     sections: [
       {
         id: "prerequisites",
@@ -88,7 +88,7 @@ export const pages: DocsPage[] = [
         id: "install-the-cli",
         title: "Install the CLI",
         blocks: [
-          { type: "code", filename: "Terminal", language: "shell", code: "cd ~/misty-org/misty-cli\ncargo install --path . --locked --force" },
+          { type: "code", filename: "Terminal", language: "shell", code: "cd ~/misty-org/misty/cli\ncargo install --path . --locked --force" },
           { type: "p", text: "Re-run this install after changing CLI source. Cargo places the `misty` executable in its normal binary directory." },
         ],
       },
@@ -108,7 +108,7 @@ export const pages: DocsPage[] = [
     description: "Use one command surface across the Misty workspace.",
     group: "CLI",
     keywords: ["misty command", "development", "release"],
-    source: { label: "CLI command definitions", href: cliSource + "/blob/main/src/cli.rs" },
+    source: { label: "CLI command definitions", href: cliSource + "/blob/main/cli/src/cli.rs" },
     sections: [
       {
         id: "what-it-does",
@@ -148,13 +148,13 @@ export const pages: DocsPage[] = [
     description: "Install the CLI and point it at the correct Misty workspace.",
     group: "CLI",
     keywords: ["cargo install", "configure", "workspace"],
-    source: { label: "Workspace configuration", href: cliSource + "/blob/main/src/config.rs" },
+    source: { label: "Workspace configuration", href: cliSource + "/blob/main/cli/src/config.rs" },
     sections: [
       {
         id: "install",
         title: "Install",
         blocks: [
-          { type: "code", filename: "Terminal", language: "shell", code: "cd ~/misty-org/misty-cli\ncargo install --path . --locked --force\nmisty --version" },
+          { type: "code", filename: "Terminal", language: "shell", code: "cd ~/misty-org/misty/cli\ncargo install --path . --locked --force\nmisty --version" },
           { type: "p", text: "The current CLI package is version `0.1.0`. `--locked` uses the committed Cargo lockfile; `--force` replaces an older local installation." },
         ],
       },
@@ -183,7 +183,7 @@ export const pages: DocsPage[] = [
     description: "The current stable command surface, grouped by workflow.",
     group: "CLI",
     keywords: ["commands", "flags", "options", "reference"],
-    source: { label: "CLI command definitions", href: cliSource + "/blob/main/src/cli.rs" },
+    source: { label: "CLI command definitions", href: cliSource + "/blob/main/cli/src/cli.rs" },
     sections: [
       {
         id: "workspace-and-checks",
@@ -237,13 +237,13 @@ export const pages: DocsPage[] = [
     description: "Keep private runtime values scoped and portable application assets predictable.",
     group: "CLI",
     keywords: ["env", ".misty", "secrets", "profiles"],
-    source: { label: "Environment implementation", href: cliSource + "/blob/main/src/environment.rs" },
+    source: { label: "Environment implementation", href: cliSource + "/blob/main/cli/src/environment.rs" },
     sections: [
       {
         id: "private-environments",
         title: "Private environments",
         blocks: [
-          { type: "p", text: "Private files live under the ignored `misty-cli/.env` directory. Commands load only the relevant files and never replace values already exported in the shell." },
+          { type: "p", text: "Private files live under the ignored `misty/cli/.env` directory. Commands load only the relevant files and never replace values already exported in the shell." },
           { type: "code", filename: "Terminal", language: "shell", code: "misty env init dev\nmisty env status dev\nmisty env check dev" },
           { type: "callout", title: "No secret output", text: "Status and validation report names and readiness, not secret values." },
         ],
@@ -273,7 +273,7 @@ export const pages: DocsPage[] = [
     description: "Run the local stack and perform explicit production infrastructure work.",
     group: "CLI",
     keywords: ["server up", "docker", "worker", "r2", "production"],
-    source: { label: "Server command implementation", href: cliSource + "/blob/main/src/server.rs" },
+    source: { label: "Server command implementation", href: cliSource + "/blob/main/cli/src/server.rs" },
     sections: [
       {
         id: "development-stack",
@@ -314,7 +314,7 @@ export const pages: DocsPage[] = [
     description: "Prepare and publish a versioned Misty desktop release in explicit stages.",
     group: "CLI",
     keywords: ["release", "publish", "upload", "verify", "dry run"],
-    source: { label: "Release implementation", href: cliSource + "/tree/main/src/release" },
+    source: { label: "Release implementation", href: cliSource + "/tree/main/cli/src/release" },
     sections: [
       {
         id: "stages",
@@ -385,13 +385,13 @@ export const pages: DocsPage[] = [
     description: "Create, preview, test, and build a Misty extension panel.",
     group: "Extensions",
     keywords: ["react", "vite", "development", "plugin query"],
-    source: { label: "Extension workspace README", href: extensionsSource + "/blob/main/README.md" },
+    source: { label: "Extension workspace README", href: extensionsSource + "/blob/main/apps/README.md" },
     sections: [
       {
         id: "development",
         title: "Development",
         blocks: [
-          { type: "code", filename: "Terminal", language: "shell", code: "cd ~/misty-org/misty-apps\nnpm install\nnpm run dev" },
+          { type: "code", filename: "Terminal", language: "shell", code: "cd ~/misty-org/misty\nmisty setup\nmisty apps build planner\nmisty desktop dev" },
           { type: "p", text: "Open a panel with the `plugin` query parameter. Add one or more `selected` values to simulate file selection." },
           { type: "code", filename: "Browser", language: "text", code: "http://127.0.0.1:5174/?plugin=quick_convert\nhttp://127.0.0.1:5174/?plugin=quick_convert&selected=/Users/me/Desktop/demo.mov" },
         ],
@@ -420,7 +420,7 @@ export const pages: DocsPage[] = [
     description: "Declare the runtime, launcher placement, panels, and platform tools.",
     group: "Extensions",
     keywords: ["manifest.json", "schema_version", "launcher", "tools"],
-    source: { label: "Extension manifests", href: extensionsSource + "/tree/main/extensions" },
+    source: { label: "Extension manifests", href: extensionsSource + "/tree/main/apps/extensions" },
     sections: [
       {
         id: "minimal-manifest",
@@ -453,7 +453,7 @@ export const pages: DocsPage[] = [
     description: "Request selected paths, notifications, jobs, tools, and native actions safely.",
     group: "Extensions",
     keywords: ["postMessage", "runHostCommand", "context", "theme"],
-    source: { label: "Typed host bridge", href: extensionsSource + "/blob/main/src/mistyBridge.ts" },
+    source: { label: "Typed host bridge", href: extensionsSource + "/blob/main/apps/src/mistyBridge.ts" },
     sections: [
       {
         id: "handshake",
@@ -494,7 +494,7 @@ export const pages: DocsPage[] = [
     description: "Validate metadata and produce platform-specific install artifacts.",
     group: "Extensions",
     keywords: ["catalog", "package release", "zip", "sha256"],
-    source: { label: "Release packaging", href: extensionsSource + "/tree/main/scripts" },
+    source: { label: "Release packaging", href: extensionsSource + "/tree/main/apps/scripts" },
     sections: [
       {
         id: "catalog-entry",
@@ -528,7 +528,7 @@ export const pages: DocsPage[] = [
     description: "The first-party extension catalog currently maintained by Misty.",
     group: "Extensions",
     keywords: ["quick convert", "themes", "storage report", "image optimizer", "backups", "yt-dlp"],
-    source: { label: "Public catalog", href: extensionsSource + "/tree/main/catalog" },
+    source: { label: "Public catalog", href: extensionsSource + "/tree/main/apps/catalog" },
     sections: [
       {
         id: "catalog",
