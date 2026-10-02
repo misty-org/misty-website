@@ -96,12 +96,23 @@ export async function createSubscriptionCheckout(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ tier, interval }),
   });
-  return res.json();
+  return billingRedirect(res, "Checkout");
 }
 
 export async function createBillingPortal(): Promise<{ url: string }> {
   const res = await apiFetch("/billing/portal-session", { method: "POST" });
-  return res.json();
+  return billingRedirect(res, "Billing portal");
+}
+
+async function billingRedirect(
+  res: Response,
+  action: string,
+): Promise<{ url: string }> {
+  const result = await res.json();
+  if (typeof result?.url !== "string" || !result.url.trim()) {
+    throw new Error(`${action} did not return a URL`);
+  }
+  return { url: result.url };
 }
 
 export async function updateProfile(name: string): Promise<void> {

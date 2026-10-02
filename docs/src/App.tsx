@@ -26,22 +26,21 @@ function Sidebar({ onNavigate, onSearch }: { onNavigate?: () => void; onSearch: 
     }
   });
 
+  // Open the current page's group when navigation moves to another group.
+  const [revealedGroup, setRevealedGroup] = useState(currentGroup);
+  if (currentGroup !== revealedGroup) {
+    setRevealedGroup(currentGroup);
+    if (currentGroup && !openGroups.has(currentGroup)) setOpenGroups(new Set(openGroups).add(currentGroup));
+  }
   useEffect(() => {
-    if (!currentGroup) return;
-    setOpenGroups((groups) => {
-      if (groups.has(currentGroup)) return groups;
-      const next = new Set(groups).add(currentGroup);
-      try { window.localStorage.setItem("misty-docs-nav-groups", JSON.stringify([...next])); } catch { /* Optional preference. */ }
-      return next;
-    });
-  }, [currentGroup]);
+    try { window.localStorage.setItem("misty-docs-nav-groups", JSON.stringify([...openGroups])); } catch { /* Optional preference. */ }
+  }, [openGroups]);
 
   const toggleGroup = (label: string) => {
     setOpenGroups((groups) => {
       const next = new Set(groups);
       if (next.has(label)) next.delete(label);
       else next.add(label);
-      try { window.localStorage.setItem("misty-docs-nav-groups", JSON.stringify([...next])); } catch { /* Optional preference. */ }
       return next;
     });
   };
@@ -203,8 +202,12 @@ function DocumentRoute() {
 
 function TableOfContents({ page }: { page: DocsPage }) {
   const [active, setActive] = useState(page.sections[0]?.id ?? "");
-  useEffect(() => {
+  const [activePage, setActivePage] = useState(page);
+  if (activePage !== page) {
+    setActivePage(page);
     setActive(page.sections[0]?.id ?? "");
+  }
+  useEffect(() => {
     const headings = page.sections.map((section) => document.getElementById(section.id)).filter(Boolean) as HTMLElement[];
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -225,9 +228,9 @@ function SearchDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (op
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const results = useMemo(() => { const normalized = query.trim().toLowerCase(); return normalized ? pages.filter((page) => searchableText(page).includes(normalized)).slice(0, 10) : pages.slice(0, 8); }, [query]);
-  useEffect(() => { if (!open) setQuery(""); }, [open]);
-  const choose = (path: string) => { onOpenChange(false); navigate(path); };
-  return <Dialog open={open} onOpenChange={onOpenChange}><DialogContent className="search-dialog"><DialogTitle>Search documentation</DialogTitle><DialogDescription>Find a guide, command, capability, or extension contract.</DialogDescription><div className="search-field"><Search /><Input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search commands, extensions, servers…" /></div><div className="search-results">{results.map((page) => <button type="button" key={page.path} onClick={() => choose(page.path)}><span><strong>{page.title}</strong><small>{page.description}</small></span><span className="result-group">{page.group}</span></button>)}{!results.length && <p>No documentation matched “{query}”.</p>}</div></DialogContent></Dialog>;
+  const change = (next: boolean) => { if (!next) setQuery(""); onOpenChange(next); };
+  const choose = (path: string) => { change(false); navigate(path); };
+  return <Dialog open={open} onOpenChange={change}><DialogContent className="search-dialog"><DialogTitle>Search documentation</DialogTitle><DialogDescription>Find a guide, command, capability, or extension contract.</DialogDescription><div className="search-field"><Search /><Input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search commands, extensions, servers…" /></div><div className="search-results">{results.map((page) => <button type="button" key={page.path} onClick={() => choose(page.path)}><span><strong>{page.title}</strong><small>{page.description}</small></span><span className="result-group">{page.group}</span></button>)}{!results.length && <p>No documentation matched “{query}”.</p>}</div></DialogContent></Dialog>;
 }
 
 function updateMeta(page: DocsPage) {
@@ -250,7 +253,12 @@ export function App(): ReactNode {
   const location = useLocation();
   const page = pageByPath(location.pathname) ?? pages[0];
   const isLanding = page.path === "/";
-  useEffect(() => { setMobileOpen(false); window.scrollTo({ top: 0 }); updateMeta(page); }, [location.pathname, page]);
+  const [navigatedPath, setNavigatedPath] = useState(location.pathname);
+  if (navigatedPath !== location.pathname) {
+    setNavigatedPath(location.pathname);
+    setMobileOpen(false);
+  }
+  useEffect(() => { window.scrollTo({ top: 0 }); updateMeta(page); }, [location.pathname, page]);
   useEffect(() => {
     const openSearch = (event: KeyboardEvent) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); } };
     window.addEventListener("keydown", openSearch);

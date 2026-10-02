@@ -129,10 +129,15 @@ test("an authenticated user can select monthly Max checkout", async ({
     .toBe(JSON.stringify({ tier: "max", interval: "month" }));
 });
 
-test("an active subscriber cannot repurchase the current tier", async ({
+test("an active subscriber opens Stripe billing without repurchasing the current tier", async ({
   page,
 }) => {
   let checkoutRequests = 0;
+  let portalRequests = 0;
+  await page.route("**/api/billing/portal-session", async (route) => {
+    portalRequests += 1;
+    await route.fulfill({ json: { url: "#billing-portal" } });
+  });
 
   await page.route("**/api/me", async (route) => {
     await route.fulfill({
@@ -162,16 +167,12 @@ test("an active subscriber cannot repurchase the current tier", async ({
   });
   await page.route("**/api/billing/checkout-session", async (route) => {
     checkoutRequests += 1;
-    await route.fulfill({
-      status: 409,
-      contentType: "text/plain",
-      body: "active subscription already exists",
-    });
+    await route.fulfill({ json: { url: "#upgrade-confirmation" } });
   });
 
   await page.goto("/pricing?checkout=pro&interval=month");
 
-  await expect(page).toHaveURL(/\/pricing$/);
+  await expect(page).toHaveURL(/\/pricing#billing-portal$/);
   const proCard = page
     .locator("article")
     .filter({ has: page.getByRole("heading", { name: "Pro", exact: true }) });
@@ -179,20 +180,19 @@ test("an active subscriber cannot repurchase the current tier", async ({
     .locator("article")
     .filter({ has: page.getByRole("heading", { name: "Max", exact: true }) });
   await expect(
-    proCard.getByRole("link", { name: "Manage subscription" }),
-  ).toHaveAttribute("href", "/settings");
+    proCard.getByRole("button", { name: "Manage subscription" }),
+  ).toBeEnabled();
   await expect(
-    maxCard.getByRole("link", { name: "Change to Max" }),
-  ).toHaveAttribute("href", "/settings");
+    maxCard.getByRole("button", { name: "Change to Max" }),
+  ).toBeEnabled();
   await expect(
-    maxCard.getByRole("link", { name: "Manage subscription" }),
+    maxCard.getByRole("button", { name: "Manage subscription" }),
   ).toHaveCount(0);
-  await expect(
-    page.getByText(
-      "Your Pro subscription is already active and renews automatically.",
-    ),
-  ).toBeVisible();
-  expect(checkoutRequests).toBe(0);
+  expect(portalRequests).toBe(1);
+  await maxCard.getByRole("button", { name: "Change to Max" }).click();
+  await expect(page).toHaveURL(/#upgrade-confirmation$/);
+  expect(portalRequests).toBe(1);
+  expect(checkoutRequests).toBe(1);
 });
 
 test("an active Max subscription is mapped to the Max card", async ({
@@ -234,13 +234,13 @@ test("an active Max subscription is mapped to the Max card", async ({
     .locator("article")
     .filter({ has: page.getByRole("heading", { name: "Max", exact: true }) });
   await expect(
-    maxCard.getByRole("link", { name: "Manage subscription" }),
-  ).toHaveAttribute("href", "/settings");
+    maxCard.getByRole("button", { name: "Manage subscription" }),
+  ).toBeEnabled();
   await expect(
-    proCard.getByRole("link", { name: "Change to Pro" }),
-  ).toHaveAttribute("href", "/settings");
+    proCard.getByRole("button", { name: "Change to Pro" }),
+  ).toBeEnabled();
   await expect(
-    proCard.getByRole("link", { name: "Manage subscription" }),
+    proCard.getByRole("button", { name: "Manage subscription" }),
   ).toHaveCount(0);
 });
 
@@ -341,7 +341,7 @@ test("checkout success confirms the upgraded plan and renewal date", async ({
   ).toHaveAttribute("href", "/");
   await expect(
     page.getByRole("link", { name: "View billing settings" }),
-  ).toHaveAttribute("href", "/settings");
+  ).toHaveAttribute("href", "/settings/billing");
   await expect(
     page.locator('section[aria-labelledby="plans-heading"]'),
   ).toHaveCount(0);
@@ -354,4 +354,103 @@ test("checkout success confirms the upgraded plan and renewal date", async ({
       nodes.map(({ target }) => `${id}: ${target.join(" > ")}`),
     ),
   ).toEqual([]);
+});
+
+for (const subscriptionStatus of ["past_due", "unpaid", "incomplete", "paused"]) {
+  test(`${subscriptionStatus} subscribers open the portal even after falling back to Basic`, async ({ page }) => {
+    await page.route("**/api/me", async (route) => {
+      await route.fulfill({ json: {
+        id: "subscriber", name: "Maya", email: "maya@misty.local",
+        tier: "basic", status: "active", allows_use: true,
+        billing: { kind: "free", subscription_status: subscriptionStatus, customer_portal_available: true },
+      } });
+    });
+    let checkouts = 0;
+    await page.route("**/api/billing/checkout-session", async (route) => {
+      checkouts += 1;
+      await route.fulfill({ status: 503 });
+    });
+    await page.route("**/api/billing/portal-session", async (route) => {
+      await route.fulfill({ json: { url: "#billing-portal" } });
+    });
+    await page.goto("/pricing");
+    await page.getByRole("button", { name: "Change to Pro" }).click();
+    await expect(page).toHaveURL(/#billing-portal$/);
+    expect(checkouts).toBe(0);
+  });
+}
+
+test("missing checkout URL leaves an actionable error on pricing", async ({ page }) => {
+  await provideAuthenticatedSession(page, { id: "new-user", name: "Maya", email: "maya@misty.local" });
+  await page.route("**/api/billing/checkout-session", async (route) => {
+    await route.fulfill({ json: {} });
+  });
+  await page.goto("/pricing");
+  await page.getByRole("button", { name: "Choose Pro" }).click();
+  await expect(page.getByRole("alert")).toHaveText("Checkout did not return a URL");
+  await expect(page).toHaveURL(/\/pricing$/);
+  await expect(page.getByRole("button", { name: "Choose Pro" })).toBeEnabled();
+});
+
+test("portal failure stays on pricing and can be retried", async ({ page }) => {
+  await page.route("**/api/me", async (route) => {
+    await route.fulfill({ json: {
+      id: "subscriber", name: "Maya", email: "maya@misty.local",
+      tier: "pro", status: "active", allows_use: true,
+      billing: { kind: "subscription", subscription_status: "active", customer_portal_available: true },
+    } });
+  });
+  let portalRequests = 0;
+  await page.route("**/api/billing/portal-session", async (route) => {
+    portalRequests += 1;
+    if (portalRequests === 1) {
+      await route.fulfill({ status: 503, body: "Billing is temporarily unavailable" });
+    } else {
+      await route.fulfill({ json: { url: "#billing-portal" } });
+    }
+  });
+  await page.goto("/pricing");
+  await page.getByRole("button", { name: "Manage subscription" }).click();
+  await expect(page.getByRole("alert")).toHaveText("Billing is temporarily unavailable");
+  await expect(page).toHaveURL(/\/pricing$/);
+  await page.getByRole("button", { name: "Manage subscription" }).click();
+  await expect(page).toHaveURL(/#billing-portal$/);
+  expect(portalRequests).toBe(2);
+});
+
+
+test("subscribers can confirm an interval change on the same tier", async ({ page }) => {
+  await page.route("**/api/me", async (route) => {
+    await route.fulfill({ json: {
+      id: "subscriber", name: "Maya", email: "maya@misty.local",
+      tier: "pro", status: "active", allows_use: true,
+      billing: { kind: "subscription", interval: "month", subscription_status: "active", customer_portal_available: true },
+    } });
+  });
+  let selection = "";
+  await page.route("**/api/billing/checkout-session", async (route) => {
+    selection = route.request().postData() ?? "";
+    await route.fulfill({ json: { url: "#upgrade-confirmation" } });
+  });
+  await page.goto("/pricing");
+  await page.getByText("Yearly", { exact: true }).click();
+  await page.getByRole("button", { name: "Change to Pro yearly" }).click();
+  await expect(page).toHaveURL(/#upgrade-confirmation$/);
+  expect(JSON.parse(selection)).toEqual({ tier: "pro", interval: "year" });
+});
+
+test("upgrade confirmation waits for the selected tier and interval", async ({ page }) => {
+  let reads = 0;
+  await page.route("**/api/me", async (route) => {
+    reads += 1;
+    await route.fulfill({ json: {
+      id: "subscriber", name: "Maya", email: "maya@misty.local",
+      tier: reads < 3 ? "pro" : "max", status: "active", allows_use: true,
+      billing: { kind: "subscription", interval: reads < 4 ? "month" : "year", subscription_status: "active", current_period_end: "2027-10-01T00:00:00Z" },
+    } });
+  });
+  await page.goto("/pricing?checkout=success&tier=max&interval=year");
+  await expect(page.getByRole("heading", { name: "Your Max plan is ready." })).toBeVisible();
+  expect(reads).toBeGreaterThanOrEqual(4);
+  await expect(page.getByRole("heading", { name: "Your Pro plan is ready." })).toHaveCount(0);
 });

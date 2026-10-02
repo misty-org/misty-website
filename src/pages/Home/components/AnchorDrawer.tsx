@@ -2,15 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type HomeSection = {
+type HomeSection = {
   readonly id: string;
   readonly label: string;
 };
 
-export const HOME_SECTIONS: readonly HomeSection[] = [
+const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "overview", label: "Overview" },
-  { id: "ecosystem", label: "Ecosystem" },
-  { id: "features", label: "How it works" },
+  { id: "ecosystem", label: "Websites and tools" },
+  { id: "features", label: "Browser workspace" },
   { id: "foundation", label: "Our goal" },
   { id: "resources", label: "Resources" },
   { id: "get-started", label: "Get started" },

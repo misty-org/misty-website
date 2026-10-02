@@ -17,6 +17,7 @@ export default function Pricing() {
     pendingTier,
     error,
     currentPlanTier,
+    currentPlanInterval,
     hasManagedSubscription,
     trialEligible,
     checkoutReady,
@@ -36,6 +37,7 @@ export default function Pricing() {
         checkoutError={error}
         checkoutReady={checkoutReady}
         currentPlanTier={currentPlanTier}
+        currentPlanInterval={currentPlanInterval}
         hasManagedSubscription={hasManagedSubscription}
         trialEligible={trialEligible}
         onIntervalChange={setInterval}
