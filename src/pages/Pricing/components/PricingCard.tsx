@@ -106,7 +106,7 @@ export default function PricingCard({
             aria-busy={ctaBusy}
             onClick={onCtaClick}
           >
-            {ctaBusy ? "Opening checkout…" : ctaLabel}
+            {ctaBusy ? "Opening Stripe…" : ctaLabel}
           </Button>
         ) : ctaHref ? (
           <Button

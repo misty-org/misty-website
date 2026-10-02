@@ -129,14 +129,14 @@ export function Foundation() {
       <div ref={storyRef} className="foundation-story" style={lightStyle}>
         <div className="foundation-stage">
           <div className="foundation-intro site-container" aria-hidden={scrollEnabled && slide > 0.98}>
-            <p className="marketing-heading scroll-heading-flow">And so much more.</p>
+            <p className="marketing-heading scroll-heading-flow">Keep your place.</p>
           </div>
           <div className="foundation-arrival" aria-hidden={contentHidden} inert={contentHidden ? true : undefined}>
             <WordRain />
           <div className="site-container foundation-content" data-scroll-enabled={scrollEnabled}>
             <h2 id="foundation-title" className="marketing-heading foundation-title">
               <span className="foundation-title-light">
-                Less setup.<br />More progress.
+                Switch computers.<br />Keep going.
               </span>
             </h2>
 

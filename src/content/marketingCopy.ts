@@ -26,29 +26,29 @@ export interface MarketingCopy {
 
 export const marketingCopy: MarketingCopy = {
   home: {
-    heroTitle: "The space for organizing, creating, and collaborating.",
-    heroTitleLead: "The space for",
-    heroDescription: "Misty brings your apps, information, and AI together in one workspace built around how you work.",
+    heroTitle: "A browser for your work.",
+    heroTitleLead: "A browser for",
+    heroDescription: "Your websites, native tools, and agents in one workspace. Continue on another computer with encrypted sync for your tabs and website sign-ins.",
     heroTitleWords: [
-      "organizing.",
-      "creating.",
-      "collaborating.",
-      "sharing.",
-      "working.",
-      "planning.",
-      "building.",
+      "your work.",
+      "your tabs.",
+      "your ideas.",
+      "your focus.",
+      "your plans.",
+      "your tasks.",
+      "your day.",
     ],
-    ctaTitle: "Ready to build your space with Misty?",
+    ctaTitle: "Make Misty your browser workspace.",
   },
   pricing: {
-    title: "Start together for free. Upgrade when your work grows.",
+    title: "Start browsing for free. Upgrade when your work grows.",
     description:
-      "Every plan includes Misty’s core collaboration experience. Choose a plan based on how many Spaces you need and how much you use AI agents.",
+      "Find the right plan for your Misty workspace. Compare shared Space limits, storage, and AI agent usage.",
   },
   download: {
     title: "Get Misty for your desktop.",
     description:
-      "The current beta download is 44 MB on macOS and 70 MB on Windows, with Browser included.",
+      "Your browser workspace for macOS and Windows. The current beta download is 44 MB on macOS and 70 MB on Windows.",
   },
   blog: {
     title: "Notes on building Misty.",
@@ -80,11 +80,11 @@ export const marketingCopy: MarketingCopy = {
       "That page doesn’t exist. Check the link, or head back to the homepage.",
   },
   metadata: {
-    home: "Misty is a fast, lightweight workspace with built-in apps for organizing, creating, and collaborating.",
+    home: "Misty is a browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.",
     pricing:
       "Compare Misty Basic, Pro, and Max plans by Space limits, AI agent usage, and monthly or annual pricing.",
     download:
-      "Download the Misty public beta for macOS and Windows. Both current downloads are under 100 MB with Browser included.",
+      "Download the Misty browser workspace for macOS and Windows. Both current beta downloads are under 100 MB.",
     blog: "Notes from the team building Misty — what we’re making, what changed our minds, and what’s next.",
     changelog:
       "Every Misty release and the changes that shipped with it, newest first.",

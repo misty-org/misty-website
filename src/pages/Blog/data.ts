@@ -14,7 +14,7 @@ export const posts: BlogPost[] = [
       "We built Misty because managing files across Google Drive, OneDrive, and iCloud shouldn't require three different apps. Here's the story behind it.",
     tag: "Archive",
     historicalContext:
-      "This post documents Misty's original file-first direction. Since then, Misty has expanded around shared Spaces for conversations, tasks, and a curated Library.",
+      "This post documents Misty's original file-first direction. Misty is now a browser workspace with native tools, agents, and encrypted sync across computers.",
   },
 ];
 

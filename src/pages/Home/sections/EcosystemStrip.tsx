@@ -226,14 +226,14 @@ export function EcosystemStrip() {
       <div className="site-container min-w-0">
         <div>
           <h2 className="marketing-heading text-center text-[var(--marketing-foreground)]">
-            Built with trusted open source software
+            Built on open source software
           </h2>
           <BrandMarquee items={openSourceTools} duration="90s" />
         </div>
 
         <div className="mt-8 sm:mt-10">
           <h2 className="marketing-heading text-center text-[var(--marketing-foreground)]">
-            Connect with popular platforms
+            Your everyday websites, together
           </h2>
           <BrandMarquee items={integrations} reverse duration="120s" />
         </div>

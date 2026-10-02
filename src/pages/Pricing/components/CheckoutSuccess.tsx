@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useSearchParams } from "react-router";
 
 import { useAuth } from "@/AuthContext";
 import { PublicPage } from "@/components/marketing";
@@ -17,7 +17,9 @@ type ConfirmationState = "checking" | "confirmed" | "pending";
 const syncDelays = [0, 400, 800, 1_200, 1_600, 2_000];
 
 function isPaidPlan(account: MeResponse) {
-  return account.tier === "pro" || account.tier === "max";
+  return account.allows_use &&
+    (account.status === "active" || account.status === "trialing") &&
+    (account.tier === "pro" || account.tier === "max");
 }
 
 function formatPlan(tier: MeResponse["tier"]) {
@@ -40,7 +42,8 @@ function PlanDetails({ account }: { account: MeResponse }) {
       );
   const periodLabel = account.billing?.cancel_at_period_end
     ? "Access until"
-    : account.billing?.kind === "trial"
+    : account.billing?.subscription_status === "trialing" ||
+        (!account.billing?.subscription_status && account.billing?.kind === "trial")
       ? "Trial ends"
       : "Renews";
 
@@ -81,6 +84,10 @@ function PlanDetails({ account }: { account: MeResponse }) {
 }
 
 export default function CheckoutSuccess() {
+  const [searchParams] = useSearchParams();
+  const expectedTier = searchParams.get("tier");
+  const expectedInterval = searchParams.get("interval");
+  const returnTo = `/pricing?${searchParams.toString()}`;
   const { user, sessionReady } = useAuth();
   const setMe = useUserStore((store) => store.setMe);
   const [state, setState] = useState<ConfirmationState>("checking");
@@ -108,7 +115,9 @@ export default function CheckoutSuccess() {
           const nextAccount = await fetchMe();
           if (!active) return;
           setMe(nextAccount);
-          if (isPaidPlan(nextAccount)) {
+          if (isPaidPlan(nextAccount) &&
+              (!expectedTier || nextAccount.tier === expectedTier) &&
+              (!expectedInterval || nextAccount.billing?.interval === expectedInterval)) {
             setAccount(nextAccount);
             setState("confirmed");
             return;
@@ -127,7 +136,7 @@ export default function CheckoutSuccess() {
     return () => {
       active = false;
     };
-  }, [retry, sessionReady, setMe, user]);
+  }, [expectedTier, expectedInterval, retry, sessionReady, setMe, user]);
 
   return (
     <PublicPage className="min-h-[72vh]">
@@ -176,7 +185,7 @@ export default function CheckoutSuccess() {
                 <NavLink to="/">Continue to Misty</NavLink>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <NavLink to="/settings">View billing settings</NavLink>
+                <NavLink to="/settings/billing">View billing settings</NavLink>
               </Button>
             </div>
           </>
@@ -220,7 +229,7 @@ export default function CheckoutSuccess() {
             <Button asChild size="lg" className="mt-8">
               <NavLink
                 to="/signin"
-                state={{ from: "/pricing?checkout=success" }}
+                state={{ from: returnTo }}
               >
                 Sign in
               </NavLink>

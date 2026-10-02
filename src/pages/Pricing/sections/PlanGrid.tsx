@@ -9,6 +9,7 @@ export default function PlanGrid({
   checkoutError,
   checkoutReady,
   currentPlanTier,
+  currentPlanInterval,
   hasManagedSubscription,
   trialEligible,
   onIntervalChange,
@@ -19,6 +20,7 @@ export default function PlanGrid({
   checkoutError: string;
   checkoutReady: boolean;
   currentPlanTier: PaidTier | null;
+  currentPlanInterval: PricingInterval | null;
   hasManagedSubscription: boolean;
   trialEligible: boolean;
   onIntervalChange: (interval: PricingInterval) => void;
@@ -38,12 +40,12 @@ export default function PlanGrid({
           const isCurrentPlan =
             paidTier !== null && paidTier === currentPlanTier;
           const managesCurrentSubscription =
-            isCurrentPlan && hasManagedSubscription;
+            isCurrentPlan && hasManagedSubscription &&
+            (!currentPlanInterval || currentPlanInterval === interval);
           const changesManagedSubscription =
             paidTier !== null &&
-            currentPlanTier !== null &&
             hasManagedSubscription &&
-            !isCurrentPlan;
+            !managesCurrentSubscription;
           return (
             <PricingCard
               key={plan.id}
@@ -53,21 +55,14 @@ export default function PlanGrid({
               billingNote={plan.prices[interval].billingNote}
               features={features}
               inheritsFrom={inheritsFrom}
-              ctaHref={
-                plan.id === "free"
-                  ? "/register"
-                  : managesCurrentSubscription ||
-                      changesManagedSubscription
-                    ? "/settings"
-                    : undefined
-              }
+              ctaHref={plan.id === "free" ? "/register" : undefined}
               ctaLabel={
                 plan.id === "free"
                   ? "Get started free"
                   : managesCurrentSubscription
                     ? "Manage subscription"
                     : changesManagedSubscription
-                      ? `Change to ${plan.name}`
+                      ? `Change to ${plan.name}${isCurrentPlan ? (interval === "year" ? " yearly" : " monthly") : ""}`
                       : isCurrentPlan
                         ? "Current plan"
                         : plan.id === "pro" && trialEligible
@@ -78,14 +73,11 @@ export default function PlanGrid({
               ctaDisabled={
                 paidTier !== null &&
                 (!checkoutReady ||
-                  (isCurrentPlan && !managesCurrentSubscription))
+                  checkoutPendingTier !== null ||
+                  (isCurrentPlan && !hasManagedSubscription))
               }
               onCtaClick={
-                paidTier &&
-                !managesCurrentSubscription &&
-                !changesManagedSubscription
-                  ? () => onPaidCheckout(paidTier)
-                  : undefined
+                paidTier ? () => onPaidCheckout(paidTier) : undefined
               }
               popular={plan.id === "pro"}
             />

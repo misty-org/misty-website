@@ -259,7 +259,7 @@ function MistyProgressScene({ progress: contentProgress }: { progress: number })
         <path data-mobile-trail d={mobileRoute} fill="none" stroke="var(--marketing-foreground)" strokeWidth="2"
           pathLength="1" strokeDasharray="1" strokeDashoffset={1 - mobileProgress} strokeLinecap="round" />
       </svg>
-      <div className="mobile-path-marker" aria-hidden="true"><img src="/misty-cloud-expression-cycle.webp" alt="" width="32" height="32" /></div>
+      <div className="mobile-path-marker" aria-hidden="true"><img src="/misty-icon.png" alt="" width="32" height="32" /></div>
       <svg
         aria-hidden="true"
         className="feature-logo-route pointer-events-none absolute inset-0 size-full overflow-visible"
@@ -325,7 +325,7 @@ function MistyProgressScene({ progress: contentProgress }: { progress: number })
         }}
       >
         <img
-          src="/misty-cloud-expression-cycle.webp"
+          src="/misty-icon.png"
           alt=""
           width="512"
           height="512"
@@ -354,8 +354,8 @@ export function FeatureShowcase() {
       <span id="spaces" className="block scroll-mt-24" />
       <ScrollSceneIntro
         id="feature-bento-title"
-        title="A closer look at Misty."
-        description="Create a Space, make it yours, and bring in AI or friends whenever it helps."
+        title="Your browser. Your workspace."
+        description="Browse, organize, and work with native tools. Bring your tabs and website sign-ins along when you switch computers."
       />
       <div
         ref={storyRef}

@@ -1,8 +1,8 @@
 export const workspaceShowcase = [
   {
     id: "create-space",
-    title: "Create a Space",
-    description: "Give whatever you’re working on a Space of its own.",
+    title: "Browse in your workspace",
+    description: "Open your everyday websites and group related tabs around what you’re working on.",
     view: "space",
     fallbackSlot: "space-overview",
     videoSlot: "create-space",
@@ -10,8 +10,8 @@ export const workspaceShowcase = [
   },
   {
     id: "choose-apps",
-    title: "Add your apps",
-    description: "Choose the apps you need. Add more as you go.",
+    title: "Continue on another computer",
+    description: "Encrypted sync carries your tabs and website sign-ins between computers. Some sites may ask you to sign in again.",
     view: "space",
     fallbackSlot: "space-overview",
     videoSlot: "choose-apps",
@@ -19,8 +19,8 @@ export const workspaceShowcase = [
   },
   {
     id: "choose-integrations",
-    title: "Choose your integrations",
-    description: "Bring supported websites and services into your apps.",
+    title: "Keep native tools close",
+    description: "Work with notes, files, and planning tools alongside your websites, all inside Misty.",
     view: "space",
     fallbackSlot: "connections",
     videoSlot: "choose-integrations",
@@ -28,8 +28,8 @@ export const workspaceShowcase = [
   },
   {
     id: "workspace-layouts",
-    title: "Make the layout yours",
-    description: "Arrange tabs, panels, and virtual windows around your work.",
+    title: "Work side by side",
+    description: "Arrange websites and native tools in split panes. Keep your references beside the work.",
     view: "space",
     fallbackSlot: "home-dashboard",
     videoSlot: "workspace-layouts",
@@ -37,8 +37,8 @@ export const workspaceShowcase = [
   },
   {
     id: "agent-workflows",
-    title: "Bring in AI collaborators",
-    description: "Bring in an Agent and choose what it can work with.",
+    title: "Bring an agent into context",
+    description: "Ask for help with the work in front of you. Choose the pages, files, and tools your agent can use.",
     view: "agent",
     fallbackSlot: "agent-workspace",
     videoSlot: "agent-workflows",
@@ -46,8 +46,8 @@ export const workspaceShowcase = [
   },
   {
     id: "share-space",
-    title: "Invite your friends",
-    description: "Invite friends when you’re ready. Personal accounts and files stay private unless shared.",
+    title: "Share work when you want",
+    description: "Bring people into shared Spaces for conversations, tasks, and files. Keep personal browsing separate.",
     view: "library",
     fallbackSlot: "space-library",
     videoSlot: "share-space",
