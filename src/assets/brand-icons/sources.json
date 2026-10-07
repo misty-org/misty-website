@@ -1,0 +1,121 @@
+{
+  "github": {
+    "url": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/github.svg",
+    "collection": "Simple Icons",
+    "brandSource": "https://github.com/logos",
+    "hex": "181717",
+    "adaptation": "White monochrome variant under prefers-color-scheme: dark; original artwork otherwise."
+  },
+  "google-docs": {
+    "url": "https://www.gstatic.com/images/branding/productlogos/docs_2026/v2/web/192px.svg",
+    "collection": "Google product assets"
+  },
+  "google-sheets": {
+    "url": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/googlesheets.svg",
+    "collection": "Simple Icons",
+    "adaptation": "Filled with Sheets green #34A853; the 2026 product asset's blurs and masks smear at small sizes"
+  },
+  "youtube": {
+    "collection": "YouTube Brand Resources",
+    "color": "#FF0000"
+  },
+  "figma": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/figma.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "notion": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/notion-icon.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "todoist": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/todoist-icon.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "spotify": {
+    "url": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/spotify.svg",
+    "collection": "Simple Icons",
+    "adaptation": "Filled with Spotify green #1ED760; replaces a hand-drawn mark"
+  },
+  "linear": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/linear-icon.svg",
+    "collection": "gilbarbara/logos",
+    "adaptation": "White monochrome variant under prefers-color-scheme: dark; original artwork otherwise."
+  },
+  "slack": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/slack-icon.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "jira": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/jira.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "gmail": {
+    "url": "https://www.gstatic.com/images/branding/productlogos/gmail_2026/v2/web/192px.svg",
+    "collection": "Google product assets"
+  },
+  "google-calendar": {
+    "url": "https://www.gstatic.com/images/branding/productlogos/calendar_2026/v2/web/192px.svg",
+    "collection": "Google product assets",
+    "adaptation": "Added viewBox matching the original 192 by 192 dimensions for proportional scaling."
+  },
+  "google-drive": {
+    "url": "https://www.gstatic.com/images/branding/productlogos/drive_2026/v2/web/192px.svg",
+    "collection": "Google product assets",
+    "adaptation": "Added viewBox matching the original 192 by 192 dimensions for proportional scaling."
+  },
+  "airtable": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/airtable.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "asana": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/asana-icon.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "trello": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/trello.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "hubspot": {
+    "url": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/hubspot.svg",
+    "collection": "Simple Icons",
+    "brandSource": "https://www.hubspot.com/style-guide",
+    "hex": "FF7A59"
+  },
+  "discord": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/discord-icon.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "dropbox": {
+    "url": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/dropbox.svg",
+    "collection": "Simple Icons",
+    "brandSource": "https://www.dropbox.com/branding",
+    "hex": "0061FF"
+  },
+  "outlook": {
+    "url": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/outlook_48x1.svg",
+    "collection": "Microsoft product assets"
+  },
+  "microsoft-teams": {
+    "url": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/teams_48x1.svg",
+    "collection": "Microsoft product assets"
+  },
+  "onedrive": {
+    "url": "https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/assets/brand-icons/product/svg/onedrive_48x1.svg",
+    "collection": "Microsoft product assets"
+  },
+  "reddit": {
+    "collection": "Reddit Brand",
+    "color": "#FF4500"
+  },
+  "x": {
+    "url": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/x.svg",
+    "collection": "Simple Icons",
+    "brandSource": "https://x.com",
+    "hex": "000000",
+    "adaptation": "White silhouette for dark surfaces, like GitHub and Linear"
+  },
+  "linkedin": {
+    "collection": "LinkedIn Brand Resources",
+    "color": "#0A66C2"
+  }
+}

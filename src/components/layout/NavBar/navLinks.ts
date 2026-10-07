@@ -1,5 +1,3 @@
-import { DOCS_URL } from "@/lib/site";
-
 export interface NavLinkEntry {
   to: string;
   label: string;
@@ -12,7 +10,6 @@ export const navItems: NavLinkEntry[] = [
 ];
 
 export const resourceLinks: NavLinkEntry[] = [
-  ...(import.meta.env.DEV ? [{ to: DOCS_URL, label: "Docs", external: true }] : []),
   { to: "/blog", label: "Blog" },
   { to: "/changelog", label: "Changelog" },
   { to: "/roadmap", label: "Roadmap" },

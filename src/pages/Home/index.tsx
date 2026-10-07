@@ -1,27 +1,17 @@
-import { marketingCopy } from "@/content/marketingCopy";
+import { createPortal } from "react-dom";
 import { AnchorDrawer } from "./components/AnchorDrawer";
-import { ClosingCta } from "./sections/ClosingCta";
-import { EcosystemStrip } from "./sections/EcosystemStrip";
-import { FeatureShowcase } from "./sections/FeatureShowcase";
-import { Foundation } from "./sections/Foundation";
-import { Hero } from "./sections/Hero";
-import { ResourcePreview } from "./sections/ResourcePreview";
+import { MidnightHome } from "./midnight/MidnightHome";
+import { useSectionRoute } from "./useSectionRoute";
 
+/** Serves / and /download; the latter scrolls to its section. */
 export default function Home() {
-  const copy = marketingCopy.home;
+  useSectionRoute();
 
   return (
-    <div className="home-page">
-      <AnchorDrawer />
-      <div className="home-scroll-edge-fade" aria-hidden="true" />
-      <Hero copy={copy} />
-      <div className="home-content-rail">
-        <EcosystemStrip />
-        <FeatureShowcase />
-        <Foundation />
-        <ResourcePreview />
-        <ClosingCta copy={copy} />
-      </div>
-    </div>
+    <>
+      {/* Keep the fixed drawer above the footer and outside route transforms. */}
+      {createPortal(<AnchorDrawer />, document.body)}
+      <MidnightHome />
+    </>
   );
 }

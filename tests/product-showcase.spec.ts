@@ -1,212 +1,91 @@
 import { expect, test } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
 });
 
-test("slide-in stories start moving as soon as their tracks enter the viewport", async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: "no-preference" });
+test("the homepage tells its story chapter by chapter and keeps its resource previews", async ({ page }) => {
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The agentic browser for building your workspace");
+  // Three parts, each opened by an interlude, then the equation they add up to.
+  await expect(page.locator(".mist-interlude h2")).toHaveText(["It starts as a browser.", "Then come the tools for your work.", "Bring it all together in a space."]);
+  await expect(page.locator(".mist-chapter-head h2")).toHaveText([
+    "Fast because it's native. No bundled Chromium.",
+    "Give each computer its own setup and keep them all in sync.",
+    "Agents that work across your whole browser.",
+    "Connect your apps once and let agents use them.",
+    "Open any file from any of your computers.",
+    "A space for every project.",
+  ]);
+  await expect(page.locator("#equation-title")).toHaveText("browser + work + space");
+  await expect(page.getByRole("heading", { name: "Ready to build your browser workspace?" })).toBeVisible();
+  await expect(page.locator(".mist-eyebrow, .mist-device-badge, .mist-sync-status, .mist-workspace, .mist-reveal")).toHaveCount(0);
+  // The call to download follows the equation; the blog, changelog and roadmap sit after it,
+  // as three columns of two.
+  await expect(page.locator("#features + #download")).toHaveCount(1);
+  for (const [id, title] of [["blog", "Blog"], ["changelog", "Changelog"], ["roadmap", "Roadmap"]]) {
+    const section = page.locator(`[data-resource-preview='${id}']`);
+    await expect(section.getByRole("heading", { name: title, exact: true })).toBeVisible();
+    await expect(section.locator(".resource-flat-card")).toHaveCount(1);
+    await expect(section.getByRole("link", { name: `Visit ${id}` })).toHaveAttribute("href", `/${id}`);
+  }
+  if (page.viewportSize()!.width > 900) {
+    const tops = await page.locator(".mist-resource-column").evaluateAll(els => els.map(el => Math.round(el.getBoundingClientRect().top)));
+    expect(new Set(tops).size).toBe(1);
+  }
+});
+
+test("the sync chapter shows the devices card across its row", async ({ page }) => {
+  const cards = page.locator('.mist-feature-card');
+  await expect(cards).toHaveCount(1);
+  await expect(cards.locator('.mist-feature-label')).toHaveText(['devices']);
+  const card = cards.first();
+  await card.scrollIntoViewIfNeeded();
+  await expect(card.getByRole('heading', { level: 3 })).toBeVisible();
+  await expect(card.locator('.mist-devices')).toBeVisible();
+  if (page.viewportSize()!.width > 800) {
+    const [cardWidth, gridWidth] = await card.evaluate(el => [el.getBoundingClientRect().width, el.parentElement!.getBoundingClientRect().width]);
+    expect(cardWidth).toBeCloseTo(gridWidth, 0);
+  }
+});
+
+test("missing replacement images fall back to a capture without changing the slot size", async ({ page }) => {
+  await page.route('**/screenshots/misty-space-library.webp', route => route.fulfill({ status: 404, body: '' }));
   await page.reload();
-
-  for (const { track, scene, property } of [
-    {
-      track: ".story-intro-track",
-      scene: ".story-intro-copy",
-      property: "--story-intro-x",
-    },
-    {
-      track: ".pin-track",
-      scene: ".pin-scene",
-      property: "--pin-scene-x",
-    },
-    {
-      track: ".feature-bento-story",
-      scene: ".feature-bento-stage-inner",
-      property: "--feature-bento-entry-x",
-    },
-  ]) {
-    const storyTrack = page.locator(track).first();
-    await storyTrack.evaluate((element) => {
-      const top = window.scrollY + element.getBoundingClientRect().top;
-      window.scrollTo({
-        top: top - window.innerHeight * 0.75,
-        behavior: "instant",
-      });
-    });
-
-    const storyScene = page.locator(scene).first();
-    await expect
-      .poll(async () => {
-        const value = await storyScene.evaluate(
-          (element, customProperty) =>
-            Number.parseFloat(
-              (element as HTMLElement).style.getPropertyValue(customProperty),
-            ),
-          property,
-        );
-        return Math.abs(value);
-      })
-      .toBeLessThan(95);
-  }
-});
-
-test("the homepage tells the complete collaboration story", async ({
-  page,
-}) => {
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "The operating system for human and agent work.",
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByText(
-      "Launch a collaborative, agentic workspace for any group in seconds.",
-      { exact: true },
-    ),
-  ).toBeVisible();
-
-  // The hero product shot is a live DOM window, not a captured screenshot.
-  // Filter to visible: each pinned track keeps a hidden twin of its window
-  // for the stacked fallback, and under reduced motion the pinned copy is the
-  // one that's display:none.
-  await expect(
-    page.locator(".app-chrome").filter({ visible: true }).first(),
-  ).toBeVisible();
-  await expect(page.locator('img[src*="space-library-crop"]')).toHaveCount(0);
-  await expect(
-    page.getByText("Message Launch plan").filter({ visible: true }).first(),
-  ).toBeVisible();
-
-  // The status bar is where the privacy claim gets made, as ordinary UI.
-  // Assert the leading half of each bar: the trailing half is dropped on a
-  // narrow window rather than wrapping the bar onto two lines.
-  await expect(
-    page.getByText("Launch plan · 5 members").filter({ visible: true }).first(),
-  ).toBeVisible();
-  await expect(
-    page
-      .getByText("2,418 files on this Mac · private to you")
-      .filter({ visible: true })
-      .first(),
-  ).toBeVisible();
-
-  // Each resource preview links out to its own section.
-  const viewAll = page.getByRole("link", { name: "View all" });
-  await expect(viewAll).toHaveCount(3);
-  await expect(viewAll.nth(0)).toHaveAttribute("href", "/blog");
-  await expect(viewAll.nth(1)).toHaveAttribute("href", "/changelog");
-  await expect(viewAll.nth(2)).toHaveAttribute("href", "/roadmap");
-});
-
-test("every showcase surface is rendered, not promised", async ({ page }) => {
-  // The showcase used to render dashed "Screenshot placeholder" boxes, and
-  // several pages shipped Lorem ipsum. Both are regressions worth catching.
-  await expect(page.getByText("Screenshot placeholder")).toHaveCount(0);
-  await expect(page.getByText(/lorem ipsum/i)).toHaveCount(0);
-
-  const showcase = page.getByRole("region", { name: "Misty product showcase" });
-  await expect(showcase.locator(".app-chrome")).toHaveCount(4);
-
-  for (const title of [
-    "One Space per group",
-    "Your files stay yours",
-    "Agents that read the Space",
-    "A Library the group builds",
-  ]) {
-    await expect(showcase.getByRole("heading", { name: title })).toBeVisible();
-  }
-});
-
-test("the product templates are available without motion-dependent UI", async ({
-  page,
-}) => {
-  await expect(
-    page.getByText("Launch plan · 5 members").filter({ visible: true }).first(),
-  ).toBeVisible();
-  await expect(page.locator("video[autoplay]")).toHaveCount(0);
-  await expect(
-    page.locator("[data-scroll-stack-anchor], [data-scroll-stack-panel]"),
-  ).toHaveCount(0);
-
-  // Under reduced motion every scroll-pinned track — the hero's scale-up and
-  // the walkthrough — is replaced by its stacked fallback, so nothing is
-  // reachable only by animating.
-  const tracks = page.locator(".pin-track");
-  await expect(tracks).toHaveCount(2);
-  for (let i = 0; i < 2; i += 1) {
-    await expect(tracks.nth(i)).toBeHidden();
-  }
-  const howItWorks = page.getByRole("region", { name: "How Misty works" });
-  for (const beat of [
-    "Create a Space",
-    "Your files stay private",
-    "Pool what the group needs",
-    "Put Agents on it",
-  ]) {
-    await expect(howItWorks.getByRole("heading", { name: beat })).toBeVisible();
-  }
-});
-
-test("the homepage is complete, responsive, and free of horizontal overflow", async ({
-  page,
-}) => {
-  await page.getByRole("contentinfo").scrollIntoViewIfNeeded();
-  await expect(page.getByRole("contentinfo")).toBeVisible();
-
-  const layout = await page.evaluate(() => ({
-    hasHorizontalOverflow:
-      document.documentElement.scrollWidth > window.innerWidth,
-    documentHeight: document.documentElement.scrollHeight,
-    visibleText: document.body.innerText.length,
+  // The shared slot is the Library pane of the Spaces tour.
+  await page.locator('#mist-tour-tab-library').click();
+  const hero = page.locator('[data-image-slot="shared"]');
+  await hero.scrollIntoViewIfNeeded();
+  await expect(hero).toHaveAttribute('data-fallback', 'true');
+  await expect.poll(() => hero.locator('img').evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect(hero).toHaveText('');
+  const emptyBox = await hero.boundingBox();
+  await page.route('**/screenshots/misty-space-library.webp', route => route.fulfill({
+    contentType: 'image/svg+xml',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="1600" height="1000" fill="#345"/></svg>',
   }));
-
-  expect(layout.hasHorizontalOverflow).toBe(false);
-  expect(layout.documentHeight).toBeGreaterThan(
-    page.viewportSize()!.height * 3,
-  );
-  expect(layout.visibleText).toBeGreaterThan(600);
+  await page.reload();
+  await page.locator('#mist-tour-tab-library').click();
+  await hero.scrollIntoViewIfNeeded();
+  await expect(hero.locator('img')).toBeVisible();
+  await expect.poll(() => hero.locator('img').evaluate(el => (el as HTMLImageElement).naturalWidth)).toBe(1600);
+  const filledBox = await hero.boundingBox();
+  expect(filledBox!.height).toBeCloseTo(emptyBox!.height, 0);
 });
 
-test("the hero call to action moves visitors to sign up", async ({ page }) => {
-  const hero = page.locator("section").first();
-  const getStartedLink = hero.getByRole("link", { name: "Get started" });
-  await expect(getStartedLink).toHaveAttribute("href", "/register");
-  await getStartedLink.click();
+test("the homepage stays dark and accessible for either system appearance", async ({ page }) => {
+  for (const theme of ["light", "dark"]) {
+    await page.emulateMedia({ colorScheme: theme as "light" | "dark" });
+    await expect(page.locator("html")).toHaveClass("dark");
+    const results = await new AxeBuilder({ page }).include(".mist-home").withTags(["wcag2a", "wcag2aa"]).analyze();
+    expect(results.violations.map(({ id, nodes }) => ({ id, targets: nodes.map(node => node.target) }))).toEqual([]);
+  }
+});
+
+test("join CTA opens registration", async ({ page }) => {
+  await page.locator(".mist-hero").getByRole("link", { name: "Join now" }).click();
   await expect(page).toHaveURL(/\/register$/);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Create an account" }),
-  ).toBeVisible();
-  await expect(page.getByLabel("Name")).toBeVisible();
-  await expect(page.getByLabel("Email")).toBeVisible();
-  await expect(page.getByLabel("Password")).toBeVisible();
-});
-
-test("the footer keeps product resources and community links focused", async ({
-  page,
-}) => {
-  const footer = page.getByRole("contentinfo");
-  await footer.scrollIntoViewIfNeeded();
-
-  await expect(footer.getByRole("heading", { name: "Explore" })).toBeVisible();
-  await expect(
-    footer.getByRole("heading", { name: "Resources" }),
-  ).toBeVisible();
-  await expect(footer.getByRole("heading", { name: "Subscribe" })).toHaveCount(
-    0,
-  );
-  await expect(footer.getByRole("link", { name: "GitHub" })).toHaveAttribute(
-    "href",
-    "https://github.com/misty-org",
-  );
-  await expect(
-    footer.getByRole("link", { name: "X.com link placeholder" }),
-  ).toBeVisible();
-  await expect(
-    footer.getByRole("link", { name: "Discord link placeholder" }),
-  ).toBeVisible();
-  await expect(footer.getByText(/careers?|enterprise/i)).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Create an account" })).toBeVisible();
 });

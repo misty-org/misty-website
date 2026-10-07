@@ -47,6 +47,6 @@ test("the canonical shadcn preset fonts and tokens are active", async ({ page })
   expect(preset.headingFont).toContain("Inter Variable");
   expect(preset.fontsLoaded).toEqual({ inter: true });
   expect(preset.radius).toBe("0.625rem");
-  expect(preset.overscrollBehaviorY).toBe("none");
+  expect(preset.overscrollBehaviorY).toBe("auto");
   expect(preset.charts).toEqual(zincCharts);
 });

@@ -28,7 +28,7 @@ export const marketingCopy: MarketingCopy = {
   home: {
     heroTitle: "A browser for your work.",
     heroTitleLead: "A browser for",
-    heroDescription: "Your websites, native tools, and agents in one workspace. Continue on another computer with encrypted sync for your tabs and website sign-ins.",
+    heroDescription: "Misty puts websites, native tools, and agents in one workspace. Continue on another computer with encrypted sync for your tabs and website sign-ins.",
     heroTitleWords: [
       "your work.",
       "your tabs.",
@@ -48,7 +48,7 @@ export const marketingCopy: MarketingCopy = {
   download: {
     title: "Get Misty for your desktop.",
     description:
-      "Your browser workspace for macOS and Windows. The current beta download is 44 MB on macOS and 70 MB on Windows.",
+      "Misty is available for macOS and Windows. The current beta download is 44 MB on macOS and 70 MB on Windows.",
   },
   blog: {
     title: "Notes on building Misty.",

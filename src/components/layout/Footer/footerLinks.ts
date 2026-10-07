@@ -7,7 +7,7 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 
-import { DOCS_URL, JOIN_HREF, PUBLIC_RELEASES_URL } from "@/lib/site";
+import { JOIN_HREF, PUBLIC_RELEASES_URL } from "@/lib/site";
 
 export interface FooterColumn {
   label: string;
@@ -27,7 +27,6 @@ export const columns: FooterColumn[] = [
   {
     label: "Resources",
     links: [
-      ...(import.meta.env.DEV ? [{ to: DOCS_URL, text: "Docs", external: true }] : []),
       { to: "/blog", text: "Blog" },
       { to: "/roadmap", text: "Roadmap" },
       { to: "/changelog", text: "Changelog" },

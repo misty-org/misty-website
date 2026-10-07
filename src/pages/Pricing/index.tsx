@@ -44,7 +44,7 @@ export default function Pricing() {
         onPaidCheckout={(tier) => void openCheckout(tier, interval)}
       />
 
-      <div className="mx-auto max-w-3xl border-t border-border pt-12">
+      <div className="mx-auto max-w-3xl pt-4">
         <PricingFaq />
       </div>
     </PublicPage>

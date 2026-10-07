@@ -143,7 +143,7 @@ export const planLimitRows = [
 
 export const ownerRules = [
   {
-    title: "Your plan stays yours",
+    title: "Joining a Space doesn't change your plan",
     description:
       "Your own plan controls your Space limit and AI agent usage. Joining a Space created by a Pro or Max member does not upgrade your account.",
   },

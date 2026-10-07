@@ -325,7 +325,7 @@ test("checkout success confirms the upgraded plan and renewal date", async ({
 
   await page.goto("/pricing?checkout=success");
 
-  await expect(page).toHaveTitle("Plan upgraded — Misty");
+  await expect(page).toHaveTitle("Plan upgraded | Misty");
   await expect(
     page.getByRole("heading", { name: "Your Pro plan is ready." }),
   ).toBeVisible();

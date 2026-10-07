@@ -9,6 +9,17 @@ test.beforeEach(async ({ page }) => {
   await page.reload();
 });
 
+test("the site opens dark, even when the system prefers light", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.evaluate(() => localStorage.removeItem("misty-ui-theme"));
+  for (const path of ["/", "/pricing", "/signin"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveClass("dark");
+    await expect(page.locator("html")).toHaveCSS("color-scheme", "dark");
+    await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/misty-white.png");
+  }
+});
+
 test("the navbar theme toggle persists across navigation and reload", async ({ page }) => {
   const toggle = page.getByRole("button", { name: "Switch to light theme" });
   await expect(toggle).toBeVisible();
@@ -17,41 +28,40 @@ test("the navbar theme toggle persists across navigation and reload", async ({ p
   await expect(page.locator("html")).toHaveClass(/(^|\s)light(\s|$)/);
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => localStorage.getItem("misty-ui-theme"))).toBe("light");
+  // The homepage swaps to its light tokens: pale paper and the mist inverted to black.
+  await expect(page.locator(".mist-home")).toHaveCSS("background-color", "rgb(243, 243, 241)");
+  await expect(page.locator(".mist-cloud")).toHaveCSS("filter", "invert(1)");
 
   await page.getByRole("link", { name: "Misty home" }).click();
   await page.reload();
 
   await expect(page.locator("html")).toHaveClass(/(^|\s)light(\s|$)/);
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/misty-black.png");
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
 });
 
-test("the desktop theme toggle follows the sign-in control", async ({
+test("the desktop theme toggle sits between the social links and sign in, after a divider", async ({
   page,
 }, testInfo) => {
-  test.skip(
-    testInfo.project.name !== "desktop-chromium",
-    "Desktop navigation is only rendered at the desktop breakpoint.",
-  );
-
-  const navigation = page.getByRole("navigation", {
-    name: "Primary navigation",
-  });
+  test.skip(testInfo.project.name === "mobile-chromium", "Desktop navigation is only rendered at the desktop breakpoint.");
+  const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+  const lastSocial = navigation.getByRole("link", { name: /Instagram/ });
+  const toggle = navigation.getByRole("button", { name: "Switch to light theme" });
   const signIn = navigation.getByRole("link", { name: "Sign in" });
-  const toggle = navigation.getByRole("button", {
-    name: "Switch to light theme",
+  const [socialBox, toggleBox, signInBox] = await Promise.all([lastSocial.boundingBox(), toggle.boundingBox(), signIn.boundingBox()]);
+  expect(toggleBox!.x).toBeGreaterThan(socialBox!.x + socialBox!.width);
+  expect(signInBox!.x).toBeGreaterThan(toggleBox!.x + toggleBox!.width);
+  // A thin divider separates the socials from the toggle.
+  const divider = await toggle.evaluate(el => {
+    const line = el.previousElementSibling as HTMLElement | null;
+    return line ? { width: line.getBoundingClientRect().width, height: line.getBoundingClientRect().height } : null;
   });
-  await expect(signIn).toBeVisible();
-  await expect(toggle).toBeVisible();
-
-  const [signInBox, toggleBox] = await Promise.all([
-    signIn.boundingBox(),
-    toggle.boundingBox(),
-  ]);
-
-  expect(toggleBox?.x).toBeGreaterThan(signInBox?.x ?? Number.POSITIVE_INFINITY);
+  expect(divider!.width).toBe(1);
+  expect(divider!.height).toBeGreaterThan(16);
+  expect(divider!.height).toBeLessThan(26);
 });
 
-test("the primary links include the public Store", async ({
+test("the primary links include Download and Pricing", async ({
   page,
 }, testInfo) => {
   const mobile = testInfo.project.name === "mobile-chromium";
@@ -70,7 +80,7 @@ test("the primary links include the public Store", async ({
     .filter({ hasText: /^(Download|Store|Pricing)$/ })
     .allTextContents();
 
-  expect(labels).toEqual(["Download", "Store", "Pricing"]);
+  expect(labels).toEqual(["Download", "Pricing"]);
   await expect(
     linkContainer.getByRole("link", { name: "Features", exact: true }),
   ).toHaveCount(0);

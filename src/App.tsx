@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  type Location,
   Outlet,
   useLocation,
   useMatches,
@@ -17,8 +18,26 @@ import {
 } from "./pages/AccountSettings/settingsRoute";
 import { TABS } from "./pages/AccountSettings/tabs";
 import { SITE_URL } from "./lib/site";
+import { isHomePath } from "./pages/Home/useSectionRoute";
 
 type Handle = { title?: string; description?: string };
+
+/** Must stay stable: a new function each render makes the router restore scroll again. */
+const scrollKey = (location: Location) => (isHomePath(location.pathname) ? "home" : location.key);
+const SCROLL_STORAGE_KEY = "misty-scroll-positions";
+
+// A direct visit to /download opens at that section. The router restores the
+// saved homepage position a few frames after the first render, which would pull the page
+// elsewhere, so forget that position before the router reads it.
+if (typeof window !== "undefined" && window.location.pathname !== "/" && isHomePath(window.location.pathname)) {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(SCROLL_STORAGE_KEY) ?? "{}");
+    delete saved.home;
+    sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(saved));
+  } catch {
+    // Without storage there is nothing to restore.
+  }
+}
 
 function setMeta(
   selector: string,
@@ -55,8 +74,8 @@ export default function App() {
       location.pathname === "/pricing" &&
       new URLSearchParams(location.search).get("checkout") === "success";
     const title = checkoutSucceeded
-      ? "Plan upgraded — Misty"
-      : (handle?.title ?? "Misty — Your browser workspace");
+      ? "Plan upgraded | Misty"
+      : (handle?.title ?? "Misty | The agentic browser for your workspace");
     const description = checkoutSucceeded
       ? "Your Misty plan and billing details have been updated."
       : (handle?.description ??
@@ -111,8 +130,9 @@ export default function App() {
     previousPathRef.current = location.pathname;
 
     // The dialog owns its own focus trap, so never steal focus to the page h1
-    // underneath it.
+    // underneath it. Moving between the homepage's own sections keeps the page.
     if (previousPath === location.pathname || onSettingsRoute) return;
+    if (isHomePath(previousPath) && isHomePath(location.pathname)) return;
 
     const frame = window.requestAnimationFrame(() => {
       const heading = mainRef.current?.querySelector<HTMLElement>("h1");
@@ -155,7 +175,8 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <ScrollRestoration />
+      {/* / and /download are one page; the homepage scrolls between its sections. */}
+      <ScrollRestoration getKey={scrollKey} storageKey={SCROLL_STORAGE_KEY} />
 
       <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
         <a
@@ -174,7 +195,7 @@ export default function App() {
           className="relative z-10 min-h-[100svh] w-full min-w-0 flex-1 outline-none"
         >
           <div
-            key={location.pathname}
+            key={isHomePath(location.pathname) ? "/" : location.pathname}
             data-page-transition={location.pathname}
             className="page-transition w-full min-w-0"
           >

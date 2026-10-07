@@ -7,12 +7,7 @@ import { columns, legalLinks, socialLinks } from "./footerLinks";
 const linkClass =
   "w-fit text-sm leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-function siteHref(to: string, siteOrigin?: string) {
-  if (!siteOrigin || /^https?:\/\//.test(to)) return to;
-  return new URL(to, siteOrigin).toString();
-}
-
-function FooterColumns({ siteOrigin }: { siteOrigin?: string }) {
+function FooterColumns() {
   return (
     <>
       {columns.map((column) => (
@@ -25,10 +20,10 @@ function FooterColumns({ siteOrigin }: { siteOrigin?: string }) {
             {column.label}
           </h2>
           {column.links.map((link) =>
-            link.external || siteOrigin ? (
+            link.external ? (
               <a
                 key={link.text}
-                href={siteHref(link.to, siteOrigin)}
+                href={link.to}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={linkClass}
@@ -68,14 +63,14 @@ function FooterSocials() {
   );
 }
 
-export default function Footer({ className, siteOrigin }: { className?: string; siteOrigin?: string } = {}) {
+export default function Footer({ className }: { className?: string } = {}) {
   const location = useLocation();
 
   return (
     <footer
       className={cn(
-        "relative z-10 border-t border-border bg-background",
-        !siteOrigin && location.pathname === "/" && "home-content-rail",
+        "relative z-10 bg-background",
+        location.pathname === "/" && "home-content-rail",
         className,
       )}
     >
@@ -83,34 +78,23 @@ export default function Footer({ className, siteOrigin }: { className?: string; 
         <div className="px-1.5">
           <div className="grid gap-y-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-20">
             <div>
-              {siteOrigin ? (
-                <a
-                  href={siteOrigin}
-                  aria-label="Misty footer"
-                  className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <BrandLogo />
-                  <span>Misty</span>
-                </a>
-              ) : (
-                <NavLink
-                  to="/"
-                  aria-label="Misty footer"
-                  className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <BrandLogo />
-                  <span>Misty</span>
-                </NavLink>
-              )}
+              <NavLink
+                to="/"
+                aria-label="Misty footer"
+                className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <BrandLogo />
+                <span>Misty</span>
+              </NavLink>
               <FooterSocials />
             </div>
 
             <div className="grid grid-cols-2 gap-x-12 sm:gap-x-20 lg:gap-x-24">
-              <FooterColumns siteOrigin={siteOrigin} />
+              <FooterColumns />
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-2 border-t border-border pt-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-6 flex flex-col gap-2 pt-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <span>
               &copy; {new Date().getFullYear()} Misty. All rights reserved.
             </span>
@@ -118,15 +102,7 @@ export default function Footer({ className, siteOrigin }: { className?: string; 
               aria-label="Legal"
               className="flex flex-wrap items-center gap-x-5 gap-y-1"
             >
-              {legalLinks.map((link) => siteOrigin ? (
-                <a
-                  key={link.to}
-                  href={siteHref(link.to, siteOrigin)}
-                  className="text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {link.text}
-                </a>
-              ) : (
+              {legalLinks.map((link) => (
                 <NavLink
                   key={link.to}
                   to={link.to}

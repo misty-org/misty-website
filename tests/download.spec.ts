@@ -1,26 +1,40 @@
 import { expect, test } from "@playwright/test";
 
-test.beforeEach(async ({ page }) => {
+test("the homepage ends with a call to download", async ({ page }, info) => {
   await page.goto("/download");
+  const section = page.locator("#download");
+  await expect(section.getByRole("heading", { level: 2, name: "Ready to build your browser workspace?" })).toBeInViewport();
+  // The hero's button again: the visitor's own build on desktop, the web app on a phone.
+  const button = info.project.name === "mobile-chromium"
+    ? section.getByRole("link", { name: "Try the web app" })
+    : section.getByRole("link", { name: /^(Download Misty for (macOS|Windows)|Get started)$/ });
+  await expect(button).toBeVisible();
+  await expect(section.getByRole("link")).toHaveCount(1);
 });
 
-test("download page presents the current desktop release", async ({ page }) => {
-  await expect(page.getByRole("heading", { level: 1, name: "Download" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "Releases" })).toBeVisible();
-  await expect(page.getByText("v0.1.0 (latest)")).toBeVisible();
+test("/download opens the homepage at its section and /pricing is its own page", async ({ page }) => {
+  await page.goto("/pricing");
+  await expect(page).toHaveTitle(/^Pricing/);
+  await expect(page.locator(".mist-hero")).toHaveCount(0);
 
-  for (const platform of ["Windows", "macOS"]) {
-    const card = page.getByRole("article").filter({ hasText: platform });
-    await expect(card).toBeVisible();
-    await expect(card.getByRole("link", { name: new RegExp(`Download Misty .* for ${platform}`) })).toBeVisible();
-  }
+  await page.goto("/download");
+  await expect(page).toHaveTitle(/^Download Misty/);
+  await expect(page.locator("#download h2")).toBeInViewport();
 });
 
-test("release details can be collapsed and restored", async ({ page }) => {
-  const releaseToggle = page.getByRole("button", { name: "v0.1.0 (latest)" });
-  await releaseToggle.click();
-  await expect(page.getByRole("article")).toHaveCount(0);
+test("navbar links scroll the homepage to its sections without reloading it", async ({ page }, info) => {
+  test.skip(info.project.name === "mobile-chromium", "Desktop navigation");
+  await page.goto("/");
+  await page.locator(".mist-hero").evaluate(el => ((window as unknown as { hero: Element }).hero = el));
+  const nav = page.getByRole("navigation", { name: "Primary navigation" });
 
-  await releaseToggle.click();
-  await expect(page.getByRole("article")).toHaveCount(2);
+  await nav.getByRole("link", { name: "Download" }).click();
+  await expect(page).toHaveURL(/\/download$/);
+  await expect(page.locator("#download h2")).toBeInViewport();
+
+  await nav.getByRole("link", { name: "Misty home" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  // The same page the whole time: moving between sections never remounts the homepage.
+  expect(await page.locator(".mist-hero").evaluate(el => (window as unknown as { hero: Element }).hero === el)).toBe(true);
 });
