@@ -63,7 +63,9 @@ export default defineConfig(({ command, mode }) => {
       "import.meta.env.MISTY_PUBLIC_API_URL": JSON.stringify(apiBase ?? ""),
     },
     server: {
-      port: 5174,
+      host: "127.0.0.1",
+      port: 5176,
+      strictPort: false,
       proxy: proxyTarget
         ? {
             "/api": {

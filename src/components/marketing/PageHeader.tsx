@@ -18,7 +18,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "grid gap-8 border-b border-border pb-12 md:grid-cols-[1fr_auto] md:items-end",
+        "grid gap-8 pb-12 md:grid-cols-[1fr_auto] md:items-end",
         className,
       )}
     >

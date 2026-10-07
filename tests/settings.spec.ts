@@ -171,7 +171,7 @@ async function openAccountSettings(page: Page) {
 }
 
 for (const theme of ["light", "dark"] as const) {
-  test(`settings opens as a focused account dialog in ${theme} mode`, async ({
+  test(`settings opens in the saved ${theme} theme`, async ({
     page,
   }) => {
     const pageErrors: Error[] = [];
@@ -182,9 +182,7 @@ for (const theme of ["light", "dark"] as const) {
     await openAccountSettings(page);
 
     await expect(page).toHaveURL(/\/pricing$/);
-    await expect(page.locator("html")).toHaveClass(
-      new RegExp(`(^|\\s)${theme}(\\s|$)`),
-    );
+    await expect(page.locator("html")).toHaveClass(new RegExp(`^${theme}$`));
     const dialog = page.getByRole("dialog", { name: "Account settings" });
     await expect(
       dialog.getByRole("heading", { level: 1, name: "Account" }),
@@ -206,7 +204,7 @@ for (const theme of ["light", "dark"] as const) {
     );
     await expect(accountNavSurface).toHaveCSS(
       "background-color",
-      theme === "dark" ? "rgb(62, 62, 62)" : "rgb(216, 216, 222)",
+      "rgb(62, 62, 62)",
     );
     const usageNavButton = dialog.getByRole("button", {
       name: "Usage",
@@ -223,7 +221,7 @@ for (const theme of ["light", "dark"] as const) {
         usageNavButton.locator('[data-settings-nav-surface="true"]'),
       ).toHaveCSS(
         "background-color",
-        theme === "dark" ? "rgb(43, 43, 43)" : "rgb(232, 232, 236)",
+        "rgb(43, 43, 43)",
       );
     }
     await expect(

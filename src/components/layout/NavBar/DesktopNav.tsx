@@ -17,16 +17,7 @@ import { navItems, resourceLinks } from "./navLinks";
 const desktopLinkClass =
   "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-function websiteHref(to: string, siteOrigin?: string) {
-  if (!siteOrigin || /^https?:\/\//.test(to)) return to;
-  return new URL(to, siteOrigin).toString();
-}
-
-function DesktopNavLink({ to, label, siteOrigin }: { to: string; label: string; siteOrigin?: string }) {
-  if (siteOrigin) {
-    return <a href={websiteHref(to, siteOrigin)} className={desktopLinkClass}>{label}</a>;
-  }
-
+function DesktopNavLink({ to, label }: { to: string; label: string }) {
   return (
     <NavLink
       to={to}
@@ -51,7 +42,6 @@ export default function DesktopNav({
   signedIn,
   onOpenSettings,
   onSignOut,
-  siteOrigin,
 }: {
   currentPath: string;
   displayName: string;
@@ -61,7 +51,6 @@ export default function DesktopNav({
   signedIn: boolean;
   onOpenSettings: () => void;
   onSignOut: () => void;
-  siteOrigin?: string;
 }) {
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -95,7 +84,7 @@ export default function DesktopNav({
   return (
     <div className="hidden items-center gap-1 md:flex">
       {navItems.map((item) => (
-        <DesktopNavLink key={item.to} {...item} siteOrigin={siteOrigin} />
+        <DesktopNavLink key={item.to} {...item} />
       ))}
 
       <DropdownMenu open={resourcesOpen} modal={false}>
@@ -129,12 +118,8 @@ export default function DesktopNav({
               onSelect={() => setResourcesOpen(false)}
               className="py-1"
             >
-              {external || siteOrigin ? (
-                <a
-                  href={websiteHref(to, siteOrigin)}
-                  target={external ? "_blank" : undefined}
-                  rel={external ? "noopener noreferrer" : undefined}
-                >
+              {external ? (
+                <a href={to} target="_blank" rel="noopener noreferrer">
                   {label}
                 </a>
               ) : (
@@ -148,6 +133,10 @@ export default function DesktopNav({
       <div className="ml-3 flex items-center gap-2 border-l border-border pl-4">
         <NavbarSocials />
 
+        {/* The theme toggle sits in its own group between the socials and the account. */}
+        <span aria-hidden="true" className="mx-1 h-5 w-px bg-border" />
+        <ModeToggle />
+
         {signedIn ? (
           <AccountMenu
             displayName={displayName}
@@ -158,15 +147,9 @@ export default function DesktopNav({
           />
         ) : (
           <Button asChild size="sm" className="rounded-full px-4">
-            {siteOrigin ? (
-              <a href={websiteHref("/signin", siteOrigin)}>Sign in</a>
-            ) : (
-              <NavLink to="/signin" state={{ from: currentPath }}>Sign in</NavLink>
-            )}
+            <NavLink to="/signin" state={{ from: currentPath }}>Sign in</NavLink>
           </Button>
         )}
-
-        <ModeToggle />
       </div>
     </div>
   );

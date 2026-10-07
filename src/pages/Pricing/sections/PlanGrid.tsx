@@ -33,7 +33,7 @@ export default function PlanGrid({
       </h2>
       <IntervalToggle interval={interval} onChange={onIntervalChange} />
 
-      <div className="mx-auto mb-20 grid max-w-6xl grid-cols-1 items-stretch gap-5 pt-3 md:grid-cols-3">
+      <div className="mx-auto mb-12 grid max-w-6xl grid-cols-1 items-stretch gap-5 pt-3 md:grid-cols-3">
         {plans.map((plan, index) => {
           const { inheritsFrom, features } = planFeatureList(index);
           const paidTier = plan.id === "free" ? null : plan.id;
@@ -87,7 +87,7 @@ export default function PlanGrid({
       {checkoutError ? (
         <p
           role="alert"
-          className="mx-auto -mt-16 mb-16 max-w-6xl text-sm text-destructive"
+          className="mx-auto -mt-8 mb-12 max-w-6xl text-sm text-destructive"
         >
           {checkoutError}
         </p>

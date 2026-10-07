@@ -14,7 +14,7 @@ export default function PricingFaq() {
       </h2>
       <Accordion type="multiple">
         {pricingFaqs.map((faq) => (
-          <AccordionItem key={faq.q} value={faq.q}>
+          <AccordionItem key={faq.q} value={faq.q} className="not-last:border-b-0">
             <AccordionTrigger className="py-4 text-foreground hover:no-underline">
               {faq.q}
             </AccordionTrigger>

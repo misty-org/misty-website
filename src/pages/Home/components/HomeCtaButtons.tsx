@@ -5,62 +5,20 @@ import { NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { JOIN_HREF, WEB_APP_URL } from "@/lib/site";
-import {
-  currentRelease,
-  type PlatformName,
-  type ReleaseBuild,
-} from "@/pages/Download/data";
-
-type NavigatorWithUserAgentData = Navigator & {
-  userAgentData?: { platform?: string };
-};
-
-function detectDownloadPlatform(): PlatformName | undefined {
-  if (typeof navigator === "undefined") return undefined;
-
-  try {
-    const detectedNavigator = navigator as NavigatorWithUserAgentData;
-    const userAgent = detectedNavigator.userAgent;
-    const isMobile =
-      /Android|iPhone|iPad|iPod/i.test(userAgent) ||
-      (detectedNavigator.platform === "MacIntel" &&
-        detectedNavigator.maxTouchPoints > 1);
-
-    if (isMobile) return undefined;
-
-    const platform = [
-      detectedNavigator.userAgentData?.platform,
-      detectedNavigator.platform,
-      userAgent,
-    ]
-      .filter(Boolean)
-      .join(" ");
-
-    if (/Mac/i.test(platform)) return "macOS";
-    if (/Win/i.test(platform)) return "Windows";
-  } catch {
-    return undefined;
-  }
-
-  return undefined;
-}
+import { currentRelease, type ReleaseBuild } from "@/pages/Download/data";
+import { detectDownloadPlatform } from "@/pages/Download/detectPlatform";
 
 function detectDownloadBuild(): ReleaseBuild | undefined {
   const platform = detectDownloadPlatform();
   return currentRelease.builds.find((build) => build.platform === platform);
 }
 
-export function HomeCtaButtons({
-  className,
-  dark = false,
-}: {
-  className?: string;
-  dark?: boolean;
-}) {
+/** The hero's primary button: the visitor's own desktop build, or the web app on phones and tablets. */
+export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
   const [downloadBuild] = useState(detectDownloadBuild);
 
   return (
-    <div className={cn("flex flex-wrap items-center gap-3", className)}>
+    <>
       <Button
         asChild
         size="lg"
@@ -90,6 +48,20 @@ export function HomeCtaButtons({
       <Button asChild size="lg" className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] md:hidden">
         <a href={WEB_APP_URL}>Try the web app</a>
       </Button>
+    </>
+  );
+}
+
+export function HomeCtaButtons({
+  className,
+  dark = false,
+}: {
+  className?: string;
+  dark?: boolean;
+}) {
+  return (
+    <div className={cn("flex flex-wrap items-center gap-3", className)}>
+      <DownloadCtaButton dark={dark} />
       <Button
         asChild
         variant="outline"
@@ -101,7 +73,7 @@ export function HomeCtaButtons({
             : "border-[var(--marketing-border-strong)] text-[var(--marketing-foreground)] hover:bg-[var(--secondary)]",
         )}
       >
-        <NavLink to={JOIN_HREF}>Join now</NavLink>
+        <NavLink to={JOIN_HREF} data-cta="join">Join now</NavLink>
       </Button>
     </div>
   );

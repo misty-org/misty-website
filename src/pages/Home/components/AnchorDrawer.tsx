@@ -9,11 +9,15 @@ type HomeSection = {
 
 const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "overview", label: "Overview" },
-  { id: "ecosystem", label: "Websites and tools" },
-  { id: "features", label: "Browser workspace" },
-  { id: "foundation", label: "Our goal" },
+  { id: "browser", label: "Browser" },
+  { id: "sync", label: "Sync" },
+  { id: "work", label: "Work" },
+  { id: "agents", label: "Agents" },
+  { id: "tools", label: "Files" },
+  { id: "space", label: "Space" },
+  { id: "spaces", label: "Spaces" },
   { id: "resources", label: "Resources" },
-  { id: "get-started", label: "Get started" },
+  { id: "download", label: "Download" },
 ];
 
 export function AnchorDrawer() {
@@ -29,9 +33,9 @@ export function AnchorDrawer() {
       const winHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
 
-      // If scrolled near bottom, activate get-started
+      // If scrolled near bottom, activate the last section
       if (window.scrollY + winHeight >= docHeight - 80) {
-        setActiveId("get-started");
+        setActiveId("download");
         return;
       }
 
@@ -149,7 +153,7 @@ export function AnchorDrawer() {
       )}
     >
       {/* Drawer Section Panel */}
-      <div className="w-48 rounded-r-2xl border border-l-0 border-[var(--marketing-border)] bg-[var(--marketing-surface)]/98 p-2 shadow-2xl shadow-black/30 backdrop-blur-xl">
+      <div className="w-48 rounded-r-2xl border border-l-0 border-[var(--marketing-border)] bg-[var(--marketing-surface)]/98 p-2 shadow-2xl shadow-black/30">
         <nav aria-label="Section anchors" className="flex flex-col gap-0.5">
           {HOME_SECTIONS.map((section) => {
             const isActive = activeId === section.id;
@@ -182,7 +186,7 @@ export function AnchorDrawer() {
             setIsOpen((prev) => !prev);
           }
         }}
-        className="group absolute left-full top-1/2 -ml-px flex h-16 w-6 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900 shadow-xl shadow-black/25 backdrop-blur-xl transition-all duration-200 hover:w-7 hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="group absolute left-full top-1/2 -ml-px flex h-16 w-6 -translate-y-1/2 items-center justify-center rounded-r-xl border border-l-0 border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900 shadow-xl shadow-black/25 transition-all duration-200 hover:w-7 hover:bg-neutral-800 dark:hover:bg-neutral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label={isOpen ? "Collapse section drawer" : "Open section drawer"}
         title={isOpen ? "Collapse drawer" : "Jump to section"}
       >

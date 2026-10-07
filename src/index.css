@@ -229,7 +229,8 @@
 html {
   font-size: 17px;
   scroll-behavior: auto;
-  overscroll-behavior-y: none;
+  /* Never set overscroll-behavior on the root: in Misty's WKWebView it blocks
+     wheel scrolling entirely. Misty disables rubber-banding natively instead. */
   overflow-x: clip;
 }
 
@@ -281,7 +282,7 @@ body {
 }
 
 #resources {
-  row-gap: clamp(4rem, 8svh, 6rem);
+  row-gap: clamp(2.5rem, 5svh, 3.5rem);
 }
 
 /* The content scrolls normally through a fixed, direction-independent fade.
@@ -1484,12 +1485,6 @@ button:disabled {
 }
 
 
-.resource-flat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.resource-flat-card { display: block; min-height: 108px; padding: 16px; border: 1px solid var(--marketing-border); border-radius: 4px; background: var(--marketing-surface); transition: background-color 160ms; }
-.resource-flat-card:hover { background: var(--marketing-border); }
-.resource-flat-card:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: 3px; }
-@media (max-width: 1023px) { .resource-flat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 639px) { .resource-flat-grid { grid-template-columns: 1fr; } }
 
 @media (max-width: 767px) {
   .hero-scroll-layout { min-height: 0; gap: 1.5rem; padding-bottom: 2rem; }
@@ -1560,6 +1555,9 @@ button:disabled {
   .foundation-rain-screenshot { width: calc(clamp(210px, 76vw, 360px) * var(--screenshot-size, 1)); opacity: .65; --rain-crop: 1.12; }
 }
 
+.resource-flat-card { display: block; min-height: 108px; padding: 16px; border: 1px solid var(--marketing-border); border-radius: 10px; background: var(--marketing-surface); transition: background-color 160ms; }
+.resource-flat-card:hover { background: var(--marketing-border); }
+.resource-flat-card:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: 3px; }
 .mobile-walkthrough { display: none; }
 @media (max-width: 767px) {
   #how-it-works .walkthrough-static { display: none !important; }

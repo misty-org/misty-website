@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark" style="color-scheme: dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/misty-white.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Misty — Your browser workspace</title>
+    <title>Misty | The agentic browser for your workspace</title>
     <meta
       name="description"
       content="Misty is a browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers."
@@ -15,7 +15,7 @@
     <meta property="og:site_name" content="Misty" />
     <meta
       property="og:title"
-      content="Misty — Your browser workspace"
+      content="Misty | The agentic browser for your workspace"
     />
     <meta
       property="og:description"
@@ -32,7 +32,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
-      content="Misty — Your browser workspace"
+      content="Misty | The agentic browser for your workspace"
     />
     <meta
       name="twitter:description"
@@ -42,14 +42,12 @@
     <script>
       (() => {
         try {
-          const storedTheme = localStorage.getItem("misty-ui-theme");
-          const theme = storedTheme === "light" ? "light" : "dark";
-          document.documentElement.classList.add(theme);
-          document.documentElement.style.colorScheme = theme;
-          document.querySelector('link[rel="icon"]').href =
-            theme === "light" ? "/misty-black.png" : "/misty-white.png";
+          if (localStorage.getItem("misty-ui-theme") !== "light") return;
+          document.documentElement.classList.replace("dark", "light");
+          document.documentElement.style.colorScheme = "light";
+          document.querySelector('link[rel="icon"]').href = "/misty-black.png";
         } catch {
-          document.documentElement.classList.add("dark");
+          // Without storage the page stays in the default dark theme.
         }
       })();
     </script>

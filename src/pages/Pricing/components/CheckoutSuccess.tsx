@@ -50,7 +50,7 @@ function PlanDetails({ account }: { account: MeResponse }) {
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       <dl>
-        <div className="flex min-h-20 items-center justify-between gap-6 border-b border-border px-6 py-5 sm:px-8">
+        <div className="flex min-h-20 items-center justify-between gap-6 px-6 py-5 sm:px-8">
           <dt className="text-base text-foreground sm:text-lg">Plan</dt>
           <dd className="m-0 text-right text-base font-medium text-foreground sm:text-lg">
             {formatPlan(account.tier)}
@@ -59,7 +59,7 @@ function PlanDetails({ account }: { account: MeResponse }) {
         <div
           className={
             periodEnd
-              ? "flex min-h-20 items-center justify-between gap-6 border-b border-border px-6 py-5 sm:px-8"
+              ? "flex min-h-20 items-center justify-between gap-6 px-6 py-5 sm:px-8"
               : "flex min-h-20 items-center justify-between gap-6 px-6 py-5 sm:px-8"
           }
         >

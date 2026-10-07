@@ -47,16 +47,15 @@ export default function PricingCard({
           : "border-border",
       )}
     >
-      {popular ? (
-        <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary px-3 py-1 text-[11px] font-medium text-primary-foreground shadow-sm">
-          Most popular
-        </span>
-      ) : null}
-
-      <div className="border-b border-border pb-5">
-        <h3 className="text-xl font-medium tracking-[-0.02em] text-foreground">
-          {name}
-        </h3>
+      <div className="pb-5">
+        <div className="flex items-baseline justify-between gap-3">
+          <h3 className="text-xl font-medium tracking-[-0.02em] text-foreground">
+            {name}
+          </h3>
+          {popular ? (
+            <span className="text-xs text-muted-foreground">Most popular</span>
+          ) : null}
+        </div>
         {description ? (
           <p className="mt-1.5 text-sm leading-5 text-muted-foreground">
             {description}

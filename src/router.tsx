@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import App from "./App";
 import Home from "./pages/Home";
-import Download from "./pages/Download";
 import Pricing from "./pages/Pricing";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
@@ -26,7 +25,7 @@ export const router = createBrowserRouter([
         index: true,
         element: <Home />,
         handle: {
-          title: "Misty — Your browser workspace",
+          title: "Misty | The agentic browser for your workspace",
           description: marketingCopy.metadata.home,
         },
       },
@@ -34,7 +33,7 @@ export const router = createBrowserRouter([
         path: "settings",
         element: <Settings />,
         handle: {
-          title: "Account settings — Misty",
+          title: "Account settings | Misty",
           description: "Manage your Misty account, usage, and billing.",
         },
       },
@@ -44,15 +43,16 @@ export const router = createBrowserRouter([
         path: "settings/:tab",
         element: <Settings />,
         handle: {
-          title: "Account settings — Misty",
+          title: "Account settings | Misty",
           description: "Manage your Misty account, usage, and billing.",
         },
       },
       {
         path: "download",
-        element: <Download />,
+        // The homepage, scrolled to this section.
+        element: <Home />,
         handle: {
-          title: "Download Misty — macOS and Windows beta",
+          title: "Download Misty | macOS and Windows beta",
           description: marketingCopy.metadata.download,
         },
       },
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
         path: "pricing",
         element: <Pricing />,
         handle: {
-          title: "Pricing — Basic, Pro, and Max plans | Misty",
+          title: "Pricing | Misty's Basic, Pro, and Max plans",
           description: marketingCopy.metadata.pricing,
         },
       },
@@ -68,7 +68,7 @@ export const router = createBrowserRouter([
         path: "changelog",
         element: <Changelog />,
         handle: {
-          title: "Changelog — Misty beta updates",
+          title: "Changelog | Misty beta updates",
           description: marketingCopy.metadata.changelog,
         },
       },
@@ -76,7 +76,7 @@ export const router = createBrowserRouter([
         path: "blog",
         element: <Blog />,
         handle: {
-          title: "Blog — Notes from Misty",
+          title: "Blog | Notes from Misty",
           description: marketingCopy.metadata.blog,
         },
       },
@@ -84,7 +84,7 @@ export const router = createBrowserRouter([
         path: "roadmap",
         element: <Roadmap />,
         handle: {
-          title: "Roadmap — What Misty is building",
+          title: "Roadmap | What Misty is building",
           description: marketingCopy.metadata.roadmap,
         },
       },
@@ -92,7 +92,7 @@ export const router = createBrowserRouter([
         path: "privacy",
         element: <Privacy />,
         handle: {
-          title: "Privacy Policy — Misty",
+          title: "Privacy Policy | Misty",
           description:
             "How Misty handles your account details, files, and Space content.",
         },
@@ -101,7 +101,7 @@ export const router = createBrowserRouter([
         path: "terms",
         element: <Terms />,
         handle: {
-          title: "Terms of Service — Misty",
+          title: "Terms of Service | Misty",
           description:
             "The agreement covering your use of Misty and its hosted services.",
         },
@@ -110,7 +110,7 @@ export const router = createBrowserRouter([
         path: "license",
         element: <License />,
         handle: {
-          title: "License Agreement — Misty",
+          title: "License Agreement | Misty",
           description: "The license covering the Misty desktop application.",
         },
       },
@@ -118,7 +118,7 @@ export const router = createBrowserRouter([
         path: "waitlist",
         element: <Waitlist />,
         handle: {
-          title: "Join Misty — Misty",
+          title: "Join Misty | Misty",
           description: marketingCopy.metadata.waitlist,
         },
       },
@@ -126,7 +126,7 @@ export const router = createBrowserRouter([
         path: "signin",
         element: <SignIn />,
         handle: {
-          title: "Sign in — Misty",
+          title: "Sign in | Misty",
           description: "Sign in to your Misty account.",
         },
       },
@@ -134,7 +134,7 @@ export const router = createBrowserRouter([
         path: "register",
         element: <Register />,
         handle: {
-          title: "Create an account — Misty",
+          title: "Create an account | Misty",
           description: "Sign up to get started with Misty.",
         },
       },
@@ -142,7 +142,7 @@ export const router = createBrowserRouter([
         path: "reset",
         element: <ResetPassword />,
         handle: {
-          title: "Reset your password — Misty",
+          title: "Reset your password | Misty",
           description: "Reset your Misty account password.",
         },
       },
@@ -150,7 +150,7 @@ export const router = createBrowserRouter([
         path: "*",
         element: <NotFound />,
         handle: {
-          title: "Page not found — Misty",
+          title: "Page not found | Misty",
           description: "The requested Misty page could not be found.",
         },
       },

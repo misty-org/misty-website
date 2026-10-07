@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink, useLocation } from "react-router";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 import { useAuth } from "@/AuthContext";
 import { BrandLogo } from "@/components/brand/BrandLogo";
@@ -9,8 +9,6 @@ import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { toInitials } from "@/lib/format";
-import { SITE_URL } from "@/lib/site";
-import { cn } from "@/lib/utils";
 import { useUserStore } from "@/store/userStore";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
@@ -38,14 +36,8 @@ function useScrolledNav(threshold = 60) {
 
 export default function Navbar({
   onOpenSettings,
-  docs,
 }: {
   onOpenSettings: () => void;
-  docs?: {
-    menuOpen: boolean;
-    onOpenMenu: () => void;
-    onOpenSearch: () => void;
-  };
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -65,88 +57,51 @@ export default function Navbar({
     <Collapsible open={mobileOpen} onOpenChange={setMobileOpen} asChild>
       <nav
         aria-label="Primary navigation"
-        className={cn(
-          "site-pinned-navbar pointer-events-none fixed inset-x-0 z-50 flex justify-center px-[var(--site-gutter)]",
-          docs && "docs-navbar",
-        )}
+        className="site-pinned-navbar pointer-events-none fixed inset-x-0 z-50 flex justify-center px-[var(--site-gutter)]"
       >
-        {sessionReady || docs ? (
+        {sessionReady ? (
           <div
             className="pointer-events-auto w-full will-change-[max-width]"
             style={{
               // Start at full container width and compact the bar after scrolling.
-              maxWidth: docs || !scrolled ? "var(--site-content-max)" : "820px",
-              transition: docs
-                ? undefined
-                : `max-width 0.45s ${
-                    scrolled ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
-                  }`,
+              maxWidth: scrolled ? "820px" : "var(--site-content-max)",
+              transition: `max-width 0.45s ${
+                scrolled ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
+              }`,
             }}
           >
             <div
-              className="rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)] backdrop-blur-xl"
+              // Nearly solid, with no glass blur, so links stay readable over any content;
+              // the open mobile menu turns fully solid.
+              className="rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)]/92 in-data-[state=open]:bg-[var(--marketing-surface)]"
             >
               <div
                 className="flex h-12 items-center justify-between px-5"
               >
                 <div className="flex items-center gap-2.5">
-                  {docs ? (
-                    <a
-                      href={SITE_URL}
-                      aria-label="Misty home"
-                      className="flex items-center gap-3 rounded-md text-base font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-border-strong)]"
-                    >
-                      <BrandLogo />
-                      <span>Misty</span>
-                    </a>
-                  ) : (
-                    <NavLink
-                      to="/"
-                      onClick={() => setMobileOpen(false)}
-                      aria-label="Misty home"
-                      className="flex items-center gap-3 rounded-md text-base font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-border-strong)]"
-                    >
-                      <BrandLogo />
-                      <span>Misty</span>
-                    </NavLink>
-                  )}
-                  {docs && (
-                    <>
-                      <span
-                        className="h-[18px] w-px bg-border"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium text-muted-foreground">
-                        Docs
-                      </span>
-                    </>
-                  )}
+                  <NavLink
+                    to="/"
+                    onClick={() => setMobileOpen(false)}
+                    aria-label="Misty home"
+                    className="flex items-center gap-3 rounded-md text-base font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-border-strong)]"
+                  >
+                    <BrandLogo />
+                    <span>Misty</span>
+                  </NavLink>
                 </div>
 
                 <DesktopNav
-                  currentPath={docs ? "/" : location.pathname}
+                  currentPath={location.pathname}
                   displayName={displayName}
                   email={user?.email ?? ""}
                   initials={initials}
-                  resourcesActive={docs ? false : resourcesActive}
-                  signedIn={docs ? false : Boolean(user)}
+                  resourcesActive={resourcesActive}
+                  signedIn={Boolean(user)}
                   onOpenSettings={onOpenSettings}
                   onSignOut={() => logout()}
-                  siteOrigin={docs ? SITE_URL : undefined}
                 />
 
                 <div className="flex items-center gap-1 md:hidden">
-                  {docs && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={docs.onOpenSearch}
-                      aria-label="Search documentation"
-                    >
-                      <Search aria-hidden="true" />
-                    </Button>
-                  )}
                   <ModeToggle />
                   <CollapsibleTrigger asChild>
                     <Button
@@ -170,14 +125,11 @@ export default function Navbar({
               </div>
 
               <MobileNav
-                currentPath={docs ? "/" : location.pathname}
-                signedIn={docs ? false : Boolean(user)}
+                currentPath={location.pathname}
+                signedIn={Boolean(user)}
                 onClose={() => setMobileOpen(false)}
                 onOpenSettings={onOpenSettings}
                 onSignOut={() => logout()}
-                siteOrigin={docs ? SITE_URL : undefined}
-                docsMenuOpen={docs?.menuOpen}
-                onOpenDocsMenu={docs?.onOpenMenu}
               />
             </div>
           </div>
