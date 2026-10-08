@@ -94,13 +94,13 @@ export default function Footer({ className }: { className?: string } = {}) {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col gap-2 pt-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-6 flex flex-col items-center gap-2 pt-3 text-center text-xs text-muted-foreground sm:flex-row sm:justify-center sm:gap-x-8">
             <span>
               &copy; {new Date().getFullYear()} Misty. All rights reserved.
             </span>
             <nav
               aria-label="Legal"
-              className="flex flex-wrap items-center gap-x-5 gap-y-1"
+              className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1"
             >
               {legalLinks.map((link) => (
                 <NavLink

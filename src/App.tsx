@@ -22,21 +22,34 @@ import { isHomePath } from "./pages/Home/useSectionRoute";
 
 type Handle = { title?: string; description?: string };
 
-/** Must stay stable: a new function each render makes the router restore scroll again. */
-const scrollKey = (location: Location) => (isHomePath(location.pathname) ? "home" : location.key);
+/**
+ * Must stay stable: a new function each render makes the router restore scroll again.
+ * The first entry in a tab is always keyed "default", so key it by path instead, or every
+ * hard load of any page would restore the position the last hard-loaded page saved.
+ */
+const scrollKey = (location: Location) => {
+  if (isHomePath(location.pathname)) return "home";
+  return location.key === "default" ? location.pathname : location.key;
+};
 const SCROLL_STORAGE_KEY = "misty-scroll-positions";
 
-// A direct visit to /download opens at that section. The router restores the
-// saved homepage position a few frames after the first render, which would pull the page
-// elsewhere, so forget that position before the router reads it.
-if (typeof window !== "undefined" && window.location.pathname !== "/" && isHomePath(window.location.pathname)) {
+function forgetScrollPosition(key: string) {
   try {
     const saved = JSON.parse(sessionStorage.getItem(SCROLL_STORAGE_KEY) ?? "{}");
-    delete saved.home;
+    delete saved[key];
     sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(saved));
   } catch {
     // Without storage there is nothing to restore.
   }
+}
+
+// The router restores a saved position a few frames after the first render, which would
+// pull a direct visit away from where its URL points, so forget that position before the
+// router reads it. /download opens at its section; a #hash opens at its element.
+if (typeof window !== "undefined") {
+  const { pathname, hash } = window.location;
+  if (pathname !== "/" && isHomePath(pathname)) forgetScrollPosition("home");
+  else if (!isHomePath(pathname) && hash && !hash.startsWith("#/")) forgetScrollPosition(pathname);
 }
 
 function setMeta(
