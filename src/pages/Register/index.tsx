@@ -15,6 +15,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -84,12 +85,46 @@ export default function Register() {
             onChange={setPassword}
           />
 
+          <label
+            htmlFor="register-terms"
+            className="flex items-start gap-3 text-sm leading-6 text-muted-foreground"
+          >
+            <input
+              id="register-terms"
+              type="checkbox"
+              checked={agreed}
+              required
+              onChange={(event) => setAgreed(event.target.checked)}
+              className="mt-1 size-4 shrink-0 accent-primary"
+            />
+            <span>
+              I agree to the{" "}
+              <NavLink
+                to="/terms"
+                target="_blank"
+                className="text-foreground underline underline-offset-4"
+              >
+                Terms of Service
+              </NavLink>{" "}
+              and{" "}
+              <NavLink
+                to="/privacy"
+                target="_blank"
+                className="text-foreground underline underline-offset-4"
+              >
+                Privacy Policy
+              </NavLink>
+              .
+            </span>
+          </label>
+
           {error ? <AuthMessage tone="error" message={error} /> : null}
 
           <AuthSubmitButton
             idleLabel="Create account"
             loadingLabel="Creating account..."
             loading={loading}
+            disabled={!agreed}
           />
         </form>
       </AuthCard>

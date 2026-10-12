@@ -14,6 +14,8 @@ import Roadmap from "./pages/Roadmap";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
+import Refunds from "./pages/Legal/Refunds";
+import Invite from "./pages/Invite";
 import { marketingCopy } from "./content/marketingCopy";
 
 export const router = createBrowserRouter([
@@ -60,7 +62,7 @@ export const router = createBrowserRouter([
         path: "pricing",
         element: <Pricing />,
         handle: {
-          title: "Pricing | Misty's Basic, Pro, and Max plans",
+          title: "Pricing | Misty plans from free to Ultra+",
           description: marketingCopy.metadata.pricing,
         },
       },
@@ -107,6 +109,15 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: "refunds",
+        element: <Refunds />,
+        handle: {
+          title: "Refund & Cancellation Policy | Misty",
+          description:
+            "How to cancel a Misty subscription and when we give refunds.",
+        },
+      },
+      {
         path: "license",
         element: <License />,
         handle: {
@@ -136,6 +147,14 @@ export const router = createBrowserRouter([
         handle: {
           title: "Create an account | Misty",
           description: "Sign up to get started with Misty.",
+        },
+      },
+      {
+        path: "r/:code",
+        element: <Invite />,
+        handle: {
+          title: "You're invited | Misty",
+          description: "A friend invited you to Misty, free with every feature.",
         },
       },
       {

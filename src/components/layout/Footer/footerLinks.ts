@@ -38,6 +38,8 @@ export const columns: FooterColumn[] = [
 export const legalLinks: { to: string; text: string }[] = [
   { to: "/privacy", text: "Privacy" },
   { to: "/terms", text: "Terms" },
+  { to: "/refunds", text: "Refunds" },
+  { to: "/privacy#cookies", text: "Cookies" },
   { to: "/license", text: "License" },
 ];
 

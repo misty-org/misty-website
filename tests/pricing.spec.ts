@@ -28,41 +28,42 @@ async function provideAuthenticatedSession(
   });
 }
 
-test("pricing publishes the finalized Basic, Pro, and Max plans", async ({
+test("pricing publishes Basic, Pro, Max, Ultra and Ultra+", async ({
   page,
 }) => {
   await page.goto("/pricing");
 
   const planSection = page.locator('section[aria-labelledby="plans-heading"]');
+  // Three cards: Basic, then Pro and Max sharing one, and Ultra and Ultra+ another.
   await expect(planSection.locator("article")).toHaveCount(3);
   expect(
     await planSection.getByRole("heading", { level: 3 }).allTextContents(),
-  ).toEqual(["Basic", "Pro", "Max"]);
+  ).toEqual(["Basic", "Pro", "Ultra"]);
   await expect(planSection.getByText("Free", { exact: true })).toBeVisible();
-  await expect(planSection.getByText("$8", { exact: true })).toBeVisible();
-  await expect(planSection.getByText("$19", { exact: true })).toBeVisible();
+  for (const price of ["$12", "$100"]) {
+    await expect(planSection.getByText(price, { exact: true })).toBeVisible();
+  }
   await expect(
-    planSection.getByText("Up to 10 Spaces", { exact: true }),
+    planSection.getByText("About 3½× Basic’s AI, on smarter models", { exact: true }),
   ).toBeVisible();
-  await expect(
-    planSection.getByText("Approximately 6× Basic agent usage", {
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(planSection.getByText("2× Pro agent usage")).toBeVisible();
-  await expect(
-    planSection.getByText("250 GB storage", { exact: true }),
-  ).toBeVisible();
+  await expect(planSection.getByText("1 TB storage", { exact: true })).toBeVisible();
+  await expect(planSection.getByText("Every Misty feature").first()).toBeVisible();
   await expect(planSection.getByText("Most popular")).toBeVisible();
   await expect(
     planSection.getByRole("link", { name: "Get started free" }),
   ).toHaveAttribute("href", "/register");
-  await expect(
-    planSection.getByRole("button", { name: "Choose Pro" }),
-  ).toBeVisible();
-  await expect(
-    planSection.getByRole("button", { name: "Choose Max" }),
-  ).toBeVisible();
+  for (const name of ["Pro", "Ultra"]) {
+    await expect(planSection.getByRole("button", { name: `Choose ${name}`, exact: true })).toBeVisible();
+  }
+  // Each shared card switches to its other tier in place.
+  for (const [name, price] of [["Max", "$20"], ["Ultra+", "$200"]]) {
+    await planSection.getByRole("radio", { name, exact: true }).click();
+    await expect(planSection.getByRole("heading", { level: 3, name, exact: true })).toBeAttached();
+    await expect(planSection.getByText(price, { exact: true })).toBeVisible();
+    await expect(planSection.getByRole("button", { name: `Choose ${name}`, exact: true })).toBeVisible();
+  }
+  await expect(planSection.locator("article")).toHaveCount(3);
+  await expect(planSection.getByText(/free trial/i)).toHaveCount(0);
 
   const customerText = await page.locator("main").innerText();
   expect(customerText).not.toMatch(
@@ -91,10 +92,10 @@ test("an authenticated user can select annual Pro checkout", async ({
 
   await page.goto("/pricing");
   await page.getByText("Yearly", { exact: true }).click();
-  await expect(page.getByText("$79", { exact: true })).toBeVisible();
-  await expect(page.getByText("Save $17 per year")).toBeVisible();
-  await expect(page.getByText("$189", { exact: true })).toBeVisible();
-  await expect(page.getByText("Save $39 per year")).toBeVisible();
+  await expect(page.getByText("$120", { exact: true })).toBeVisible();
+  await expect(page.getByText("Two months free: save $24 a year")).toBeVisible();
+  await expect(page.getByText("$1,000", { exact: true })).toBeVisible();
+  await expect(page.getByText("Two months free: save $200 a year")).toBeVisible();
   await page.getByRole("button", { name: "Choose Pro" }).click();
 
   await expect
@@ -122,6 +123,7 @@ test("an authenticated user can select monthly Max checkout", async ({
   });
 
   await page.goto("/pricing");
+  await page.getByRole("radio", { name: "Max", exact: true }).click();
   await page.getByRole("button", { name: "Choose Max" }).click();
 
   await expect
@@ -173,6 +175,7 @@ test("an active subscriber opens Stripe billing without repurchasing the current
   await page.goto("/pricing?checkout=pro&interval=month");
 
   await expect(page).toHaveURL(/\/pricing#billing-portal$/);
+  // Pro and Max share a card, which opens on the current tier.
   const proCard = page
     .locator("article")
     .filter({ has: page.getByRole("heading", { name: "Pro", exact: true }) });
@@ -182,6 +185,7 @@ test("an active subscriber opens Stripe billing without repurchasing the current
   await expect(
     proCard.getByRole("button", { name: "Manage subscription" }),
   ).toBeEnabled();
+  await page.getByRole("radio", { name: "Max", exact: true }).click();
   await expect(
     maxCard.getByRole("button", { name: "Change to Max" }),
   ).toBeEnabled();
@@ -236,6 +240,7 @@ test("an active Max subscription is mapped to the Max card", async ({
   await expect(
     maxCard.getByRole("button", { name: "Manage subscription" }),
   ).toBeEnabled();
+  await page.getByRole("radio", { name: "Pro", exact: true }).click();
   await expect(
     proCard.getByRole("button", { name: "Change to Pro" }),
   ).toBeEnabled();
@@ -270,6 +275,7 @@ test("the effective paid tier is disabled while billing details catch up", async
   await expect(
     page.getByRole("button", { name: "Current plan" }),
   ).toBeDisabled();
+  await page.getByRole("radio", { name: "Max", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Choose Max" }),
   ).toBeEnabled();

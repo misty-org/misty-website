@@ -8,14 +8,15 @@ import {
   createBillingPortal,
   createSubscriptionCheckout,
 } from "../AccountSettings/api";
-import type { PaidTier, PricingInterval } from "./data";
+import { PRICING_MODEL, type PaidTier, type PricingInterval } from "./data";
+
+const paidTiers: readonly PaidTier[] = ["pro", "max", "ultra", "ultra_plus"];
+export function isPaidTier(value: unknown): value is PaidTier {
+  return typeof value === "string" && (paidTiers as readonly string[]).includes(value);
+}
 
 function effectivePaidTier(me: MeResponse | null): PaidTier | null {
-  if (
-    me?.allows_use &&
-    (me.status === "active" || me.status === "trialing") &&
-    (me?.tier === "pro" || me?.tier === "max")
-  ) {
+  if (me?.allows_use && (me.status === "active" || me.status === "trialing") && isPaidTier(me.tier)) {
     return me.tier;
   }
   return null;
@@ -30,7 +31,7 @@ function hasManagedSubscription(me: MeResponse | null): boolean {
 }
 
 function planName(tier: PaidTier): string {
-  return tier === "max" ? "Max" : "Pro";
+  return PRICING_MODEL[tier].name;
 }
 
 function currentPlanMessage(tier: PaidTier): string {
@@ -64,7 +65,6 @@ export function usePaidCheckout(
   const currentPlanInterval = me?.billing?.interval ?? null;
   const subscriptionStatus = me?.billing?.subscription_status;
   const managedSubscription = hasManagedSubscription(me);
-  const trialEligible = me?.trial_eligible === true;
 
   const openCheckout = useCallback(
     async (tier: PaidTier, selectedInterval: PricingInterval) => {
@@ -145,7 +145,7 @@ export function usePaidCheckout(
     if (
       !sessionReady ||
       !user ||
-      (checkoutTier !== "pro" && checkoutTier !== "max")
+      !isPaidTier(checkoutTier)
     ) {
       return;
     }
@@ -173,7 +173,6 @@ export function usePaidCheckout(
     currentPlanTier,
     currentPlanInterval,
     hasManagedSubscription: managedSubscription,
-    trialEligible,
     checkoutReady: sessionReady,
   };
 }

@@ -10,6 +10,7 @@ import {
   fetchMe,
   type MeResponse,
 } from "@/pages/AccountSettings/api";
+import { TIER_LABEL } from "@/pages/AccountSettings/components/accountTone";
 import { useUserStore } from "@/store/userStore";
 
 type ConfirmationState = "checking" | "confirmed" | "pending";
@@ -19,11 +20,11 @@ const syncDelays = [0, 400, 800, 1_200, 1_600, 2_000];
 function isPaidPlan(account: MeResponse) {
   return account.allows_use &&
     (account.status === "active" || account.status === "trialing") &&
-    (account.tier === "pro" || account.tier === "max");
+    account.tier !== "basic";
 }
 
 function formatPlan(tier: MeResponse["tier"]) {
-  return tier === "max" ? "Max" : tier === "pro" ? "Pro" : "Basic";
+  return TIER_LABEL[tier] ?? "Basic";
 }
 
 function formatDate(value: string) {

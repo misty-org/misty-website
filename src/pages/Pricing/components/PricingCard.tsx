@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Check } from "lucide-react";
 import { NavLink } from "react-router";
 
@@ -18,6 +19,10 @@ interface PricingCardProps {
   ctaLabel: string;
   ctaBusy?: boolean;
   ctaDisabled?: boolean;
+  /** Switches between sibling tiers in place of the visible name; the name stays as the heading. */
+  tabs?: ReactNode;
+  /** Small print under the CTA, e.g. the auto-renewal terms. */
+  ctaNote?: ReactNode;
   onCtaClick?: () => void;
 }
 
@@ -34,6 +39,8 @@ export default function PricingCard({
   ctaLabel,
   ctaBusy = false,
   ctaDisabled = false,
+  ctaNote,
+  tabs,
   onCtaClick,
 }: PricingCardProps) {
   const externalCta = ctaHref ? /^https:\/\//i.test(ctaHref) : false;
@@ -48,10 +55,17 @@ export default function PricingCard({
       )}
     >
       <div className="pb-5">
-        <div className="flex items-baseline justify-between gap-3">
-          <h3 className="text-xl font-medium tracking-[-0.02em] text-foreground">
+        {/* Tall enough for the tier tabs, so names and prices line up across cards. */}
+        <div className="flex min-h-9 items-center justify-between gap-3">
+          <h3
+            className={cn(
+              "text-xl font-medium tracking-[-0.02em] text-foreground",
+              tabs && "sr-only",
+            )}
+          >
             {name}
           </h3>
+          {tabs}
           {popular ? (
             <span className="text-xs text-muted-foreground">Most popular</span>
           ) : null}
@@ -97,6 +111,8 @@ export default function PricingCard({
       </div>
 
       <div>
+        {/* Above the button so every card's CTA still lines up at the bottom. */}
+        {ctaNote ? <div className="mb-3">{ctaNote}</div> : null}
         {onCtaClick || ctaDisabled ? (
           <Button
             type="button"

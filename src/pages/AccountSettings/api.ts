@@ -7,13 +7,15 @@ export interface MeResponse {
   name: string;
   email: string;
   created_at: string;
-  tier: "basic" | "pro" | "max";
+  tier: "basic" | PaidTier;
   status: "active" | "trialing" | "cancelled" | "expired";
   allows_use: boolean;
   expires_at: string | null;
   trial_started_at: string | null;
-  /** Server-authoritative eligibility for the one-time Pro trial. */
+  /** Plans have no trials; older servers still send this, always false now. */
   trial_eligible?: boolean;
+  /** AI needs a confirmed email. */
+  email_verified?: boolean;
   license_device: string;
   /** Bumped by the server on every avatar upload; used to bust the image cache. */
   avatar_version?: number;
@@ -29,7 +31,7 @@ export interface MeResponse {
 }
 
 export interface BillingUsageResponse {
-  plan: "basic" | "pro" | "max";
+  plan: "basic" | PaidTier;
   storage: {
     used_bytes: number;
     reserved_bytes: number;
