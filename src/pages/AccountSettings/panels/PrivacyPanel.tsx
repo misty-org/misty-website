@@ -42,6 +42,11 @@ export function PrivacyPanel() {
             Read
           </a>
         </Row>
+        <Row label="Refund & Cancellation Policy">
+          <a className="underline underline-offset-4" href="/refunds">
+            Read
+          </a>
+        </Row>
         <Row label="License Agreement">
           <a className="underline underline-offset-4" href="/license">
             Read

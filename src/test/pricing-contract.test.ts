@@ -8,31 +8,29 @@ import {
   pricingFaqs,
   PRICING_MODEL,
 } from "@/pages/Pricing/data";
+import { renewalSummary } from "@/pages/Pricing/renewalTerms";
 
 describe("pricing contract", () => {
-  it("publishes Basic, Pro, and Max with the finalized limits", () => {
-    expect(plans.map((plan) => plan.id)).toEqual(["free", "pro", "max"]);
-    expect(plans.map((plan) => plan.name)).toEqual(["Basic", "Pro", "Max"]);
-    expect(PRICING_MODEL.free.spaces).toBe("Up to 3 Spaces");
-    expect(PRICING_MODEL.pro.spaces).toBe("Up to 10 Spaces");
-    expect(PRICING_MODEL.max.spaces).toBe("Unlimited Spaces");
-    expect(PRICING_MODEL.max.storage).toBe("250 GB");
-    expect(PRICING_MODEL.free.agentUsage).toBe("Light AI agent usage");
-    expect(PRICING_MODEL.pro.agentUsage).toBe(
-      "Approximately 6× Basic agent usage",
-    );
-    expect(PRICING_MODEL.max.agentUsage).toBe("2× Pro agent usage");
+  it("publishes Basic, Pro, Max, Ultra and Ultra+", () => {
+    expect(plans.map((plan) => plan.id)).toEqual(["free", "pro", "max", "ultra", "ultra_plus"]);
+    expect(plans.map((plan) => plan.name)).toEqual(["Basic", "Pro", "Max", "Ultra", "Ultra+"]);
   });
 
-  it("publishes exact monthly and annual prices and savings", () => {
+  it("publishes exact monthly and annual prices, with two months free yearly", () => {
     expect(plans[0].prices.month.price).toBe("Free");
     expect(plans[0].prices.year.price).toBe("Free");
-    expect(plans[1].prices.month.price).toBe("$8");
-    expect(plans[1].prices.year.price).toBe("$79");
-    expect(plans[1].prices.year.billingNote).toBe("Save $17 per year");
-    expect(plans[2].prices.month.price).toBe("$19");
-    expect(plans[2].prices.year.price).toBe("$189");
-    expect(plans[2].prices.year.billingNote).toBe("Save $39 per year");
+    const expected = [
+      ["$12", "$120", "$24"],
+      ["$20", "$200", "$40"],
+      ["$100", "$1,000", "$200"],
+      ["$200", "$2,000", "$400"],
+    ];
+    expected.forEach(([month, year, savings], index) => {
+      const plan = plans[index + 1];
+      expect(plan.prices.month.price).toBe(month);
+      expect(plan.prices.year.price).toBe(year);
+      expect(plan.prices.year.billingNote).toBe(`Two months free: save ${savings} a year`);
+    });
   });
 
   it("keeps internal usage and per-seat terminology out of customer copy", () => {
@@ -53,28 +51,30 @@ describe("pricing contract", () => {
     );
   });
 
-  it("publishes only verified storage amounts", () => {
-    expect(plans[0].features).toContain("2 GB storage");
+  it("publishes the storage billing enforces (account-v2)", () => {
+    expect(plans[0].features).toContain("5 GB storage");
     expect(plans[1].features).toContain("50 GB storage");
-    expect(plans[2].features).toContain("250 GB storage");
-    expect(planLimitRows).toContainEqual({
-      label: "Storage",
-      basic: "2 GB",
-      pro: "50 GB",
-      max: "250 GB",
-    });
+    expect(plans[2].features).toContain("200 GB storage");
+    expect(plans[3].features).toContain("1 TB storage");
+    expect(plans[4].features).toContain("2 TB storage");
+    expect(PRICING_MODEL.ultra.storage).toBe("1 TB");
   });
 
-  it("explains personal Space limits and weekly AI agent usage", () => {
+  it("promises every feature on every plan and no trial", () => {
+    for (const plan of plans) expect(plan.features).toContain("Every Misty feature");
     const customerCopy = JSON.stringify({ ownerRules, pricingFaqs });
-    expect(customerCopy).toMatch(/every Space you currently belong to/i);
-    expect(customerCopy).toMatch(/pending invitations do not count/i);
-    expect(customerCopy).toMatch(/leaving a Space frees a slot/i);
-    expect(customerCopy).toMatch(/your own Misty plan/i);
-    expect(customerCopy).toMatch(/cannot create another Space/i);
-    expect(customerCopy).toMatch(/accept another invitation/i);
-    expect(customerCopy).toMatch(/usage resets weekly/i);
-    expect(customerCopy).toMatch(/short conversation uses less/i);
-    expect(customerCopy).toMatch(/Smart Library indexing/i);
+    expect(customerCopy).toMatch(/Basic is the trial/i);
+    expect(customerCopy).toMatch(/refills five hours after a session starts/i);
+    expect(customerCopy).toMatch(/A task that is already running/i);
+    expect(customerCopy).not.toMatch(/free for 14 days/i);
+  });
+
+  it("states price, cadence, and renewal next to every paid checkout", () => {
+    expect(renewalSummary("pro", "month")).toBe(
+      "$12/month plus applicable tax, renewing monthly until you cancel.",
+    );
+    expect(renewalSummary("ultra_plus", "year")).toBe(
+      "$2,000/year plus applicable tax, renewing yearly until you cancel.",
+    );
   });
 });

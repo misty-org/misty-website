@@ -73,24 +73,35 @@ function PlanRows({
 
 function UpgradeOffer({
   disabled,
-  trialEligible,
   onBillingAction,
 }: {
   disabled: boolean;
-  trialEligible: boolean;
   onBillingAction: (action: () => Promise<{ url: string }>) => void;
 }) {
   return (
     <div className={`${customRowClass} grid gap-3`}>
       <p className="m-0 text-sm font-medium text-foreground">
-        Upgrade to Pro for {PRICING_MODEL.pro.storage} of pooled owner storage
-        and {PRICING_MODEL.pro.agentUsage}.
+        Pro adds {PRICING_MODEL.pro.agentUsage.toLowerCase()} and{" "}
+        {PRICING_MODEL.pro.storage} of storage. Max, Ultra and Ultra+ go further.
       </p>
       <p className="m-0 text-sm leading-6 text-muted-foreground">
-        {trialEligible
-          ? `Start with a one-time ${PRICING_MODEL.pro.trialDays}-day trial. A card is required, and your plan automatically renews unless canceled.`
-          : "Your one-time trial has already been used. Subscribe directly to restore Pro access."}{" "}
-        There are no automatic overages or surprise charges.
+        Basic keeps every feature for free. There are no automatic overages or
+        surprise charges.
+      </p>
+      <p className="m-0 text-xs leading-5 text-muted-foreground">
+        Pro is {PRICING_MODEL.pro.monthlyPrice}/month or{" "}
+        {PRICING_MODEL.pro.yearlyPrice}/year plus applicable tax and renews
+        automatically until you cancel. Cancel anytime here in Billing.
+        Non-refundable except as described in our{" "}
+        <a
+          href="/refunds"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Refund Policy
+        </a>
+        .
       </p>
       <div className="flex flex-wrap gap-2">
         <Button
@@ -100,8 +111,7 @@ function UpgradeOffer({
             onBillingAction(() => createSubscriptionCheckout("pro", "month"))
           }
         >
-          {trialEligible ? "Start Pro trial" : "Subscribe monthly"} ·{" "}
-          {PRICING_MODEL.pro.monthlyPrice}/mo
+          Subscribe monthly · {PRICING_MODEL.pro.monthlyPrice}/mo
         </Button>
         <Button
           type="button"
@@ -111,8 +121,10 @@ function UpgradeOffer({
             onBillingAction(() => createSubscriptionCheckout("pro", "year"))
           }
         >
-          {trialEligible ? "Start annual trial" : "Subscribe yearly"} ·{" "}
-          {PRICING_MODEL.pro.yearlyPrice}/yr
+          Subscribe yearly · {PRICING_MODEL.pro.yearlyPrice}/yr
+        </Button>
+        <Button asChild variant="outline">
+          <a href="/pricing">Compare all plans</a>
         </Button>
       </div>
     </div>
@@ -182,7 +194,6 @@ export function BillingPanel({
         ) : (
           <UpgradeOffer
             disabled={billingWorking}
-            trialEligible={me?.trial_eligible === true}
             onBillingAction={onBillingAction}
           />
         )}

@@ -354,7 +354,7 @@ test("account updates work while usage remains read-only", async ({ page }) => {
   expect(requests.filter(({ path }) => path.includes("checkout"))).toEqual([]);
 });
 
-test("free accounts can select the monthly Pro trial", async ({ page }) => {
+test("free accounts can subscribe to monthly Pro", async ({ page }) => {
   const requests: Array<{ path: string; method: string; body: string | null }> =
     [];
   await prepareAccount(page, "dark", freeMe, (route) => {
@@ -370,11 +370,9 @@ test("free accounts can select the monthly Pro trial", async ({ page }) => {
 
   const dialog = page.getByRole("dialog", { name: "Account settings" });
   await dialog.getByRole("button", { name: "Billing", exact: true }).click();
-  await expect(dialog.getByText(/50 GB of pooled owner storage/)).toBeVisible();
-  await expect(
-    dialog.getByText(/Approximately 6× Basic agent usage/),
-  ).toBeVisible();
-  await dialog.getByRole("button", { name: "Start Pro trial · $8/mo" }).click();
+  await expect(dialog.getByText(/50 GB of storage/)).toBeVisible();
+  await expect(dialog.getByText(/about 3½× basic’s ai/i)).toBeVisible();
+  await dialog.getByRole("button", { name: "Subscribe monthly · $12/mo" }).click();
   await expect
     .poll(() =>
       requests.some(({ path }) => path.endsWith("/billing/checkout-session")),

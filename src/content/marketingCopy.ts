@@ -41,9 +41,8 @@ export const marketingCopy: MarketingCopy = {
     ctaTitle: "Make Misty your browser workspace.",
   },
   pricing: {
-    title: "Start browsing for free. Upgrade when your work grows.",
-    description:
-      "Find the right plan for your Misty workspace. Compare shared Space limits, storage, and AI agent usage.",
+    title: "Start free. Upgrade when you need more.",
+    description: "Every plan includes every Misty feature. Paid plans add more AI, storage, and sync.",
   },
   download: {
     title: "Get Misty for your desktop.",
@@ -82,7 +81,7 @@ export const marketingCopy: MarketingCopy = {
   metadata: {
     home: "Misty is a browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.",
     pricing:
-      "Compare Misty Basic, Pro, and Max plans by Space limits, AI agent usage, and monthly or annual pricing.",
+      "Compare Misty Basic, Pro, Max, Ultra, and Ultra+ plans by AI usage, storage, sync, and monthly or annual pricing.",
     download:
       "Download the Misty browser workspace for macOS and Windows. Both current beta downloads are under 100 MB.",
     blog: "Notes from the team building Misty — what we’re making, what changed our minds, and what’s next.",
