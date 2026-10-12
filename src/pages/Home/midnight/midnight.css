@@ -1,12 +1,13 @@
 /* Homepage-only styles. Shared navigation, footer, and drawer keep their styles. */
-/* Theme tokens. Dark is the default; the light theme (html without .dark) swaps them below.
+/* Theme tokens. Cards stay transparent so the mist drifts through every panel the same way.
+   Dark is the default; the light theme (html without .dark) swaps them below.
    The rebuilt Misty window and the device hardware keep their own dark colors in both. */
 .mist-home {
   --mist-background: #000; --mist-paper: #0a0a0b;
   --mist-ink: #f4f4f5; --mist-ink-max: #fff; --mist-strong: #e4e4e7;
   --mist-text-2: #c2c2c6; --mist-text-3: #d4d4d8; --mist-muted: #adadb2; --mist-subtle: #8f8f94; --mist-dim: #85858b;
   --mist-line: #ffffff1c; --mist-line-soft: #ffffff12; --mist-border: #ffffff1f; --mist-border-strong: #ffffff4d;
-  --mist-card: #0a0a0bcc; --mist-card-border: #ffffff2e; --mist-sticky: #0f0f10f2; --mist-shadow: #0008;
+  --mist-card: transparent; --mist-card-border: #ffffff2e; --mist-sticky: #0f0f10f2; --mist-shadow: #0008;
   --mist-raised: #1c1c1e; --mist-raised-2: #111112; --mist-raised-3: #2a2a2c; --mist-raised-border: #ffffff1a;
   --mist-tile-a: #3a3a3d; --mist-tile-b: #232325;
   --mist-chip: #161617; --mist-chip-active: #262628; --mist-pulse: #f4f4f524;
@@ -27,29 +28,31 @@
   --mist-nav-offset: calc(var(--site-nav-height, 72px) + env(safe-area-inset-top, 0px));
   margin-top: calc(-1 * var(--mist-nav-offset));
 }
-/* Light: off-white paper, near-black ink, and the same mist inverted to black. */
+/* Light: white paper, near-black ink, and the same mist inverted to a soft gray. */
 html:not(.dark) .mist-home {
-  --mist-background: #f3f3f1; --mist-paper: #fff;
+  --mist-background: #fff; --mist-paper: #fff;
   --mist-ink: #0d0d0e; --mist-ink-max: #000; --mist-strong: #1d1d1f;
   --mist-text-2: #3a3a3f; --mist-text-3: #2c2c30; --mist-muted: #55555c; --mist-subtle: #66666d; --mist-dim: #8a8a90;
   --mist-line: #0000001a; --mist-line-soft: #00000012; --mist-border: #0000001c; --mist-border-strong: #00000038;
-  --mist-card: #ffffffb8; --mist-card-border: #0000001f; --mist-sticky: #fffffff2; --mist-shadow: #0000001f;
+  --mist-card: transparent; --mist-card-border: #0000001f; --mist-sticky: #fffffff2; --mist-shadow: #0000001f;
   --mist-raised: #f3f3f2; --mist-raised-2: #fafaf9; --mist-raised-3: #e6e6e4; --mist-raised-border: #00000014;
   --mist-tile-a: #ffffff; --mist-tile-b: #ececea;
   --mist-chip: #fff; --mist-chip-active: #e9e9e7; --mist-pulse: #0d0d0e1a;
   --mist-band: #00000005; --mist-band-hover: #0000000a; --mist-edge: #00000026; --mist-edge-strong: #00000059;
-  --mist-grain: .06; --mist-cloud-filter: invert(1);
+  /* No grain on white: inverted, it reads as a gray film over the whole page. */
+  --mist-grain: 0; --mist-cloud-filter: invert(1);
 }
 .mist-home *, .mist-home *::before, .mist-home *::after { box-sizing: border-box; }
 .mist-home button, .mist-home a { -webkit-tap-highlight-color: transparent; }
 .mist-home button { cursor: pointer; }
 .mist-home :focus-visible { outline: 2px solid var(--mist-text-3); outline-offset: 5px; }
-.mist-home h1, .mist-home h2, .mist-home p { margin: 0; }
-.mist-container { width: min(1240px, calc(100% - 112px)); margin-inline: auto; position: relative; z-index: 1; }
+.mist-home h1, .mist-home h2:not(footer *), .mist-home p { margin: 0; }
+/* The same rail as the navbar (index.css --site-gutter / --site-content-max), so every edge lines up. */
+.mist-container { width: min(var(--site-content-max), calc(100% - 2 * var(--site-gutter))); margin-inline: auto; position: relative; z-index: 1; }
 /* Every section pads by the same --mist-gap above and below, so all section breaks match. */
 .mist-section { position: relative; padding: calc(var(--mist-gap) * .55) 0; scroll-margin-top: 110px; }
 .mist-section-anchor { scroll-margin-top: 110px; }
-.mist-home h2 { font-size: clamp(32px, 3.4vw, 49px); line-height: 1.12; letter-spacing: -.045em; font-weight: 580; }
+.mist-home h2:not(footer *) { font-size: clamp(32px, 3.4vw, 49px); line-height: 1.12; letter-spacing: -.045em; font-weight: 580; }
 /* One viewport-sized wallpaper shared by every section. Its negative margin
    keeps it behind the content without allocating another viewport of space. */
 .mist-atmosphere {
@@ -61,7 +64,7 @@ html:not(.dark) .mist-home {
   overflow: hidden;
   pointer-events: none;
   contain: paint;
-  --mist-tile-width: max(174vw, 200lvh);
+  --mist-tile-width: max(124vw, 143lvh);
 }
 .mist-cloud {
   filter: var(--mist-cloud-filter);
@@ -76,11 +79,11 @@ html:not(.dark) .mist-home {
   bottom: -12%;
   left: 0;
   width: calc(var(--mist-tile-width) * 2);
-  /* Baked density texture keeps the billowing detail off the runtime paint path.
-     Two identical tiles loop continuously without a jump or reversal. */
+  /* Baked density texture keeps the billowing detail off the runtime paint path. Its left and
+     right edges are crossfaded, so two identical tiles loop continuously with no empty seam. */
   background: url('../../../assets/mist-clouds.webp') left center / 50% auto repeat-x;
-  animation: mist-current 140s linear infinite;
-  animation-delay: -30s;
+  animation: mist-current 100s linear infinite;
+  animation-delay: -20s;
   animation-play-state: paused;
 }
 .mist-cloud::after {
@@ -89,8 +92,8 @@ html:not(.dark) .mist-home {
   bottom: -28%;
   opacity: .32;
   background-position: left 65%;
-  animation-duration: 220s;
-  animation-delay: -130s;
+  animation-duration: 157s;
+  animation-delay: -93s;
 }
 .mist-cloud-back {
   opacity: .6;
@@ -164,7 +167,8 @@ html:not(.dark) .mist-home {
 }
 .mist-home .mist-hero-actions [data-cta=join]:hover { background: var(--mist-paper); color: var(--mist-ink); }
 .mist-hero-demo { position: relative; z-index: 1; padding-bottom: var(--mist-gap); }
-.mist-hero-demo::before { content: ""; position: absolute; inset: 8% 10% 20%; z-index: -1; background: radial-gradient(ellipse at center, var(--mist-line-soft), transparent 70%); filter: blur(40px); }
+/* No glow or drop shadow behind the hero window; its border is enough. */
+.mist-hero-demo .mw { box-shadow: inset 0 1px #ffffff10; }
 .mist-image-frame { border: 1px solid var(--mist-card-border); border-radius: 12px; overflow: hidden; background: #151516; box-shadow: 0 30px 80px var(--mist-shadow); }
 .mist-product-image { width: 100%; aspect-ratio: 16 / 10; position: relative; background: var(--mist-chip); }
 .mist-product-image > img { display: block; width: 100%; height: 100%; object-fit: contain; }
@@ -252,20 +256,6 @@ html:not(.dark) .mist-home {
 .mist-sketch-actions b, .mist-sketch-actions em { padding: 9px 16px; border-radius: 9px; font-size: 14px; font-style: normal; font-weight: 550; }
 .mist-sketch-actions b { background: var(--mist-ink); color: var(--mist-paper); }
 .mist-sketch-actions em { border: 1px solid var(--mist-card-border); color: var(--mist-strong); }
-/* Files: every place your files live, and transfers between your computers. */
-.mist-sketch-transfers { display: grid; gap: 16px; }
-.mist-sketch-transfers > div { display: grid; grid-template-columns: 1fr auto; row-gap: 8px; font-size: 14px; }
-.mist-sketch-transfers span { color: var(--mist-subtle); font-size: 13px; }
-.mist-sketch-transfers b { color: var(--mist-ink); font-weight: 520; }
-.mist-sketch-transfers small { grid-column: 1 / -1; margin-top: -4px; color: var(--mist-subtle); font-size: 12.5px; }
-/* The shared clipboard: copied on one device, pasted on another. */
-.mist-sketch-clipboard { display: grid; gap: 10px; }
-.mist-sketch-clipboard div { display: grid; gap: 4px; padding: 12px 14px; border: 1px solid var(--mist-raised-border); border-radius: 10px; background: var(--mist-card); }
-.mist-sketch-clipboard span { color: var(--mist-subtle); font-size: 12.5px; }
-.mist-sketch-clipboard b { color: var(--mist-ink); font-weight: 520; }
-.mist-sketch-clipboard i { justify-self: center; color: var(--mist-subtle); font-style: normal; line-height: 1; }
-.mist-sketch-transfers i { position: relative; grid-column: 1 / -1; height: 4px; overflow: hidden; border-radius: 2px; background: var(--mist-raised-border); }
-.mist-sketch-transfers i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--mist-strong); transform: scaleX(var(--done)); transform-origin: left; transition: transform 1.6s cubic-bezier(.2, .7, .2, 1) .5s; }
 /* Together: one agent asking another, under the owner's rule. */
 .mist-sketch-request { display: grid; gap: 14px; color: var(--mist-text-2); line-height: 1.5; }
 .mist-sketch-request p { margin: 0; }
@@ -274,17 +264,6 @@ html:not(.dark) .mist-home {
 .mist-sketch-policy { display: grid; grid-template-columns: repeat(3, 1fr); padding: 3px; border: 1px solid var(--mist-border); border-radius: 10px; background: var(--mist-raised-2); }
 .mist-sketch-policy em { padding: 8px 0; border-radius: 7px; color: var(--mist-subtle); font-size: 13px; font-style: normal; text-align: center; }
 .mist-sketch-policy em[data-on=true] { background: var(--mist-raised-3); color: var(--mist-ink); }
-/* The smaller built-in tools: a label and four small tiles in one row. */
-.mist-built-in { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 20px; }
-.mist-home .mist-built-in h3 { grid-column: 1 / -1; margin: 12px 0 -6px; color: var(--mist-subtle); font-size: 13px; font-weight: 500; letter-spacing: -.01em; }
-.mist-built-in-tile {
-  display: grid; align-content: start; row-gap: 4px; padding: 16px 18px;
-  border: 1px solid var(--mist-card-border); border-radius: 14px; background: var(--mist-card); transition: border-color .3s, background-color .3s;
-}
-.mist-built-in-tile:hover { border-color: var(--mist-border-strong); background: var(--mist-chip); }
-.mist-built-in-tile strong { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 540; letter-spacing: -.015em; }
-.mist-built-in-tile strong svg { flex: none; color: var(--mist-subtle); }
-.mist-built-in-tile > span:last-child { color: var(--mist-subtle); font-size: 13px; line-height: 1.4; }
 /* The workspace: connected apps, then what agents can do across them. */
 /* Tools: a bento grid. The file manager spans two rows; the other tiles size to their content. */
 .mist-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 20px; }
@@ -295,70 +274,8 @@ html:not(.dark) .mist-home {
 .mist-home .mist-bento-tile h3, .mist-home .mist-points h3, .mist-home .mist-hub-points h3 { font-size: 20px; line-height: 1.4; letter-spacing: -.025em; font-weight: 520; text-wrap: pretty; }
 .mist-points p, .mist-hub-points p { margin-top: 8px !important; max-width: 520px; color: var(--mist-muted); font-size: 15px; line-height: 1.6; text-wrap: pretty; }
 .mist-bento-tile .mist-fine-print { margin-top: auto !important; }
-.mist-bento-panel { padding: 18px; border: 1px solid var(--mist-raised-border); border-radius: 12px; background: var(--mist-raised-2); font-size: 14px; }
-/* The screenshot bleeds off the tile's right and bottom edges, cropped wherever the tile ends. */
-.mist-bento-shot { position: relative; flex: 1; min-height: 260px; margin-right: -28px; }
-.mist-bento-shot img {
-  position: absolute; top: 0; left: 0; width: 128%; max-width: none; height: 100%; object-fit: cover; object-position: left top;
-  border: 1px solid var(--mist-raised-border); border-radius: 12px 0 0 0; box-shadow: 0 24px 60px var(--mist-shadow);
-}
 
-/* Spaces: a window whose sidebar is the tour. */
-.mist-tour-window { overflow: hidden; border: 1px solid var(--mist-card-border); border-radius: 16px; background: var(--mist-card); box-shadow: 0 40px 100px var(--mist-shadow); }
-.mist-tour-bar { display: flex; align-items: center; gap: 7px; height: 42px; padding: 0 16px; border-bottom: 1px solid var(--mist-line); }
-.mist-tour-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--mist-raised-3); }
-.mist-tour-bar span { margin-left: 12px; color: var(--mist-subtle); font-size: 13px; }
-.mist-tour-body { display: grid; grid-template-columns: 200px minmax(0, 1fr); height: 400px; }
-.mist-tour-nav { display: flex; flex-direction: column; gap: 4px; padding: 16px 12px; border-right: 1px solid var(--mist-line); background: var(--mist-raised-2); }
-.mist-tour-space { display: flex; align-items: center; gap: 10px; margin: 0 6px 14px; font-size: 15px; font-weight: 560; }
-.mist-tour-space b { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(145deg, var(--mist-tile-a), var(--mist-tile-b)); font-size: 11px; font-weight: 600; }
-.mist-tour-tab {
-  position: relative; display: flex; align-items: center; gap: 10px; padding: 10px 12px; overflow: hidden; border: 0; border-radius: 9px;
-  background: none; color: var(--mist-subtle); font-size: 14px; text-align: left; transition: color .2s, background-color .2s;
-}
-.mist-tour-tab:hover { color: var(--mist-ink); background: var(--mist-band-hover); }
-.mist-tour-tab[aria-selected=true] { color: var(--mist-ink); background: var(--mist-raised-3); }
-.mist-tour-tab:focus-visible { outline: 2px solid var(--mist-ink); outline-offset: -2px; }
-/* While the tour plays, the current tab fills along its bottom edge until the next app. */
-.mist-tour-tab i { position: absolute; left: 12px; right: 12px; bottom: 5px; height: 2px; border-radius: 2px; background: var(--mist-edge-strong); transform: scaleX(0); transform-origin: left; opacity: 0; }
-.mist-tour[data-auto=true] .mist-tour-tab[aria-selected=true] i { opacity: 1; animation: mist-tour-fill var(--tour-ms) linear forwards; }
-.mist-tour-people { display: flex; align-items: center; margin: auto 6px 0; padding-top: 14px; }
-.mist-tour-people i {
-  display: grid; place-items: center; width: 26px; height: 26px; margin-right: -6px; border: 2px solid var(--mist-raised-2); border-radius: 50%;
-  background: var(--mist-raised-3); color: var(--mist-ink); font-size: 11px; font-style: normal; font-weight: 600;
-}
-.mist-tour-people i[data-agent=true] { background: radial-gradient(circle at 35% 30%, var(--mist-ink), var(--mist-subtle)); }
-.mist-tour-people span { margin-left: 16px; color: var(--mist-subtle); font-size: 12px; }
-.mist-tour-stage { position: relative; min-width: 0; overflow: hidden; }
-.mist-tour-pane { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 22px; padding: 26px 30px; }
-.mist-tour-pane[hidden] { display: none; }
-.mist-tour-pane header { display: flex; align-items: baseline; gap: 12px; }
-.mist-tour-pane header strong { font-size: 18px; font-weight: 560; letter-spacing: -.02em; }
-.mist-tour-pane header span { color: var(--mist-subtle); font-size: 14px; }
-.mist-tour-pane[data-app=library] { padding-right: 0; padding-bottom: 0; }
-.mist-tour-shot { flex: 1; min-height: 0; overflow: hidden; border: 1px solid var(--mist-raised-border); border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
-.mist-tour-shot .mist-product-image { height: 100%; aspect-ratio: auto; }
-.mist-tour-shot .mist-product-image > img { object-fit: cover; object-position: left top; }
-.mist-tour-doc { display: grid; gap: 14px; max-width: 560px; color: var(--mist-text-2); font-size: 16px; line-height: 1.6; }
-.mist-tour-doc strong { color: var(--mist-ink); font-size: 26px; font-weight: 560; letter-spacing: -.03em; }
-.mist-tour-doc p { margin: 0; }
-.mist-tour-checks { display: grid; gap: 10px; margin: 8px 0 0; padding: 12px 0 0; list-style: none; font-size: 15px; }
-.mist-tour-checks li { position: relative; display: flex; align-items: center; gap: 12px; }
-.mist-tour-checks li::before { content: ""; flex: none; width: 16px; height: 16px; border: 1.5px solid var(--mist-border-strong); border-radius: 5px; }
-.mist-tour-checks li[data-done=true] { color: var(--mist-subtle); text-decoration: line-through; text-decoration-color: var(--mist-border-strong); }
-.mist-tour-checks li[data-done=true]::before { border-color: var(--mist-ink); background: var(--mist-ink); }
-/* The tick is drawn with borders so it takes the paper color in both themes. */
-.mist-tour-checks li[data-done=true]::after { content: ""; position: absolute; left: 6px; top: 50%; width: 4px; height: 8px; border: solid var(--mist-paper); border-width: 0 2px 2px 0; transform: translateY(-62%) rotate(45deg); }
-.mist-tour-chat { display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 12px; }
-.mist-tour-chat p { display: grid; gap: 4px; max-width: 520px; margin: 0; padding: 12px 16px; border: 1px solid var(--mist-raised-border); border-radius: 14px 14px 14px 4px; background: var(--mist-raised); color: var(--mist-text-2); line-height: 1.5; }
-.mist-tour-chat b { color: var(--mist-ink); font-size: 13px; font-weight: 560; }
-.mist-tour-chat p[data-agent=true] { border-style: dashed; background: var(--mist-raised-2); }
-.mist-tour-composer {
-  display: flex; align-items: center; justify-content: space-between; align-self: stretch; margin-top: auto; padding: 12px 12px 12px 16px;
-  border: 1px solid var(--mist-border); border-radius: 12px; background: var(--mist-raised-2); color: var(--mist-subtle); font-size: 14px;
-}
-.mist-tour-composer i { width: 26px; height: 26px; border-radius: 50%; background: var(--mist-strong); }
-/* Three short points under the tour, divided by hairlines. */
+/* Three short points, divided by hairlines. */
 .mist-points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 28px; scroll-margin-top: 110px; }
 .mist-points > div { padding: 0; }
 .mist-points > div:last-child { padding-right: 0; }
@@ -393,36 +310,6 @@ html:not(.dark) .mist-home {
 .mist-hub-points { display: grid; }
 .mist-hub-points > div { padding: 12px 0; }
 .mist-hub-points > .mist-fine-print { margin-top: 18px !important; }
-/* Devices: linked to each other directly, files moving along the links (see DeviceMesh). */
-.mist-mesh-stage { width: min(100%, 440px); margin-inline: auto; }
-.mist-mesh { display: block; width: 100%; height: auto; overflow: visible; color: var(--mist-ink); font-family: inherit; }
-.mist-mesh text { fill: var(--mist-ink); font-size: 16px; font-weight: 500; letter-spacing: -.01em; }
-.mist-mesh .mist-mesh-dim { fill: var(--mist-subtle); font-size: 13px; font-weight: 400; }
-/* A pipe: a tube, a dark core, and light pulsing through it from one device to the next. */
-.mist-mesh-tube { fill: none; stroke: var(--mist-raised-3); stroke-width: 16; stroke-linecap: round; }
-.mist-mesh-core { fill: none; stroke: var(--mist-background); stroke-width: 9; stroke-linecap: round; }
-.mist-mesh-flow { fill: none; stroke: var(--mist-strong); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 18; }
-.mist-mesh-device rect { fill: var(--mist-raised); stroke: var(--mist-card-border); filter: drop-shadow(0 12px 24px var(--mist-shadow)); }
-.mist-mesh-device svg { color: var(--mist-ink); }
-.mist-mesh-panel rect { fill: var(--mist-raised-2); stroke: var(--mist-card-border); }
-.mist-mesh-panel svg { color: var(--mist-subtle); }
-.mist-mesh-panel text { font-size: 12px; font-weight: 400; }
-.mist-mesh-panel .mist-mesh-dim { font-size: 12px; }
-.mist-mesh .mist-mesh-panel-title { fill: var(--mist-subtle); font: 12px "Geist Mono Variable", ui-monospace, monospace; }
-.mist-mesh-file rect { fill: var(--mist-ink); }
-.mist-mesh-file svg { color: var(--mist-paper); }
-.mist-mesh .mist-mesh-file text { fill: var(--mist-paper); font-size: 12px; font-weight: 600; }
-/* Why Files is built in: benefits on the left, the usual round trip over Misty's one window on the right. */
-/* The round trip: a dot runs back and forth between the two apps. */
-/* In Misty: one window, the page beside Files, and the file crossing between them. */
-@media (prefers-reduced-motion: no-preference) {
-  .mist-mesh-flow { animation: mist-mesh-flow 1.6s linear infinite; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .mist-mesh-file { display: none; }
-}
-@keyframes mist-mesh-flow { to { stroke-dashoffset: -24; } }
-@keyframes mist-tour-fill { to { transform: scaleX(1); } }
 @keyframes mist-orbit { to { rotate: 360deg; } }
 .mist-devices { position: relative; height: 280px; isolation: isolate; }
 .mist-devices::after { content: ''; position: absolute; inset: 75% -10% -10%; background: radial-gradient(ellipse, #9b9ba320, transparent 65%); z-index: -1; }
@@ -468,26 +355,15 @@ html:not(.dark) .mist-home {
   .mist-close-content { transform: translateY(calc((1 - var(--mist-entry, 1)) * 45px)) scale(calc(.95 + var(--mist-entry, 1) * .05)); }
 }
 @media (max-width: 1100px) {
-  .mist-built-in { gap: 14px; }
-  .mist-built-in-tile { padding: 14px 16px; }
   .mist-bento-tile { grid-column: span 5; }
-  .mist-container { width: calc(100% - 72px); }
   .mist-feature-card { min-height: 400px; padding-inline: 26px; }
   .mist-devices { height: 240px; }
 }
 @media (max-width: 800px) {
   .mist-chapter-head, .mist-resources-head { margin-bottom: 28px; }
   .mist-home :is(.mist-chapter-head, .mist-resources-head) h2 { font-size: clamp(26px, 7vw, 32px); }
-  .mist-built-in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .mist-bento { grid-template-columns: 1fr; gap: 16px; }
   .mist-bento-tile { grid-column: auto; grid-row: auto; padding: 22px 20px; }
-  .mist-bento-shot { min-height: 220px; margin-right: -20px; }
-  .mist-tour-body { grid-template-columns: 1fr; grid-template-rows: auto 360px; height: auto; }
-  .mist-tour-nav { flex-direction: row; gap: 2px; padding: 8px; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--mist-line); scrollbar-width: none; }
-  .mist-tour-space, .mist-tour-people { display: none; }
-  .mist-tour-tab { flex: none; padding: 8px 12px; }
-  .mist-tour-pane { padding: 20px; }
-  .mist-tour-pane header span { display: none; }
   .mist-points { grid-template-columns: 1fr; }
   .mist-points { gap: 18px; }
   .mist-hub-layout { grid-template-columns: 1fr; gap: 32px; }
@@ -496,7 +372,6 @@ html:not(.dark) .mist-home {
   .mist-hub-ring img { width: 20px; height: 20px; }
   .mist-hub-core { width: 72px; height: 72px; margin: -36px; border-radius: 20px; }
   .mist-hub-core [data-misty-brand-logo], .mist-hub-core svg { width: 34px; height: 34px; }
-  .mist-container { width: calc(100% - 48px); }
   .mist-home { --mist-gap: 36px; }
   .mist-hero-copy { padding: 64px 0 40px; }
   .mist-home h1 { font-size: clamp(36px, 9vw, 52px); }
@@ -505,18 +380,16 @@ html:not(.dark) .mist-home {
   .mist-feature-visual { flex: none; height: clamp(170px, 48vw, 340px); }
   .mist-feature-card[data-size] .mist-feature-visual > .mist-image-frame { left: 0; width: 125%; }
   .mist-feature-card[data-size] .mist-sketch { left: 0; right: 0; padding: 18px; }
-  .mist-home h2 { font-size: 39px; }
+  .mist-home h2:not(footer *) { font-size: 39px; }
   .mist-devices { height: 360px; max-width: 610px; width: 100%; margin: 0 auto; }
   .mist-feature-card .mist-devices { margin: 40px auto 32px; }
 }
 @media (max-width: 520px) {
-  .mist-built-in { grid-template-columns: 1fr; }
-  .mist-container { width: calc(100% - 40px); }
   .mist-hero-copy { padding: 48px 0 32px; }
   .mist-home h1 { font-size: 34px; line-height: 1.06; }
   .mist-hero-actions { gap: 8px; }
   .mist-hero-actions a { padding-inline: 18px; font-size: 12px; }
-  .mist-home h2 { font-size: 33px; }
+  .mist-home h2:not(footer *) { font-size: 33px; }
   .mist-image-frame { border-radius: 8px; }
   .mist-feature-card { padding: 22px 20px 0; border-radius: 12px; }
   .mist-feature-label { font-size: 15px; }
@@ -535,48 +408,50 @@ html:not(.dark) .mist-home {
   .mist-cloud::before, .mist-cloud::after { will-change: auto; }
 }
 
-/* Agents: a pinned scene. One step's text on the left, the window on the right, and segment
-   bars under the window that fill with the scroll. */
+/* Agents: a pinned scene. The steps on the left, the window playing the current one on the right. */
 .mist-steps-stage { display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.5fr); gap: 64px; align-items: center; }
-.mist-steps-copy { display: grid; }
-.mist-steps-beat { grid-area: 1 / 1; align-self: center; transition: opacity .5s var(--mist-ease, ease), translate .6s var(--mist-ease, ease), visibility 0s; }
-.mist-steps-beat:not([data-active=true]) { visibility: hidden; opacity: 0; translate: 0 18px; pointer-events: none; transition-delay: 0s, 0s, .5s; }
-.mist-home .mist-steps-beat h3 { font-size: clamp(26px, 2.4vw, 34px); font-weight: 560; line-height: 1.06; letter-spacing: -.045em; text-wrap: balance; }
-.mist-home .mist-steps-beat p { max-width: 420px; margin-top: 14px; color: var(--mist-muted); font-size: 17px; line-height: 1.55; letter-spacing: -.015em; text-wrap: pretty; }
-.mist-steps-media { display: grid; justify-items: center; gap: 24px; min-width: 0; }
-.mist-steps-media > .mw-frame { justify-self: stretch; }
-.mist-steps-progress { display: flex; gap: 8px; width: min(380px, 72%); }
-.mist-steps-progress button { flex: 1; display: grid; align-items: center; height: 14px; padding: 0; border: 0; background: none; }
-.mist-steps-progress i { position: relative; display: block; height: 4px; overflow: hidden; border-radius: 999px; background: var(--mist-border-strong); }
-.mist-steps-progress i::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--mist-ink); transform-origin: left;
-  transform: scaleX(clamp(0, calc(var(--steps-progress, 0) * var(--steps-count, 3) - var(--i, 0)), 1)); transition: transform .4s var(--mist-ease, ease);
+/* The steps run down one rail; the current one is lit. */
+.mist-steps-list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--mist-line); }
+.mist-steps-list button {
+  display: block; width: 100%; margin-left: -1px; padding: 12px 0 12px 20px; border: 0; border-left: 1px solid transparent; background: none;
+  color: var(--mist-subtle); font-size: clamp(17px, 1.45vw, 21px); font-weight: 500; line-height: 1.3; letter-spacing: -.025em; text-align: left; text-wrap: balance;
+  transition: color .3s, border-color .3s;
 }
-.mist-steps-progress button:hover i { background: var(--mist-subtle); }
-.mist-steps-progress button:focus-visible { outline: 2px solid var(--mist-ink); outline-offset: 4px; border-radius: 4px; }
+.mist-steps-list button:hover { color: var(--mist-muted); }
+.mist-steps-list button[aria-current=step] { color: var(--mist-ink); border-left-color: var(--mist-ink); }
+.mist-steps-list button:focus-visible { outline: 2px solid var(--mist-ink); outline-offset: 2px; border-radius: 4px; }
+.mist-steps-media { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 24px; min-width: 0; }
+.mist-steps-media > .mw-frame { justify-self: stretch; }
+/* The window and the app orbit share one cell; the apps step fades the window back behind the orbit. */
+/* min-width 0, so the 900px window inside scales down to the column instead of widening it. */
+.mist-steps-window, .mist-steps-apps { grid-area: 1 / 1; width: 100%; min-width: 0; }
+.mist-steps-window > .mw-frame { width: 100%; }
+.mist-steps-apps { display: grid; place-items: center; opacity: 0; pointer-events: none; }
+.mist-steps-apps .mist-hub { width: min(78%, 400px); }
+.mist-steps-media[data-apps=true] .mist-steps-window { opacity: .04; scale: .97; }
+.mist-steps-media[data-apps=true] .mist-steps-apps { opacity: 1; pointer-events: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  .mist-steps-window, .mist-steps-apps { transition: opacity .5s var(--mist-ease, ease), scale .6s var(--mist-ease, ease); }
+}
 @media (min-width: 1000px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
-  /* The heading, steps and window pin together, sized to their content. The sticky offset centers
+  /* The steps and window pin together, sized to their content. The sticky offset centers
      them in the viewport (AgentsChapter writes --pin-h), never under the navbar, so the scene only
      sticks once it sits in the middle of the screen. */
-  /* About 45svh of scroll per beat, whatever the number of beats. */
-  .mist-steps { --steps-nav: calc(var(--site-nav-height, 72px) + 16px); height: calc(100svh + var(--steps-count, 3) * 45svh); }
+  /* About 30svh of scroll per step, whatever the number of steps. */
+  .mist-steps { --steps-nav: calc(var(--site-nav-height, 72px) + 16px); height: calc(100svh + var(--steps-count, 3) * 30svh); }
   .mist-steps-pin {
     position: sticky;
     top: max(var(--steps-nav), calc((100svh - var(--pin-h, 100svh)) / 2));
   }
   .mist-steps-pin > .mist-chapter-head { margin-bottom: clamp(24px, 4svh, 48px); }
-  /* The window scales with its column's width; cap that width so heading, window and bars fit one screen. */
-  /* Right-aligned, so the window's edge lines up with the right-aligned heading above it. */
+  /* The window scales with its column's width; cap that width so it fits one screen. */
   .mist-steps-media { justify-self: end; width: min(100%, calc((100svh - var(--steps-nav) - 290px) * 900 / 620)); }
-  /* Scroll drives the fill directly; a short ease only smooths each frame. */
-  .mist-steps-progress i::after { transition-duration: .12s; transition-timing-function: linear; }
 }
 @media (max-width: 999px) {
   .mist-steps-stage { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .mist-home .mist-steps-beat p { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mist-steps-beat, .mist-steps-progress i::after { transition: none; }
+  .mist-steps-list button { transition: none; }
 }
 
 /* The rebuilt Misty window. Drawn at 1180 × 720 and scaled to fit its column. */
@@ -749,7 +624,7 @@ button.mw-send:hover:not(:disabled) { background: #fff; }
   }
 
   /* Cards lift, and a soft light follows the cursor across them. */
-  .mist-feature-card, .mist-tree-card {
+  .mist-feature-card {
     transition: opacity .8s var(--mist-ease) var(--mist-reveal, 0s), translate .9s var(--mist-ease) var(--mist-reveal, 0s),
       transform .45s var(--mist-ease), border-color .3s, box-shadow .45s var(--mist-ease);
   }
@@ -769,21 +644,17 @@ button.mw-send:hover:not(:disabled) { background: #fff; }
     background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 30%), var(--mist-line-soft), transparent 65%); transition: opacity .4s;
   }
   .mist-bento-tile[data-spotlight]:hover::after { opacity: 1; }
-  .mist-tour-pane[data-active=true] > :not(header) { animation: mist-rise .6s var(--mist-ease) both; }
   .mist-hub-ring { animation: mist-orbit var(--orbit) linear infinite var(--spin); }
   .mist-hub-ring li > span { animation: mist-orbit var(--orbit) linear infinite var(--counter); }
 
   /* Inside the sketches: transfers fill and keep moving, collaborators type, locks settle. */
-  [data-reveal-stagger]:not([data-revealed]) .mist-sketch-transfers i::after { transform: scaleX(0); }
-  [data-revealed] .mist-sketch-transfers i[data-moving=true]::after { animation: mist-transfer 7s ease-in-out 2.2s infinite alternate; }
   .mist-sketch-caret { animation: mist-blink 1.1s step-end infinite; }
   .mist-sketch-caret[data-name=Sam] { animation-delay: .45s; }
   .mist-sketch-policy em[data-on=true] { animation: mist-glow 3.2s ease-in-out infinite; }
-  .mist-cloud::before, .mist-cloud::after { animation-duration: 80s; }
+  .mist-cloud::before, .mist-cloud::after { animation-duration: 57s; }
 }
 @keyframes mist-rise { from { opacity: 0; translate: 0 24px; } }
 @keyframes mist-window-in { from { opacity: 0; transform: perspective(2400px) rotateX(16deg) translateY(70px) scale(.94); } }
-@keyframes mist-transfer { from { transform: scaleX(var(--done)); } to { transform: scaleX(calc(var(--done) + .2)); } }
 @keyframes mist-glow { 50% { box-shadow: 0 0 0 1px var(--mist-border-strong), 0 0 18px var(--mist-raised-border); } }
 
 /* The live window tilts back slightly and flattens as it scrolls up to meet you. */
@@ -803,46 +674,29 @@ button.mw-send:hover:not(:disabled) { background: #fff; }
 
 /* Light theme details the tokens can't express. */
 html:not(.dark) .mist-cloud-back { opacity: .85; }
+/* The texture carries a faint haze everywhere, which reads as a gray page once inverted; drop it so the white shows between clouds. */
+html:not(.dark) .mist-cloud { filter: url(#mist-light-clouds); }
 /* GitHub and Linear ship white marks; flip them to black on light surfaces. */
 html:not(.dark) .mist-home :is(img, image):is([data-brand=github], [data-brand=linear], [data-brand=x]) { filter: invert(1); }
 /* The dark window keeps its look, with a lighter shadow on the pale page. */
 html:not(.dark) .mw { box-shadow: 0 40px 90px #0000002e, 0 0 0 1px #0000000f; }
-html:not(.dark) .mist-hero-demo::before { background: radial-gradient(ellipse at center, #0000000f, transparent 70%); }
+html:not(.dark) .mist-hero-demo .mw { box-shadow: 0 0 0 1px #0000000f; }
 
 /* ── The three parts: browser + work + space ─────────────────────────────────────────────── */
 
 /* Interludes: one serif line opening each part, in the page's normal flow. The finale lines up
    the three terms. */
-.mist-interlude, .mist-equation { position: relative; padding: calc(var(--mist-gap) * .55) 0; text-align: center; scroll-margin-top: 80px; }
+/* Each interlude opens a new part: a wide gap above sets it apart from the part before, and a
+   smaller one below keeps it with the panels it introduces. */
+.mist-interlude { position: relative; padding: clamp(88px, 15svh, 170px) 0 clamp(44px, 7svh, 84px); text-align: center; scroll-margin-top: 80px; }
 .mist-interlude-copy { display: grid; justify-items: center; gap: 14px; }
 .mist-interlude h2 { width: fit-content; }
-.mist-interlude-lead { color: var(--mist-muted); font-size: clamp(16px, 1.4vw, 19px); letter-spacing: -.015em; }
-.mist-home .mist-interlude h2, .mist-home .mist-equation h2 { font-size: clamp(40px, 5.4vw, 84px); font-weight: 400; line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
-.mist-equation h2 { width: fit-content; margin-inline: auto; white-space: nowrap; }
-.mist-eq-term { display: inline-block; }
-.mist-equation i { margin: 0 .04em; color: var(--mist-dim); font-style: normal; font-weight: 300; }
-.mist-equation a { color: inherit; text-decoration: none; }
-.mist-equation a:focus-visible { outline: 2px solid var(--mist-ink); outline-offset: 6px; border-radius: 6px; }
+.mist-home .mist-interlude h2 { font-size: clamp(40px, 5.4vw, 84px); font-weight: 400; line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
 
-
-/* Engine: where the web engine lives. Misty's sits inside the system; a typical browser carries
-   its own, drawn heavy and hatched. */
-.mist-engine { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-.mist-engine-stack { display: grid; align-content: start; gap: 10px; }
-.mist-engine-stack[data-kind=bundled] { opacity: .5; }
-.mist-engine-label { color: var(--mist-subtle); font-size: 13px; }
-.mist-engine-box { display: grid; gap: 4px; padding: 16px 18px; border: 1px solid var(--mist-card-border); border-radius: 14px; background: var(--mist-card); }
-.mist-engine-box b { display: flex; align-items: center; gap: 8px; color: var(--mist-ink); font-size: 15px; font-weight: 540; letter-spacing: -.015em; }
-.mist-engine-box b svg, .mist-engine-box b [data-misty-brand-logo] { width: 18px; height: 18px; }
-.mist-engine-box small { color: var(--mist-subtle); font-size: 13px; line-height: 1.45; }
-.mist-engine-box .mist-engine-box { margin-top: 12px; border-color: var(--mist-raised-border); background: var(--mist-raised-2); }
-.mist-engine-box[data-layer=bundled] { min-height: 104px; align-content: start; background: repeating-linear-gradient(135deg, var(--mist-raised-2) 0 7px, transparent 7px 14px); }
 
 /* Layout: a window whose panes resize and whose virtual window switches on its own. */
 
 
-/* Spaces: the tour inside a labeled panel. */
-.mist-space-tile .mist-tour { margin-top: 24px; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Markers outside the hero are laid down once their block is revealed. */
@@ -857,21 +711,14 @@ html:not(.dark) .mist-hero-demo::before { background: radial-gradient(ellipse at
   .mist-home[data-motion=ready] [data-write][data-revealed] { animation: mist-write var(--write-for, .75s) cubic-bezier(.45, .05, .4, 1) var(--write-at, 0s) both; }
   .mist-home[data-motion=ready] [data-write] .mist-marker::before { transition: transform .7s var(--mist-ease, ease) calc(var(--write-at, 0s) + var(--marker-at, .5s)); }
   .mist-home[data-motion=ready] [data-write]:not([data-revealed]) .mist-marker::before { transform: rotate(-1.5deg) skewX(-8deg) scaleX(0); }
-  /* An interlude's lead fades in first; its heading starts writing just after. The term sits at
+  /* An interlude's heading starts writing as it arrives. The term sits at
      the end of the line, so its marker lands near the end of the sweep. */
   .mist-interlude h2 { --write-at: .05s; --marker-at: .4s; }
-  .mist-equation h2 { --write-for: 1.3s; }
-  .mist-eq-term { --marker-at: calc(.12s + var(--i) * .4s); }
 }
 
 @media (max-width: 800px) {
   .mist-home .mist-interlude h2 { font-size: clamp(34px, 9.5vw, 56px); }
 }
-@media (max-width: 520px) {
-  .mist-engine { grid-template-columns: 1fr; }
-}
-/* On phones the equation still fits one line. */
-@media (max-width: 800px) { .mist-home .mist-equation h2 { font-size: clamp(28px, 8.4vw, 60px); } }
 
 /* ── Compact story: headings only, smaller diagrams, more use of width ─────────────────────── */
 
@@ -881,19 +728,12 @@ html:not(.dark) .mist-hero-demo::before { background: radial-gradient(ellipse at
 .mist-home :is(.mist-chapter-head, .mist-resources-head) h2 > span { display: inline; }
 .mist-chapter-head { margin-bottom: 24px; }
 
-/* Three tiles to a row, each a heading over one diagram. */
-.mist-bento.mist-trio > .mist-bento-tile { grid-column: span 4; }
-.mist-trio .mist-bento-tile { gap: 18px; padding: 22px 24px; }
-.mist-trio .mist-bento-panel { margin-top: auto; }
-.mist-trio .mist-mesh-stage { width: 100%; margin: auto auto 0; }
-.mist-trio .mist-fine-print { margin-top: 0 !important; }
-.mist-home .mist-trio .mist-bento-tile h3, .mist-home .mist-bento-tile h3 { font-size: 16px; line-height: 1.4; }
-.mist-trio + .mist-trio, .mist-bento + .mist-trio { margin-top: 20px; }
+.mist-home .mist-bento-tile h3 { font-size: 16px; line-height: 1.4; }
 
 /* Smaller diagrams. */
 .mist-hub-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
 /* Phones stack the diagram and its points; the rule above would otherwise squeeze both into two columns. */
-@media (max-width: 800px) { .mist-hub-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } .mist-checklist { justify-self: start; } }
+@media (max-width: 800px) { .mist-hub-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
 .mist-hub { width: min(100%, 300px); }
 .mist-hub-ring li { width: 42px; height: 42px; margin: -21px; }
 .mist-hub-ring li > span { border-radius: 12px; }
@@ -903,48 +743,28 @@ html:not(.dark) .mist-hero-demo::before { background: radial-gradient(ellipse at
 .mist-hub-points { display: grid; gap: 4px; }
 .mist-home .mist-hub-points h3 { font-size: 16px; }
 
-.mist-engine { max-width: 440px; margin-inline: auto; gap: 14px; }
-.mist-engine-box { padding: 11px 13px; border-radius: 11px; }
-.mist-engine-box b { font-size: 13.5px; }
-.mist-engine-box small { font-size: 12px; }
-.mist-engine-box .mist-engine-box { margin-top: 9px; }
-.mist-engine-box[data-layer=bundled] { min-height: 76px; }
 
 
 .mist-tree-stage { max-width: 400px; }
-.mist-tree-card { padding: 22px 24px; }
-.mist-home .mist-tree-card h3 { font-size: 18px; }
-.mist-tree-pager { margin-top: 12px; }
 
 .mist-feature-card { min-height: 0; padding-top: 22px; }
 .mist-feature-visual { min-height: 0; height: 190px; flex: none; margin-top: 18px; }
 .mist-devices { height: 190px; }
 .mist-feature-card .mist-devices { margin: 18px 6% 18px 0; }
 
-.mist-bento-shot { min-height: 170px; }
-.mist-steps-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 48px; }
+.mist-steps-stage { grid-template-columns: minmax(0, .8fr) minmax(0, 1.5fr); gap: 48px; }
 /* Below the pinned breakpoint the text sits above the window; the rule above would squeeze them side by side. */
 @media (max-width: 999px) { .mist-steps-stage { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
-.mist-steps-media { width: min(100%, 560px); }
-/* Just under the chapter heading (20–26px), so the heading stays on top of the hierarchy. */
-.mist-home .mist-steps-beat h3 { font-size: clamp(19px, 1.6vw, 23px); }
+.mist-steps-media { width: min(100%, 820px); }
 
-.mist-tour-body { grid-template-columns: 170px minmax(0, 1fr); height: 310px; }
-.mist-tour-pane { padding: 20px 24px; }
 
-.mist-basics { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 28px; }
-.mist-basics .mist-built-in-tile { padding: 12px 14px; }
 
 @media (min-width: 1000px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
-  .mist-steps-media { width: min(100%, 560px, calc((100svh - var(--steps-nav) - 230px) * 900 / 620)); }
+  .mist-steps-media { width: min(100%, 820px, calc((100svh - var(--steps-nav) - 160px) * 900 / 620)); }
 }
 @media (max-width: 1100px) {
-  .mist-basics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
+  }
 @media (max-width: 800px) {
-  .mist-bento.mist-trio > .mist-bento-tile { grid-column: auto; }
-  .mist-basics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mist-tour-body { grid-template-columns: 1fr; grid-template-rows: auto 300px; height: auto; }
   .mist-feature-visual { height: 170px; }
 }
 
@@ -967,12 +787,6 @@ html:not(.dark) .mist-hero-demo::before { background: radial-gradient(ellipse at
 /* Mirrored chapters put their second column first on wide screens; phones keep source order. */
 @media (min-width: 801px) { .mist-hub-layout-flip > :last-child { order: -1; } }
 
-/* Engine: a checklist diagram, each item checked off along one rail. No container. */
-.mist-checklist { position: relative; display: grid; gap: 18px; justify-self: center; margin: 0; padding: 0; list-style: none; }
-.mist-checklist::before { content: ""; position: absolute; left: 8.5px; top: 11px; bottom: 11px; width: 1px; background: var(--mist-line); }
-.mist-checklist li { position: relative; display: flex; align-items: center; gap: 14px; }
-.mist-checklist li > svg { flex: none; color: var(--mist-ink); background: var(--mist-background); border-radius: 50%; }
-.mist-home .mist-checklist h3 { font-size: 18px; line-height: 1.3; letter-spacing: -.02em; font-weight: 500; }
 
 /* Layout: a centered flow chart, no container. Each layer holds the one below it. */
 /* A downward arrow between layers: a line ending in a chevron. */
@@ -1009,27 +823,10 @@ html:not(.dark) .mist-hero-demo::before { background: radial-gradient(ellipse at
 /* With the card sized to its content, the sketch sits in the flow as a whole panel. */
 .mist-feature-visual .mist-sketch { position: relative; inset: auto; border-bottom: 1px solid var(--mist-border); border-radius: 12px; padding: 16px; box-shadow: none; }
 
-/* The file manager shows whole: the screenshot at full width, uncropped and still. */
-.mist-bento-shot { flex: none; min-height: 0; margin: 0; }
-.mist-bento-shot img { position: static; display: block; width: 100%; height: auto; border-radius: 12px; object-fit: contain; }
 
 /* Diagrams a step larger. */
 .mist-hub { width: min(100%, 380px); }
-.mist-engine { max-width: 520px; }
 .mist-layout-sketch { max-width: 540px; }
 .mist-layout-grid { height: 260px; }
-@media (max-width: 800px) {
-  .mist-bento-shot { margin: 0; }
-}
 
-/* Files: one panel, the copy on the left, the file manager on the right. */
-.mist-tools-bento .mist-files-panel { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr); gap: 36px; align-items: center; padding: 26px 28px; }
-.mist-files-copy { display: grid; gap: 18px; align-content: center; }
-.mist-home .mist-files-copy h3 { margin: 0; }
-/* Why it's built in: three short lines under the heading. */
-.mist-files-benefits { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
-.mist-files-benefits li { color: var(--mist-subtle); font-size: 14px; line-height: 1.5; }
-.mist-files-benefits b { color: var(--mist-ink); font-weight: 520; }
-@media (max-width: 800px) {
-  .mist-tools-bento .mist-files-panel { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 22px 20px; }
-}
+

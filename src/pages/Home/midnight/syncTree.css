@@ -1,44 +1,5 @@
-/* Sync tree: each device's tree under the vault and changes moving through it, beside a panel of layouts. */
-/* Sits under the sync chapter's heading, above its feature cards. */
-/* The same gap as between the cards in a row, so the tree and the cards under it never touch. */
-.mist-tree { margin: 0 0 20px; }
-/* Two floating cards, shaped like the feature cards: the tree, and the layouts. */
-.mist-tree-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
-.mist-tree-card {
-  position: relative; display: flex; flex-direction: column; min-width: 0;
-  padding: 30px 32px; border: 1px solid var(--mist-card-border); border-radius: 16px; background: var(--mist-card);
-}
-.mist-tree-diagram { grid-column: span 3; }
-.mist-tree-explain { grid-column: span 2; }
-
-.mist-home .mist-tree-card h3 { margin: 14px 0 0; max-width: 440px; font-size: 21px; line-height: 1.4; letter-spacing: -.025em; font-weight: 520; text-wrap: pretty; }
-/* The layouts slide sideways; the card clips the slides beside the current one. */
-/* Clip hard to the viewport, and hide parked slides once the track settles, so neighbouring
-   copy never shows past the card's edge (WebKit can paint a moving layer past overflow: hidden). */
-.mist-tree-viewport { flex: 1; overflow: clip; contain: paint; }
-.mist-tree-track { display: flex; height: 100%; transform: translateX(calc(var(--slide, 0) * -100%)); transition: transform .5s cubic-bezier(.4, 0, .2, 1); }
-.mist-tree-slide { flex: 0 0 100%; min-width: 0; transition: visibility 0s .5s; }
-.mist-tree-slide[aria-hidden=true] { visibility: hidden; }
-.mist-tree-slide[aria-hidden=false] { transition-delay: 0s; }
-/* Bare arrows either side of the page dots; the current slide's dot stretches into a capsule. */
-.mist-tree-pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; }
-.mist-tree-arrow {
-  display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 8px;
-  background: none; color: var(--mist-subtle); transition: color .2s, transform .2s;
-}
-.mist-tree-arrow:hover { color: var(--mist-ink); }
-.mist-tree-arrow:first-child:active { transform: translateX(-2px); }
-.mist-tree-arrow:last-of-type:active { transform: translateX(2px); }
-.mist-tree-dots { display: flex; align-items: center; gap: 6px; }
-.mist-tree-dot-button {
-  position: relative; width: 6px; height: 6px; padding: 0; border: 0; border-radius: 999px;
-  background: var(--mist-border-strong); transition: width .45s cubic-bezier(.4, 0, .2, 1), background-color .3s;
-}
-/* A larger invisible hit area keeps the small dots easy to click. */
-.mist-tree-dot-button::after { content: ""; position: absolute; inset: -9px -4px; }
-.mist-tree-dot-button:hover { background: var(--mist-border-strong); }
-.mist-tree-dot-button[data-active=true] { width: 24px; background: var(--mist-ink); }
-.mist-tree-canvas { margin-top: 24px; }
+/* Sync tree: each device's tree under the vault and changes moving through it. It fills a tile
+   (see tiles.css). */
 .mist-tree-stage { position: relative; max-width: 590px; margin-inline: auto; }
 .mist-tree-stage[data-layout=stacked] { display: none; max-width: 400px; }
 .mist-tree-svg { display: block; width: 100%; height: auto; overflow: visible; font-family: inherit; }
@@ -98,53 +59,10 @@
 
 /* Layouts: each slide is a label, one sentence, then a placeholder sketch filling the rest. */
 .mist-tree-slide { display: flex; flex-direction: column; }
-.mist-layout-visual { flex: 1; display: grid; place-items: center; min-height: 240px; margin-top: 24px; }
-.mist-layout-demo { position: relative; display: flex; gap: 16px; width: min(100%, 320px); }
-.mist-layout-demo i { display: block; border-radius: 5px; background: var(--mist-line-soft); }
-.mist-layout-frame {
-  position: relative; display: grid; gap: 6px; flex: 1; height: 150px; padding: 8px;
-  border: 1px solid var(--mist-border-strong); border-radius: 10px; background: var(--mist-raised);
-}
-.mist-layout-frame [data-part=bar] { background: var(--mist-border-strong); }
-.mist-layout-frame [data-part=tabs] { background: var(--mist-edge); }
-.mist-layout-frame[data-edge=top] { grid-template-rows: 10px 10px 1fr; }
-.mist-layout-frame[data-edge=side] { grid-template: "bar bar" 10px "tabs page" 1fr / 22% 1fr; }
-.mist-layout-frame[data-edge=side] [data-part=bar] { grid-area: bar; }
-.mist-layout-frame[data-edge=side] [data-part=tabs] { grid-area: tabs; }
-.mist-layout-frame[data-edge=side] [data-part=page] { grid-area: page; }
-/* Virtual windows fan out behind the current one. */
-.mist-layout-demo[data-demo=windows] { display: grid; height: 210px; padding-right: 32px; }
-.mist-layout-demo[data-demo=windows] .mist-layout-frame {
-  grid-area: 1 / 1; grid-template-rows: auto 1fr; align-self: end;
-  translate: calc(var(--depth) * 16px) calc(var(--depth) * -30px); z-index: calc(3 - var(--depth));
-  opacity: calc(1 - var(--depth) * .3);
-}
-.mist-layout-demo[data-demo=windows] span { color: var(--mist-muted); font-size: 12px; }
-/* Tabs: a group of three held together, then two loose tabs. */
-.mist-layout-demo[data-demo=tabs] { flex-direction: column; gap: 8px; width: min(100%, 240px); }
-.mist-layout-demo[data-demo=tabs] i { height: 26px; border: 1px solid var(--mist-card-border); background: var(--mist-raised); }
-.mist-layout-group { display: grid; gap: 6px; padding: 8px; border: 1px dashed var(--mist-border-strong); border-radius: 10px; }
-/* Panes: one tab split three ways. */
-.mist-layout-demo[data-demo=panes] .mist-layout-frame { grid-template: "a b" 1fr "a c" 1fr / 1.4fr 1fr; height: 170px; }
-.mist-layout-demo[data-demo=panes] i:nth-child(1) { grid-area: a; }
-.mist-layout-demo[data-demo=panes] i:nth-child(2) { grid-area: b; }
-.mist-layout-demo[data-demo=panes] i:nth-child(3) { grid-area: c; }
 
-/* One column: the tree, then the layouts. */
-@media (max-width: 1000px) {
-  .mist-tree { margin-bottom: 16px; }
-  .mist-tree-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .mist-tree-diagram, .mist-tree-explain { grid-column: auto; }
-}
 @media (max-width: 800px) {
-  .mist-tree-card { padding: 22px 20px; }
   .mist-tree-stage[data-layout=wide] { display: none; }
   .mist-tree-stage[data-layout=stacked] { display: block; }
-  .mist-home .mist-tree-card h3 { font-size: 17px; margin-top: 8px; }
-  .mist-tree-pager { margin-top: 12px; }
-}
-@media (max-width: 520px) {
-  .mist-tree-card { border-radius: 12px; }
 }
 /* SMIL and script-driven animations ignore the reduced-motion reset, so hide the moving parts outright. */
 @media (prefers-reduced-motion: reduce) {

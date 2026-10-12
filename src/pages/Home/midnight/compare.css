@@ -1,0 +1,21 @@
+/* Why one more AI subscription: one plain table, Misty's column lifted on a soft band. */
+.mist-compare { display: grid; gap: 14px; }
+/* Phones scroll the table sideways inside its card; the row labels stay pinned. */
+.mist-compare-scroll:focus-visible { outline: 2px solid var(--mist-ink); outline-offset: 3px; }
+.mist-compare-scroll { overflow-x: auto; border: 1px solid var(--mist-card-border); border-radius: 16px; background: var(--mist-card); scrollbar-width: thin; }
+.mist-compare table { width: 100%; min-width: 760px; border-collapse: collapse; table-layout: fixed; font-size: 14px; line-height: 1.4; }
+.mist-compare :is(th, td) { padding: 16px 12px; border-bottom: 1px solid var(--mist-line-soft); text-align: center; vertical-align: middle; color: var(--mist-subtle); font-weight: 400; }
+.mist-compare tbody tr:last-child > * { border-bottom: 0; }
+.mist-compare thead :is(th, td) { padding-block: 18px 14px; color: var(--mist-muted); font-size: 13px; }
+.mist-compare :is(th, td):first-child { position: sticky; left: 0; z-index: 1; width: 26%; padding-left: 22px; background: var(--mist-paper); text-align: left; }
+.mist-compare tbody th { color: var(--mist-text-2); }
+/* Wide screens never scroll the table, so the pinned labels let the mist through like the rest of the card. */
+@media (min-width: 900px) { .mist-compare :is(th, td):first-child { background: transparent; } }
+.mist-compare [data-misty] { background: var(--mist-band-hover); color: var(--mist-ink); font-weight: 520; }
+.mist-compare-mark { display: inline-block; width: 18px; height: 18px; vertical-align: middle; color: var(--mist-ink); }
+.mist-compare-mark[data-no] { color: var(--mist-dim); }
+.mist-compare .mist-fine-print a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.mist-compare .mist-fine-print a:hover { color: var(--mist-ink); }
+/* A short qualifier under a cell's value. */
+.mist-compare-note { display: block; margin-top: 4px; color: var(--mist-subtle); font-size: 12px; font-weight: 400; }
+.mist-compare tbody :is(th, td) { padding-block: 20px; }

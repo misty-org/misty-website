@@ -1,5 +1,3 @@
-import { createPortal } from "react-dom";
-import { AnchorDrawer } from "./components/AnchorDrawer";
 import { MidnightHome } from "./midnight/MidnightHome";
 import { useSectionRoute } from "./useSectionRoute";
 
@@ -7,11 +5,5 @@ import { useSectionRoute } from "./useSectionRoute";
 export default function Home() {
   useSectionRoute();
 
-  return (
-    <>
-      {/* Keep the fixed drawer above the footer and outside route transforms. */}
-      {createPortal(<AnchorDrawer />, document.body)}
-      <MidnightHome />
-    </>
-  );
+  return <MidnightHome />;
 }

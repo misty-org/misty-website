@@ -17,7 +17,7 @@ const publicRoutes = [
   {
     name: "pricing",
     path: "/pricing",
-    title: "Pricing | Misty's Basic, Pro, and Max plans",
+    title: "Pricing | Misty plans from free to Ultra+",
   },
   {
     name: "changelog",

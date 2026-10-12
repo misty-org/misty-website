@@ -1,76 +1,102 @@
-import { Bookmark, CircleCheck, History, Import, Puzzle, Search, type LucideIcon } from "lucide-react";
-import { BrandLogo } from "@/components/brand/BrandLogo";
+import { Bookmark, Check, ChevronDown, History, Puzzle, Search } from "lucide-react";
 import { Chapter } from "./Chapter";
+import { Tile, Tiles } from "./Tiles";
 
 /**
  * The Browser part of the homepage story: the native engine and the basics, then
  * sync (in Chapters.tsx). Agents belong to the Work part, so nothing here mentions them.
- * Engine claims follow misty/src-tauri.
+ * Engine, extension and import claims follow SELLING-POINTS.md and misty/src-tauri.
  */
 
-/** Where the web engine lives: inside the system for Misty, inside the app for a typical browser. */
-function EngineDiagram() {
+/** The engine as a diff from a typical browser to Misty: same app and OS, a different engine underneath. */
+const ENGINE_DIFF: { op?: "add" | "del"; line: number; text: string }[] = [
+  { line: 1, text: "app: tabs, layouts, sync" },
+  { op: "del", line: 2, text: "engine: bundled with the app" },
+  { op: "del", line: 3, text: "updates: shipped with the app" },
+  { op: "add", line: 2, text: "engine: built into your system" },
+  { op: "add", line: 3, text: "updates: from Apple and Microsoft" },
+  { line: 4, text: "os: macOS or Windows" },
+];
+
+function EngineDiff() {
   return (
-    <div className="mist-engine" aria-label="Misty uses the web engine built into macOS and Windows; a typical browser carries its own copy of Chromium">
-      <div className="mist-engine-stack" data-kind="misty">
-        <span className="mist-engine-label">Misty</span>
-        <div className="mist-engine-box" data-layer="app"><b><BrandLogo /> Misty</b><small>Tabs, layouts, sync and agents</small></div>
-        <div className="mist-engine-box" data-layer="os">
-          <b>macOS or Windows</b>
-          <div className="mist-engine-box" data-layer="engine"><b>Built-in web engine</b><small>WebKit on macOS, WebView2 on Windows</small></div>
-        </div>
-      </div>
-      <div className="mist-engine-stack" data-kind="bundled" aria-hidden="true">
-        <span className="mist-engine-label">A typical browser</span>
-        <div className="mist-engine-box" data-layer="app">
-          <b>The browser</b>
-          <div className="mist-engine-box" data-layer="bundled"><b>Its own copy of Chromium</b><small>Shipped and updated with the app</small></div>
-        </div>
-        <div className="mist-engine-box" data-layer="os"><b>macOS or Windows</b></div>
-      </div>
+    <div className="mist-diff-card">
+      <small>typical browser → Misty</small>
+      <ol className="mist-diff" aria-label="Misty uses the web engine built into macOS and Windows; a typical browser bundles its own">
+        {ENGINE_DIFF.map(({ op, line, text }) => (
+          <li key={`${op ?? "ctx"}-${line}`} data-op={op}>
+            <span aria-hidden>{line}</span>
+            <span aria-hidden>{op === "add" ? "+" : op === "del" ? "−" : ""}</span>
+            <span>{text}</span>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
 
-const ENGINE_CHECKS = ["Uses your system's engine.", "No bundled Chromium.", "Fixes from Apple and Microsoft."];
+/** What an extension asks for, shown before it installs. Private browsing starts off. */
+function ExtensionAccess() {
+  return (
+    <div className="mist-tile-sheet" aria-hidden="true">
+      <header><Puzzle size={16} strokeWidth={1.75} /><i /><small>Firefox Add-ons</small></header>
+      <div><b>Read pages</b><small>Asks first</small></div>
+      <div><b>Store data</b><small>Allowed</small></div>
+      <div data-active><b>Private browsing</b><small>Off</small></div>
+    </div>
+  );
+}
+
+/**
+ * The import sheet: pick a browser, see what it has, bring it over. Categories follow the importer's
+ * preview in misty/src-tauri/src/infra/browser_import (bookmarks, history, sign-ins, settings).
+ */
+const IMPORT_ITEMS: [string, string][] = [
+  ["Bookmarks", "1,284 links"],
+  ["History", "9,320 pages"],
+  ["Sign-ins", "86 sites"],
+  ["Settings", "Search engine, homepage"],
+];
+
+export function ImportSheet() {
+  return (
+    <div className="mist-tile-import" aria-hidden="true">
+      <header>
+        <small>Import from</small>
+        <span>Chrome<ChevronDown size={14} strokeWidth={1.75} /></span>
+      </header>
+      <ul>
+        {IMPORT_ITEMS.map(([name, count]) => (
+          <li key={name}><Check size={14} strokeWidth={2} /><b>{name}</b><small>{count}</small></li>
+        ))}
+      </ul>
+      <footer><span>Import</span></footer>
+    </div>
+  );
+}
+
+/** The address bar with a bookmark, a visited page and a search suggested underneath. */
+export function AddressBar() {
+  return (
+    <div className="mist-tile-omnibox" aria-hidden="true">
+      <div className="mist-tile-omnibox-input"><Search size={16} strokeWidth={1.75} />misty docs<i /></div>
+      <ul>
+        <li><Bookmark size={16} strokeWidth={1.75} /><b>Misty Docs</b><small>Bookmark</small></li>
+        <li><History size={16} strokeWidth={1.75} /><b>Getting started</b><small>Yesterday</small></li>
+        <li><Search size={16} strokeWidth={1.75} /><b>Web search</b><small>Your pick</small></li>
+      </ul>
+    </div>
+  );
+}
 
 export function EngineChapter() {
   return (
-    <Chapter id="engine" title={<>Fast because it's native.{" "}<span>No bundled Chromium.</span></>}>
-      <div className="mist-hub-layout">
-        <div className="mist-panel" data-reveal><span className="mist-feature-label">engine</span><EngineDiagram /></div>
-        {/* A checklist diagram: each item checked off along one rail. */}
-        <ul className="mist-checklist" data-reveal-stagger>
-          {ENGINE_CHECKS.map(item => (
-            <li key={item}><CircleCheck size={18} strokeWidth={1.75} aria-hidden /><h3>{item}</h3></li>
-          ))}
-        </ul>
-      </div>
-      <BrowserBasics />
+    <Chapter id="engine" title={<>Fast, secure,{" "}<span>and lightweight.</span></>}>
+      <Tiles>
+        {/* Security fixes from Apple and Microsoft are the diff's "updates" line. */}
+        <Tile span={8} title="Uses the engine built into macOS and Windows."><EngineDiff /></Tile>
+        <Tile span={4} title="See an extension's access before installing."><ExtensionAccess /></Tile>
+      </Tiles>
     </Chapter>
-  );
-}
-
-/** The rest of the browser, one small tile each. Extensions run on macOS only (see SELLING-POINTS.md). */
-const basics: { name: string; text: string; icon: LucideIcon }[] = [
-  { name: "Extensions", text: "Review access before you install.", icon: Puzzle },
-  { name: "Import", text: "Bring your profiles and settings.", icon: Import },
-  { name: "Bookmarks", text: "Save pages for later.", icon: Bookmark },
-  { name: "History", text: "Every page you've visited.", icon: History },
-  { name: "Search", text: "Your choice of search engine.", icon: Search },
-];
-
-function BrowserBasics() {
-  return (
-    <div className="mist-built-in mist-basics" data-reveal-stagger>
-      <h3>Everything else you expect</h3>
-      {basics.map(({ name, text, icon: Icon }) => (
-        <div key={name} className="mist-built-in-tile">
-          {/* A small bare glyph beside the name; no container behind it. */}
-          <strong><Icon size={16} strokeWidth={1.75} aria-hidden />{name}</strong>
-          <span>{text}</span>
-        </div>
-      ))}
-    </div>
   );
 }
