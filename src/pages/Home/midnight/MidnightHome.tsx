@@ -1,10 +1,16 @@
+import Footer from "@/components/layout/Footer";
 import { DownloadSection } from "@/pages/Download/DownloadSection";
 import { HomeCtaButtons } from "../components/HomeCtaButtons";
 import { ResourcePreview } from "../sections/ResourcePreview";
 import { EngineChapter } from "./BrowserChapters";
-import { AgentsChapter, IntegrationsChapter, SpacesChapter, SyncChapter, ToolsChapter } from "./Chapters";
+import { AgentsChapter, SyncChapter } from "./Chapters";
+import { SpacesChapter } from "./SpacesChapter";
+import { TileRoute } from "./Tiles";
+import { BROWSER_ROUTE } from "./browserRoute";
+import { CompareChapter } from "./CompareChapter";
 import { ScaledDemoWindow } from "./DemoWindow";
-import { Equation, Interlude } from "./Interludes";
+import { HomeFaq } from "./HomeFaq";
+import { Interlude } from "./Interludes";
 import { useReveal } from "./useReveal";
 import { useMistMotion } from "./useMistMotion";
 import "@fontsource-variable/geist-mono";
@@ -15,6 +21,13 @@ function Mist() {
   return (
     <div className="mist-atmosphere" aria-hidden="true">
       <div className="mist-cloud mist-cloud-back" />
+      {/* Light theme: tints the clouds a smoky gray and clears the texture's thin haze, so pure white shows between them. */}
+      <svg width="0" height="0" style={{ position: "absolute" }}>
+        <filter id="mist-light-clouds" colorInterpolationFilters="sRGB">
+          <feColorMatrix type="matrix" values="-.7 0 0 0 1  0 -.7 0 0 1  0 0 -.7 0 1  0 0 0 1 0" />
+          <feComponentTransfer><feFuncA type="linear" slope="1.5" intercept="-0.3" /></feComponentTransfer>
+        </filter>
+      </svg>
     </div>
   );
 }
@@ -37,25 +50,29 @@ export function MidnightHome() {
         </div>
         <HeroDemo />
       </section>
-      {/* The story is an equation: browser + work + space. Each part opens with a one-line
-          interlude, each leads into the next, and the finale lines the terms up. */}
+      {/* The story has three parts: browser, work and space. Each opens with a one-line interlude. */}
       <div id="features">
         <Interlude term="browser" before="It starts as a" />
-        <EngineChapter />
-        <SyncChapter />
-        <Interlude term="work" lead="Browsing is only half the job." before="Then come the tools for your" />
+        {/* One bundle of lines snakes through every Browser tile. */}
+        <TileRoute route={BROWSER_ROUTE}>
+          <EngineChapter />
+          <SyncChapter />
+        </TileRoute>
+        <Interlude term="work" before="It does your" after="for you" />
         <AgentsChapter />
-        <IntegrationsChapter />
-        <ToolsChapter />
-        <Interlude term="space" lead="Work can get messy sometimes." before="Bring it all together in a" />
+        {/* Right after the agents, when a visitor is weighing Misty against other AI browsers. */}
+        <CompareChapter />
+        <Interlude term="space" before="It organizes everything in a" />
         <SpacesChapter />
       </div>
+      <HomeFaq />
       <div className="mist-resources mist-section" data-mist-scene data-reveal>
         <ResourcePreview />
       </div>
-      {/* The equation sums up the story right before the call to download, which always closes the page. */}
-      <Equation />
+      {/* The call to download always closes the page. */}
       <DownloadSection />
+      {/* Transparent, so the mist keeps drifting behind the footer instead of ending at a white band. */}
+      <Footer className="bg-transparent" />
     </div>
   );
 }

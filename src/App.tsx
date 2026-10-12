@@ -216,7 +216,8 @@ export default function App() {
           </div>
         </main>
 
-        <Footer />
+        {/* The homepage renders its own footer inside the mist. */}
+        {!isHomePath(location.pathname) && <Footer />}
         <AccountSettingsDialog
           open={settingsOpen || routeTab !== null}
           onOpenChange={handleSettingsOpenChange}
