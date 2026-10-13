@@ -17,6 +17,9 @@ import "@fontsource-variable/geist-mono";
 import "@fontsource/instrument-serif/400-italic.css";
 import "./midnight.css";
 
+/** The drifting clouds behind the page. Switched off for now, to see the page without them. */
+const SHOW_MIST = false;
+
 function Mist() {
   return (
     <div className="mist-atmosphere" aria-hidden="true">
@@ -42,7 +45,7 @@ export function MidnightHome() {
   useReveal(ref);
   return (
     <div ref={ref} className="mist-home">
-      <Mist />
+      {SHOW_MIST && <Mist />}
       <section id="overview" className="mist-hero" aria-labelledby="mist-hero-title" data-mist-scene>
         <div className="mist-container mist-hero-copy">
           <h1 id="mist-hero-title"><span>The <mark className="mist-marker" data-tone="yellow">agentic</mark> browser</span>{" "}<span>for building your <mark className="mist-marker" data-tone="blue">workspace</mark></span></h1>

@@ -22,6 +22,7 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
       <Button
         asChild
         size="lg"
+        data-cta="download"
         className={cn(
           "hidden md:inline-flex h-11 rounded-full px-6 text-sm hover:opacity-85",
           dark
@@ -45,7 +46,7 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
           <NavLink to={JOIN_HREF}>Get started</NavLink>
         )}
       </Button>
-      <Button asChild size="lg" className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] md:hidden">
+      <Button asChild size="lg" data-cta="download" className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] md:hidden">
         <a href={WEB_APP_URL}>Try the web app</a>
       </Button>
     </>

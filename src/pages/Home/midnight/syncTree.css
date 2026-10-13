@@ -1,6 +1,6 @@
 /* Sync tree: each device's tree under the vault and changes moving through it. It fills a tile
    (see tiles.css). */
-.mist-tree-stage { position: relative; max-width: 590px; margin-inline: auto; }
+.mist-tree-stage { position: relative; max-width: 860px; margin-inline: auto; }
 .mist-tree-stage[data-layout=stacked] { display: none; max-width: 400px; }
 .mist-tree-svg { display: block; width: 100%; height: auto; overflow: visible; font-family: inherit; }
 /* Letter spacing stays at 0 so measured text widths match what renders. */
@@ -68,3 +68,9 @@
 @media (prefers-reduced-motion: reduce) {
   .mist-tree-flows, .mist-tree-pulse, .mist-tree-current, .mist-tree-breath { display: none; }
 }
+
+/* In a full-width tile the diagram scales up to fill more of the row. */
+.mist-tile[data-span="12"] .mist-tree-stage[data-layout=wide] { max-width: 860px; }
+
+/* Until the rope reaches the tree's panel, its CSS animations hold still too (the script-driven ones are paused in useClock). */
+.mist-tree[data-idle] :is(.mist-tree-current, .mist-tree-breath, .mist-tree-pulse) { animation-play-state: paused; }

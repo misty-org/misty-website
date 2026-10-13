@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SyncTreeDiagram } from "./SyncTreeDiagram";
 import { estimate, type Kind, type Measure } from "./syncTreeModel";
+import { useTileActive } from "./useTileActive";
 import "./syncTree.css";
 
 /** Measures chip text with the page font so labels sit exactly centered. */
@@ -36,13 +37,16 @@ function useReducedMotion() {
 export function SyncTree() {
   const measure = useMeasure();
   const reduced = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
+  // The tree stays idle until the rope has reached its panel.
+  const active = useTileActive(root);
   const wide = useRef<SVGSVGElement>(null);
   const stacked = useRef<SVGSVGElement>(null);
   const [selected, setSelected] = useState<Kind>("vault");
-  const diagram = { measure, still: reduced, selected, onSelect: setSelected };
+  const diagram = { measure, still: reduced, active, selected, onSelect: setSelected };
 
   return (
-    <div id="sync-tree" className="mist-tree" data-mist-scene aria-label="Each device's tree, synced through your encrypted vault">
+    <div ref={root} id="sync-tree" className="mist-tree" data-idle={!active || undefined} data-mist-scene aria-label="Each device's tree, synced through your encrypted vault">
       <div className="mist-tree-canvas">
         <SyncTreeDiagram layout="wide" svgRef={wide} {...diagram} />
         <SyncTreeDiagram layout="stacked" svgRef={stacked} {...diagram} />

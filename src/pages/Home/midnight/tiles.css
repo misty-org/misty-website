@@ -1,7 +1,7 @@
 /* Bento tiles: a visual on top, cropped by the tile, and one short sentence at the bottom. */
 .mist-tiles { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
 .mist-tile {
-  position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 400px; grid-column: span 4;
+  position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 360px; grid-column: span 4;
   border: 1px solid var(--mist-card-border); border-radius: 16px; background: var(--mist-card); overflow: hidden;
 }
 .mist-tile[data-span="3"] { grid-column: span 3; }
@@ -10,7 +10,7 @@
 .mist-tile[data-span="7"] { grid-column: span 7; }
 .mist-tile[data-span="8"] { grid-column: span 8; }
 .mist-tile[data-span="12"] { grid-column: 1 / -1; }
-.mist-tile-visual { position: relative; flex: 1; display: grid; place-items: center; min-height: 0; padding: 28px 28px 8px; }
+.mist-tile-visual { position: relative; flex: 1; display: grid; place-items: center; min-height: 0; padding: 64px 28px 8px; }
 .mist-home .mist-tile h3 {
   position: relative; margin: 0; padding: 0 28px 26px; max-width: 460px;
   font-size: 17px; line-height: 1.4; letter-spacing: -.02em; font-weight: 500; text-wrap: pretty;
@@ -36,10 +36,8 @@
 @media (max-width: 640px) {
   .mist-tiles { gap: 12px; }
   .mist-tile, .mist-tile[data-span] { grid-column: 1 / -1; min-height: 320px; border-radius: 14px; }
-  .mist-tile-visual { padding: 22px 20px 8px; }
+  .mist-tile-visual { padding: 58px 20px 8px; }
   .mist-home .mist-tile h3 { padding: 0 20px 22px; font-size: 16px; }
-  .mist-diff { font-size: 11.5px; }
-  .mist-diff li { grid-template-columns: 30px 16px minmax(0, 1fr); padding-right: 12px; }
 }
 
 /* One bundle of lines snaking through the tiles of several chapters. The scope isolates, so the
@@ -50,23 +48,16 @@
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
   /* The highlighter pastels (yellow, blue, green, the order the story adds them); deeper on the
      light page so they still read on white. */
-  --ribbon-1: #f0d58c; --ribbon-2: #a0c4d4; --ribbon-3: #b4d3a2;
+  --ribbon-1: #f0d58c; --ribbon-2: #a0c4d4; --ribbon-3: #b4d3a2; --ribbon-edge: #0a0a0b;
 }
-html:not(.dark) .mist-tile-route { --ribbon-1: #d2ad4a; --ribbon-2: #6b9db3; --ribbon-3: #7fae68; }
+html:not(.dark) .mist-tile-route { --ribbon-1: #d2ad4a; --ribbon-2: #6b9db3; --ribbon-3: #7fae68; --ribbon-edge: #ffffff; }
 @media (max-width: 1000px) { .mist-tile-route { display: none; } }
 
-/* Engine: the diff floats over the waves. */
-.mist-diff-card {
-  position: relative; width: min(100%, 470px); padding: 14px 0 10px;
-  border: 1px solid var(--mist-card-border); border-radius: 14px; background: var(--mist-paper); box-shadow: 0 24px 60px var(--mist-shadow);
+/* Native: a real Misty window floating over the waves. */
+.mist-native-shot {
+  display: block; width: min(100%, 430px); height: auto; margin: 0 0 16px; border: 1px solid var(--mist-card-border); border-radius: 12px;
+  box-shadow: 0 24px 60px var(--mist-shadow);
 }
-.mist-diff-card > small { display: block; padding: 0 18px 10px; color: var(--mist-subtle); font: 12px/1.3 "Geist Mono Variable", ui-monospace, monospace; border-bottom: 1px solid var(--mist-line); }
-.mist-diff { margin: 8px 0 0; padding: 0; list-style: none; font: 13px/1.35 "Geist Mono Variable", ui-monospace, monospace; }
-.mist-diff li { display: grid; grid-template-columns: 40px 20px minmax(0, 1fr); padding: 7px 18px 7px 0; color: var(--mist-muted); }
-.mist-diff li > span:first-child { padding-right: 12px; color: var(--mist-dim); text-align: right; }
-.mist-diff li[data-op=del] { background: var(--mist-band); color: var(--mist-subtle); }
-.mist-diff li[data-op=del] > span:last-child { text-decoration: line-through; text-decoration-color: var(--mist-edge); }
-.mist-diff li[data-op=add] { background: var(--mist-band-hover); color: var(--mist-ink); }
 
 /* Rows shared by the permission sheet and the address bar. Glyphs stay small and bare. */
 .mist-tile-sheet > *, .mist-tile-omnibox li {
@@ -83,8 +74,9 @@ html:not(.dark) .mist-tile-route { --ribbon-1: #d2ad4a; --ribbon-2: #6b9db3; --r
 .mist-tile-sheet header { border-color: transparent; background: none; padding-block: 4px 8px; }
 .mist-tile-sheet header i { width: 34%; }
 .mist-tile-sheet header small { margin-left: auto; padding-right: 10%; }
-.mist-tile-sheet > div { padding-right: calc(10% + 16px); }
-.mist-tile-sheet > div[data-active] { translate: -6% 0; border-color: var(--mist-border-strong); background: var(--mist-raised); box-shadow: 0 18px 40px var(--mist-shadow); }
+.mist-tile-sheet > a { color: inherit; text-decoration: none; }
+.mist-tile-sheet > :is(div, a) { padding-right: calc(10% + 16px); }
+.mist-tile-sheet > [data-active] { translate: -6% 0; border-color: var(--mist-border-strong); background: var(--mist-raised); box-shadow: 0 18px 40px var(--mist-shadow); }
 
 /* Import: the import sheet, a browser picked and what it will bring over, bleeding off the right edge. */
 .mist-tile-import {
@@ -120,8 +112,10 @@ html:not(.dark) .mist-tile-route { --ribbon-1: #d2ad4a; --ribbon-2: #6b9db3; --r
 .mist-tile-omnibox li:first-child { background: var(--mist-band-hover); }
 
 /* Sync: the tree fills its tile; the two computers bleed off the right edge. */
-.mist-tile .mist-tree { width: 100%; margin: 0; }
-.mist-tile .mist-tree-canvas { margin: 0; }
+/* A solid card hugs the tree, so the ribbon passes behind it and is hidden completely, with no see-through. */
+.mist-tile .mist-tree { width: min(100%, 900px); margin: 0 auto; padding: 16px; border: 1px solid var(--mist-card-border); border-radius: 14px; background: var(--mist-paper); box-sizing: border-box; }
+/* The diagram has its own empty margin at the sides, so it overlaps the card's padding to keep the card snug. */
+.mist-tile .mist-tree-canvas { margin: 0 -30px; }
 .mist-tile .mist-tree-stage[data-layout=wide] { max-width: 520px; }
 .mist-tile .mist-devices { margin: 0; }
 
@@ -130,3 +124,50 @@ html:not(.dark) .mist-tile-route { --ribbon-1: #d2ad4a; --ribbon-2: #6b9db3; --r
 @media (max-width: 640px) {
   .mist-chapter:has(.mist-tiles) + .mist-chapter:has(.mist-tiles) { margin-top: calc(12px - var(--mist-gap) * .55); }
 }
+
+.mist-tile h3 .mist-tile-link { display: block; margin-top: 8px; color: var(--mist-ink); font-size: 15px; font-weight: 400; white-space: nowrap; width: fit-content; text-decoration: underline; text-underline-offset: 3px; }
+.mist-tile h3 .mist-tile-link:hover { opacity: .8; }
+
+/* The tile's category chip, pinned to its top-left corner. */
+.mist-tile-label { position: absolute; top: 20px; left: 24px; z-index: 1; }
+
+/* A small line under a tile's title, for the fine print. */
+.mist-tile h3 .mist-tile-note { display: block; margin-top: 6px; color: var(--mist-subtle); font-size: 11.5px; line-height: 1.4; font-weight: 400; letter-spacing: 0; }
+.mist-tile h3 .mist-tile-note + .mist-tile-note { margin-top: 3px; }
+.mist-tile h3 .mist-tile-ref { position: relative; top: -.75em; margin-left: 1px; font-size: .5em; line-height: 0; vertical-align: baseline; }
+
+/* Wide tiles let their sentence run longer than the 460px a narrow tile holds. */
+.mist-home .mist-tile:is([data-span="7"], [data-span="8"], [data-span="12"]) h3 { max-width: min(100%, 720px); }
+
+/* Kiri: the whole window, inset on every side like the system tile's. */
+.mist-kiri-crop { align-self: stretch; justify-self: center; width: min(100%, 460px); margin: 0 0 16px; }
+.mist-kiri-crop img { display: block; width: 100%; height: auto; border: 1px solid var(--mist-card-border); border-radius: 12px; box-shadow: 0 24px 60px var(--mist-shadow); }
+
+/* Inline outside links in a tile sentence: same ink, underlined. */
+.mist-tile h3 .mist-tile-text-link { color: inherit; text-decoration: underline; text-decoration-color: var(--mist-border-strong); text-underline-offset: 3px; transition: text-decoration-color .2s; }
+.mist-tile h3 .mist-tile-text-link:hover { text-decoration-color: currentColor; }
+
+/* The search tile's recording, cropped to the address bar's suggestions. */
+.mist-search-video {
+  display: block; align-self: stretch; justify-self: center; width: min(100%, 460px); height: auto; margin: 0 0 16px;
+  border: 1px solid var(--mist-card-border); border-radius: 12px; box-shadow: 0 24px 60px var(--mist-shadow); background: #141414;
+}
+
+/* Panels are dimmed until the rope reaches them; each brightens in step with the rope (--reach, set by TileRoute) and dims again as it is hauled back.
+   Only while the rope is in use: [data-routed] is set on wide screens that allow motion. */
+@media (min-width: 1001px) and (prefers-reduced-motion: no-preference) {
+  .mist-route-scope[data-routed] .mist-tile { filter: brightness(calc(.3 + .7 * var(--reach, 0))) saturate(calc(.6 + .4 * var(--reach, 0))); }
+}
+
+/* Pinned scene: the screen holds on one row of panels at a time, and scrolling slides the next row in as the rope
+   pays out (see TileRoute). Each row is held for most of a screen of scroll while the rope grows through it, then the grid glides on; the exact lengths are in scenePlan. */
+.mist-route-track[data-pinned] {
+  --pin-nav: calc(var(--site-nav-height, 72px) + 16px); --pin-h: calc(100svh - var(--pin-nav));
+  height: calc(var(--pin-h) + var(--scene, 4.2) * 100svh);
+}
+/* The pin is the screen below the navbar. */
+.mist-route-track[data-pinned] .mist-route-pin { position: sticky; top: var(--pin-nav); height: var(--pin-h); overflow: hidden; }
+.mist-route-track[data-pinned] .mist-route-scope { will-change: transform; }
+/* The sync tile is the tallest panel, so its diagram is sized to leave the tile room on one screen. */
+.mist-route-track[data-pinned] .mist-tile .mist-tree-stage[data-layout=wide],
+.mist-route-track[data-pinned] .mist-tile[data-span="12"] .mist-tree-stage[data-layout=wide] { max-width: min(860px, calc((100svh - 380px) * 1.333)); }

@@ -28,13 +28,13 @@ type DeviceId = (typeof deviceIds)[number];
 const structure = deviceIds.flatMap(device => [
   { id: device, parent: "vault", kind: "device" as const, dx: 0 },
   { id: `${device}.window`, parent: device, kind: "window" as const, dx: 0 },
-  { id: `${device}.tab0`, parent: `${device}.window`, kind: "tab" as const, dx: -24 },
-  { id: `${device}.tab1`, parent: `${device}.window`, kind: "tab" as const, dx: 48 },
-  { id: `${device}.pane0`, parent: `${device}.tab0`, kind: "pane" as const, dx: -24 },
-  { id: `${device}.pane1`, parent: `${device}.tab1`, kind: "pane" as const, dx: 48 },
-  { id: `${device}.page0`, parent: `${device}.pane0`, kind: "page" as const, dx: -48 },
-  { id: `${device}.page1`, parent: `${device}.pane0`, kind: "page" as const, dx: 0 },
-  { id: `${device}.page2`, parent: `${device}.pane1`, kind: "page" as const, dx: 48 },
+  { id: `${device}.tab0`, parent: `${device}.window`, kind: "tab" as const, dx: -36 },
+  { id: `${device}.tab1`, parent: `${device}.window`, kind: "tab" as const, dx: 36 },
+  { id: `${device}.pane0`, parent: `${device}.tab0`, kind: "pane" as const, dx: -36 },
+  { id: `${device}.pane1`, parent: `${device}.tab1`, kind: "pane" as const, dx: 36 },
+  { id: `${device}.page0`, parent: `${device}.pane0`, kind: "page" as const, dx: -60 },
+  { id: `${device}.page1`, parent: `${device}.pane0`, kind: "page" as const, dx: -12 },
+  { id: `${device}.page2`, parent: `${device}.pane1`, kind: "page" as const, dx: 36 },
 ]);
 const parentOf = new Map(structure.map(node => [node.id, node.parent]));
 
@@ -55,11 +55,11 @@ const anyTab = (device: DeviceId) => `${device}.tab${Math.floor(next() * 2)}`;
 
 /** Pacing, in seconds. Trips are uneven, so a change sent later often lands first. */
 const PACE = {
-  up: [5.4, 14] as [number, number],
-  down: [3.8, 8.6] as [number, number],
-  pause: [0.9, 2.6] as [number, number],
+  up: [3.2, 8] as [number, number],
+  down: [2.3, 5.2] as [number, number],
+  pause: [0.6, 1.6] as [number, number],
   maxInFlight: 4,
-  length: 84,
+  length: 58,
 };
 
 /** What can happen, and where it starts. Shared kinds go on to the other devices.

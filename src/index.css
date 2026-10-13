@@ -73,7 +73,7 @@
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
+  --muted-foreground: oklch(0.88 0.004 286);
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
@@ -137,11 +137,11 @@
   --card: #191919;
   --card-foreground: #e0e0e0;
   --sidebar: #161616;
-  --sidebar-foreground: #8c8c8c;
+  --sidebar-foreground: #c9c9ce;
   --sidebar-accent: #3e3e3e;
   --sidebar-accent-foreground: #f1f1f1;
   --muted: #2b2b2b;
-  --muted-foreground: #8c8c8c;
+  --muted-foreground: #c9c9ce;
   --accent: #2b2b2b;
   --accent-foreground: #f1f1f1;
   --border: #262626;
@@ -1339,7 +1339,7 @@ button:disabled {
   --app-active: #3e3e3e;
   --app-ink: #e0e0e0;
   --app-ink-bright: #f1f1f1;
-  --app-ink-muted: #8c8c8c;
+  --app-ink-muted: #c9c9ce;
 
   font-family:
     -apple-system, system-ui, "SF Pro Display", "SF Pro Text", "Helvetica Neue",
@@ -1369,7 +1369,7 @@ button:disabled {
   --marketing-border: rgba(255, 255, 255, 0.1);
   --marketing-border-strong: rgba(255, 255, 255, 0.18);
   --marketing-foreground: #f1f1f1;
-  --marketing-muted: #8c8c8c;
+  --marketing-muted: #c9c9ce;
 
   background-color: #0f0f0f;
   color: var(--marketing-foreground);

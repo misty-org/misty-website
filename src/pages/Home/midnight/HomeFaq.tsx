@@ -4,11 +4,13 @@ import { Link } from "react-router";
 import "./faq.css";
 
 /**
- * Questions and answers as a plain accordion under a "Q&A" heading. Only what the page above
- * doesn't already show: price, platforms, privacy, extensions and sign-ins. Answers follow SELLING-POINTS.md and its fine print, and
- * the pricing answer follows PRICING_MODEL (src/pages/Pricing/data.ts).
+ * Questions and answers as a plain accordion on the right, with a "Q&A" heading centered in the space on the left. Only what the
+ * page above doesn't already show: price, platforms, importing, extensions, privacy, sign-ins, agent approval and files.
+ * Answers follow SELLING-POINTS.md and its fine print, and the pricing answer follows PRICING_MODEL
+ * (src/pages/Pricing/data.ts).
  */
-const FAQS: { q: string; a: ReactNode }[] = [
+type Faq = { q: string; a: ReactNode };
+const START: Faq[] = [
   {
     q: "Is Misty free?",
     a: <>Yes. Basic is free, never ends and includes every feature. Paid plans add more AI, smarter models, storage and sync. See <Link to="/pricing">pricing</Link>.</>,
@@ -18,26 +20,42 @@ const FAQS: { q: string; a: ReactNode }[] = [
     a: "Mac and Windows. Misty uses the web engine your computer already has, so the app stays small and gets security fixes from Apple and Microsoft.",
   },
   {
-    q: "Can Misty see my data?",
-    a: "No. Everything is encrypted on your device before it syncs, with a key only your devices hold. Misty never tracks, shares or reads your data.",
+    q: "Can I bring my profile from another browser?",
+    a: "Yes. You can import your profile and settings from Chrome, Safari, Firefox or Zen.",
   },
   {
     q: "Do extensions work?",
     a: "On a Mac with macOS 15.4 or later, you can install extensions from the Firefox Add-ons catalog and see what each one can access first. Chrome extensions are in progress, and extensions aren't available on Windows yet.",
   },
+];
+const TRUST: Faq[] = [
+  {
+    q: "Can Misty read my synced data?",
+    a: "No. Everything is encrypted on your device before it syncs, with a key only your devices hold. Misty never tracks, shares or reads your data.",
+  },
   {
     q: "Will I stay signed in on every computer?",
     a: "On most sites, yes. Some sites tie a sign-in to one device and ask you to sign in again, and Misty shows which ones did.",
+  },
+  {
+    q: "Can an agent act without asking me?",
+    a: "No. An agent shows you its plan first, and nothing changes until you approve it. You can take over at any point.",
+  },
+  {
+    q: "Do my files go through your servers?",
+    a: "No. Your computers connect to each other directly, so a file moves between them at local network speed. Both need to be on the same network, or connected through a public tunnel.",
   },
 ];
 
 export function HomeFaq() {
   return (
     <section id="faq" className="mist-faq mist-section" aria-labelledby="faq-title" data-mist-scene>
-      <div className="mist-container">
-        <h2 id="faq-title" aria-label="Questions and answers" data-reveal>Q&amp;A</h2>
+      <div className="mist-container mist-faq-layout">
+        <div className="mist-faq-head">
+          <h2 id="faq-title" aria-label="Questions and answers" data-reveal>Q&amp;A</h2>
+        </div>
         <div className="mist-faq-list" data-reveal-stagger>
-          {FAQS.map(({ q, a }) => (
+          {[...START, ...TRUST].map(({ q, a }) => (
             <details key={q} className="mist-faq-item">
               <summary>{q}<ChevronDown size={16} strokeWidth={1.75} aria-hidden /></summary>
               <p>{a}</p>

@@ -30,6 +30,11 @@ const publicRoutes = [
     path: "/roadmap",
     title: "Roadmap | What Misty is building",
   },
+  {
+    name: "kiri",
+    path: "/kiri",
+    title: "Kiri | How Misty runs Chrome and Firefox extensions",
+  },
   { name: "legacy join", path: "/waitlist", title: "Join Misty | Misty" },
   { name: "sign in", path: "/signin", title: "Sign in | Misty" },
   {

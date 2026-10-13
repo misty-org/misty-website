@@ -12,6 +12,7 @@ export interface MarketingCopy {
   blog: { title: string; description: string };
   changelog: { title: string; description: string };
   roadmap: { title: string; description: string };
+  kiri: { title: string; description: string };
   waitlist: { title: string; description: string };
   auth: {
     signInDescription: string;
@@ -63,6 +64,11 @@ export const marketingCopy: MarketingCopy = {
     description:
       "What’s available in beta today, what’s in pilot, and what’s still planned.",
   },
+  kiri: {
+    title: "Chrome and Firefox extensions, in one browser.",
+    description:
+      "Kiri is Misty's web platform layer. It sits above the system's web engine and adds what a full browser needs, including the extension APIs Chrome and Firefox extensions expect.",
+  },
   waitlist: {
     title: "Join Misty",
     description:
@@ -79,6 +85,7 @@ export const marketingCopy: MarketingCopy = {
       "That page doesn’t exist. Check the link, or head back to the homepage.",
   },
   metadata: {
+    kiri: "How Misty runs extensions from both the Chrome Web Store and Firefox Add-ons on one engine, which APIs Kiri adds, and what keeps each extension within the access you approve.",
     home: "Misty is a browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.",
     pricing:
       "Compare Misty Basic, Pro, Max, Ultra, and Ultra+ plans by AI usage, storage, sync, and monthly or annual pricing.",
