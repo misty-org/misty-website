@@ -1,6 +1,9 @@
-import { Bookmark, Check, ChevronDown, History, Puzzle, Search } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Puzzle } from "lucide-react";
+import { NavLink } from "react-router";
 import { Chapter } from "./Chapter";
 import { Tile, Tiles } from "./Tiles";
+import { useTileActive } from "./useTileActive";
 
 /**
  * The Browser part of the homepage story: the native engine and the basics, then
@@ -8,84 +11,62 @@ import { Tile, Tiles } from "./Tiles";
  * Engine, extension and import claims follow SELLING-POINTS.md and misty/src-tauri.
  */
 
-/** The engine as a diff from a typical browser to Misty: same app and OS, a different engine underneath. */
-const ENGINE_DIFF: { op?: "add" | "del"; line: number; text: string }[] = [
-  { line: 1, text: "app: tabs, layouts, sync" },
-  { op: "del", line: 2, text: "engine: bundled with the app" },
-  { op: "del", line: 3, text: "updates: shipped with the app" },
-  { op: "add", line: 2, text: "engine: built into your system" },
-  { op: "add", line: 3, text: "updates: from Apple and Microsoft" },
-  { line: 4, text: "os: macOS or Windows" },
-];
-
-function EngineDiff() {
+/** Misty in a real native window: the system's own title bar, with the web engine built into the OS underneath. */
+function NativeWindow() {
   return (
-    <div className="mist-diff-card">
-      <small>typical browser → Misty</small>
-      <ol className="mist-diff" aria-label="Misty uses the web engine built into macOS and Windows; a typical browser bundles its own">
-        {ENGINE_DIFF.map(({ op, line, text }) => (
-          <li key={`${op ?? "ctx"}-${line}`} data-op={op}>
-            <span aria-hidden>{line}</span>
-            <span aria-hidden>{op === "add" ? "+" : op === "del" ? "−" : ""}</span>
-            <span>{text}</span>
-          </li>
-        ))}
-      </ol>
+    <img className="mist-native-shot" src="/screenshots/misty-native-window.webp" width={2000} height={1257} loading="lazy"
+      alt="Misty running in a native macOS window" />
+  );
+}
+
+/** An inline outside link inside a tile sentence. */
+function Ref({ href, children }: { href: string; children: string }) {
+  return <a href={href} target="_blank" rel="noopener noreferrer" className="mist-tile-text-link">{children}</a>;
+}
+
+/** Misty with a Firefox add-on and a Chrome extension open side by side: one window, both catalogs. */
+function KiriCard() {
+  return (
+    <div className="mist-kiri-crop">
+      <img src="/screenshots/misty-kiri-extensions.webp" width={2000} height={1254} loading="lazy"
+        alt="Misty showing Dark Reader on Firefox Add-ons above uBlock Origin Lite on the Chrome Web Store" />
     </div>
   );
 }
 
-/** What an extension asks for, shown before it installs. Private browsing starts off. */
-function ExtensionAccess() {
+/** The two extension catalogs Misty installs from. */
+export function ExtensionStores() {
   return (
     <div className="mist-tile-sheet" aria-hidden="true">
-      <header><Puzzle size={16} strokeWidth={1.75} /><i /><small>Firefox Add-ons</small></header>
-      <div><b>Read pages</b><small>Asks first</small></div>
-      <div><b>Store data</b><small>Allowed</small></div>
-      <div data-active><b>Private browsing</b><small>Off</small></div>
+      <header><Puzzle size={16} strokeWidth={1.75} /><i /><small>Extensions</small></header>
+      <div><b>Chrome Web Store</b><small>Supported</small></div>
+      <div><b>Firefox Add-ons</b><small>Supported</small></div>
     </div>
   );
 }
 
 /**
- * The import sheet: pick a browser, see what it has, bring it over. Categories follow the importer's
- * preview in misty/src-tauri/src/infra/browser_import (bookmarks, history, sign-ins, settings).
+ * A recording of Misty's address bar, cropped to its suggestion list. It plays only while it is on
+ * screen, and not at all for visitors who prefer reduced motion, who see its poster instead.
  */
-const IMPORT_ITEMS: [string, string][] = [
-  ["Bookmarks", "1,284 links"],
-  ["History", "9,320 pages"],
-  ["Sign-ins", "86 sites"],
-  ["Settings", "Search engine, homepage"],
-];
-
-export function ImportSheet() {
-  return (
-    <div className="mist-tile-import" aria-hidden="true">
-      <header>
-        <small>Import from</small>
-        <span>Chrome<ChevronDown size={14} strokeWidth={1.75} /></span>
-      </header>
-      <ul>
-        {IMPORT_ITEMS.map(([name, count]) => (
-          <li key={name}><Check size={14} strokeWidth={2} /><b>{name}</b><small>{count}</small></li>
-        ))}
-      </ul>
-      <footer><span>Import</span></footer>
-    </div>
-  );
-}
-
-/** The address bar with a bookmark, a visited page and a search suggested underneath. */
 export function AddressBar() {
+  const video = useRef<HTMLVideoElement>(null);
+  // It stays idle until the rope has reached its panel.
+  const active = useTileActive(video);
+  useEffect(() => {
+    const element = video.current;
+    if (!element || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!active) { element.pause(); return; }
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) void element.play().catch(() => undefined);
+      else element.pause();
+    }, { threshold: .35 });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [active]);
   return (
-    <div className="mist-tile-omnibox" aria-hidden="true">
-      <div className="mist-tile-omnibox-input"><Search size={16} strokeWidth={1.75} />misty docs<i /></div>
-      <ul>
-        <li><Bookmark size={16} strokeWidth={1.75} /><b>Misty Docs</b><small>Bookmark</small></li>
-        <li><History size={16} strokeWidth={1.75} /><b>Getting started</b><small>Yesterday</small></li>
-        <li><Search size={16} strokeWidth={1.75} /><b>Web search</b><small>Your pick</small></li>
-      </ul>
-    </div>
+    <video ref={video} className="mist-search-video" src="/videos/misty-address-search.mp4" poster="/screenshots/misty-address-search-poster.jpg"
+      width={960} height={794} muted loop playsInline preload="metadata" aria-label="Misty's address bar searching your spaces, files and the web as you type" />
   );
 }
 
@@ -94,8 +75,8 @@ export function EngineChapter() {
     <Chapter id="engine" title={<>Fast, secure,{" "}<span>and lightweight.</span></>}>
       <Tiles>
         {/* Security fixes from Apple and Microsoft are the diff's "updates" line. */}
-        <Tile span={8} title="Uses the engine built into macOS and Windows."><EngineDiff /></Tile>
-        <Tile span={4} title="See an extension's access before installing."><ExtensionAccess /></Tile>
+        <Tile span={5} label="system" title="Runs on the web engine built into macOS and Windows."><NativeWindow /></Tile>
+        <Tile span={7} label="engine" title={<>Run Chrome and Firefox extensions with Kiri, a layer on top of <Ref href="https://webkit.org">WebKit</Ref> and <Ref href="https://developer.microsoft.com/microsoft-edge/webview2">WebView2</Ref> that adds the extension APIs used in <Ref href="https://www.chromium.org">Chromium</Ref> and <Ref href="https://firefox-source-docs.mozilla.org/overview/gecko.html">Gecko</Ref>.<NavLink to="/kiri" className="mist-tile-link">Learn about Kiri →</NavLink></>}><KiriCard /></Tile>
       </Tiles>
     </Chapter>
   );

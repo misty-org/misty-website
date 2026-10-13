@@ -17,13 +17,19 @@ export function usePinnedSteps(section: RefObject<HTMLElement | null>, count: nu
     const media = matchMedia(PINNED);
     let frame = 0;
     const pin = element.querySelector<HTMLElement>(".mist-steps-pin");
+    // Read once per resize, not every scroll frame: style and layout reads in a scroll handler cost frames.
+    let top = 0;
+    let travel = 1;
+    const measure = () => {
+      if (!pin) return;
+      top = parseFloat(getComputedStyle(pin).top) || 0;
+      travel = Math.max(1, element.offsetHeight - pin.offsetHeight);
+    };
     const update = () => {
       frame = 0;
       if (!media.matches || !pin) return;
       // The pin sticks at its `top` (which centers it) and holds until the track runs out.
       const rect = element.getBoundingClientRect();
-      const top = parseFloat(getComputedStyle(pin).top) || 0;
-      const travel = Math.max(1, rect.height - pin.offsetHeight);
       const progress = Math.min(1, Math.max(0, (top - rect.top) / travel));
       setActive(Math.min(count - 1, Math.floor(progress * count)));
     };
@@ -31,11 +37,13 @@ export function usePinnedSteps(section: RefObject<HTMLElement | null>, count: nu
     // The pin's height feeds its centering offset in CSS.
     const resize = new ResizeObserver(() => {
       if (pin) element.style.setProperty("--pin-h", `${pin.offsetHeight}px`);
+      measure();
       schedule();
     });
     if (pin) resize.observe(pin);
     addEventListener("scroll", schedule, { passive: true });
     media.addEventListener("change", schedule);
+    measure();
     update();
     return () => {
       cancelAnimationFrame(frame);

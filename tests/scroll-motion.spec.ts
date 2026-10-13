@@ -92,19 +92,20 @@ test("the agents scene locks the viewport and lights one step at a time with the
   await expect(active).toHaveText('Ask in one sentence.');
   await expect(active).toHaveCount(1);
   await expect(window.locator('.mw-composer')).toHaveAttribute('data-typing', 'true');
+  // The apps step swaps the window for the Integrations screenshot.
   await step(1);
-  await expect(active).toHaveText('Approve the plan before anything changes.');
-  await expect(window.locator('.mw-plan')).toBeVisible();
-  // The apps step swaps the window for the orbit of connected apps.
-  await step(2);
   await expect(active).toHaveText('Connect your apps once.');
   await expect(media).toHaveAttribute('data-apps', 'true');
+  await step(2);
+  await expect(active).toHaveText('Approve the plan first.');
+  await expect(media).toHaveAttribute('data-apps', 'false');
+  await expect(window.locator('.mw-plan')).toBeVisible();
   await step(3);
-  await expect(active).toHaveText('It works across them, following the skills you add.');
+  await expect(active).toHaveText('Watch it work in real tabs.');
   await expect(media).toHaveAttribute('data-apps', 'false');
   await expect(window.locator('.mw-steps')).toBeVisible();
   await step(4);
-  await expect(active).toHaveText('Save it as a workflow and put it on a schedule.');
+  await expect(active).toHaveText('Save it as a workflow.');
   await expect(window.locator('.mw-saved')).toBeVisible();
   // The scene stays locked in place while the steps change.
   const pinned = await page.locator('.mist-steps-pin').boundingBox();
@@ -115,18 +116,18 @@ test("the agents scene locks the viewport and lights one step at a time with the
   await expect(active).toHaveText('Ask in one sentence.');
 });
 
-test("reduced motion keeps every image and both computer screens visible and still", async ({ page }) => {
+test("reduced motion keeps every image and the layout window visible and still", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  for (const selector of ['.mist-laptop-device', '.mist-cloud-back']) {
+  for (const selector of ['.mist-cloud-back']) {
     await expect(page.locator(selector).first()).toHaveCSS('transform', 'none');
   }
   // The live window holds still on the moment the agent asks for approval.
   await expect(page.locator('.mist-hero-demo .mw-approve')).toBeVisible();
   await page.locator('#foundation').scrollIntoViewIfNeeded();
-  // Both screens hold one layout each instead of stepping through them.
+  // The window holds one layout instead of stepping through them.
   const screens = page.locator('#foundation .mist-screen');
-  await expect(screens).toHaveCount(2);
+  await expect(screens).toHaveCount(1);
   const layouts = await screens.evaluateAll(els => els.map(el => (el as HTMLElement).dataset.layout));
   await page.waitForTimeout(3200);
   expect(await screens.evaluateAll(els => els.map(el => (el as HTMLElement).dataset.layout))).toEqual(layouts);

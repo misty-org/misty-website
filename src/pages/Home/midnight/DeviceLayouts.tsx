@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { BrandLogo } from "@/components/brand/BrandLogo";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { useTileActive } from "./useTileActive";
 import "./deviceLayouts.css";
 
 /**
- * Two computers, each holding its own layout. Their screens step through the layout controls
- * (tabs on top or down the side, tab groups, split panes) out of step with each other, so the two
- * never match. Placeholder sketches until real captures exist.
+ * One Misty window, shuffling through the layout controls: tabs on top or down the side, tab groups
+ * and split panes. A placeholder sketch until real captures exist.
  */
 const LAYOUTS = [
   { key: "panes", name: "Split panes" },
@@ -15,15 +14,17 @@ const LAYOUTS = [
 ] as const;
 type LayoutKey = (typeof LAYOUTS)[number]["key"];
 
-const STEP_MS = 2800;
+const STEP_MS = 1800;
 
-function useLayoutStep() {
+function useLayoutStep(root: RefObject<Element | null>) {
   const [step, setStep] = useState(0);
+  // The layouts only start stepping once the rope has reached this panel.
+  const active = useTileActive(root);
   useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!active || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = setInterval(() => setStep(current => current + 1), STEP_MS);
     return () => clearInterval(timer);
-  }, []);
+  }, [active]);
   return step;
 }
 
@@ -41,26 +42,12 @@ function ScreenSketch({ layout }: { layout: LayoutKey }) {
 }
 
 export function DeviceLayouts() {
-  const step = useLayoutStep();
-  const desktop = LAYOUTS[step % LAYOUTS.length];
-  const laptop = LAYOUTS[(step + 1) % LAYOUTS.length];
+  const root = useRef<HTMLDivElement>(null);
+  const step = useLayoutStep(root);
+  const layout = LAYOUTS[step % LAYOUTS.length];
   return (
-    <div className="mist-device-layouts">
-      <div className="mist-devices" role="img" aria-label="Two computers, each with its own Misty layout">
-        <div className="mist-desktop-device">
-          <div className="mist-device-screen"><ScreenSketch layout={desktop.key} /></div>
-          <div className="mist-monitor-chin"><BrandLogo /></div>
-          <div className="mist-monitor-stand" />
-        </div>
-        <div className="mist-laptop-device">
-          <div className="mist-device-screen"><ScreenSketch layout={laptop.key} /></div>
-          <div className="mist-laptop-base" />
-        </div>
-      </div>
-      <p className="mist-device-names" aria-hidden="true">
-        <span>Desktop · <b key={desktop.key}>{desktop.name}</b></span>
-        <span>Laptop · <b key={laptop.key}>{laptop.name}</b></span>
-      </p>
+    <div className="mist-device-layouts" role="img" aria-label="A Misty window shuffling between tabs on top, tabs on the side, tab groups and split panes">
+      <ScreenSketch layout={layout.key} />
     </div>
   );
 }

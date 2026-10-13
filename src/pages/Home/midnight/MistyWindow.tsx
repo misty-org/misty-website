@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { memo, useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowLeftRight, Bell, Bot, Check, FolderOpen, Globe, House,
   LayoutPanelLeft, Plus, Puzzle, Search, Settings, X,
@@ -145,6 +145,7 @@ export function ScaledFrame({ width = 1180, height = 720, children }: { width?: 
   );
 }
 
-export function ScaledWindow({ stage, after, width, height }: { stage: Stage; after?: Aftermath; width?: number; height?: number }) {
+/** Memoized: a step change elsewhere in the scene shouldn't re-render the whole window mid-scroll. */
+export const ScaledWindow = memo(function ScaledWindow({ stage, after, width, height }: { stage: Stage; after?: Aftermath; width?: number; height?: number }) {
   return <ScaledFrame width={width} height={height}>{() => <MistyWindow stage={stage} after={after} />}</ScaledFrame>;
-}
+});

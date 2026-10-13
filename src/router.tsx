@@ -11,6 +11,7 @@ import Settings from "./pages/AccountSettings";
 import Changelog from "./pages/Changelog";
 import Blog from "./pages/Blog";
 import Roadmap from "./pages/Roadmap";
+import Kiri from "./pages/Kiri";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
@@ -56,6 +57,14 @@ export const router = createBrowserRouter([
         handle: {
           title: "Download Misty | macOS and Windows beta",
           description: marketingCopy.metadata.download,
+        },
+      },
+      {
+        path: "kiri",
+        element: <Kiri />,
+        handle: {
+          title: "Kiri | How Misty runs Chrome and Firefox extensions",
+          description: marketingCopy.metadata.kiri,
         },
       },
       {

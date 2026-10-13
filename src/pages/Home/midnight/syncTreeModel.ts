@@ -22,12 +22,12 @@ export const CHIP = { h: 32, font: 13, pad: 12, glyph: 18, gap: 7, icon: 42 } as
 
 const GEOMETRY = {
   wide: {
-    width: 590, height: 500, vault: [330, 30] as Point,
-    deviceX: (device: number) => 166 + device * 164, deviceY: () => 126,
-    bandTop: (_device: number, level: number) => 178 + level * 86, band: { x: 8, w: 574, h: 56 }, rows: [0],
+    width: 800, height: 600, vault: [445, 30] as Point, spread: 1.3,
+    deviceX: (device: number) => 224 + device * 221, deviceY: () => 130,
+    bandTop: (_device: number, level: number) => 186 + level * 106, band: { x: 8, w: 784, h: 62 }, rows: [0],
   },
   stacked: {
-    width: 380, height: 962, vault: [190, 30] as Point,
+    width: 380, height: 962, vault: [190, 30] as Point, spread: 1,
     deviceX: () => 228, deviceY: (device: number) => 104 + device * 296,
     bandTop: (device: number, level: number) => 136 + device * 296 + level * 60, band: { x: 14, w: 354, h: 44 }, rows: [0, 1, 2],
   },
@@ -61,7 +61,7 @@ export function place(layout: Layout, nodes: TreeNode[], measure: Measure): Map<
     const level = LEVELS.findIndex(item => item.id === node.kind);
     const y = level < 0 ? g.deviceY(node.device) : g.bandTop(node.device, level) + g.band.h / 2;
     const w = labeled(node.kind) ? Math.max(...node.variants.map(variant => labeledWidth(variant.label, measure))) : CHIP.icon;
-    return [node.id, { ...node, x: g.deviceX(node.device) + node.dx - w / 2, y, w, h: CHIP.h, depth: level + 2 }];
+    return [node.id, { ...node, x: g.deviceX(node.device) + node.dx * g.spread - w / 2, y, w, h: CHIP.h, depth: level + 2 }];
   }));
 }
 

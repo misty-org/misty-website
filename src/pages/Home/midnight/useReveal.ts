@@ -18,6 +18,15 @@ export function useReveal(root: RefObject<HTMLElement | null>) {
         observer.unobserve(entry.target);
       }
     }, { rootMargin: "0px 0px -4% 0px" });
+    // An interlude's line is written once it is 25% of the screen's height up from the bottom edge, not as soon
+    // as its top edge peeks in at the bottom, and not after it has reached the middle.
+    const centered = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        (entry.target as HTMLElement).dataset.revealed = "true";
+        centered.unobserve(entry.target);
+      }
+    }, { rootMargin: "0px 0px -25% 0px" });
     const SELECTOR = "[data-reveal], [data-reveal-stagger], [data-write]";
     /** Watches every not-yet-revealed target in `scope`, including `scope` itself. */
     const watch = (scope: Element) => {
@@ -28,7 +37,7 @@ export function useReveal(root: RefObject<HTMLElement | null>) {
         if (target.hasAttribute("data-reveal-stagger")) {
           [...target.children].forEach((child, index) => (child as HTMLElement).style.setProperty("--i", String(index)));
         }
-        observer.observe(target);
+        (target.matches(".mist-interlude [data-write]") ? centered : observer).observe(target);
       }
     };
     watch(element);
@@ -53,6 +62,7 @@ export function useReveal(root: RefObject<HTMLElement | null>) {
     element.addEventListener("pointermove", spotlight, { passive: true });
     return () => {
       observer.disconnect();
+      centered.disconnect();
       mutations.disconnect();
       element.removeEventListener("pointermove", spotlight);
       element.removeAttribute("data-motion");

@@ -162,7 +162,7 @@ function FlowDot({ path, flow }: { path: string; flow: Flow }) {
 
 /** SMIL keeps running off screen; pause it when hidden. Reduced motion holds one moment still.
     Changes in flight are compositor animations on the SVG's clock, so moving them never repaints the tree. */
-function useClock(ref: RefObject<SVGSVGElement | null>, still: boolean, routes: string) {
+function useClock(ref: RefObject<SVGSVGElement | null>, still: boolean, active: boolean, routes: string) {
   useLayoutEffect(() => {
     const svg = ref.current;
     const overlay = svg?.nextElementSibling as HTMLElement | null;
@@ -191,6 +191,8 @@ function useClock(ref: RefObject<SVGSVGElement | null>, still: boolean, routes: 
       animations.forEach(animation => animation.pause());
       return () => resize.disconnect();
     }
+    // Idle until the tree's panel is active.
+    if (!active) return () => resize.disconnect();
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         svg.unpauseAnimations();
@@ -207,18 +209,18 @@ function useClock(ref: RefObject<SVGSVGElement | null>, still: boolean, routes: 
       resize.disconnect();
       animations.forEach(animation => animation.cancel());
     };
-  }, [ref, still, routes]);
+  }, [ref, still, active, routes]);
 }
 
-export function SyncTreeDiagram({ layout, measure, svgRef, still, selected, onSelect }: Select & {
-  layout: Layout; measure: Measure; svgRef: RefObject<SVGSVGElement | null>; still: boolean;
+export function SyncTreeDiagram({ layout, measure, svgRef, still, active, selected, onSelect }: Select & {
+  layout: Layout; measure: Measure; svgRef: RefObject<SVGSVGElement | null>; still: boolean; active: boolean;
 }) {
   const select = { selected, onSelect };
   const placed = place(layout, nodes, measure);
   const vault = vaultBox(layout, measure);
   const list = [...placed.values()];
   const routes = flows.map(flow => routePath(layout, placed, vault, flow.route));
-  useClock(svgRef, still, routes.join("|"));
+  useClock(svgRef, still, active, routes.join("|"));
   return (
     <div className="mist-tree-stage" data-layout={layout}>
       <svg ref={svgRef} className="mist-tree-svg" viewBox={viewBox(layout)} role="group" aria-label="Sync tree">
