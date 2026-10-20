@@ -120,7 +120,7 @@ html:not(.dark) .mist-home {
 .mist-mono { font-family: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0; }
 .mist-hero { position: relative; padding-top: var(--mist-nav-offset); scroll-margin-top: 110px; }
 .mist-hero-copy { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 96px 0 64px; text-align: center; }
-.mist-home h1 { max-width: 1000px; font-size: clamp(40px, 5.6vw, 80px); font-weight: 400; line-height: 1.22; letter-spacing: -.055em; text-wrap: balance; }
+.mist-home h1 { max-width: 1200px; font-size: clamp(40px, 5.6vw, 80px); font-weight: 400; line-height: 1.22; letter-spacing: -.055em; text-wrap: balance; }
 /* The second line of a heading is dimmed, so each heading reads as a statement and its turn. */
 /* The hero is one bright tone; section titles dim their second line. */
 /* Each line is its own centred block, so the headline can be written out line by line. */
