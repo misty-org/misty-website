@@ -88,7 +88,7 @@ export default function App() {
       new URLSearchParams(location.search).get("checkout") === "success";
     const title = checkoutSucceeded
       ? "Plan upgraded | Misty"
-      : (handle?.title ?? "Misty | The agentic browser for your workspace");
+      : (handle?.title ?? "Misty | The agentic browser workspace");
     const description = checkoutSucceeded
       ? "Your Misty plan and billing details have been updated."
       : (handle?.description ??

@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
         index: true,
         element: <Home />,
         handle: {
-          title: "Misty | The agentic browser for your workspace",
+          title: "Misty | The agentic browser workspace",
           description: marketingCopy.metadata.home,
         },
       },

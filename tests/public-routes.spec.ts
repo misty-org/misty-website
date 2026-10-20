@@ -7,7 +7,7 @@ const publicRoutes = [
   {
     name: "home",
     path: "/",
-    title: "Misty | The agentic browser for your workspace",
+    title: "Misty | The agentic browser workspace",
   },
   {
     name: "download",
