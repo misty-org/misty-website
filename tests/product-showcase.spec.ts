@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("the homepage tells its story chapter by chapter, then answers questions", async ({ page }) => {
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The agentic browser for building your workspace");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("The agentic browser workspace");
   // Three parts, each opened by an interlude.
   await expect(page.locator(".mist-interlude h2")).toHaveText(["It starts as a browser", "It does your work for you", "It organizes everything in a space"]);
   // Chapters show only panels; each one's heading stays in the outline for screen readers.
