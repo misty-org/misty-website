@@ -8,7 +8,6 @@ import { SpacesChapter } from "./SpacesChapter";
 import { TileRoute } from "./Tiles";
 import { BROWSER_ROUTE } from "./browserRoute";
 import { CompareChapter } from "./CompareChapter";
-import { ScaledDemoWindow } from "./DemoWindow";
 import { HomeFaq } from "./HomeFaq";
 import { Interlude } from "./Interludes";
 import { useReveal } from "./useReveal";
@@ -35,9 +34,20 @@ function Mist() {
   );
 }
 
-/** The hero's window plays one agent task, then hands the demo to the visitor. */
+/** The hero screenshot shows Misty's split workspace and assistant together. */
 function HeroDemo() {
-  return <div className="mist-container mist-hero-demo"><ScaledDemoWindow /></div>;
+  return (
+    <div className="mist-container mist-hero-demo">
+      <img
+        className="mist-hero-screenshot"
+        src="/screenshots/home/hero-layout.png"
+        alt="Misty showing a split browser workspace with Space.com, YouTube, Gmail, and its assistant and shared chat panels."
+        width={1919}
+        height={1029}
+        fetchPriority="high"
+      />
+    </div>
+  );
 }
 
 export function MidnightHome() {
@@ -48,14 +58,13 @@ export function MidnightHome() {
       {SHOW_MIST && <Mist />}
       <section id="overview" className="mist-hero" aria-labelledby="mist-hero-title" data-mist-scene>
         <div className="mist-container mist-hero-copy">
-          <h1 id="mist-hero-title">The agentic browser workspace</h1>
+          <h1 id="mist-hero-title" data-write>The agentic browser workspace</h1>
           <HomeCtaButtons className="mist-hero-actions justify-center" />
         </div>
         <HeroDemo />
       </section>
-      {/* The story has three parts: browser, work and space. Each opens with a one-line interlude. */}
+      {/* The story has three parts: browser, work and space. Work and space open with a one-line interlude. */}
       <div id="features">
-        <Interlude term="browser" before="It starts as a" />
         {/* One bundle of lines snakes through every Browser tile. */}
         <TileRoute route={BROWSER_ROUTE}>
           <EngineChapter />

@@ -65,3 +65,8 @@ artifacts/
 *.njsproj
 *.sln
 *.sw?
+
+# Local visual experiments and generated screenshots
+/output/
+/.tmp-cap.mjs
+/.claude/launch.json
