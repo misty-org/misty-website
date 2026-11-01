@@ -49,7 +49,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Run a server"),
         description:
-          "Run your own Misty server with one Compose file, five env files and a setup container.",
+          "Run your own Misty server with one Compose file, four env files and a setup container.",
       },
     },
     ...integrationDocs.map((doc) => ({

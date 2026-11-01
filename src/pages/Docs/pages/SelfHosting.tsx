@@ -68,25 +68,25 @@ const ROTATIONS = [
   ],
 ];
 
-/** Running your own server: one Compose file, five env files and the setup container. */
+/** Running your own server: one Compose file, four env files and the setup container. */
 export default function SelfHosting() {
   return (
     <DocPage
       title="Run a server"
-      description="A Misty server is one Compose file and five env files. A setup container does the rest on every start."
+      description="A Misty server is one Compose file and four env files. A setup container does the rest on every start."
     >
       <DocSection id="what-you-need" title="What you need">
         <BulletList
           items={[
             "A Linux or macOS host with Docker Engine and Compose v2. Two CPU cores and 2 GB of memory are enough for a small server, since agents run on each person's desktop.",
             "Git, to get the code. Everything else builds inside the containers.",
-            "A domain on Cloudflare, and accounts with Composio, Google Cloud and Decodo or Serper. Each one is a required part of every server; turning one off means changing the code.",
+            "A domain on Cloudflare, and accounts with Composio and Google Cloud. Each one is a required part of every server; turning one off means changing the code.",
           ]}
         />
       </DocSection>
 
       <DocSection id="files" title="The files">
-        <P text="Everything you configure lives in five files directly under `server/.env/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
+        <P text="Everything you configure lives in four files directly under `server/.env/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
         <CodeBlock code={ENV_TREE} label="The server folder" />
         <DocTable
           columns={["File", "What it's for", "Page"]}
@@ -103,7 +103,7 @@ export default function SelfHosting() {
         <Steps
           items={[
             "Clone Misty on the host and create `server/.env/`.",
-            "Write the five files, following each file's page.",
+            "Write the four files, following each file's page.",
             "Start the stack from the `server` folder. The first start builds the images, so it takes a few minutes.",
             "Watch the setup container's log. Once the tunnel connects, the API answers at `https://MISTY_HOSTNAME/health`, and on the host at `http://127.0.0.1:8081/health`.",
             "Open the Misty app, choose My own server and enter `https://MISTY_HOSTNAME`, then create the first account ([Connect the app](/docs/connect)).",
@@ -114,7 +114,7 @@ export default function SelfHosting() {
           code={`git clone https://github.com/misty-org/misty.git
 cd misty/server
 mkdir -m 700 .env
-# write the five files under .env/
+# write the four files under .env/
 docker compose up -d --build
 docker compose ps
 docker compose logs setup`}
