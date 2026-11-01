@@ -41,12 +41,12 @@ export const cloudTermsSection: LegalSectionDef = {
       <LegalList
         items={[
           <>
-            Your plan includes the storage, number of devices, web searches and
-            app actions shown on our{" "}
+            Your plan includes the storage, number of devices and app actions
+            shown on our{" "}
             <LegalLink to="/pricing">pricing page</LegalLink> when you
             subscribe.
           </>,
-          "Web searches and app actions reset each month on your billing date and don't carry over.",
+          "App actions reset each month on your billing date and don't carry over.",
           "When you reach a limit, the features that need it stop until your next billing date or until you add capacity. You can always open, download and delete what you have, and the rest of Misty keeps working.",
           "We never charge for AI. Misty hosts no model and doesn't supply model access: AI runs on the models you choose, including Sign in with ChatGPT, called from your own device, and you pay your model provider directly.",
         ]}

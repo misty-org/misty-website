@@ -21,9 +21,9 @@ const WHERE_THINGS_RUN = [
     "HTTPS for the server, file storage in R2, and the Workers that save notes and read pages.",
   ],
   [
-    "Composio, Google, Decodo or Serper",
+    "Composio, Google",
     "Their own services",
-    "App actions, Google sign-in and web search.",
+    "App actions and Google sign-in.",
   ],
 ];
 
@@ -37,7 +37,7 @@ export default function Overview() {
       <DocSection id="two-ways" title="Free or Misty Cloud">
         <Paragraphs
           items={[
-            "Misty is free and open source under the GNU AGPL-3.0, with every feature. On Free you set everything up yourself: the server, and your own Cloudflare, Composio, Google and search (Decodo or Serper) accounts. [Run a server](/docs/self-hosting) walks through it.",
+            "Misty is free and open source under the GNU AGPL-3.0, with every feature. On Free you set everything up yourself: the server, and your own Cloudflare, Composio and Google accounts. [Run a server](/docs/self-hosting) walks through it.",
             "Misty Cloud is a server that's already configured, for $10 a month plus tax where it applies. You install the app, open the setup link from your welcome email and start. See [pricing](/pricing).",
             "Without a server, Misty is a browser, and everything stays on your computer.",
           ]}

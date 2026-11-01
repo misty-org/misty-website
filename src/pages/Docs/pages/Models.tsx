@@ -84,6 +84,15 @@ export default function Models() {
         />
       </DocSection>
 
+      <DocSection id="web-search" title="Web search">
+        <Paragraphs
+          items={[
+            "Agents search the web from your computer, on your own search key, the same way they use your models. In Settings, next to your models, pick [Decodo](https://decodo.com) or [Serper](https://serper.dev) and paste its API key. The key stays on this device and goes only to that provider.",
+            "Serper offers every Google tab, from news and videos to places, shopping and maps. Decodo offers web, news, videos and images. Without a search key, agents work as before and read the pages you give them.",
+          ]}
+        />
+      </DocSection>
+
       <DocSection id="claude" title="Claude">
         <Paragraphs
           items={[
@@ -111,9 +120,9 @@ export default function Models() {
           ]}
         />
         <Note>
-          Misty Cloud charges for storage, devices, web searches and app
-          actions, never for AI. Whatever you spend on models goes to your
-          provider, not to Misty.
+          Misty Cloud charges for storage, devices and app actions, never for
+          AI or web search. Whatever you spend on models and searches goes to
+          your provider, not to Misty.
         </Note>
       </DocSection>
     </DocPage>

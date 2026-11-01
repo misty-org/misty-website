@@ -89,10 +89,11 @@ const sections: LegalSectionDef[] = [
           items={[
             <>
               <strong className="font-medium text-foreground">Usage:</strong>{" "}
-              storage used, number of devices, and counts of web searches and
-              app actions, which we need to run the service and apply your
-              plan's limits. We count searches and actions; we don't keep the
-              search terms or what an action did beyond what the feature needs.
+              storage used, number of devices, and counts of app actions, which
+              we need to run the service and apply your plan's limits. We count
+              actions; we don't keep what an action did beyond what the feature
+              needs. Web search runs on your device with your own search key,
+              so search terms never reach us.
             </>,
             <>
               <strong className="font-medium text-foreground">Technical data:</strong>{" "}
@@ -244,11 +245,6 @@ const sections: LegalSectionDef[] = [
               "Stripe",
               "Payments and tax for Misty Cloud",
               "Email address, billing details, payment card",
-            ],
-            [
-              "Decodo",
-              "Web search for agents",
-              "The search terms an agent sends, without your name or email",
             ],
             ["Google", "Sign in with Google, if you use it", "Name, email, profile picture"],
             [
