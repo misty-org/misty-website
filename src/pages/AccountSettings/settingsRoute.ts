@@ -7,7 +7,7 @@ export const SETTINGS_PATH = "/settings";
  * purpose:
  *
  * - From the nav menu it is an overlay over whatever page you are on, and the
- *   URL must not change (the e2e asserts you stay on /pricing).
+ *   URL must not change (the e2e asserts you stay on the page you were on).
  * - From a URL — which is how the desktop app hands off — it is addressable, so
  *   the path sticks, the tab is shareable, and a reload returns you to it.
  *

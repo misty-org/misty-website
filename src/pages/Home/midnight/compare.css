@@ -1,4 +1,4 @@
-/* Why one more AI subscription: one plain table, Misty's column lifted on a soft band. */
+/* Why another AI browser: one plain table, Misty's column lifted on a soft band. */
 .mist-compare { display: grid; gap: 14px; }
 /* Phones scroll the table sideways inside its card; the row labels stay pinned. */
 .mist-compare-scroll:focus-visible { outline: 2px solid var(--mist-ink); outline-offset: 3px; }

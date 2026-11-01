@@ -4,17 +4,18 @@ test("the homepage ends with a call to download", async ({ page }, info) => {
   await page.goto("/download");
   const section = page.locator("#download");
   await expect(section.getByRole("heading", { level: 2, name: "Ready to build your browser workspace?" })).toBeInViewport();
-  // The hero's button again: the visitor's own build on desktop, the web app on a phone.
+  // The hero's button again: the visitor's own build on desktop, every release on a phone.
   const button = info.project.name === "mobile-chromium"
-    ? section.getByRole("link", { name: "Try the web app" })
-    : section.getByRole("link", { name: /^(Download Misty for (macOS|Windows)|Get started)$/ });
+    ? section.getByRole("link", { name: "Download Misty" })
+    : section.getByRole("link", { name: /^Download Misty( for (macOS|Windows))?$/ });
   await expect(button).toBeVisible();
   await expect(section.getByRole("link")).toHaveCount(1);
 });
 
-test("/download opens the homepage at its section and /pricing is its own page", async ({ page }) => {
-  await page.goto("/pricing");
-  await expect(page).toHaveTitle(/^Pricing/);
+test("/download opens the homepage at its section and /self-hosting goes to the docs", async ({ page }) => {
+  await page.goto("/self-hosting");
+  await expect(page).toHaveURL(/\/docs\/self-hosting$/);
+  await expect(page).toHaveTitle(/^Run a server/);
   await expect(page.locator(".mist-hero")).toHaveCount(0);
 
   await page.goto("/download");

@@ -52,7 +52,7 @@ export type Scenario = {
 };
 
 export const SUMMARY = [
-  "Pricing page copy approved in Slack on Tuesday.",
+  "Landing page copy approved in Slack on Tuesday.",
   "Press embargo moved to Oct 27, per Ravi's email.",
   "Support macros due Friday; Sam owns the FAQ.",
 ] as const;

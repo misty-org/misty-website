@@ -4,7 +4,7 @@ import { NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { JOIN_HREF, WEB_APP_URL } from "@/lib/site";
+import { RELEASES_URL } from "@/lib/site";
 import { currentRelease, type ReleaseBuild } from "@/pages/Download/data";
 import { detectDownloadPlatform } from "@/pages/Download/detectPlatform";
 
@@ -13,7 +13,7 @@ function detectDownloadBuild(): ReleaseBuild | undefined {
   return currentRelease.builds.find((build) => build.platform === platform);
 }
 
-/** The hero's primary button: the visitor's own desktop build, or the web app on phones and tablets. */
+/** The hero's primary button: the visitor's own desktop build, or every release on other devices. */
 export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
   const [downloadBuild] = useState(detectDownloadBuild);
 
@@ -24,7 +24,7 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
         size="lg"
         data-cta="download"
         className={cn(
-          "hidden md:inline-flex h-11 rounded-full px-6 text-sm hover:opacity-85",
+          "h-11 rounded-full px-6 text-sm hover:opacity-85",
           dark
             ? "bg-white text-[#09090b] hover:bg-white"
             : "bg-[var(--marketing-foreground)] text-[var(--marketing-surface)]",
@@ -43,11 +43,10 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
             <span>Download for {downloadBuild.platform}</span>
           </a>
         ) : (
-          <NavLink to={JOIN_HREF}>Get started</NavLink>
+          <a href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
+            Download Misty
+          </a>
         )}
-      </Button>
-      <Button asChild size="lg" data-cta="download" className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] md:hidden">
-        <a href={WEB_APP_URL}>Try the web app</a>
       </Button>
     </>
   );
@@ -74,7 +73,7 @@ export function HomeCtaButtons({
             : "border-[var(--marketing-border-strong)] text-[var(--marketing-foreground)] hover:bg-[var(--secondary)]",
         )}
       >
-        <NavLink to={JOIN_HREF} data-cta="join">Join now</NavLink>
+        <NavLink to="/download" data-cta="secondary">Get Misty</NavLink>
       </Button>
     </div>
   );

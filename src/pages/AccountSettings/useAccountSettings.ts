@@ -4,13 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "@/AuthContext";
 import { useUserStore } from "@/store/userStore";
 import { isSettingsPathname } from "./settingsRoute";
-import {
-  fetchBillingUsage,
-  fetchMe,
-  type BillingUsageResponse,
-} from "./api";
-
-export type LoadState = "idle" | "loading" | "ready" | "error";
+import { fetchMe } from "./api";
 
 /**
  * Loads everything the settings dialog renders and owns the redirect rules that
@@ -29,12 +23,6 @@ export function useAccountSettings({
   const location = useLocation();
   const { me, loading, setMe, setLoading, patchMe } = useUserStore();
   const [loadError, setLoadError] = useState("");
-  const [usage, setUsage] = useState<BillingUsageResponse | null>(null);
-  const [usageState, setUsageState] = useState<LoadState>("idle");
-  const [usageError, setUsageError] = useState("");
-  const [usageRequest, setUsageRequest] = useState(0);
-  const [billingWorking, setBillingWorking] = useState(false);
-  const [billingError, setBillingError] = useState("");
 
   // A signed-out visitor who arrived on a settings URL — the desktop hand-off
   // when the browser has no session — is sent to sign-in and brought back here
@@ -87,50 +75,6 @@ export function useAccountSettings({
     };
   }, [open, user, me, logout, navigate, onOpenChange, setLoading, setMe]);
 
-  useEffect(() => {
-    if (!open || !user) return;
-
-    let active = true;
-    void Promise.resolve().then(async () => {
-      if (!active) return;
-      setUsageState("loading");
-      setUsageError("");
-      try {
-        const nextUsage = await fetchBillingUsage();
-        if (!active) return;
-        setUsage(nextUsage);
-        setUsageState("ready");
-      } catch (error) {
-        if (!active) return;
-        setUsageError(
-          error instanceof Error ? error.message : "Could not load usage.",
-        );
-        setUsageState("error");
-      }
-    });
-
-    return () => {
-      active = false;
-    };
-  }, [open, user, usageRequest]);
-
-  /** Sends the visitor to Stripe checkout or the customer portal. */
-  function openBillingAction(action: () => Promise<{ url: string }>) {
-    setBillingWorking(true);
-    setBillingError("");
-    void action()
-      .then(({ url }) => {
-        setBillingWorking(false);
-        window.location.assign(url);
-      })
-      .catch((error) => {
-        setBillingError(
-          error instanceof Error ? error.message : "Could not start billing.",
-        );
-        setBillingWorking(false);
-      });
-  }
-
   /** Keeps the cached account and the auth session in sync after a rename. */
   function renameAccount(name: string) {
     patchMe({ name });
@@ -154,15 +98,8 @@ export function useAccountSettings({
     me,
     loading,
     loadError,
-    usage,
-    usageState,
-    usageError,
-    billingWorking,
-    billingError,
-    openBillingAction,
     renameAccount,
     bumpAvatarVersion,
     finishDeletion,
-    retryUsage: () => setUsageRequest((request) => request + 1),
   };
 }

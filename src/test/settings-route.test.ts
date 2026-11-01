@@ -12,34 +12,34 @@ describe("settings route", () => {
     expect(settingsTabFromPathname("/settings")).toBe("account");
     expect(settingsTabFromPathname("/settings/")).toBe("account");
     expect(settingsTabFromPathname("/settings/account")).toBe("account");
-    expect(settingsTabFromPathname("/settings/usage")).toBe("usage");
-    expect(settingsTabFromPathname("/settings/billing")).toBe("billing");
     expect(settingsTabFromPathname("/settings/privacy")).toBe("privacy");
   });
 
   it("reports an unknown tab as null so the caller can redirect", () => {
     expect(settingsTabFromPathname("/settings/not-a-tab")).toBeNull();
+    // Billing and usage tabs were removed; old links fall back to the default.
+    expect(settingsTabFromPathname("/settings/billing")).toBeNull();
     expect(isSettingsPathname("/settings/not-a-tab")).toBe(true);
   });
 
   it("does not claim unrelated paths", () => {
     expect(settingsTabFromPathname("/")).toBeNull();
-    expect(settingsTabFromPathname("/pricing")).toBeNull();
-    expect(isSettingsPathname("/pricing")).toBe(false);
+    expect(settingsTabFromPathname("/download")).toBeNull();
+    expect(isSettingsPathname("/download")).toBe(false);
     // A path that merely starts with the same letters is not a settings route.
     expect(isSettingsPathname("/settingsomething")).toBe(false);
   });
 
   it("round-trips a tab through its path", () => {
-    expect(settingsTabFromPathname(settingsPathForTab("billing"))).toBe(
-      "billing",
+    expect(settingsTabFromPathname(settingsPathForTab("privacy"))).toBe(
+      "privacy",
     );
   });
 });
 
 describe("safeInternalPath", () => {
   it("accepts same-site absolute paths", () => {
-    expect(safeInternalPath("/settings/billing")).toBe("/settings/billing");
+    expect(safeInternalPath("/settings/privacy")).toBe("/settings/privacy");
   });
 
   it("rejects anything that could leave the site", () => {

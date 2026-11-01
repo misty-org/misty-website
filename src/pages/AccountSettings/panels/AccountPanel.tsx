@@ -7,7 +7,6 @@ import { updateProfile, type MeResponse } from "../api";
 import { AvatarUpload } from "./components/AvatarUpload";
 import { DangerZone } from "./components/DangerZone";
 import { DataExport } from "./components/DataExport";
-import { LicenseDevice } from "./components/LicenseDevice";
 import { SaveFeedback } from "../components/SaveFeedback";
 import {
   customRowClass,
@@ -109,13 +108,6 @@ export function AccountPanel({
             {me.id}
           </span>
         </Row>
-      </Section>
-
-      <Section
-        title="Device license"
-        description="Control which computer is linked to this license."
-      >
-        <LicenseDevice me={me} />
       </Section>
 
       <Section

@@ -10,9 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { AccountPanel } from "./panels/AccountPanel";
-import { BillingPanel } from "./panels/BillingPanel";
 import { PrivacyPanel } from "./panels/PrivacyPanel";
-import { UsagePanel } from "./panels/UsagePanel";
 import { TABS, type Tab } from "./tabs";
 import { useAccountSettings } from "./useAccountSettings";
 
@@ -43,16 +41,9 @@ export function AccountSettingsDialog({
     me,
     loading,
     loadError,
-    usage,
-    usageState,
-    usageError,
-    billingWorking,
-    billingError,
-    openBillingAction,
     renameAccount,
     bumpAvatarVersion,
     finishDeletion,
-    retryUsage,
   } = useAccountSettings({ open, onOpenChange });
 
   const activeTab = TABS.find((item) => item.id === tab) ?? TABS[0];
@@ -70,7 +61,7 @@ export function AccountSettingsDialog({
       >
         <DialogTitle className="sr-only">Account settings</DialogTitle>
         <DialogDescription className="sr-only">
-          Manage your Misty account, usage, billing, and privacy settings.
+          Manage your Misty account and privacy settings.
         </DialogDescription>
 
         <DesktopSettingsFrame
@@ -104,27 +95,6 @@ export function AccountSettingsDialog({
                 </AlertDescription>
               </Alert>
             )
-          ) : null}
-
-          {tab === "usage" ? (
-            <UsagePanel
-              usage={usage}
-              state={usageState}
-              error={usageError}
-              onRetry={retryUsage}
-            />
-          ) : null}
-
-          {tab === "billing" ? (
-            <BillingPanel
-              me={me}
-              usage={usage}
-              loading={loading}
-              loadError={loadError}
-              billingWorking={billingWorking}
-              billingError={billingError}
-              onBillingAction={openBillingAction}
-            />
           ) : null}
 
           {tab === "privacy" ? <PrivacyPanel /> : null}

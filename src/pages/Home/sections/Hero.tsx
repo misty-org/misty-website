@@ -7,7 +7,6 @@ import { ScreenshotSlot } from "@/components/marketing/previews";
 import { Button } from "@/components/ui/button";
 import type { MarketingCopy } from "@/content/marketingCopy";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
-import { WEB_APP_URL } from "@/lib/site";
 import { MobileScreenshotPreview } from "../components/MobileScreenshotPreview";
 import { HomeCtaButtons } from "../components/HomeCtaButtons";
 import { heroZoomMotion, HERO_ZOOM_DURATION_SCALE } from "../scrollMotion";
@@ -328,8 +327,8 @@ export function Hero({ copy }: { copy: MarketingCopy["home"] }) {
                   size="lg"
                   className="h-11 rounded-full bg-[var(--marketing-foreground)] px-6 text-sm text-[var(--marketing-surface)] shadow-lg shadow-black/10 hover:opacity-85"
                 >
-                  <a href={WEB_APP_URL}>
-                    Try the web app
+                  <a href="/download">
+                    Download Misty
                     <ArrowRight aria-hidden="true" />
                   </a>
                 </Button>

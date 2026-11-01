@@ -35,7 +35,7 @@ export function DocPage({ writing, written }: { writing: boolean; written: boole
 }
 
 const MESSAGES = [
-  { from: "Ana Ortiz", at: "Tue 10:12", text: "Pricing page copy is approved. Shipping it with the beta." },
+  { from: "Ana Ortiz", at: "Tue 10:12", text: "Landing page copy is approved. Shipping it with the beta." },
   { from: "Ravi Shah", at: "Wed 16:40", text: "Press embargo is moving. Sent the details by email." },
   { from: "Sam Lee", at: "Thu 09:05", text: "I'll own the support FAQ. Macros will be ready Friday." },
   { from: "Jo Kim", at: "Thu 11:30", text: "Changelog draft is in the Launch plan. Can someone give it a final pass?" },

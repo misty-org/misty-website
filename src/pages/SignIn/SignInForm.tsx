@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import { Button } from "@/components/ui/button";
 import AuthField from "../Auth/AuthField";
 import AuthMessage from "../Auth/AuthMessage";
@@ -11,7 +12,6 @@ interface SignInFormProps {
   onEmailChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  onForgotPasswordClick: () => void;
 }
 
 export default function SignInForm({
@@ -22,7 +22,6 @@ export default function SignInForm({
   onEmailChange,
   onPasswordChange,
   onSubmit,
-  onForgotPasswordClick,
 }: SignInFormProps) {
   return (
     <>
@@ -50,12 +49,11 @@ export default function SignInForm({
             onChange={onPasswordChange}
           />
           <Button
-            type="button"
+            asChild
             variant="link"
-            onClick={onForgotPasswordClick}
             className="h-auto self-start p-0 text-foreground"
           >
-            Forgot your password?
+            <NavLink to="/sign-in">Forgot your password?</NavLink>
           </Button>
         </div>
 

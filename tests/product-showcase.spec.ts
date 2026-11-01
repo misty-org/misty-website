@@ -16,7 +16,7 @@ test("the homepage tells its story chapter by chapter, then answers questions", 
     "Fast, secure, and lightweight.",
     "Give each computer its own setup and keep them all in sync.",
     "Agents that work across your browser and your apps.",
-    "Why one more AI subscription? Here's how Misty compares.",
+    "Why another AI browser? Here's how Misty compares.",
     "A space for every project.",
   ]);
   await expect(page.locator(".mist-chapter-title").first()).toHaveClass(/sr-only/);
@@ -79,8 +79,8 @@ test("the homepage stays dark and accessible for either system appearance", asyn
   }
 });
 
-test("join CTA opens registration", async ({ page }) => {
-  await page.locator(".mist-hero").getByRole("link", { name: "Join now" }).click();
-  await expect(page).toHaveURL(/\/register$/);
-  await expect(page.getByRole("heading", { name: "Create an account" })).toBeVisible();
+test("the secondary hero CTA scrolls to the download section", async ({ page }) => {
+  await page.locator(".mist-hero").getByRole("link", { name: "Get Misty" }).click();
+  await expect(page).toHaveURL(/\/download$/);
+  await expect(page.locator("#download h2")).toBeInViewport();
 });

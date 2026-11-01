@@ -18,7 +18,10 @@ One line: Misty is a browser with your files and agents built in, connected acro
    - Fine print: Extensions need macOS 15.4 or later and aren't available on Windows. Some extensions use features Misty doesn't fully support yet, and Misty lists them during install instead of showing them as working.
    - Misty no longer ships Backups, Quick Convert, Image Optimizer or Storage Report; don't advertise them.
 
-Short forms: the feature chips are "Built-in Files · Connected devices · Synced sign-ins · Encrypted sync · Native agents · Spaces · Extensions". The meta description is "Misty is a browser with built-in files, synced sign-ins and native agents. Connect your devices and work together in Spaces."
+6. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you set up the server yourself, and Misty Cloud gives you a server that's already set up for $10 a month. AI always runs on your own models, so Misty never charges for it: you sign in with ChatGPT, OpenRouter or Ollama, or add your own API key. You can browse without an account, and agents run on your desktop.
+   - Fine print: Setup is taught in the website's docs (`/docs`), not the GitHub wiki. Misty Cloud's numbers live in `src/pages/Pricing/plans.ts`; quote them from there. Claude subscriptions can't be used by third-party apps, so never promise a Claude sign-in.
+
+Short forms: the feature chips are "Built-in Files · Connected devices · Synced sign-ins · Encrypted sync · Native agents · Spaces · Extensions · Open source". The meta description is "Misty is a browser with built-in files, synced sign-ins and native agents. Connect your devices and work together in Spaces."
 
 Before publishing, check that each claim is true in the shipped build:
 
@@ -37,5 +40,8 @@ Before publishing, check that each claim is true in the shipped build:
 | Space summaries | "What's new in a Space" is fair; "everything in a Space" isn't (searches return at most 50 results; Drawing and Space tabs aren't readable) |
 | Firefox extensions | macOS 15.4+ only; on other platforms the runtime returns "Extensions require macOS 15.4 or later." (`misty/src-tauri/src/infra/extensions/native.rs`) |
 | Drawing app | Confirm it's in the Space app picker |
+| Open source, AGPL-3.0 | `LICENSE` at the root of github.com/misty-org/misty |
+| Any major model provider | The providers `docs/byok.md` lists; don't name one it doesn't |
+| Browse with no account | The desktop app opens and browses signed out |
 
 Avoid "seamless", "magic" and "revolutionary". Say "fewer sign-ins" or "stay signed in", never "never sign in again". Don't say "cloud file sync", because device files never go through the cloud.

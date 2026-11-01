@@ -12,12 +12,19 @@ import {
 import { cn } from "@/lib/utils";
 import AccountMenu from "./AccountMenu";
 import NavbarSocials from "./NavbarSocials";
-import { navItems, resourceLinks } from "./navLinks";
+import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
 
 const desktopLinkClass =
   "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-function DesktopNavLink({ to, label }: { to: string; label: string }) {
+function DesktopNavLink({ to, label, external }: NavLinkEntry) {
+  if (external) {
+    return (
+      <a href={to} target="_blank" rel="noopener noreferrer" className={desktopLinkClass}>
+        {label}
+      </a>
+    );
+  }
   return (
     <NavLink
       to={to}
@@ -34,7 +41,6 @@ function DesktopNavLink({ to, label }: { to: string; label: string }) {
 }
 
 export default function DesktopNav({
-  currentPath,
   displayName,
   email,
   initials,
@@ -137,6 +143,7 @@ export default function DesktopNav({
         <span aria-hidden="true" className="mx-1 h-5 w-px bg-border" />
         <ModeToggle />
 
+        {/* The website has no accounts of its own, so there is no sign-in link; an existing session keeps its menu. */}
         {signedIn ? (
           <AccountMenu
             displayName={displayName}
@@ -145,11 +152,7 @@ export default function DesktopNav({
             onOpenSettings={onOpenSettings}
             onSignOut={onSignOut}
           />
-        ) : (
-          <Button asChild size="sm" className="rounded-full px-4">
-            <NavLink to="/signin" state={{ from: currentPath }}>Sign in</NavLink>
-          </Button>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
 import App from "./App";
 import Home from "./pages/Home";
-import Pricing from "./pages/Pricing";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
-import ResetPassword from "./pages/ResetPassword";
+import SignInLink from "./pages/SignInLink";
 import NotFound from "./pages/NotFound";
 import Waitlist from "./pages/Waitlist";
 import Settings from "./pages/AccountSettings";
@@ -12,10 +11,13 @@ import Changelog from "./pages/Changelog";
 import Blog from "./pages/Blog";
 import Roadmap from "./pages/Roadmap";
 import Kiri from "./pages/Kiri";
+import Pricing from "./pages/Pricing";
+import Setup from "./pages/Setup";
+import CloudWelcome from "./pages/CloudWelcome";
+import { docsRoutes } from "./pages/Docs/routes";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
-import Refunds from "./pages/Legal/Refunds";
 import Invite from "./pages/Invite";
 import { marketingCopy } from "./content/marketingCopy";
 
@@ -37,17 +39,17 @@ export const router = createBrowserRouter([
         element: <Settings />,
         handle: {
           title: "Account settings | Misty",
-          description: "Manage your Misty account, usage, and billing.",
+          description: "Manage your Misty account and privacy settings.",
         },
       },
       {
-        // Addressable tabs, so the desktop app can hand off straight to billing
+        // Addressable tabs, so the desktop app can hand off straight to a tab
         // and a reload or share keeps you where you were.
         path: "settings/:tab",
         element: <Settings />,
         handle: {
           title: "Account settings | Misty",
-          description: "Manage your Misty account, usage, and billing.",
+          description: "Manage your Misty account and privacy settings.",
         },
       },
       {
@@ -67,12 +69,42 @@ export const router = createBrowserRouter([
           description: marketingCopy.metadata.kiri,
         },
       },
+      docsRoutes,
+      {
+        // The self-hosting page moved into the docs.
+        path: "self-hosting",
+        loader: () => redirect("/docs/self-hosting"),
+      },
       {
         path: "pricing",
         element: <Pricing />,
         handle: {
-          title: "Pricing | Misty plans from free to Ultra+",
+          title: "Pricing | Misty and Misty Cloud",
           description: marketingCopy.metadata.pricing,
+        },
+      },
+      {
+        path: "cloud",
+        loader: () => redirect("/pricing"),
+      },
+      {
+        // Stripe Checkout's success URL.
+        path: "cloud/welcome",
+        element: <CloudWelcome />,
+        handle: {
+          title: "Welcome to Misty Cloud | Misty",
+          description:
+            "Your Misty Cloud setup email is on its way. Download Misty and open its setup link.",
+        },
+      },
+      {
+        // Setup emails link here with the server and key in the fragment.
+        path: "setup",
+        element: <Setup />,
+        handle: {
+          title: "Set up Misty | Misty",
+          description:
+            "Open Misty with the server and setup key from your setup email.",
         },
       },
       {
@@ -114,24 +146,15 @@ export const router = createBrowserRouter([
         handle: {
           title: "Terms of Service | Misty",
           description:
-            "The agreement covering your use of Misty and its hosted services.",
-        },
-      },
-      {
-        path: "refunds",
-        element: <Refunds />,
-        handle: {
-          title: "Refund & Cancellation Policy | Misty",
-          description:
-            "How to cancel a Misty subscription and when we give refunds.",
+            "The agreement covering your use of Misty and Misty Cloud.",
         },
       },
       {
         path: "license",
         element: <License />,
         handle: {
-          title: "License Agreement | Misty",
-          description: "The license covering the Misty desktop application.",
+          title: "License | Misty",
+          description: "Misty is free software under the GNU AGPL-3.0.",
         },
       },
       {
@@ -163,15 +186,17 @@ export const router = createBrowserRouter([
         element: <Invite />,
         handle: {
           title: "You're invited | Misty",
-          description: "A friend invited you to Misty, free with every feature.",
+          description: "A friend invited you to Misty, the free, open-source agentic browser.",
         },
       },
       {
-        path: "reset",
-        element: <ResetPassword />,
+        // misty-billing sends visitors back here with ?sent=1.
+        path: "sign-in",
+        element: <SignInLink />,
         handle: {
-          title: "Reset your password | Misty",
-          description: "Reset your Misty account password.",
+          title: "Get a sign-in link | Misty",
+          description:
+            "Get a sign-in link for your Misty Cloud account. It also lets you choose a new password.",
         },
       },
       {

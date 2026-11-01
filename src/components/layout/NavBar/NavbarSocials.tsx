@@ -1,12 +1,15 @@
 import { socialLinks } from "@/components/layout/Footer/footerLinks";
 
+/** GitHub is already a text link in the primary navigation. */
+const navSocials = socialLinks.filter(({ label }) => label !== "GitHub");
+
 export default function NavbarSocials() {
   return (
     <div
       aria-label="Misty social links"
       className="hidden items-center gap-0.5 lg:flex"
     >
-      {socialLinks.map(({ label, href, icon: Icon, placeholder }) => (
+      {navSocials.map(({ label, href, icon: Icon, placeholder }) => (
         <a
           key={label}
           href={href}
