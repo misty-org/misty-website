@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test("the site opens dark, even when the system prefers light", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "light" });
   await page.evaluate(() => localStorage.removeItem("misty-ui-theme"));
-  for (const path of ["/", "/pricing", "/signin"]) {
+  for (const path of ["/", "/changelog", "/signin"]) {
     await page.goto(path);
     await expect(page.locator("html")).toHaveClass("dark");
     await expect(page.locator("html")).toHaveCSS("color-scheme", "dark");
@@ -40,17 +40,16 @@ test("the navbar theme toggle persists across navigation and reload", async ({ p
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
 });
 
-test("the desktop theme toggle sits between the social links and sign in, after a divider", async ({
+test("the desktop theme toggle sits after the social links and a divider, with no sign-in link", async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name === "mobile-chromium", "Desktop navigation is only rendered at the desktop breakpoint.");
   const navigation = page.getByRole("navigation", { name: "Primary navigation" });
   const lastSocial = navigation.getByRole("link", { name: /Instagram/ });
   const toggle = navigation.getByRole("button", { name: "Switch to light theme" });
-  const signIn = navigation.getByRole("link", { name: "Sign in" });
-  const [socialBox, toggleBox, signInBox] = await Promise.all([lastSocial.boundingBox(), toggle.boundingBox(), signIn.boundingBox()]);
+  await expect(navigation.getByRole("link", { name: "Sign in" })).toHaveCount(0);
+  const [socialBox, toggleBox] = await Promise.all([lastSocial.boundingBox(), toggle.boundingBox()]);
   expect(toggleBox!.x).toBeGreaterThan(socialBox!.x + socialBox!.width);
-  expect(signInBox!.x).toBeGreaterThan(toggleBox!.x + toggleBox!.width);
   // A thin divider separates the socials from the toggle.
   const divider = await toggle.evaluate(el => {
     const line = el.previousElementSibling as HTMLElement | null;
@@ -61,7 +60,7 @@ test("the desktop theme toggle sits between the social links and sign in, after 
   expect(divider!.height).toBeLessThan(26);
 });
 
-test("the primary links include Download and Pricing", async ({
+test("the primary links include Download, Docs, Pricing and GitHub", async ({
   page,
 }, testInfo) => {
   const mobile = testInfo.project.name === "mobile-chromium";
@@ -77,10 +76,13 @@ test("the primary links include Download and Pricing", async ({
   ).toBeVisible();
   const labels = await linkContainer
     .locator("a")
-    .filter({ hasText: /^(Download|Store|Pricing)$/ })
+    .filter({ hasText: /^(Download|Docs|Pricing|GitHub)$/ })
     .allTextContents();
 
-  expect(labels).toEqual(["Download", "Pricing"]);
+  expect(labels).toEqual(["Download", "Docs", "Pricing", "GitHub"]);
+  await expect(
+    linkContainer.getByRole("link", { name: "GitHub", exact: true }),
+  ).toHaveAttribute("href", "https://github.com/misty-org/misty");
   await expect(
     linkContainer.getByRole("link", { name: "Features", exact: true }),
   ).toHaveCount(0);
@@ -114,9 +116,9 @@ test("the mobile menu opens, navigates, and closes", async ({ page }, testInfo) 
   await expect(page.getByRole("button", { name: "Close navigation menu" })).toBeVisible();
   await expect(page.locator("#mobile-navigation")).toBeVisible();
 
-  await page.locator("#mobile-navigation").getByRole("link", { name: "Pricing" }).click();
+  await page.locator("#mobile-navigation").getByRole("link", { name: "Docs" }).click();
 
-  await expect(page).toHaveURL(/\/pricing$/);
+  await expect(page).toHaveURL(/\/docs$/);
   await expect(page.locator("#mobile-navigation")).toBeHidden();
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toBeVisible();
 });

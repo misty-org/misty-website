@@ -16,7 +16,7 @@ export function PrivacyPanel() {
             Private Files operations stay local unless you connect a provider or
             explicitly add content to a Space. Shared Library content is stored
             for that Space, and agents may use context you are permitted to
-            access. Billing records do not contain prompts or file contents.
+            access.
           </p>
         </div>
       </Section>
@@ -42,12 +42,7 @@ export function PrivacyPanel() {
             Read
           </a>
         </Row>
-        <Row label="Refund & Cancellation Policy">
-          <a className="underline underline-offset-4" href="/refunds">
-            Read
-          </a>
-        </Row>
-        <Row label="License Agreement">
+        <Row label="License">
           <a className="underline underline-offset-4" href="/license">
             Read
           </a>

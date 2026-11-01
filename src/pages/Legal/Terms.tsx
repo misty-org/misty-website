@@ -5,6 +5,7 @@ import LegalPage, {
   LegalSubheading,
   type LegalSectionDef,
 } from "./LegalPage";
+import { cloudTermsSection } from "./cloudTerms";
 import { legalInfo } from "./legalInfo";
 
 const { supportEmail, operatorName, operatorDescription, governingState } =
@@ -23,13 +24,13 @@ const sections: LegalSectionDef[] = [
           Economic Area or the United Kingdom. If you are under 18, or under the
           age of majority where you live, you may only use Misty with the
           permission of a parent or legal guardian, who agrees to these Terms on
-          your behalf. Paid plans must be purchased by an adult.
+          your behalf.
         </p>
         <p>
           Misty is not directed at children under 13. If we learn that an
           account belongs to a child under 13, we will close it and delete its
           data. If you believe a child under 13 is using Misty, contact{" "}
-          <LegalEmail address={legalInfo.privacyEmail} />.
+          <LegalEmail address={supportEmail} />.
         </p>
         <p>
           You may not use Misty if you are barred from doing so under the laws
@@ -46,10 +47,12 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          Most of Misty requires an account. Give us accurate information and
-          keep it up to date. You are responsible for keeping your password and
-          devices secure and for all activity under your account, including
-          actions taken by AI agents you start. Tell us promptly at{" "}
+          Misty works as a browser without an account. Sync, Spaces and the
+          tools agents use need an account on a Misty server, such as Misty
+          Cloud. Give us accurate information and keep it up to date. You are
+          responsible for keeping your password, setup keys and devices secure
+          and for all activity under your account, including actions taken by
+          AI agents you start. Tell us promptly at{" "}
           <LegalEmail address={supportEmail} /> if you think someone else has
           accessed your account.
         </p>
@@ -59,37 +62,44 @@ const sections: LegalSectionDef[] = [
       </>
     ),
   },
+  cloudTermsSection,
   {
     id: "license",
     title: "The software and your license",
     inShort:
-      "We give you a personal, revocable license to use the Misty app. We keep ownership of Misty itself.",
+      "The Misty app is open source under the GNU AGPL-3.0. These Terms cover the website and the services we run.",
     body: (
       <>
         <p>
           "Misty" means the Misty desktop application, the website at{" "}
-          {legalInfo.siteUrl}, the web app, and the hosted services behind
-          them, including sync, Spaces, and AI features. Misty is operated by{" "}
+          {legalInfo.siteUrl}, and Misty Cloud, the Misty server we run for
+          subscribers, with its sync, Spaces, and agent tools. Misty is
+          operated by{" "}
           {operatorDescription} ("we", "us", "our").
         </p>
         <p>
-          While you follow these Terms, we grant you a personal, worldwide,
-          non-exclusive, non-transferable, revocable license to install and use
-          the Misty app on devices you own or control and to use the hosted
-          services, under the plan you have. Misty may update itself
-          automatically to fix bugs, patch security issues, or add or change
-          features.
+          The Misty app, server, and agent runtime are open source under the{" "}
+          <LegalLink to="/license">GNU AGPL-3.0</LegalLink>. That license, not
+          these Terms, governs how you may use, copy, change, and share the
+          source code. Misty includes other open-source components, each
+          licensed under its own terms. Misty may update itself automatically
+          to fix bugs, patch security issues, or add or change features.
         </p>
         <p>
-          Misty includes open-source components that are licensed under their
-          own terms. Where an open-source license grants you broader rights
-          than these Terms, that license controls for that component.
+          If you run your own Misty server, you operate it and are responsible
+          for it and the data on it. These Terms cover only this website and
+          Misty Cloud.
         </p>
         <p>
-          The Misty name, logo, software, website, and design belong to us or
-          our licensors. Except for the license above, these Terms don't give
-          you any rights in Misty. If you send us feedback or ideas, we may use
-          them without owing you anything.
+          The Misty name and logo belong to us. The AGPL covers the code, not
+          our trademarks. If you share or run a changed version of Misty, give
+          it a different name and logo. You may say it's based on Misty. The
+          author attribution term in Misty's NOTICE file still applies to every
+          copy, changed or not.
+        </p>
+        <p>
+          If you send us feedback or ideas, we may use them without owing you
+          anything.
         </p>
       </>
     ),
@@ -104,16 +114,21 @@ const sections: LegalSectionDef[] = [
         <p>
           Misty includes AI features, such as chat, voice, search over your
           Spaces and Library, and agents that can browse, read pages, and take
-          actions in the browser on your behalf. These features are powered by
-          third-party AI providers listed in our{" "}
-          <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>.
+          actions in the browser on your behalf. Misty hosts no model. Agents
+          run on your desktop, and these features run on models that are your
+          own, called from your device: your ChatGPT plan through Sign in with
+          ChatGPT, OpenRouter, Ollama, or a provider whose API key you add, as
+          described in our{" "}
+          <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Sign in with
+          ChatGPT works the same on your own server and on Misty Cloud, and it
+          isn't part of what a Misty Cloud subscription sells.
         </p>
         <LegalList
           items={[
             "AI output can be inaccurate, incomplete, offensive, or out of date. Don't rely on it for medical, legal, financial, or other professional advice, and review it before you use or publish it.",
             "Agents act on your instructions. You are responsible for the actions an agent takes on your behalf, including filling in forms, sending messages, making purchases, or changing settings on other websites. Review what an agent is about to do before you approve it, and don't give agents tasks you wouldn't do yourself.",
-            "You must follow the usage policies of our AI providers, and you may not use AI features to create content that is illegal, infringing, or harmful.",
-            "AI usage on each plan is limited and resets weekly. Limits may change as model costs change.",
+            "You must follow the terms and usage policies of the model providers you use, and you may not use AI features to create content that is illegal, infringing, or harmful.",
+            "Your model provider bills you directly for the AI you use. We never charge for AI, on any plan, and aren't responsible for those charges.",
           ]}
         />
         <p>
@@ -138,8 +153,8 @@ const sections: LegalSectionDef[] = [
           process, transmit, and display Your Content only as needed to
           operate, secure, and provide Misty to you and to the people you share
           it with. This includes sending relevant parts of it to our service
-          providers, such as AI providers, when you use a feature that needs
-          them. We don't sell Your Content and we don't use it to train AI
+          providers, such as Composio when an agent acts in an app you
+          connected, when you use a feature that needs them. We don't sell Your Content and we don't use it to train AI
           models.
         </p>
         <p>
@@ -188,8 +203,9 @@ const sections: LegalSectionDef[] = [
           synced browser data cannot be recovered by anyone, including us.
         </p>
         <p>
-          Other content, including Spaces, Library files, and AI requests, is
-          protected in transit but is not end-to-end encrypted. See our{" "}
+          Other content, including Spaces and Library files, is protected in
+          transit but is not end-to-end encrypted. AI requests go from your
+          desktop to the model provider you chose, not through us. See our{" "}
           <LegalLink to="/privacy#security">Privacy Policy</LegalLink> for
           details.
         </p>
@@ -218,121 +234,14 @@ const sections: LegalSectionDef[] = [
             "upload or share malware, child sexual abuse material, non-consensual intimate imagery, or content that harasses, threatens, or exploits others;",
             "send spam, run scams, or impersonate anyone;",
             "access accounts, systems, or data you aren't authorized to access, or probe, scan, or test the security of Misty without our written permission;",
-            "interfere with or overload Misty, or get around plan limits, usage limits, or security features;",
-            "use agents or automation to scrape, attack, or abuse other websites, or to violate other websites' terms;",
-            "copy, resell, reverse engineer, or build a competing product from Misty, except where the law expressly allows it.",
+            "interfere with or overload services we run, or get around their usage limits or security features;",
+            "use agents or automation to scrape, attack, or abuse other websites, or to violate other websites' terms.",
           ]}
         />
         <p>
           Found a security issue? Report it to{" "}
           <LegalEmail address={supportEmail} />. We appreciate responsible
           disclosure.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "billing",
-    title: "Plans, free trials, and automatic renewal",
-    inShort:
-      "Paid plans renew automatically until you cancel. Trials turn into paid plans unless you cancel before they end.",
-    body: (
-      <>
-        <p>
-          Misty has a free Basic plan and paid plans, currently Pro and Max,
-          described on our <LegalLink to="/pricing">pricing page</LegalLink>.
-          Paid plans are billed in advance, monthly or yearly, through our
-          payment processor, Stripe. We never see or store your full card
-          number. Prices don't include taxes, which are added where required.
-        </p>
-        <LegalSubheading>Automatic renewal</LegalSubheading>
-        <p>
-          <strong className="font-medium text-foreground">
-            Your subscription renews automatically at the end of each billing
-            period, monthly or yearly, at the then-current price, and we will
-            charge your payment method on file until you cancel.
-          </strong>{" "}
-          By starting a paid plan or trial, you authorize these recurring
-          charges. You can cancel at any time in Account Settings → Billing.
-        </p>
-        <LegalSubheading>Free trials</LegalSubheading>
-        <p>
-          We may offer a one-time free trial of a paid plan. A trial requires a
-          payment method.{" "}
-          <strong className="font-medium text-foreground">
-            Unless you cancel before the trial ends, your trial will convert
-            into a paid subscription and you will be charged the plan price on
-            the trial's end date, and on each renewal after that.
-          </strong>{" "}
-          We will email you before your trial ends. Trials are limited to one
-          per person.
-        </p>
-        <LegalSubheading>Price changes</LegalSubheading>
-        <p>
-          We may change prices. We will tell you by email at least 30 days
-          before a new price applies to your subscription, and the change will
-          take effect at your next renewal. If you don't want to pay the new
-          price, cancel before it takes effect.
-        </p>
-        <LegalSubheading>Failed payments</LegalSubheading>
-        <p>
-          If a payment fails, we and Stripe will retry it and email you. If we
-          can't collect payment, your account may move to the free Basic plan
-          and its limits will apply, as described in section 11.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "refunds",
-    title: "Cancellation and refunds",
-    inShort:
-      "Cancel anytime. Payments are generally non-refundable, with a few exceptions.",
-    body: (
-      <>
-        <p>
-          You can cancel at any time in Account Settings → Billing. Cancellation
-          stops future renewals. You keep paid features until the end of the
-          period you already paid for, and then your account moves to the free
-          Basic plan.
-        </p>
-        <p>
-          Payments are non-refundable, and we don't give refunds or credits for
-          partial periods or unused features, except where required by law or
-          described in our{" "}
-          <LegalLink to="/refunds">Refund &amp; Cancellation Policy</LegalLink>,
-          for example when Misty clearly didn't work and we couldn't fix it.
-          Consumers in the EU, EEA, UK, and Switzerland have a 14-day right of
-          withdrawal, explained in that policy.
-        </p>
-        <p>
-          Please contact us before disputing a charge with your bank. We will
-          try to make it right. Opening a chargeback for a valid charge may lead
-          us to suspend the account.
-        </p>
-      </>
-    ),
-  },
-  {
-    id: "limits",
-    title: "Plan limits and downgrades",
-    inShort:
-      "If you go over your plan's limits after downgrading, your extra content becomes read-only, and we may delete it after 90 days' notice.",
-    body: (
-      <>
-        <p>
-          Each plan has limits on Spaces, storage, and AI usage. If you
-          downgrade, cancel, or your payment fails and your account ends up
-          over the limits of your new plan, you won't be able to add more until
-          you free up room or upgrade. Content over the limit may become
-          read-only.
-        </p>
-        <p>
-          If your account stays over its storage limit for more than 90 days,
-          we may delete content over the limit, but only after emailing you at
-          least 30 days in advance so you can export it. We will never delete
-          content just because you moved to a lower plan without giving you
-          that notice.
         </p>
       </>
     ),
@@ -345,20 +254,15 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          We may add, change, or remove features, and change plan limits, at any
-          time. If a change significantly reduces what a paid plan includes, we
-          will give you reasonable notice, and you may cancel. Where the law
-          requires it, we will also refund the unused part of your prepaid
-          period.
+          We may add, change, or remove features at any time.
         </p>
         <p>
           Features labeled beta, preview, or experimental are offered as-is,
           may be unreliable, and may be changed or removed without notice.
         </p>
         <p>
-          If we decide to shut Misty down, we will give at least 30 days'
-          notice so you can export your data, and we will refund the unused
-          part of any prepaid subscription.
+          If we decide to shut down a service we run, we will give at least 30
+          days' notice so you can export your data.
         </p>
       </>
     ),
@@ -374,20 +278,21 @@ const sections: LegalSectionDef[] = [
           You can stop using Misty and delete your account at any time in
           Account Settings. Deleted accounts can be restored for 30 days, after
           which the data is removed as described in our{" "}
-          <LegalLink to="/privacy#retention">Privacy Policy</LegalLink>.
+          <LegalLink to="/privacy#retention">Privacy Policy</LegalLink>. When
+          a Misty Cloud subscription ends, section 3 says what happens to the
+          account.
         </p>
         <p>
           We may suspend or close your account, with or without notice, if you
           materially or repeatedly break these Terms, if your use creates legal
-          risk or harm for us or others, if you don't pay, or if the law
-          requires it. Where it's reasonable and lawful, we will tell you why
-          and give you a chance to export your data. If we close your account
-          without cause, we will refund the unused part of any prepaid
-          subscription.
+          risk or harm for us or others, or if the law requires it. Where it's
+          reasonable and lawful, we will tell you why and give you a chance to
+          export your data.
         </p>
         <p>
           Sections that by their nature should survive termination will
-          survive, including sections 5, 7, and 14 through 22.
+          survive, including section 3 for amounts you owe, sections 6 and 8,
+          and sections 12 through 20.
         </p>
       </>
     ),
@@ -467,7 +372,7 @@ const sections: LegalSectionDef[] = [
     id: "liability",
     title: "Limitation of liability",
     inShort:
-      "If something goes wrong, our liability is limited to what you paid us in the last 12 months, or $50, whichever is more.",
+      "If something goes wrong, our liability is limited to US $50.",
     body: (
       <>
         <p className="uppercase tracking-[0.01em]">
@@ -481,9 +386,7 @@ const sections: LegalSectionDef[] = [
         </p>
         <p className="uppercase tracking-[0.01em]">
           Our total liability for all claims arising out of or related to Misty
-          or these Terms is limited to the greater of (a) the amount you paid us
-          for Misty in the 12 months before the event giving rise to the claim,
-          or (b) US $50.
+          or these Terms is limited to US $50.
         </p>
         <p>
           These limits apply to every theory of liability, including contract,
@@ -608,9 +511,8 @@ const sections: LegalSectionDef[] = [
         Misty at least 14 days before it takes effect, unless the change is
         required sooner by law or to address security or abuse. If you keep
         using Misty after a change takes effect, you accept the updated Terms.
-        If you don't agree, stop using Misty and cancel your subscription.
-        Changes to section 19 won't apply to disputes that we already know
-        about.
+        If you don't agree, stop using Misty. Changes to section 17 won't
+        apply to disputes that we already know about.
       </p>
     ),
   },
@@ -621,9 +523,8 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           These Terms, together with our{" "}
-          <LegalLink to="/privacy">Privacy Policy</LegalLink> and{" "}
-          <LegalLink to="/refunds">Refund &amp; Cancellation Policy</LegalLink>
-          , are the entire agreement between you and us about Misty. If any
+          <LegalLink to="/privacy">Privacy Policy</LegalLink>, are the entire
+          agreement between you and us about Misty. If any
           part of these Terms is found unenforceable, the rest stays in effect.
           Our not enforcing a provision is not a waiver of it.
         </p>
@@ -654,20 +555,21 @@ export default function Terms() {
   return (
     <LegalPage
       title="Terms of Service"
-      summary="The agreement covering your use of Misty and its hosted services."
+      summary="The agreement covering your use of Misty and Misty Cloud."
       intro={
         <p className="text-base leading-7 text-muted-foreground">
           These Terms of Service ("Terms") are a contract between you and{" "}
-          {operatorDescription}. By creating an account, installing the app, or
-          using Misty, you agree to them. If you don't agree, don't use Misty.
-          Section 19 requires U.S. users to resolve disputes through individual
-          arbitration instead of class actions.
+          {operatorDescription}. By creating an account, subscribing to Misty
+          Cloud, installing the app, or using Misty, you agree to them. If you
+          don't agree, don't use Misty. Section 17 requires U.S. users to
+          resolve disputes through individual arbitration instead of class
+          actions.
         </p>
       }
       highlights={[
         "You own your content. We only use it to run Misty for you, and we never sell it or train AI models on it.",
-        "Paid plans renew automatically until you cancel. You can cancel anytime in Account Settings.",
-        "Payments are generally non-refundable. See the Refund & Cancellation Policy for the exceptions.",
+        "The Misty app is open source under the GNU AGPL-3.0. If you run your own server, you're responsible for it.",
+        "Misty Cloud is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
         "AI can be wrong, and you're responsible for what you ask agents to do.",
         "Misty isn't a backup service. Keep copies of anything important.",
         "Our liability is limited, and U.S. disputes go to individual arbitration.",

@@ -83,16 +83,10 @@ export default function App() {
       .reverse()
       .find((routeMatch) => Boolean(routeMatch.handle as Handle | undefined));
     const handle = match?.handle as Handle | undefined;
-    const checkoutSucceeded =
-      location.pathname === "/pricing" &&
-      new URLSearchParams(location.search).get("checkout") === "success";
-    const title = checkoutSucceeded
-      ? "Plan upgraded | Misty"
-      : (handle?.title ?? "Misty | The agentic browser workspace");
-    const description = checkoutSucceeded
-      ? "Your Misty plan and billing details have been updated."
-      : (handle?.description ??
-        "Misty is a browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.");
+    const title = handle?.title ?? "Misty | The agentic browser workspace";
+    const description =
+      handle?.description ??
+      "Misty is a free, open-source browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.";
     const canonicalUrl = new URL(location.pathname, SITE_URL).toString();
 
     document.title = title;
@@ -122,13 +116,15 @@ export default function App() {
       document.head.appendChild(canonical);
     }
     canonical.href = canonicalUrl;
-  }, [location.pathname, location.search, matches]);
+  }, [location.pathname, matches]);
 
   // Cross-page anchors (e.g. "/#features" from another page). Router
   // navigation does not scroll to the hash on its own, so do it once the target
   // route has rendered.
   useEffect(() => {
-    if (!location.hash || location.hash.startsWith("#/")) return;
+    // Only a plain element id. Other fragments, such as a setup link's
+    // #server=…&key=…, aren't selectors and must never reach querySelector.
+    if (!/^#[A-Za-z][\w-]*$/.test(location.hash)) return;
 
     const frame = window.requestAnimationFrame(() => {
       const target = document.querySelector(location.hash);

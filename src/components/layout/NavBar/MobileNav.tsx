@@ -43,7 +43,6 @@ function MobileNavLink({
 }
 
 export default function MobileNav({
-  currentPath,
   signedIn,
   onClose,
   onOpenSettings,
@@ -103,19 +102,7 @@ export default function MobileNav({
                 Sign out
               </Button>
             </>
-          ) : (
-            <div className="mt-5">
-              <Button asChild className="w-full">
-                <NavLink
-                  to="/signin"
-                  state={{ from: currentPath }}
-                  onClick={onClose}
-                >
-                  Sign in
-                </NavLink>
-              </Button>
-            </div>
-          )}
+          ) : null}
 
         </div>
       </div>

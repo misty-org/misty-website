@@ -19,7 +19,7 @@ test("one continuous mist wallpaper stays behind every homepage section", async 
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });
   expect(await cloud.evaluate(el => getComputedStyle(el, '::before').animationName)).toBe('none');
-  await page.locator('.mist-hero').getByRole('link', { name: 'Join now' }).click();
+  await page.getByRole('navigation', { name: 'Explore footer links' }).getByRole('link', { name: 'Self-hosting' }).click();
   await expect(wallpaper).toHaveCount(0);
 });
 

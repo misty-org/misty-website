@@ -5,15 +5,23 @@ import "./faq.css";
 
 /**
  * Questions and answers as a plain accordion on the right, with a "Q&A" heading centered in the space on the left. Only what the
- * page above doesn't already show: price, platforms, importing, extensions, privacy, sign-ins, agent approval and files.
- * Answers follow SELLING-POINTS.md and its fine print, and the pricing answer follows PRICING_MODEL
- * (src/pages/Pricing/data.ts).
+ * page above doesn't already show: cost, accounts, models, platforms, importing, extensions, privacy, sign-ins, agent
+ * approval and files.
+ * Answers follow SELLING-POINTS.md and its fine print.
  */
 type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
   {
     q: "Is Misty free?",
-    a: <>Yes. Basic is free, never ends and includes every feature. Paid plans add more AI, smarter models, storage and sync. See <Link to="/pricing">pricing</Link>.</>,
+    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you run your own server. Misty Cloud is a server that's already set up, for $10 a month. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
+  },
+  {
+    q: "Do I need an account?",
+    a: <>No. Misty works as a browser without signing in. Sync and Spaces need a Misty server, either your own or Misty Cloud. See the <Link to="/docs">docs</Link>.</>,
+  },
+  {
+    q: "Which AI models can I use?",
+    a: "Sign in with ChatGPT to use your ChatGPT plan, or use OpenRouter, Ollama, or an API key from any major provider, such as OpenAI, Anthropic or Google. You pick a model for each job.",
   },
   {
     q: "Which computers does Misty run on?",

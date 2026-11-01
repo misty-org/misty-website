@@ -18,12 +18,6 @@ const account: MeResponse = {
   name: "Maya Chen",
   email: "maya@misty.local",
   created_at: "2026-07-01T00:00:00Z",
-  tier: "pro",
-  status: "active",
-  allows_use: true,
-  expires_at: null,
-  trial_started_at: null,
-  license_device: "",
 };
 
 function SessionProbe() {

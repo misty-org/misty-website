@@ -7,8 +7,8 @@ export interface MarketingCopy {
     heroTitleWords: readonly string[];
     ctaTitle: string;
   };
-  pricing: { title: string; description: string };
   download: { title: string; description: string };
+  pricing: { title: string; description: string };
   blog: { title: string; description: string };
   changelog: { title: string; description: string };
   roadmap: { title: string; description: string };
@@ -16,10 +16,8 @@ export interface MarketingCopy {
   waitlist: { title: string; description: string };
   auth: {
     signInDescription: string;
-    forgotDescription: string;
     registerTitle: string;
     registerDescription: string;
-    resetDescription: string;
     notFoundDescription: string;
   };
   metadata: Record<string, string>;
@@ -29,7 +27,7 @@ export const marketingCopy: MarketingCopy = {
   home: {
     heroTitle: "A browser for your work.",
     heroTitleLead: "A browser for",
-    heroDescription: "Misty puts websites, native tools, and agents in one workspace. Continue on another computer with encrypted sync for your tabs and website sign-ins.",
+    heroDescription: "Misty puts websites, native tools, and agents in one workspace. It's free and open source, and it continues on another computer with encrypted sync for your tabs and website sign-ins.",
     heroTitleWords: [
       "your work.",
       "your tabs.",
@@ -41,14 +39,15 @@ export const marketingCopy: MarketingCopy = {
     ],
     ctaTitle: "Make Misty your browser workspace.",
   },
-  pricing: {
-    title: "Start free. Upgrade when you need more.",
-    description: "Every plan includes every Misty feature. Paid plans add more AI, storage, and sync.",
-  },
   download: {
     title: "Get Misty for your desktop.",
     description:
       "Misty is available for macOS and Windows. The current beta download is 44 MB on macOS and 70 MB on Windows.",
+  },
+  pricing: {
+    title: "Free to run yourself, or $10 a month on Misty Cloud.",
+    description:
+      "Both have every feature. Misty Cloud is a server that's already set up, so you install the app and start.",
   },
   blog: {
     title: "Notes on building Misty.",
@@ -76,19 +75,18 @@ export const marketingCopy: MarketingCopy = {
   },
   auth: {
     signInDescription: "Sign in to pick up where you left off in Misty.",
-    forgotDescription:
-      "Enter your email and we’ll send you a link to reset your password.",
     registerTitle: "Create an account",
     registerDescription: "Sign up to get started with Misty.",
-    resetDescription: "Choose a new password for your Misty account.",
     notFoundDescription:
       "That page doesn’t exist. Check the link, or head back to the homepage.",
   },
   metadata: {
     kiri: "How Misty runs extensions from both the Chrome Web Store and Firefox Add-ons on one engine, which APIs Kiri adds, and what keeps each extension within the access you approve.",
-    home: "Misty is a browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.",
+    home: "Misty is a free, open-source browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.",
     pricing:
-      "Compare Misty Basic, Pro, Max, Ultra, and Ultra+ plans by AI usage, storage, sync, and monthly or annual pricing.",
+      "Misty is free with every feature when you run the server yourself. Misty Cloud is a configured server for $10 a month, and AI is never charged for.",
+    docs:
+      "How Misty works, how to run your own Misty server, how to connect the app, and which models you can use.",
     download:
       "Download the Misty browser workspace for macOS and Windows. Both current beta downloads are under 100 MB.",
     blog: "Notes from the team building Misty — what we’re making, what changed our minds, and what’s next.",

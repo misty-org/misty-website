@@ -8,21 +8,21 @@ import LegalPage, {
 } from "./LegalPage";
 import { legalInfo } from "./legalInfo";
 
-const { privacyEmail, operatorDescription } = legalInfo;
+const { supportEmail, operatorDescription } = legalInfo;
 
 const sections: LegalSectionDef[] = [
   {
     id: "what-we-dont-do",
     title: "What we don't do",
     inShort:
-      "No ads, no selling data, no advertising trackers, and no analytics unless you turn them on.",
+      "No ads, no selling data, no trackers, and no analytics.",
     body: (
       <LegalList
         items={[
           "We don't sell your personal information or share it for advertising.",
           "We don't show ads, and we don't use advertising, social-media, or cross-site tracking pixels on our website or in the app.",
           "Our website has no analytics or tracking scripts.",
-          "Usage analytics and crash reports in the app are off by default. They are only sent if you turn them on (see section 7).",
+          "The Misty app sends no usage analytics or crash reports.",
           "We don't train AI models on your content.",
           "We can't read your synced browser data. It's end-to-end encrypted with a password only you know.",
         ]}
@@ -33,7 +33,7 @@ const sections: LegalSectionDef[] = [
     id: "collect",
     title: "Information we collect",
     inShort:
-      "Your account details, the content you put in Misty, billing status, and basic technical data needed to run the service.",
+      "Your account details, the content you put in Misty, and basic technical data needed to run the service.",
     body: (
       <>
         <LegalSubheading>Information you give us</LegalSubheading>
@@ -71,6 +71,14 @@ const sections: LegalSectionDef[] = [
               that connection.
             </>,
             <>
+              <strong className="font-medium text-foreground">Billing details:</strong>{" "}
+              if you subscribe to Misty Cloud, Stripe collects your payment
+              card and billing address, and uses the address to work out sales
+              tax or VAT. We receive your email address, billing country,
+              subscription status and billing date, and the card's brand and
+              last four digits, never the full card number.
+            </>,
+            <>
               <strong className="font-medium text-foreground">Support messages:</strong>{" "}
               anything you send us by email.
             </>,
@@ -80,25 +88,17 @@ const sections: LegalSectionDef[] = [
         <LegalList
           items={[
             <>
-              <strong className="font-medium text-foreground">Billing information:</strong>{" "}
-              your plan, subscription status, and billing history. Payments are
-              handled by Stripe, so we never receive or store your full card
-              number.
-            </>,
-            <>
-              <strong className="font-medium text-foreground">Usage and limits:</strong>{" "}
-              storage used, number of Spaces, and AI usage, which we need to
-              apply your plan's limits.
+              <strong className="font-medium text-foreground">Usage:</strong>{" "}
+              storage used, number of devices, and counts of web searches and
+              app actions, which we need to run the service and apply your
+              plan's limits. We count searches and actions; we don't keep the
+              search terms or what an action did beyond what the feature needs.
             </>,
             <>
               <strong className="font-medium text-foreground">Technical data:</strong>{" "}
               IP address, device and app version, and request logs that our
               servers and network provider record when Misty connects to them.
               We use these to keep Misty working and secure.
-            </>,
-            <>
-              <strong className="font-medium text-foreground">Optional analytics and crash reports:</strong>{" "}
-              only if you turn them on (see section 7).
             </>,
           ]}
         />
@@ -132,8 +132,8 @@ const sections: LegalSectionDef[] = [
             ],
             [
               "AI requests, voice audio, agent screenshots",
-              "Encrypted in transit (TLS); sent to our AI providers",
-              "Yes, and so can the AI provider handling the request",
+              "Sent from your desktop straight to the model provider you chose, encrypted in transit (TLS)",
+              "No. They don't pass through Misty Cloud, but the provider handling them can read them",
             ],
             [
               "Connected-account tokens",
@@ -167,17 +167,17 @@ const sections: LegalSectionDef[] = [
   {
     id: "use",
     title: "How we use information",
-    inShort: "To run Misty, bill you, keep things secure, and talk to you.",
+    inShort: "To run Misty, keep things secure, and talk to you.",
     body: (
       <LegalList
         items={[
           "to provide Misty: syncing, Spaces, sharing, search, and AI features;",
-          "to create and manage your account, apply plan limits, and process payments;",
-          "to send service emails, such as sign-in and security notices, receipts, trial and renewal reminders, and important changes;",
+          "to create and manage your account;",
+          "to send service emails, such as sign-in and security notices and important changes;",
           "to send product update emails, only if you choose to receive them;",
           "to prevent fraud, abuse, and security incidents, and to enforce our Terms;",
-          "to fix bugs and improve Misty, using only analytics and crash reports you opted into;",
-          "to comply with legal obligations, such as tax and accounting rules.",
+          "to fix bugs and improve Misty, using the technical data and support messages described above;",
+          "to comply with legal obligations.",
         ]}
       />
     ),
@@ -186,23 +186,26 @@ const sections: LegalSectionDef[] = [
     id: "ai",
     title: "AI features",
     inShort:
-      "When you use AI, the content needed for that request is sent to an AI provider to generate a response.",
+      "When you use AI, your desktop sends the content needed for that request straight to the model provider you chose.",
     body: (
       <>
         <p>
-          Misty doesn't run its own AI models. When you use an AI feature, the
-          content needed for that request is sent from our servers to an AI
-          provider, which generates a response. Depending on the feature, this
-          can include your prompt, relevant Space or Library content, page
-          content and screenshots for agent tasks, voice audio, and media for
-          transcription or search indexing.
+          Misty hosts no model, and it doesn't supply model access, on any
+          plan. The models are your own: your ChatGPT plan through Sign in with
+          ChatGPT, OpenRouter, Ollama, or a provider whose API key you add. Agents and AI features run on your desktop,
+          which sends the content needed for each request straight to that
+          provider. Depending on the feature, this can include your prompt,
+          relevant Space or Library content, page content and screenshots for
+          agent tasks, voice audio, and media for transcription or search
+          indexing.
         </p>
         <p>
-          We currently use OpenAI directly, and the Vercel AI Gateway to reach
-          models from Google (Gemini), Anthropic, and xAI. These providers
-          process the content under their API terms for business customers.
-          Those terms say they don't train their models on API data by default.
-          We don't train AI models on your content.
+          Your model keys and sign-ins, including Sign in with ChatGPT, stay on
+          your device, in its keychain. No Misty server, Misty Cloud included,
+          receives them or calls a model. The
+          provider processes your content under the terms you accepted with
+          it, and it bills you directly. Check its policy on training and data
+          retention. We don't train AI models on your content.
         </p>
         <p>
           Only the content needed for the feature you use is sent. If you don't
@@ -232,27 +235,26 @@ const sections: LegalSectionDef[] = [
               "Technical data, stored files, encrypted backups",
             ],
             [
-              "Our server hosting provider",
-              "Runs our application servers and database",
+              "OVHcloud",
+              "Hosts the Misty Cloud server and its database",
               "Account data and content",
             ],
+            ["Mailjet", "Sending email, including setup keys", "Name, email address, email content"],
             [
-              "OpenAI, Vercel AI Gateway, Google, Anthropic, xAI",
-              "AI features",
-              "Content needed for each AI request",
+              "Stripe",
+              "Payments and tax for Misty Cloud",
+              "Email address, billing details, payment card",
             ],
-            ["Stripe", "Payments and subscriptions", "Name, email, billing details"],
-            ["Mailjet", "Sending email", "Name, email address, email content"],
             [
-              "PostHog",
-              "Usage analytics and crash reports, only if you opt in",
-              "Feature usage events and redacted error reports",
+              "Decodo",
+              "Web search for agents",
+              "The search terms an agent sends, without your name or email",
             ],
-            ["Google", "Sign in with Google (optional)", "Name, email, profile picture"],
+            ["Google", "Sign in with Google, if you use it", "Name, email, profile picture"],
             [
               "Composio",
-              "Connecting third-party apps (optional)",
-              "Tokens and data for apps you connect",
+              "Connecting the apps agents act in",
+              "Tokens and data for apps you connect, under a random ID instead of your name or email",
             ],
           ]}
         />
@@ -262,52 +264,6 @@ const sections: LegalSectionDef[] = [
             "with the members of any Space you share content with;",
             "when required by law, such as a valid subpoena or court order, or when needed to protect someone's safety or our rights. Where allowed, we will tell you first;",
             "with a successor if Misty is transferred to a company we form or to a buyer. The successor must honor this policy, and we will notify you.",
-          ]}
-        />
-      </>
-    ),
-  },
-  {
-    id: "analytics",
-    title: "Optional analytics and crash reports",
-    inShort:
-      "Off by default. If you turn them on, we learn which features are used and what crashed, never your files or browsing.",
-    body: (
-      <>
-        <p>
-          In Account Settings → Privacy, you can choose to share anonymous usage
-          analytics and crash reports. Both are off unless you turn them on, and
-          you can turn them off at any time.
-        </p>
-        <LegalList
-          items={[
-            "Usage analytics records which Misty features are used, such as opening the AI companion. It is linked to your account so we can count usage accurately. It does not include page views, browsing history, file names, file contents, or session recordings.",
-            "Crash reports include an error message and stack trace with file paths, URLs, email addresses, and tokens removed. They are linked to a random ID for that app session, not to your account.",
-            "Both are processed by PostHog in the United States.",
-          ]}
-        />
-      </>
-    ),
-  },
-  {
-    id: "face-grouping",
-    title: "Face grouping (optional)",
-    inShort:
-      "If you turn on People, Misty groups photos by face. It's off unless you opt in, and the data is deleted when you turn it off.",
-    body: (
-      <>
-        <p>
-          The People feature can group photos and videos in your Library by the
-          faces in them. To do this, Misty creates numerical face templates, a
-          kind of biometric data. This feature only runs if you turn it on and
-          agree to this processing.
-        </p>
-        <LegalList
-          items={[
-            "Face templates are used only to group your media in Misty. We never sell them or use them to identify people outside your Library.",
-            "They are processed on our servers and not shared with anyone except our hosting providers.",
-            "If you turn People off, delete the media, or delete your account, the related face templates are deleted within 30 days. In any case, we delete them within 3 years of your last use of Misty.",
-            "Only turn People on for photos of people who have agreed to it, where the law requires their consent.",
           ]}
         />
       </>
@@ -346,12 +302,6 @@ const sections: LegalSectionDef[] = [
               "Restore your scroll position when you go back",
               "Until you close the tab",
             ],
-            [
-              "Stripe cookies",
-              "Cookie (third-party)",
-              "Fraud prevention, set only on Stripe's checkout and billing pages",
-              "Set by Stripe",
-            ],
           ]}
         />
         <p>
@@ -374,10 +324,11 @@ const sections: LegalSectionDef[] = [
           items={[
             "Account details and content: while your account is open.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
+            "After a Misty Cloud subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data. We email you a warning before the deletion date, then delete the account the same way.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
             "Content in shared Spaces: content you added to a Space other people still use stays with that Space, attributed to a deleted user.",
-            "Billing records: kept as long as tax and accounting laws require, usually up to 7 years. Stripe keeps its own records under its policy.",
             "Server logs: kept for a limited period for security and troubleshooting.",
+            "Billing records: kept as long as tax and accounting law requires, which can be up to 7 years.",
             "Support emails: kept as long as needed to help you and for our records.",
           ]}
         />
@@ -396,7 +347,7 @@ const sections: LegalSectionDef[] = [
             "Export: download a copy of your account data in Account Settings → Account. Synced browser data isn't included because we can't decrypt it.",
             "Correct: update your name, email, and profile picture in Account Settings.",
             "Delete: delete your account in Account Settings → Account. You will first need to hand off or delete Spaces you own that have other members.",
-            "Opt out: turn off analytics, crash reports, and product update emails in Account Settings, or use the unsubscribe link in any email.",
+            "Opt out: turn off product update emails in Account Settings, or use the unsubscribe link in any email.",
           ]}
         />
         <p>
@@ -404,7 +355,7 @@ const sections: LegalSectionDef[] = [
           correct, delete, or receive a portable copy of your personal
           information, to restrict or object to how we process it, and to
           withdraw consent at any time. Email{" "}
-          <LegalEmail address={privacyEmail} /> from your account email to make
+          <LegalEmail address={supportEmail} /> from your account email to make
           a request. We will respond within 30 days, or sooner if your local law
           requires. We may need to verify your identity first. We won't treat
           you differently for exercising your rights.
@@ -427,10 +378,10 @@ const sections: LegalSectionDef[] = [
         </p>
         <LegalList
           items={[
-            "Contract: to provide Misty and bill you under our Terms.",
+            "Contract: to provide Misty under our Terms.",
             "Legitimate interests: to keep Misty secure, prevent abuse, and send essential service messages, balanced against your rights.",
-            "Consent: for optional analytics, crash reports, product update emails, and face grouping. You can withdraw consent at any time.",
-            "Legal obligation: to keep billing records and respond to lawful requests.",
+            "Consent: for product update emails. You can withdraw consent at any time.",
+            "Legal obligation: to respond to lawful requests.",
           ]}
         />
       </>
@@ -443,13 +394,12 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           Residents of California and other U.S. states with privacy laws have
-          the rights described in section 11. In the past 12 months we have
+          the rights described in section 9. In the past 12 months we have
           collected these categories of personal information, for the purposes
-          in section 4: identifiers (name, email, IP address); commercial
-          information (plan and billing history); internet activity limited to
-          your use of Misty and, with your consent, feature-usage analytics; and
-          content you choose to store. If you turn on People, we also collect
-          biometric information (face templates).
+          in section 4: identifiers (name, email, IP address); internet
+          activity limited to your use of Misty; commercial information, if you
+          subscribe to Misty Cloud (your plan and payment history); and content
+          you choose to store.
         </p>
         <p>
           We do not sell personal information or share it for cross-context
@@ -483,7 +433,7 @@ const sections: LegalSectionDef[] = [
         Misty is not directed at children under 13, or under 16 in the EEA and
         UK, and we don't knowingly collect their personal information. If we
         learn we have, we will delete the account and its data. If you believe a
-        child is using Misty, contact <LegalEmail address={privacyEmail} />.
+        child is using Misty, contact <LegalEmail address={supportEmail} />.
       </p>
     ),
   },
@@ -506,7 +456,7 @@ const sections: LegalSectionDef[] = [
       <p>
         Misty is operated by {operatorDescription}, who is responsible for your
         personal information (the "controller" under GDPR). Questions or
-        requests: <LegalEmail address={privacyEmail} />. See also our{" "}
+        requests: <LegalEmail address={supportEmail} />. See also our{" "}
         <LegalLink to="/terms">Terms of Service</LegalLink>.
       </p>
     ),
@@ -522,14 +472,16 @@ export default function Privacy() {
         <p className="text-base leading-7 text-muted-foreground">
           This policy explains what information Misty collects, why, who we
           share it with, and the choices you have. It applies to the Misty app,
-          website, and hosted services.
+          this website, and Misty Cloud. A self-hosted Misty server is run by
+          its operator, not Misty, and that operator handles the data on it.
         </p>
       }
       highlights={[
         "We don't sell your data, show ads, or use advertising trackers.",
-        "Our website has no analytics. In-app analytics and crash reports are off unless you turn them on.",
+        "Neither our website nor the app has analytics or crash reporting.",
         "Browser sync is end-to-end encrypted. Spaces, files, and AI requests are not.",
-        "AI requests go to AI providers such as OpenAI and Google to generate responses.",
+        "Misty hosts no model. AI requests go from your desktop to the model provider you choose, and Misty never charges for AI or sees your model keys.",
+        "If you subscribe to Misty Cloud, Stripe handles your card. We never see the full number.",
         "You can export or delete your data anytime in Account Settings.",
       ]}
       sections={sections}

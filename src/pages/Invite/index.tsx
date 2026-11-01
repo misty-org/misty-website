@@ -19,15 +19,15 @@ export default function Invite() {
       <header className="mx-auto max-w-2xl text-center">
         <h1 className="marketing-heading text-foreground">A friend invited you to Misty</h1>
         <p className="mt-4 text-pretty marketing-description text-muted-foreground">
-          Misty is free with every feature. If you later subscribe, you both get extra AI every
-          month: you for your first two months, your friend for as long as you stay.
+          Misty is a free, open-source browser with agents built in. Download it to start
+          browsing, or create an account to join your friend.
         </p>
         <div className="mt-8 flex justify-center gap-3">
           <Button asChild>
-            <NavLink to="/register">Create a free account</NavLink>
+            <NavLink to="/register">Create an account</NavLink>
           </Button>
           <Button asChild variant="outline">
-            <NavLink to="/pricing">See plans</NavLink>
+            <NavLink to="/download">Download Misty</NavLink>
           </Button>
         </div>
       </header>

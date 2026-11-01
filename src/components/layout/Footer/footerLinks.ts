@@ -7,7 +7,7 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 
-import { JOIN_HREF, PUBLIC_RELEASES_URL } from "@/lib/site";
+import { RELEASES_URL, REPO_URL } from "@/lib/site";
 
 export interface FooterColumn {
   label: string;
@@ -19,9 +19,10 @@ export const columns: FooterColumn[] = [
     label: "Explore",
     links: [
       { to: "/#features", text: "Features" },
-      { to: "/pricing", text: "Pricing" },
       { to: "/download", text: "Download" },
-      { to: JOIN_HREF, text: "Join now" },
+      { to: "/pricing", text: "Pricing" },
+      { to: "/docs", text: "Docs" },
+      { to: "/docs/self-hosting", text: "Self-hosting" },
     ],
   },
   {
@@ -31,7 +32,8 @@ export const columns: FooterColumn[] = [
       { to: "/roadmap", text: "Roadmap" },
       { to: "/changelog", text: "Changelog" },
       { to: "/kiri", text: "Kiri" },
-      { to: PUBLIC_RELEASES_URL, text: "Public releases", external: true },
+      { to: REPO_URL, text: "GitHub", external: true },
+      { to: RELEASES_URL, text: "Releases", external: true },
     ],
   },
 ];
@@ -39,7 +41,6 @@ export const columns: FooterColumn[] = [
 export const legalLinks: { to: string; text: string }[] = [
   { to: "/privacy", text: "Privacy" },
   { to: "/terms", text: "Terms" },
-  { to: "/refunds", text: "Refunds" },
   { to: "/privacy#cookies", text: "Cookies" },
   { to: "/license", text: "License" },
 ];
@@ -52,7 +53,7 @@ export const socialLinks: {
 }[] = [
   {
     label: "GitHub",
-    href: "https://github.com/misty-org",
+    href: REPO_URL,
     icon: FaGithub,
   },
   { label: "X.com", href: "#", icon: FaXTwitter, placeholder: true },

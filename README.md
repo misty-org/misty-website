@@ -1,7 +1,41 @@
 # Misty website
 
-The public website contains Misty's marketing pages, authentication flows,
-account settings, pricing, and Stripe Checkout handoff.
+The public website contains Misty's marketing pages, the docs, the Misty Cloud
+pricing page and the legal pages. The sign-in, registration and account
+settings pages are still in the code but no longer linked from the site.
+
+Misty itself is free and open source under the GNU AGPL-3.0, at
+https://github.com/misty-org/misty. Free means every feature, with the server
+set up by whoever runs it; Misty Cloud is a configured server for about $10 a
+month. AI always runs on people's own models.
+
+## Docs
+
+The docs live at `/docs` (`src/pages/Docs/`) and replace the GitHub wiki.
+Each env file under the server's `server/.env/` has one data file in
+`src/pages/Docs/integrations/`; its variable tables, steps and example are
+plain data, so a renamed or added variable is a one-line change there.
+
+## Setup links and checkout
+
+- `/setup` is where every server's setup key email points:
+  `https://mistysys.com/setup#server=<host>&key=<key>`. The page reads the
+  fragment in the browser, keeps it only in memory, clears it from the address
+  bar and offers `misty://setup?server=<host>&key=<key>`. The fragment never
+  reaches the website, and nothing on the page sends or logs it.
+- "Get Misty Cloud" links to misty-billing at
+  `https://billing.mistysys.com/checkout?plan=cloud` (`&storage=1` adds the
+  storage add-on), which redirects to Stripe Checkout. Its success URL is
+  `/cloud/welcome`.
+- The hosts and links live in `src/lib/site.ts`. The Cloud server is
+  `api.mistysys.com`.
+
+## Placeholders before launch
+
+- `CUSTOMER_PORTAL_URL` in `src/lib/site.ts`: Stripe's customer-portal login
+  link.
+- `src/pages/Pricing/plans.ts`: the plan numbers, which must match the Cloud
+  server's account limits.
 
 ## Development
 

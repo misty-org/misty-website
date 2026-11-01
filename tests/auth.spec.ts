@@ -5,12 +5,6 @@ const account = {
   name: "Maya Chen",
   email: "maya@misty.local",
   created_at: "2026-07-01T00:00:00Z",
-  tier: "pro",
-  status: "active",
-  allows_use: true,
-  expires_at: null,
-  trial_started_at: null,
-  license_device: "",
 };
 
 async function provideAuthApi(page: Page, initiallyAuthenticated: boolean) {
@@ -120,25 +114,15 @@ test("signed-out navigation waits for the session check", async ({ page }) => {
   if ((page.viewportSize()?.width ?? 1440) < 768) {
     await page.getByRole("button", { name: "Open navigation menu" }).click();
   }
-  await expect(navigation.getByRole("link", { name: "Sign in" })).toBeVisible();
-  await expect(navigation.getByRole("link", { name: "Join now" })).toBeVisible();
+  // Misty runs no hosted accounts, so a signed-out visitor gets no account links.
+  await expect(navigation.getByRole("link", { name: "Sign in" })).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Join now" })).toHaveCount(0);
 });
 
-test("signed-out visitors can reach account creation from navigation and sign in", async ({
+test("the unlinked sign-in page still reaches account creation", async ({
   page,
 }) => {
   await provideAuthApi(page, false);
-  await page.goto("/");
-
-  if ((page.viewportSize()?.width ?? 1440) < 768) {
-    await page.getByRole("button", { name: "Open navigation menu" }).click();
-  }
-
-  const joinLink = page
-    .getByRole("navigation", { name: "Primary navigation" })
-    .getByRole("link", { name: "Join now" });
-  await expect(joinLink).toHaveAttribute("href", "/register");
-
   await page.goto("/signin");
   await expect(page.getByText("Sign in to pick up where you left off in Misty.")).toBeVisible();
   await expect(
@@ -150,14 +134,10 @@ test("client-side route focus announces sign in without drawing a heading outlin
   page,
 }) => {
   await provideAuthApi(page, false);
-  await page.goto("/pricing");
+  await page.goto("/register");
 
-  if ((page.viewportSize()?.width ?? 1440) < 768) {
-    await page.getByRole("button", { name: "Open navigation menu" }).click();
-  }
   await page
-    .getByRole("navigation", { name: "Primary navigation" })
-    .getByRole("link", { name: "Sign in" })
+    .getByRole("link", { name: "Already have an account? Sign in" })
     .click();
 
   const heading = page.getByRole("heading", { name: "Welcome back" });
@@ -191,7 +171,7 @@ test("signing out clears the session and reloads the document at home", async ({
     if (request.resourceType() === "document") documentRequests += 1;
   });
 
-  await page.goto("/pricing");
+  await page.goto("/changelog");
   await expectSignedIn(page);
   await signOut(page);
 
@@ -199,6 +179,10 @@ test("signing out clears the session and reloads the document at home", async ({
   await expect.poll(() => documentRequests).toBe(2);
   if ((page.viewportSize()?.width ?? 1440) < 768) {
     await page.getByRole("button", { name: "Open navigation menu" }).click();
+    await expect(page.getByRole("button", { name: "Sign out" })).toHaveCount(0);
+  } else {
+    await expect(
+      page.getByRole("button", { name: "Open account menu" }),
+    ).toHaveCount(0);
   }
-  await expect(page.getByRole("link", { name: "Sign in" })).toBeVisible();
 });
