@@ -11,7 +11,8 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { AccountPanel } from "./panels/AccountPanel";
 import { PrivacyPanel } from "./panels/PrivacyPanel";
-import { TABS, type Tab } from "./tabs";
+import { SubscriptionPanel } from "./panels/SubscriptionPanel";
+import { TAB_GROUPS, TABS, type Tab } from "./tabs";
 import { useAccountSettings } from "./useAccountSettings";
 
 export function AccountSettingsDialog({
@@ -67,11 +68,10 @@ export function AccountSettingsDialog({
         <DesktopSettingsFrame
           activeId={tab}
           ariaLabel="Account settings"
-          items={TABS}
+          groups={TAB_GROUPS}
           navigationLabel="Account settings sections"
           onClose={() => onOpenChange(false)}
           onSelect={setTab}
-          presentation="overlay"
           title={activeTab.label}
         >
           {tab === "account" ? (
@@ -95,6 +95,10 @@ export function AccountSettingsDialog({
                 </AlertDescription>
               </Alert>
             )
+          ) : null}
+
+          {tab === "subscription" ? (
+            <SubscriptionPanel onClose={() => onOpenChange(false)} />
           ) : null}
 
           {tab === "privacy" ? <PrivacyPanel /> : null}

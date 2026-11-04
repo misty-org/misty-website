@@ -79,7 +79,6 @@ export default function License() {
   return (
     <LegalPage
       title="License"
-      summary="Misty is free software under the GNU AGPL-3.0."
       sections={sections}
     />
   );

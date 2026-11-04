@@ -18,23 +18,21 @@ export type LegalSectionDef = {
  */
 export default function LegalPage({
   title,
-  summary,
   highlights,
   intro,
   sections,
 }: {
   title: string;
-  summary: string;
   highlights?: ReactNode[];
   intro?: ReactNode;
   sections: LegalSectionDef[];
 }) {
   return (
     <PublicPage>
-      <PageHeader label="Legal" title={title} description={summary} />
+      <PageHeader title={title} />
 
       <div className="max-w-3xl">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           Last updated {legalInfo.lastUpdated}
         </p>
 
@@ -51,7 +49,7 @@ export default function LegalPage({
             >
               The short version
             </h2>
-            <ul className="mt-3 grid list-disc gap-2 pl-5 text-sm leading-6 text-muted-foreground marker:text-muted-foreground/60">
+            <ul className="mt-3 grid list-disc gap-2 pl-5 text-base leading-7 text-muted-foreground marker:text-muted-foreground/60">
               {highlights.map((highlight, index) => (
                 <li key={index}>{highlight}</li>
               ))}
@@ -62,11 +60,11 @@ export default function LegalPage({
         <nav aria-labelledby="legal-contents" className="mt-10">
           <h2
             id="legal-contents"
-            className="text-sm font-medium text-foreground"
+            className="text-base font-medium text-foreground"
           >
             Contents
           </h2>
-          <ol className="mt-3 grid gap-1.5 text-sm text-muted-foreground sm:grid-cols-2 sm:gap-x-8">
+          <ol className="mt-3 grid gap-1.5 text-base text-muted-foreground sm:grid-cols-2 sm:gap-x-8">
             {sections.map((section, index) => (
               <li key={section.id}>
                 <a
@@ -95,7 +93,7 @@ export default function LegalPage({
                 {index + 1}. {section.title}
               </h2>
               {section.inShort ? (
-                <p className="mt-3 text-sm leading-6 text-foreground/80">
+                <p className="mt-3 text-base leading-7 text-foreground/80">
                   <span className="font-medium text-foreground">In short:</span>{" "}
                   {section.inShort}
                 </p>

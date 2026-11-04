@@ -60,7 +60,7 @@ export default function SignInForm({
         {error ? <AuthMessage tone="error" message={error} /> : null}
 
         <AuthSubmitButton
-          idleLabel="Sign In"
+          idleLabel="Sign in"
           loadingLabel="Signing in..."
           loading={loading}
         />

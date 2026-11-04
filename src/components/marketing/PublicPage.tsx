@@ -12,7 +12,7 @@ export function PublicPage({
   className?: string;
 }) {
   return (
-    <div className={cn(publicPageContainer, "pb-24 pt-28 sm:pt-32", className)}>
+    <div className={cn(publicPageContainer, "pb-24 pt-8 sm:pt-12", className)}>
       {children}
     </div>
   );

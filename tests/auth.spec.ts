@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 const account = {
   id: "user-auth",
-  name: "Maya Chen",
+  username: "maya",
   email: "maya@misty.local",
   created_at: "2026-07-01T00:00:00Z",
 };
@@ -114,17 +114,15 @@ test("signed-out navigation waits for the session check", async ({ page }) => {
   if ((page.viewportSize()?.width ?? 1440) < 768) {
     await page.getByRole("button", { name: "Open navigation menu" }).click();
   }
-  // Misty runs no hosted accounts, so a signed-out visitor gets no account links.
-  await expect(navigation.getByRole("link", { name: "Sign in" })).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Sign in" })).toBeVisible();
   await expect(navigation.getByRole("link", { name: "Join now" })).toHaveCount(0);
 });
 
-test("the unlinked sign-in page still reaches account creation", async ({
+test("the sign-in page reaches account creation", async ({
   page,
 }) => {
   await provideAuthApi(page, false);
   await page.goto("/signin");
-  await expect(page.getByText("Sign in to pick up where you left off in Misty.")).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Don’t have an account? Create one" }),
   ).toHaveAttribute("href", "/register");
@@ -154,8 +152,8 @@ test("signing in reloads the document at home", async ({ page }) => {
 
   await page.goto("/signin");
   await page.getByLabel("Email").fill(account.email);
-  await page.getByLabel("Password").fill("password123");
-  await page.getByRole("button", { name: "Sign In" }).click();
+  await page.getByLabel("Password", { exact: true }).fill("password123");
+  await page.getByRole("button", { name: "Sign in" }).click();
 
   await expect(page).toHaveURL(/\/$/);
   await expect.poll(() => documentRequests).toBe(2);

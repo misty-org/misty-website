@@ -15,7 +15,8 @@ import { useUserStore } from "../store/userStore";
 
 const account: MeResponse = {
   id: "user-123",
-  name: "Maya Chen",
+  username: "maya",
+  provider: "misty",
   email: "maya@misty.local",
   created_at: "2026-07-01T00:00:00Z",
 };

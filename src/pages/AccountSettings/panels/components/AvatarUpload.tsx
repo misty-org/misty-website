@@ -60,7 +60,7 @@ export function AvatarUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [working, setWorking] = useState(false);
   const [error, setError] = useState("");
-  const initials = toInitials(me.name || me.email);
+  const initials = toInitials(me.username || me.email);
 
   async function handleFile(file: File | undefined) {
     if (!file) return;
@@ -95,8 +95,8 @@ export function AvatarUpload({
         </AvatarFallback>
       </Avatar>
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">{me.name}</p>
-        <p className="mt-0.5 truncate text-xs text-muted-foreground">
+        <p className="truncate text-sm font-medium text-foreground">{me.username}</p>
+        <p className="mt-0.5 truncate text-sm text-muted-foreground">
           {me.email}
         </p>
         <div className="mt-2 flex items-center gap-2">
@@ -122,7 +122,7 @@ export function AvatarUpload({
           </Button>
         </div>
         {error ? (
-          <p className="mt-1 text-xs text-destructive" role="status">
+          <p className="mt-1 text-sm text-destructive" role="status">
             {error}
           </p>
         ) : null}

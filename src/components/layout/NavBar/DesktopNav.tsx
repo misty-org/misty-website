@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router";
 
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import { cn } from "@/lib/utils";
 import AccountMenu from "./AccountMenu";
 import NavbarSocials from "./NavbarSocials";
 import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
+import { SiteLink } from "@/components/SiteLink";
 
 const desktopLinkClass =
   "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -26,7 +26,7 @@ function DesktopNavLink({ to, label, external }: NavLinkEntry) {
     );
   }
   return (
-    <NavLink
+    <SiteLink
       to={to}
       className={({ isActive }) =>
         cn(
@@ -36,11 +36,12 @@ function DesktopNavLink({ to, label, external }: NavLinkEntry) {
       }
     >
       {label}
-    </NavLink>
+    </SiteLink>
   );
 }
 
 export default function DesktopNav({
+  currentPath,
   displayName,
   email,
   initials,
@@ -89,7 +90,7 @@ export default function DesktopNav({
 
   return (
     <div className="hidden items-center gap-1 md:flex">
-      {navItems.map((item) => (
+      {navItems.filter(({ external }) => !external).map((item) => (
         <DesktopNavLink key={item.to} {...item} />
       ))}
 
@@ -129,7 +130,7 @@ export default function DesktopNav({
                   {label}
                 </a>
               ) : (
-                <NavLink to={to}>{label}</NavLink>
+                <SiteLink to={to}>{label}</SiteLink>
               )}
             </DropdownMenuItem>
           ))}
@@ -143,7 +144,6 @@ export default function DesktopNav({
         <span aria-hidden="true" className="mx-1 h-5 w-px bg-border" />
         <ModeToggle />
 
-        {/* The website has no accounts of its own, so there is no sign-in link; an existing session keeps its menu. */}
         {signedIn ? (
           <AccountMenu
             displayName={displayName}
@@ -152,7 +152,11 @@ export default function DesktopNav({
             onOpenSettings={onOpenSettings}
             onSignOut={onSignOut}
           />
-        ) : null}
+        ) : (
+          <Button asChild size="sm" className="rounded-full px-4">
+            <SiteLink to="/signin" state={{ from: currentPath }}>Sign in</SiteLink>
+          </Button>
+        )}
       </div>
     </div>
   );

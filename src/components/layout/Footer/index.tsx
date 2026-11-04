@@ -1,8 +1,9 @@
-import { NavLink, useLocation } from "react-router";
+import { useLocation } from "react-router";
 
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 import { columns, legalLinks, socialLinks } from "./footerLinks";
+import { SiteLink } from "@/components/SiteLink";
 
 const linkClass =
   "w-fit text-sm leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -31,9 +32,9 @@ function FooterColumns() {
                 {link.text}
               </a>
             ) : (
-              <NavLink key={link.text} to={link.to} className={linkClass}>
+              <SiteLink key={link.text} to={link.to} className={linkClass}>
                 {link.text}
-              </NavLink>
+              </SiteLink>
             ),
           )}
         </nav>
@@ -78,14 +79,14 @@ export default function Footer({ className }: { className?: string } = {}) {
         <div className="px-1.5">
           <div className="grid gap-y-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-20">
             <div>
-              <NavLink
+              <SiteLink
                 to="/"
                 aria-label="Misty footer"
                 className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <BrandLogo />
                 <span>Misty</span>
-              </NavLink>
+              </SiteLink>
               <FooterSocials />
             </div>
 
@@ -94,7 +95,7 @@ export default function Footer({ className }: { className?: string } = {}) {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col items-center gap-2 pt-3 text-center text-xs text-muted-foreground sm:flex-row sm:justify-center sm:gap-x-8">
+          <div className="mt-6 flex flex-col items-center gap-2 pt-3 text-center text-sm text-muted-foreground sm:flex-row sm:justify-center sm:gap-x-8">
             <span>
               &copy; {new Date().getFullYear()} Misty. All rights reserved.
             </span>
@@ -103,13 +104,13 @@ export default function Footer({ className }: { className?: string } = {}) {
               className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1"
             >
               {legalLinks.map((link) => (
-                <NavLink
+                <SiteLink
                   key={link.to}
                   to={link.to}
                   className="text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   {link.text}
-                </NavLink>
+                </SiteLink>
               ))}
             </nav>
           </div>

@@ -72,7 +72,7 @@ const sections: LegalSectionDef[] = [
             </>,
             <>
               <strong className="font-medium text-foreground">Billing details:</strong>{" "}
-              if you subscribe to Misty Cloud, Stripe collects your payment
+              if you subscribe to Misty Pro, Stripe collects your payment
               card and billing address, and uses the address to work out sales
               tax or VAT. We receive your email address, billing country,
               subscription status and billing date, and the card's brand and
@@ -134,7 +134,7 @@ const sections: LegalSectionDef[] = [
             [
               "AI requests, voice audio, agent screenshots",
               "Sent from your desktop straight to the model provider you chose, encrypted in transit (TLS)",
-              "No. They don't pass through Misty Cloud, but the provider handling them can read them",
+              "No. They don't pass through Misty Pro, but the provider handling them can read them",
             ],
             [
               "Connected-account tokens",
@@ -202,7 +202,7 @@ const sections: LegalSectionDef[] = [
         </p>
         <p>
           Your model keys and sign-ins, including Sign in with ChatGPT, stay on
-          your device, in its keychain. No Misty server, Misty Cloud included,
+          your device, in its keychain. No Misty server, Misty Pro included,
           receives them or calls a model. The
           provider processes your content under the terms you accepted with
           it, and it bills you directly. Check its policy on training and data
@@ -237,13 +237,13 @@ const sections: LegalSectionDef[] = [
             ],
             [
               "OVHcloud",
-              "Hosts the Misty Cloud server and its database",
+              "Hosts the Misty Pro server and its database",
               "Account data and content",
             ],
             ["Mailjet", "Sending email, including setup keys", "Name, email address, email content"],
             [
               "Stripe",
-              "Payments and tax for Misty Cloud",
+              "Payments and tax for Misty Pro",
               "Email address, billing details, payment card",
             ],
             ["Google", "Sign in with Google, if you use it", "Name, email, profile picture"],
@@ -320,7 +320,7 @@ const sections: LegalSectionDef[] = [
           items={[
             "Account details and content: while your account is open.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
-            "After a Misty Cloud subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data. We email you a warning before the deletion date, then delete the account the same way.",
+            "After a Misty Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
             "Content in shared Spaces: content you added to a Space other people still use stays with that Space, attributed to a deleted user.",
             "Server logs: kept for a limited period for security and troubleshooting.",
@@ -335,14 +335,14 @@ const sections: LegalSectionDef[] = [
     id: "rights",
     title: "Your choices and rights",
     inShort:
-      "You can see, export, correct, and delete your data, and turn off optional data sharing.",
+      "You can see, correct, and delete your data, ask us for a copy, and turn off optional data sharing.",
     body: (
       <>
         <LegalList
           items={[
-            "Export: download a copy of your account data in Account Settings → Account. Synced browser data isn't included because we can't decrypt it.",
+            `Get a copy: email ${supportEmail} from your account email and we'll send you a copy of your account data. Synced browser data isn't included because we can't decrypt it.`,
             "Correct: update your name, email, and profile picture in Account Settings.",
-            "Delete: delete your account in Account Settings → Account. You will first need to hand off or delete Spaces you own that have other members.",
+            "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete Spaces you own that have other members.",
             "Opt out: turn off product update emails in Account Settings, or use the unsubscribe link in any email.",
           ]}
         />
@@ -394,7 +394,7 @@ const sections: LegalSectionDef[] = [
           collected these categories of personal information, for the purposes
           in section 4: identifiers (name, email, IP address); internet
           activity limited to your use of Misty; commercial information, if you
-          subscribe to Misty Cloud (your plan and payment history); and content
+          subscribe to Misty Pro (your plan and payment history); and content
           you choose to store.
         </p>
         <p>
@@ -462,13 +462,12 @@ const sections: LegalSectionDef[] = [
 export default function Privacy() {
   return (
     <LegalPage
-      title="Privacy Policy"
-      summary="How Misty handles your account details, files, and Space content."
+      title="Privacy policy"
       intro={
         <p className="text-base leading-7 text-muted-foreground">
           This policy explains what information Misty collects, why, who we
           share it with, and the choices you have. It applies to the Misty app,
-          this website, and Misty Cloud. A self-hosted Misty server is run by
+          this website, and Misty Pro. A self-hosted Misty server is run by
           its operator, not Misty, and that operator handles the data on it.
         </p>
       }
@@ -477,8 +476,8 @@ export default function Privacy() {
         "Neither our website nor the app has analytics or crash reporting.",
         "Browser sync is end-to-end encrypted. Spaces, files, and AI requests are not.",
         "Misty hosts no model. AI requests go from your desktop to the model provider you choose, and Misty never charges for AI or sees your model keys.",
-        "If you subscribe to Misty Cloud, Stripe handles your card. We never see the full number.",
-        "You can export or delete your data anytime in Account Settings.",
+        "If you subscribe to Misty Pro, Stripe handles your card. We never see the full number.",
+        "You can delete your account anytime in Account Settings, or email us for a copy of your data.",
       ]}
       sections={sections}
     />

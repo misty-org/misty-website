@@ -17,7 +17,7 @@ import {
   settingsTabFromPathname,
 } from "./pages/AccountSettings/settingsRoute";
 import { TABS } from "./pages/AccountSettings/tabs";
-import { SITE_URL } from "./lib/site";
+import { DOCS_URL, isDocsHost, isDocsPath, SITE_URL } from "./lib/site";
 import { isHomePath } from "./pages/Home/useSectionRoute";
 
 type Handle = { title?: string; description?: string };
@@ -32,6 +32,12 @@ const scrollKey = (location: Location) => {
   return location.key === "default" ? location.pathname : location.key;
 };
 const SCROLL_STORAGE_KEY = "misty-scroll-positions";
+
+/** What remounts between pages. The homepage's sections are one page; the docs keep their sidebar. */
+const pageKey = (pathname: string) => {
+  if (isHomePath(pathname)) return "/";
+  return isDocsHost() || isDocsPath(pathname) ? "/docs" : pathname;
+};
 
 function forgetScrollPosition(key: string) {
   try {
@@ -87,7 +93,10 @@ export default function App() {
     const description =
       handle?.description ??
       "Misty is a free, open-source browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.";
-    const canonicalUrl = new URL(location.pathname, SITE_URL).toString();
+    const canonicalUrl = new URL(
+      location.pathname,
+      isDocsHost() ? DOCS_URL : SITE_URL,
+    ).toString();
 
     document.title = title;
     setMeta('meta[name="description"]', "name", "description", description);
@@ -204,7 +213,7 @@ export default function App() {
           className="relative z-10 min-h-[100svh] w-full min-w-0 flex-1 outline-none"
         >
           <div
-            key={isHomePath(location.pathname) ? "/" : location.pathname}
+            key={pageKey(location.pathname)}
             data-page-transition={location.pathname}
             className="page-transition w-full min-w-0"
           >

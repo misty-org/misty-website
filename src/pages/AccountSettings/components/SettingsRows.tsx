@@ -10,22 +10,16 @@ import { Spinner } from "@/components/ui/spinner";
 
 /** Padding for rows that hold custom content instead of a label/value pair. */
 export const customRowClass =
-  "border-b border-border/70 px-5 py-4 last:border-b-0";
+  "border-b border-border px-5 py-4 last:border-b-0";
 
 export function Section({
   title,
-  description,
   children,
 }: {
   title: string;
-  description?: string;
   children: ReactNode;
 }) {
-  return (
-    <DesktopSettingsSection title={title} description={description}>
-      {children}
-    </DesktopSettingsSection>
-  );
+  return <DesktopSettingsSection title={title}>{children}</DesktopSettingsSection>;
 }
 
 export function Row({

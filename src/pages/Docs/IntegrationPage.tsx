@@ -20,7 +20,7 @@ function variableRows(variables: EnvVariable[]): string[][] {
 /** One env file: what it's for, the account it needs, its values and how to get them. */
 export default function IntegrationPage({ doc }: { doc: IntegrationDoc }) {
   return (
-    <DocPage title={doc.file} description={doc.summary}>
+    <DocPage title={doc.file}>
       <DocSection id="purpose" title="What it's for">
         <Paragraphs items={doc.purpose} />
       </DocSection>
@@ -53,8 +53,8 @@ export default function IntegrationPage({ doc }: { doc: IntegrationDoc }) {
 
       <DocSection id="steps" title="Get the values">
         <Steps items={doc.steps} />
-        <CodeBlock code={doc.example} label={`server/.env/${doc.file}`} />
-        <P text="Keep the file out of Git. Misty's `.gitignore` already ignores everything under `server/.env/`." />
+        <CodeBlock code={doc.example} label={`~/.misty/server/prod/${doc.file}`} />
+        <P text="Keep the file out of Git. Misty's `.gitignore` already ignores everything under `~/.misty/server/prod/`." />
       </DocSection>
     </DocPage>
   );

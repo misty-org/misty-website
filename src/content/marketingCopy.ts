@@ -8,17 +8,14 @@ export interface MarketingCopy {
     ctaTitle: string;
   };
   download: { title: string; description: string };
-  pricing: { title: string; description: string };
+  pricing: { title: string };
   blog: { title: string; description: string };
   changelog: { title: string; description: string };
   roadmap: { title: string; description: string };
-  kiri: { title: string; description: string };
-  waitlist: { title: string; description: string };
+  kiri: { title: string };
+  waitlist: { title: string };
   auth: {
-    signInDescription: string;
     registerTitle: string;
-    registerDescription: string;
-    notFoundDescription: string;
   };
   metadata: Record<string, string>;
 }
@@ -45,9 +42,7 @@ export const marketingCopy: MarketingCopy = {
       "Misty is available for macOS and Windows. The current beta download is 44 MB on macOS and 70 MB on Windows.",
   },
   pricing: {
-    title: "Free to run yourself, or $10 a month on Misty Cloud.",
-    description:
-      "Both have every feature. Misty Cloud is a server that's already set up, so you install the app and start.",
+    title: "Pricing",
   },
   blog: {
     title: "Notes on building Misty.",
@@ -64,27 +59,19 @@ export const marketingCopy: MarketingCopy = {
       "What’s available in beta today, what’s in pilot, and what’s still planned.",
   },
   kiri: {
-    title: "Chrome and Firefox extensions, in one browser.",
-    description:
-      "Kiri is Misty's web platform layer. It sits above the system's web engine and adds what a full browser needs, including the extension APIs Chrome and Firefox extensions expect.",
+    title: "Kiri runs Chrome and Firefox extensions in one browser.",
   },
   waitlist: {
     title: "Join Misty",
-    description:
-      "Sign in to join your group and start working together in one shared Space.",
   },
   auth: {
-    signInDescription: "Sign in to pick up where you left off in Misty.",
     registerTitle: "Create an account",
-    registerDescription: "Sign up to get started with Misty.",
-    notFoundDescription:
-      "That page doesn’t exist. Check the link, or head back to the homepage.",
   },
   metadata: {
     kiri: "How Misty runs extensions from both the Chrome Web Store and Firefox Add-ons on one engine, which APIs Kiri adds, and what keeps each extension within the access you approve.",
     home: "Misty is a free, open-source browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.",
     pricing:
-      "Misty is free with every feature when you run the server yourself. Misty Cloud is a configured server for $10 a month, and AI is never charged for.",
+      "Misty is free with every feature when you run the server yourself. Misty Pro is a configured server for $10 a month, and AI is never charged for.",
     docs:
       "How Misty works, how to run your own Misty server, how to connect the app, and which models you can use.",
     download:

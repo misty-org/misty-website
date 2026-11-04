@@ -1,32 +1,11 @@
-import { Lock, UserCircle, type LucideIcon } from "lucide-react";
+import { CreditCard, Shield, UserCircle, type LucideIcon } from "lucide-react";
 
-export type Tab = "account" | "privacy";
-export type TabGroup = "account" | "privacy";
+export type Tab = "account" | "subscription" | "privacy";
 
-const GROUP_LABELS: Record<TabGroup, string> = {
-  account: "Account",
-  privacy: "Privacy & legal",
-};
-
-export const TABS: readonly {
-  id: Tab;
-  label: string;
-  icon: LucideIcon;
-  group: TabGroup;
-  groupLabel: string;
-}[] = [
-  {
-    id: "account",
-    label: "Account",
-    icon: UserCircle,
-    group: "account",
-    groupLabel: GROUP_LABELS.account,
-  },
-  {
-    id: "privacy",
-    label: "Privacy",
-    icon: Lock,
-    group: "privacy",
-    groupLabel: GROUP_LABELS.privacy,
-  },
+export const TABS: readonly { id: Tab; label: string; icon: LucideIcon }[] = [
+  { id: "account", label: "Profile", icon: UserCircle },
+  { id: "subscription", label: "Subscription", icon: CreditCard },
+  { id: "privacy", label: "Privacy", icon: Shield },
 ];
+
+export const TAB_GROUPS = [{ label: "Account", items: TABS }] as const;

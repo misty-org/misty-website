@@ -44,7 +44,7 @@ export default function AccountMenu({
           <span className="block truncate text-sm font-medium text-foreground">
             {displayName}
           </span>
-          <span className="block truncate text-xs text-muted-foreground">
+          <span className="block truncate text-sm text-muted-foreground">
             {email}
           </span>
         </DropdownMenuLabel>

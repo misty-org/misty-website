@@ -121,7 +121,7 @@ export function DataSharing() {
         </DesktopSettingsRow>
       ))}
       {saveError ? (
-        <p className="px-5 pb-3 text-xs text-destructive" role="status">
+        <p className="px-5 pb-3 text-sm text-destructive" role="status">
           {saveError}
         </p>
       ) : null}

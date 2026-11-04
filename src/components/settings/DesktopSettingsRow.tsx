@@ -19,24 +19,22 @@ export function DesktopSettingsRow({
     <div
       aria-disabled={muted || undefined}
       className={cn(
-        "grid min-h-16 grid-cols-[minmax(0,0.52fr)_minmax(240px,0.48fr)] items-center gap-5 border-b border-border/70 px-5 py-3.5 last:border-b-0",
-        "max-[760px]:grid-cols-1 max-[760px]:items-start max-[760px]:gap-3",
-        "max-[520px]:grid-cols-1",
+        "grid min-h-14 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-8 gap-y-3 border-b border-border px-5 py-3 last:border-b-0",
+        "max-[760px]:grid-cols-1 max-[760px]:items-start",
         last && "border-b-0",
-        muted && "bg-background/70",
       )}
     >
       <div className="grid min-w-0 gap-1">
         <strong
           className={cn(
-            "text-sm font-medium leading-5",
+            "text-[15px] font-medium leading-6",
             muted ? "text-muted-foreground" : "text-foreground",
           )}
         >
           {label}
         </strong>
         {description ? (
-          <span className="text-[13px] leading-[18px] text-muted-foreground">
+          <span className="text-sm leading-[22px] text-muted-foreground">
             {description}
           </span>
         ) : null}

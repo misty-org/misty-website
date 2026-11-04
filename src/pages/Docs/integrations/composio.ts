@@ -25,7 +25,7 @@ export const composioEnv: IntegrationDoc = {
     "Sign up at [platform.composio.dev](https://platform.composio.dev).",
     "Create a project for your Misty server, or use the default one.",
     "Open the project's Settings → API Keys and create a key. Copy it.",
-    "Write it into `server/.env/composio.env` as `MISTY_COMPOSIO_API_KEY`.",
+    "Write it into `~/.misty/server/prod/composio.env` as `MISTY_COMPOSIO_API_KEY`.",
   ],
   example: `MISTY_COMPOSIO_API_KEY=<your project API key>`,
 };

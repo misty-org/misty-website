@@ -40,14 +40,14 @@ test("the navbar theme toggle persists across navigation and reload", async ({ p
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
 });
 
-test("the desktop theme toggle sits after the social links and a divider, with no sign-in link", async ({
+test("the desktop theme toggle sits after the social links and a divider", async ({
   page,
 }, testInfo) => {
   test.skip(testInfo.project.name === "mobile-chromium", "Desktop navigation is only rendered at the desktop breakpoint.");
   const navigation = page.getByRole("navigation", { name: "Primary navigation" });
   const lastSocial = navigation.getByRole("link", { name: /Instagram/ });
   const toggle = navigation.getByRole("button", { name: "Switch to light theme" });
-  await expect(navigation.getByRole("link", { name: "Sign in" })).toHaveCount(0);
+  await expect(navigation.getByRole("link", { name: "Sign in" })).toBeVisible();
   const [socialBox, toggleBox] = await Promise.all([lastSocial.boundingBox(), toggle.boundingBox()]);
   expect(toggleBox!.x).toBeGreaterThan(socialBox!.x + socialBox!.width);
   // A thin divider separates the socials from the toggle.

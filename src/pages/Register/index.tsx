@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useLocation } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { marketingCopy } from "@/content/marketingCopy";
@@ -8,25 +8,42 @@ import AuthField from "../Auth/AuthField";
 import AuthMessage from "../Auth/AuthMessage";
 import AuthShell from "../Auth/AuthShell";
 import AuthSubmitButton from "../Auth/AuthSubmitButton";
+import GoogleSignInButton from "../Auth/GoogleSignInButton";
 import { registerRequest } from "../Auth/api";
+import { useAuth } from "../../AuthContext";
+import { passwordProblem } from "@/lib/accountPassword";
+import { safeInternalPath } from "@/lib/navigation";
 
 export default function Register() {
-  const navigate = useNavigate();
-  const [name, setName] = useState("");
+  const { refreshSession } = useAuth();
+  const location = useLocation();
+  const returnTo = safeInternalPath((location.state as { from?: string } | null)?.from);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    const problem = passwordProblem(password);
+    if (problem) {
+      setError(problem);
+      return;
+    }
     setLoading(true);
 
     try {
-      await registerRequest(name, email, password);
-      navigate("/signin");
+      const { confirmEmail } = await registerRequest(username, email, password);
+      if (confirmEmail) {
+        setConfirming(true);
+        return;
+      }
+      await refreshSession();
+      window.location.replace(returnTo ?? "/");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Could not connect to server",
@@ -36,11 +53,20 @@ export default function Register() {
     }
   }
 
+  if (confirming) {
+    return (
+      <AuthShell title="Check your email">
+        <AuthCard>
+          <p role="status" className="text-base leading-7 text-foreground">
+            We sent a link to {email}. Open it to finish creating your account.
+          </p>
+        </AuthCard>
+      </AuthShell>
+    );
+  }
+
   return (
-    <AuthShell
-      title={marketingCopy.auth.registerTitle}
-      description={marketingCopy.auth.registerDescription}
-    >
+    <AuthShell title={marketingCopy.auth.registerTitle}>
       <AuthCard
         footer={
           <Button
@@ -48,19 +74,19 @@ export default function Register() {
             variant="link"
             className="h-auto p-0 text-foreground"
           >
-            <NavLink to="/signin">Already have an account? Sign in</NavLink>
+            <NavLink to="/signin" state={location.state}>Already have an account? Sign in</NavLink>
           </Button>
         }
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <AuthField
-            id="register-name"
-            label="Name"
-            value={name}
-            autoComplete="name"
-            placeholder="Your name"
+            id="register-username"
+            label="Username"
+            value={username}
+            autoComplete="username"
+            placeholder="yourname"
             required
-            onChange={setName}
+            onChange={setUsername}
           />
 
           <AuthField
@@ -104,7 +130,7 @@ export default function Register() {
                 target="_blank"
                 className="text-foreground underline underline-offset-4"
               >
-                Terms of Service
+                Terms of service
               </NavLink>{" "}
               and{" "}
               <NavLink
@@ -112,7 +138,7 @@ export default function Register() {
                 target="_blank"
                 className="text-foreground underline underline-offset-4"
               >
-                Privacy Policy
+                Privacy policy
               </NavLink>
               .
             </span>
@@ -125,6 +151,11 @@ export default function Register() {
             loadingLabel="Creating account..."
             loading={loading}
             disabled={!agreed}
+          />
+          <GoogleSignInButton
+            returnTo={returnTo}
+            disabled={loading || !agreed}
+            onError={setError}
           />
         </form>
       </AuthCard>

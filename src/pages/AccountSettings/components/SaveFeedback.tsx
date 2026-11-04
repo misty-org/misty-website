@@ -4,7 +4,7 @@ export function SaveFeedback({ ok, error }: { ok: boolean; error: string }) {
       <p
         role="status"
         aria-live="polite"
-        className="mt-2 text-xs text-[var(--settings-success)]"
+        className="mt-2 text-sm text-[var(--settings-success)]"
       >
         Saved.
       </p>
@@ -13,7 +13,7 @@ export function SaveFeedback({ ok, error }: { ok: boolean; error: string }) {
 
   if (error) {
     return (
-      <p role="alert" className="mt-2 text-xs text-destructive">
+      <p role="alert" className="mt-2 text-sm text-destructive">
         {error}
       </p>
     );

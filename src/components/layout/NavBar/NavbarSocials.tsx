@@ -1,15 +1,12 @@
 import { socialLinks } from "@/components/layout/Footer/footerLinks";
 
-/** GitHub is already a text link in the primary navigation. */
-const navSocials = socialLinks.filter(({ label }) => label !== "GitHub");
-
 export default function NavbarSocials() {
   return (
     <div
       aria-label="Misty social links"
-      className="hidden items-center gap-0.5 lg:flex"
+      className="hidden items-center gap-0.5 md:flex"
     >
-      {navSocials.map(({ label, href, icon: Icon, placeholder }) => (
+      {socialLinks.map(({ label, href, icon: Icon, placeholder }) => (
         <a
           key={label}
           href={href}
@@ -17,7 +14,7 @@ export default function NavbarSocials() {
           rel={placeholder ? undefined : "noopener noreferrer"}
           aria-label={placeholder ? `${label} link placeholder` : label}
           title={placeholder ? `Add Misty's ${label} URL` : `Misty on ${label}`}
-          className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className={`${label === "GitHub" ? "inline-flex" : "hidden lg:inline-flex"} size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
         >
           <Icon aria-hidden="true" className="size-3.5" />
         </a>

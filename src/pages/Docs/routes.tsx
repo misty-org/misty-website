@@ -12,7 +12,10 @@ import SelfHosting from "./pages/SelfHosting";
 
 const docsTitle = (page: string) => `${page} | Misty docs`;
 
-/** /docs and its pages. Each env file gets its own page from the integrations data. */
+/**
+ * The docs pages, served at the root of docs.mistysys.com (the router drops this route's
+ * own path there). Each env file gets its own page from the integrations data.
+ */
 export const docsRoutes: RouteObject = {
   path: "docs",
   element: <DocsLayout />,
@@ -31,7 +34,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Connect the app"),
         description:
-          "Connect the Misty app to Misty Cloud or your own server, or use it as a browser only.",
+          "Connect the Misty app to Misty Pro or your own server, or use it as a browser only.",
       },
     },
     {

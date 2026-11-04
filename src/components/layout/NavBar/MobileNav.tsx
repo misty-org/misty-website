@@ -1,9 +1,9 @@
-import { NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { CollapsibleContent } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
+import { SiteLink } from "@/components/SiteLink";
 
 const mobileLinkClass =
   "px-0 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -30,7 +30,7 @@ function MobileNavLink({
   }
 
   return (
-    <NavLink
+    <SiteLink
       to={link.to}
       onClick={onNavigate}
       className={({ isActive }) =>
@@ -38,11 +38,12 @@ function MobileNavLink({
       }
     >
       {link.label}
-    </NavLink>
+    </SiteLink>
   );
 }
 
 export default function MobileNav({
+  currentPath,
   signedIn,
   onClose,
   onOpenSettings,
@@ -102,7 +103,15 @@ export default function MobileNav({
                 Sign out
               </Button>
             </>
-          ) : null}
+          ) : (
+            <div className="mt-5">
+              <Button asChild className="w-full">
+                <SiteLink to="/signin" state={{ from: currentPath }} onClick={onClose}>
+                  Sign in
+                </SiteLink>
+              </Button>
+            </div>
+          )}
 
         </div>
       </div>
