@@ -21,7 +21,7 @@ export const phases: RoadmapPhase[] = [
         description: "Create a Space and manage members.",
       },
       {
-        title: "Space Chat",
+        title: "Space chat",
         description: "Shared, group, and direct messages.",
       },
       {
@@ -33,7 +33,7 @@ export const phases: RoadmapPhase[] = [
         description: "Shared project files and references.",
       },
       {
-        title: "Private Files",
+        title: "Private files",
         description: "Local and connected files stay private until shared.",
       },
       {

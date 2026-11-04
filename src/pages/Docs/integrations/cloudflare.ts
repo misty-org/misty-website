@@ -5,9 +5,9 @@ export const cloudflareEnv: IntegrationDoc = {
   file: "cloudflare.env",
   service: "Cloudflare",
   summary:
-    "Publishes the server over HTTPS, stores files and backups in R2 and runs Misty's two Workers.",
+    "Publishes the server over HTTPS, stores files and backups in R2 and runs Misty's Worker.",
   purpose: [
-    "Every Misty server runs on your own Cloudflare account. A Cloudflare Tunnel publishes the API at `https://MISTY_HOSTNAME` with no open ports. R2 holds Library files and the nightly backups. Two Workers save notes and drawings as people edit them together, and read public pages for agent runs when none of your devices is online.",
+    "Every Misty server runs on your own Cloudflare account. A Cloudflare Tunnel publishes the API at `https://MISTY_HOSTNAME` with no open ports. R2 holds Library files and the nightly backups. A Worker saves notes and drawings as people edit them together.",
     "You give the setup container a token, an account and a zone. On every start it creates whatever is missing and finds what it made before by name, so it never makes a second copy. You never run Wrangler or the `misty` CLI.",
   ],
   account: [
@@ -49,7 +49,7 @@ export const cloudflareEnv: IntegrationDoc = {
           [
             "Account",
             "Workers Scripts: Edit",
-            "Uploads the two Workers and their secrets.",
+            "Uploads the Worker and its secrets.",
           ],
           [
             "Account",
@@ -109,11 +109,6 @@ export const cloudflareEnv: IntegrationDoc = {
             "`misty-<host>-collab`",
             "Saves and co-edits notes and drawings.",
           ],
-          [
-            "web-fetch Worker",
-            "`misty-<host>-web-fetch`",
-            "Reads one public page for an agent run when no device is online.",
-          ],
         ],
       },
     },
@@ -124,7 +119,7 @@ export const cloudflareEnv: IntegrationDoc = {
     "Open R2 Object Storage and turn it on.",
     "On your domain's Overview page, copy the Zone ID and Account ID from the API section.",
     "Create an account API token with the permissions above, limited to your account and zone. Copy it; Cloudflare shows it once.",
-    "Write the three values into `server/.env/cloudflare.env`.",
+    "Write the three values into `~/.misty/server/prod/cloudflare.env`.",
   ],
   example: `CLOUDFLARE_API_TOKEN=<your API token>
 CLOUDFLARE_ACCOUNT_ID=<your account ID>

@@ -1,36 +1,81 @@
-import { useEffect } from "react";
-import { NavLink, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 
-import { useAuth } from "@/AuthContext";
-import { PublicPage } from "@/components/marketing";
+import { SiteLink } from "@/components/SiteLink";
 import { Button } from "@/components/ui/button";
-import { claimRememberedReferral, rememberReferral } from "./referralCode";
+import { Skeleton } from "@/components/ui/skeleton";
+import { apiBase } from "@/lib/apiBase";
+import AuthCard from "../Auth/AuthCard";
+import AuthShell from "../Auth/AuthShell";
+import AuthSteps, { type AuthStep } from "../Auth/AuthSteps";
+
+const STEPS: AuthStep[] = [
+  {
+    text: "Create your free Misty account.",
+    action: (
+      <Button asChild>
+        <SiteLink to="/register">Create account</SiteLink>
+      </Button>
+    ),
+  },
+  {
+    text: "Download Misty and install it on your computer.",
+    action: (
+      <Button asChild variant="outline">
+        <SiteLink to="/download">Download</SiteLink>
+      </Button>
+    ),
+  },
+];
+
+/** Who a code's link is from, or null when it names nobody any more. */
+async function fetchInviter(code: string): Promise<string | null> {
+  try {
+    const response = await fetch(`${apiBase}/invites/${encodeURIComponent(code)}`);
+    if (!response.ok) return null;
+    return ((await response.json()) as { name: string }).name;
+  } catch {
+    return null;
+  }
+}
 
 /** The landing page an invite link opens. */
 export default function Invite() {
   const { code = "" } = useParams();
-  const { user, sessionReady } = useAuth();
+  // Undefined while asking the server.
+  const [inviter, setInviter] = useState<string | null | undefined>(undefined);
+
   useEffect(() => {
-    rememberReferral(code);
-    if (sessionReady && user) void claimRememberedReferral().catch(() => undefined);
-  }, [code, sessionReady, user]);
+    let current = true;
+    void fetchInviter(code).then((name) => {
+      if (current) setInviter(name);
+    });
+    return () => {
+      current = false;
+    };
+  }, [code]);
+
+  const title =
+    inviter === undefined ? (
+      <Skeleton aria-label="Loading who invited you" className="mx-auto h-9 w-72 max-w-full" />
+    ) : inviter ? (
+      `${inviter} invited you to Misty`
+    ) : (
+      "You're invited to Misty"
+    );
+
   return (
-    <PublicPage>
-      <header className="mx-auto max-w-2xl text-center">
-        <h1 className="marketing-heading text-foreground">A friend invited you to Misty</h1>
-        <p className="mt-4 text-pretty marketing-description text-muted-foreground">
-          Misty is a free, open-source browser with agents built in. Download it to start
-          browsing, or create an account to join your friend.
-        </p>
-        <div className="mt-8 flex justify-center gap-3">
-          <Button asChild>
-            <NavLink to="/register">Create an account</NavLink>
-          </Button>
-          <Button asChild variant="outline">
-            <NavLink to="/download">Download Misty</NavLink>
-          </Button>
-        </div>
-      </header>
-    </PublicPage>
+    <AuthShell title={title} wide>
+      <AuthCard
+        footer={
+          <p className="text-center text-base leading-7 text-pretty text-muted-foreground">
+            Misty is a free, open-source browser workspace with native tools, agents and encrypted
+            sync.
+          </p>
+        }
+      >
+        <AuthSteps steps={STEPS} />
+      </AuthCard>
+    </AuthShell>
   );
 }

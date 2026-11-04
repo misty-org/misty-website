@@ -1,10 +1,14 @@
 import { sessionFetch } from "../../lib/sessionFetch";
 import { apiBase } from "../../lib/apiBase";
+import { fetchAccountProof } from "../../lib/accountProof";
+import { ACCOUNT_SUBSCRIPTION_URL } from "../../lib/site";
 
 export interface MeResponse {
   id: string;
-  name: string;
+  username: string;
   email: string;
+  /** How the account signs in; a Google account has no Misty password. */
+  provider: "misty" | "google";
   created_at: string;
   /** Bumped by the server on every avatar upload; used to bust the image cache. */
   avatar_version?: number;
@@ -29,12 +33,52 @@ export async function fetchMe(): Promise<MeResponse> {
   return res.json();
 }
 
-export async function updateProfile(name: string): Promise<void> {
-  await apiFetch("/me/profile", {
+/** Saves the username and answers it as the server stored it. */
+export async function updateUsername(username: string): Promise<string> {
+  const res = await apiFetch("/me/username", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ username }),
   });
+  return ((await res.json()) as { username: string }).username;
+}
+
+/** The code of the person's invite link, made the first time they ask. */
+export async function fetchInviteCode(): Promise<string> {
+  const res = await apiFetch("/me/invite-code");
+  return ((await res.json()) as { code: string }).code;
+}
+
+export interface SubscriptionState {
+  subscribed: boolean;
+  status?: string;
+  current_period_end?: string;
+  cancel_at_period_end: boolean;
+}
+
+/** A form-encoded post needs no preflight, and billing answers this site's origin. */
+async function postSubscription(path = "", given?: string): Promise<SubscriptionState> {
+  const proof = given ?? (await fetchAccountProof());
+  const res = await fetch(`${ACCOUNT_SUBSCRIPTION_URL}${path}`, {
+    method: "POST",
+    body: new URLSearchParams({ proof }),
+  });
+  if (!res.ok) throw new Error("Subscription request failed");
+  return res.json();
+}
+
+export function fetchSubscription(): Promise<SubscriptionState> {
+  return postSubscription();
+}
+
+/** The subscription behind a suspended sign-in, which has a proof but no session. */
+export function fetchSubscriptionWithProof(proof: string): Promise<SubscriptionState> {
+  return postSubscription("", proof);
+}
+
+/** Cancelling ends the plan with the month already paid for; resuming undoes that. */
+export function changeSubscription(change: "cancel" | "resume"): Promise<SubscriptionState> {
+  return postSubscription(`/${change}`);
 }
 
 export async function logoutRequest(): Promise<void> {

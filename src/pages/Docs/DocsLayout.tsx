@@ -1,81 +1,117 @@
-import { ChevronDown } from "lucide-react";
-import { NavLink, Outlet, useLocation } from "react-router";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { Outlet, useLocation } from "react-router";
 
-import { PublicPage } from "@/components/marketing";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { docsNav, docsPages } from "./docsNav";
+import { docsPagePath } from "@/lib/site";
+import { docsGroupFor, docsNav, docsPages } from "./docsNav";
+import { SiteLink } from "@/components/SiteLink";
 
-function DocsNavList() {
+function DocsNavList({
+  open,
+  onOpenChange,
+}: {
+  open: string[];
+  onOpenChange: (groups: string[]) => void;
+}) {
   return (
-    <div className="grid gap-7">
+    <Accordion type="multiple" value={open} onValueChange={onOpenChange}>
       {docsNav.map((group) => (
-        <div key={group.label}>
-          <p className="mb-2 text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
+        <AccordionItem
+          key={group.label}
+          value={group.label}
+          className="not-last:border-b-0"
+        >
+          <AccordionTrigger className="h-9 items-center px-2.5 py-0 font-normal text-muted-foreground transition-colors hover:text-foreground hover:no-underline aria-expanded:text-foreground [&>[data-slot=accordion-trigger-icon]]:hidden">
             {group.label}
-          </p>
-          <ul className="grid gap-0.5">
-            {group.items.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end
-                  className={({ isActive }) =>
-                    cn(
-                      "block rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                      item.mono && "font-mono text-[0.8125rem]",
-                      isActive && "bg-muted font-medium text-foreground",
-                    )
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+            <ChevronRight
+              aria-hidden="true"
+              className="ml-auto size-4 shrink-0 transition-transform group-aria-expanded/accordion-trigger:rotate-90"
+            />
+          </AccordionTrigger>
+          {/* The list may first measure inside a closed disclosure, so its height stays automatic. */}
+          <AccordionContent className="h-auto pb-2 [&_a]:no-underline">
+            <ul className="ml-3">
+              {group.items.map((item) => (
+                <li key={item.to}>
+                  <SiteLink
+                    to={item.to}
+                    end
+                    className={({ isActive }) =>
+                      cn(
+                        "flex h-8 items-center truncate rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                        isActive && "text-foreground",
+                      )
+                    }
+                  >
+                    {item.label}
+                  </SiteLink>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
       ))}
-    </div>
+    </Accordion>
   );
 }
 
 /**
- * The docs section: a page list on the left and the page on the right. On a
- * phone the list folds into a disclosure above the page.
+ * The docs section, spanning the window under the site's navbar: accordion page sections on the
+ * left, then the page and its contents (DocPage). Under 1000px the sections fold into a
+ * disclosure above the page. The section holding the current page opens itself, and stays as
+ * the reader left it otherwise.
  */
 export default function DocsLayout() {
   const { pathname } = useLocation();
-  const current = docsPages.find((page) => page.to === pathname);
+  const path = docsPagePath(pathname);
+  const current = docsPages.find((page) => page.to === path);
+  const group = docsGroupFor(path);
+  const [open, setOpen] = useState(group ? [group] : []);
+  const [openedGroup, setOpenedGroup] = useState(group);
+
+  if (group !== openedGroup) {
+    setOpenedGroup(group);
+    if (group && !open.includes(group)) setOpen([...open, group]);
+  }
 
   return (
-    <PublicPage>
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-16">
-        <nav aria-label="Docs" className="lg:sticky lg:top-28 lg:self-start">
-          <details
-            key={pathname}
-            className="group rounded-lg border border-border lg:hidden"
-          >
-            <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm text-foreground [&::-webkit-details-marker]:hidden">
-              <span>
-                <span className="text-muted-foreground">Docs</span>
-                {current ? <span> / {current.label}</span> : null}
-              </span>
-              <ChevronDown
-                aria-hidden="true"
-                className="size-4 text-muted-foreground transition-transform group-open:rotate-180"
-              />
-            </summary>
-            <div className="border-t border-border px-2 py-4">
-              <DocsNavList />
-            </div>
-          </details>
-          <div className="hidden lg:block">
-            <DocsNavList />
+    <div className="docs-shell grid w-full grid-cols-[minmax(0,1fr)] gap-x-8 px-[var(--site-gutter)] pb-24 min-[1000px]:grid-cols-[clamp(200px,18.3vw,264px)_minmax(0,1fr)] min-[1000px]:pl-3 min-[1000px]:pr-4">
+      <nav
+        aria-label="Docs"
+        className="pt-2.5 min-[1000px]:sticky min-[1000px]:top-[var(--site-nav-height)] min-[1000px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1000px]:self-start min-[1000px]:overflow-y-auto min-[1000px]:pb-6 min-[1000px]:[scrollbar-width:thin]"
+      >
+        <details
+          key={pathname}
+          className="group rounded-lg border border-border min-[1000px]:hidden"
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm text-foreground [&::-webkit-details-marker]:hidden">
+            <span>
+              <span className="text-muted-foreground">Docs</span>
+              {current ? <span> / {current.label}</span> : null}
+            </span>
+            <ChevronDown
+              aria-hidden="true"
+              className="size-4 text-muted-foreground transition-transform group-open:rotate-180"
+            />
+          </summary>
+          <div className="border-t border-border px-2 py-3">
+            <DocsNavList open={open} onOpenChange={setOpen} />
           </div>
-        </nav>
-        <div className="min-w-0 max-w-3xl">
-          <Outlet />
+        </details>
+        <div className="hidden min-[1000px]:block">
+          <DocsNavList open={open} onOpenChange={setOpen} />
         </div>
+      </nav>
+      <div key={pathname} className="page-transition min-w-0">
+        <Outlet />
       </div>
-    </PublicPage>
+    </div>
   );
 }

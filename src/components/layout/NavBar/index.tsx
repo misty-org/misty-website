@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { NavLink, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { Menu, X } from "lucide-react";
 
 import { useAuth } from "@/AuthContext";
@@ -13,6 +13,7 @@ import { useUserStore } from "@/store/userStore";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 import { resourceLinks } from "./navLinks";
+import { SiteLink } from "@/components/SiteLink";
 
 const COMPACT_WIDTH_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
 const EXPAND_WIDTH_EASING = "cubic-bezier(0.8, 0, 0.6, 1)";
@@ -45,7 +46,7 @@ export default function Navbar({
   const me = useUserStore((state) => state.me);
   const scrolled = useScrolledNav(60);
 
-  const displayName = me?.name ?? user?.name ?? "";
+  const displayName = me?.username ?? user?.name ?? "";
   const initials = displayName
     ? toInitials(displayName)
     : (user?.email?.[0]?.toUpperCase() ?? "?");
@@ -71,15 +72,14 @@ export default function Navbar({
             }}
           >
             <div
-              // Nearly solid, with no glass blur, so links stay readable over any content;
-              // the open mobile menu turns fully solid.
-              className="rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)]/92 in-data-[state=open]:bg-[var(--marketing-surface)]"
+              // Solid, so links stay readable over any content.
+              className="rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)]"
             >
               <div
                 className="flex h-12 items-center justify-between px-5"
               >
                 <div className="flex items-center gap-2.5">
-                  <NavLink
+                  <SiteLink
                     to="/"
                     onClick={() => setMobileOpen(false)}
                     aria-label="Misty home"
@@ -87,7 +87,7 @@ export default function Navbar({
                   >
                     <BrandLogo />
                     <span>Misty</span>
-                  </NavLink>
+                  </SiteLink>
                 </div>
 
                 <DesktopNav

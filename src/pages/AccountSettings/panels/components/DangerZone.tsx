@@ -88,7 +88,7 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
         <div>
           <label
             htmlFor="account-delete-password"
-            className="mb-1.5 block text-xs font-medium text-foreground"
+            className="mb-1.5 block text-sm font-medium text-foreground"
           >
             Password
           </label>
@@ -103,7 +103,7 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
         <div>
           <label
             htmlFor="account-delete-confirmation"
-            className="mb-1.5 block text-xs font-medium text-foreground"
+            className="mb-1.5 block text-sm font-medium text-foreground"
           >
             Type {CONFIRMATION} to confirm
           </label>
@@ -131,7 +131,7 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
       </div>
 
       {blockedSpaces.length > 0 ? (
-        <ul className="list-disc pl-5 text-xs text-[var(--settings-warning)]">
+        <ul className="list-disc pl-5 text-sm text-[var(--settings-warning)]">
           {blockedSpaces.map((name) => (
             <li key={name}>{name}</li>
           ))}
@@ -139,7 +139,7 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
       ) : null}
 
       {error ? (
-        <p className="text-xs text-destructive" role="status">
+        <p className="text-sm text-destructive" role="status">
           {error}
         </p>
       ) : null}

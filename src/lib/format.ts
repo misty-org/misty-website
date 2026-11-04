@@ -11,11 +11,11 @@ export function formatBytes(bytes: number): string {
   return `${value >= 10 ? value.toFixed(0) : value.toFixed(1)} ${units[unitIndex]}`;
 }
 
-/** Turns an API status slug such as "past_due" into "Past Due". */
+/** Turns an API status slug such as "past_due" into "Past due". */
 export function formatStatus(status: string): string {
   return status
     .replace(/_/g, " ")
-    .replace(/\b\w/g, (character: string) => character.toUpperCase());
+    .replace(/^\w/, (character: string) => character.toUpperCase());
 }
 
 /** First letter of the first two words, uppercased — for avatar fallbacks. */

@@ -37,8 +37,8 @@ const publicRoutes = [
     path: "/docs/maintenance",
     title: "Updates and backups | Misty docs",
   },
-  { name: "terms", path: "/terms", title: "Terms of Service | Misty" },
-  { name: "privacy", path: "/privacy", title: "Privacy Policy | Misty" },
+  { name: "terms", path: "/terms", title: "Terms of service | Misty" },
+  { name: "privacy", path: "/privacy", title: "Privacy policy | Misty" },
   {
     name: "changelog",
     path: "/changelog",

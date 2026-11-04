@@ -49,7 +49,7 @@ export function DataExport() {
         <div>
           <label
             htmlFor="account-export-password"
-            className="mb-1.5 block text-xs font-medium text-foreground"
+            className="mb-1.5 block text-sm font-medium text-foreground"
           >
             Password
           </label>
@@ -73,12 +73,12 @@ export function DataExport() {
         </Button>
       </div>
       {done ? (
-        <p className="text-xs text-[var(--settings-success)]" role="status">
+        <p className="text-sm text-[var(--settings-success)]" role="status">
           Your download has started.
         </p>
       ) : null}
       {error ? (
-        <p className="text-xs text-destructive" role="status">
+        <p className="text-sm text-destructive" role="status">
           {error}
         </p>
       ) : null}

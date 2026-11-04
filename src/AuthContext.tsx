@@ -1,4 +1,3 @@
-import { claimRememberedReferral } from "@/pages/Invite/referralCode";
 import {
   createContext,
   useCallback,
@@ -63,7 +62,7 @@ export function AuthProvider({ children, onLogout }: AuthProviderProps) {
         useUserStore.getState().setMe(account);
         setUserState({
           id: account.id,
-          name: account.name,
+          name: account.username,
           email: account.email,
         });
       }
@@ -86,11 +85,6 @@ export function AuthProvider({ children, onLogout }: AuthProviderProps) {
       // A missing or expired HttpOnly session cookie means signed out.
     });
   }, [refreshSession]);
-
-  // An invite link remembered before sign-up is claimed once there is an account.
-  useEffect(() => {
-    if (user) void claimRememberedReferral().catch(() => undefined);
-  }, [user]);
 
   const logout = useCallback(
     (destination?: string) => {

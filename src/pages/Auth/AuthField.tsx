@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 interface AuthFieldProps {
   id: string;
   label: string;
+  name?: string;
   type?: string;
   value: string;
   placeholder?: string;
@@ -16,6 +17,7 @@ interface AuthFieldProps {
 export default function AuthField({
   id,
   label,
+  name,
   type = "text",
   value,
   placeholder,
@@ -29,6 +31,7 @@ export default function AuthField({
       <Label htmlFor={id}>{label}</Label>
       <Input
         id={id}
+        name={name}
         type={type}
         value={value}
         placeholder={placeholder}

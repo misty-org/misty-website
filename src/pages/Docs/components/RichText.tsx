@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { NavLink } from "react-router";
+import { SiteLink } from "@/components/SiteLink";
 
 /** Splits on `code` spans and [text](href) links, the only markup docs data uses. */
 const TOKEN = /(`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
@@ -25,9 +25,9 @@ export function DocLink({
 }) {
   if (href.startsWith("/")) {
     return (
-      <NavLink to={href} className={docLinkClass}>
+      <SiteLink to={href} className={docLinkClass}>
         {children}
-      </NavLink>
+      </SiteLink>
     );
   }
   return (

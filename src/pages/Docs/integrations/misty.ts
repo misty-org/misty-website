@@ -38,7 +38,7 @@ export const mistyEnv: IntegrationDoc = {
   ],
   steps: [
     "Choose the hostname for your server on a domain in your Cloudflare account, such as `misty.example.com`.",
-    "Write it into `server/.env/misty.env` as `MISTY_HOSTNAME`.",
+    "Write it into `~/.misty/server/prod/misty.env` as `MISTY_HOSTNAME`.",
     "Add a name for the server if you want one.",
   ],
   example: `MISTY_HOSTNAME=misty.example.com

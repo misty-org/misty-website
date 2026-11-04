@@ -16,6 +16,4 @@
 .mist-compare-mark[data-no] { color: var(--mist-dim); }
 .mist-compare .mist-fine-print a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 .mist-compare .mist-fine-print a:hover { color: var(--mist-ink); }
-/* A short qualifier under a cell's value. */
-.mist-compare-note { display: block; margin-top: 4px; color: var(--mist-subtle); font-size: 12px; font-weight: 400; }
 .mist-compare tbody :is(th, td) { padding-block: 20px; }

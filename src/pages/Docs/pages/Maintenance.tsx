@@ -11,10 +11,7 @@ import { DocPage } from "../components/DocPage";
 /** Keeping a server current, backing it up, and what the AGPL asks of a changed one. */
 export default function Maintenance() {
   return (
-    <DocPage
-      title="Updates and backups"
-      description="How to update a server, back it up and restore it, and what the license asks of you if you change it."
-    >
+    <DocPage title="Updates and backups">
       <DocSection id="updating" title="Updating">
         <Paragraphs
           items={[

@@ -1,6 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
+
+import { SiteLink } from "@/components/SiteLink";
 import "./faq.css";
 
 /**
@@ -13,11 +15,11 @@ type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
   {
     q: "Is Misty free?",
-    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you run your own server. Misty Cloud is a server that's already set up, for $10 a month. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
+    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you run your own server. Misty Pro is a server that's already set up, for $10 a month. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
   },
   {
     q: "Do I need an account?",
-    a: <>No. Misty works as a browser without signing in. Sync and Spaces need a Misty server, either your own or Misty Cloud. See the <Link to="/docs">docs</Link>.</>,
+    a: <>No. Misty works as a browser without signing in. Sync and Spaces need a Misty server, either your own or Misty Pro. See the <SiteLink to="/docs">docs</SiteLink>.</>,
   },
   {
     q: "Which AI models can I use?",

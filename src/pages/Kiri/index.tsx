@@ -6,11 +6,7 @@ import EngineTable from "./sections/EngineTable";
 export default function Kiri() {
   return (
     <PublicPage>
-      <PageHeader
-        label="Kiri"
-        title={marketingCopy.kiri.title}
-        description={marketingCopy.kiri.description}
-      />
+      <PageHeader title={marketingCopy.kiri.title} />
       <EngineTable />
     </PublicPage>
   );

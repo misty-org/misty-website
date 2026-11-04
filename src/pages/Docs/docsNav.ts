@@ -3,8 +3,6 @@ import { integrationDocs } from "./integrations";
 export interface DocsNavItem {
   to: string;
   label: string;
-  /** File names read better in the mono face. */
-  mono?: boolean;
 }
 
 export interface DocsNavGroup {
@@ -15,7 +13,7 @@ export interface DocsNavGroup {
 /** Every docs page, in reading order. The sidebar and next/previous links read this. */
 export const docsNav: DocsNavGroup[] = [
   {
-    label: "Start",
+    label: "Get started",
     items: [
       { to: "/docs", label: "What Misty is" },
       { to: "/docs/connect", label: "Connect the app" },
@@ -26,13 +24,15 @@ export const docsNav: DocsNavGroup[] = [
     label: "Self-hosting",
     items: [
       { to: "/docs/self-hosting", label: "Run a server" },
-      ...integrationDocs.map((doc) => ({
-        to: `/docs/self-hosting/${doc.slug}`,
-        label: doc.file,
-        mono: true,
-      })),
       { to: "/docs/maintenance", label: "Updates and backups" },
     ],
+  },
+  {
+    label: "Server env files",
+    items: integrationDocs.map((doc) => ({
+      to: `/docs/self-hosting/${doc.slug}`,
+      label: doc.file,
+    })),
   },
 ];
 

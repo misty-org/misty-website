@@ -131,11 +131,6 @@ html:not(.dark) .mist-tile-route { --ribbon-1: #d2ad4a; --ribbon-2: #6b9db3; --r
 /* The tile's category chip, pinned to its top-left corner. */
 .mist-tile-label { position: absolute; top: 20px; left: 24px; z-index: 1; }
 
-/* A small line under a tile's title, for the fine print. */
-.mist-tile h3 .mist-tile-note { display: block; margin-top: 6px; color: var(--mist-subtle); font-size: 11.5px; line-height: 1.4; font-weight: 400; letter-spacing: 0; }
-.mist-tile h3 .mist-tile-note + .mist-tile-note { margin-top: 3px; }
-.mist-tile h3 .mist-tile-ref { position: relative; top: -.75em; margin-left: 1px; font-size: .5em; line-height: 0; vertical-align: baseline; }
-
 /* Wide tiles let their sentence run longer than the 460px a narrow tile holds. */
 .mist-home .mist-tile:is([data-span="7"], [data-span="8"], [data-span="12"]) h3 { max-width: min(100%, 720px); }
 

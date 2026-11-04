@@ -76,9 +76,9 @@ export function useAccountSettings({
   }, [open, user, me, logout, navigate, onOpenChange, setLoading, setMe]);
 
   /** Keeps the cached account and the auth session in sync after a rename. */
-  function renameAccount(name: string) {
-    patchMe({ name });
-    if (user) setUser({ ...user, name });
+  function renameAccount(username: string) {
+    patchMe({ username });
+    if (user) setUser({ ...user, name: username });
   }
 
   /**

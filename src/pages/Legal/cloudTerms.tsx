@@ -6,36 +6,35 @@ import {
 } from "./LegalPage";
 
 /**
- * The Misty Cloud subscription section of the Terms (section 3). Kept apart so
+ * The Misty Pro subscription section of the Terms (section 3). Kept apart so
  * the Terms file stays readable.
  */
 export const cloudTermsSection: LegalSectionDef = {
   id: "cloud",
-  title: "Misty Cloud subscriptions",
+  title: "Misty Pro subscriptions",
   inShort:
-    "Misty Cloud is a monthly subscription to a Misty server we run. We never charge for AI, and you can cancel at any time, effective at the end of the month you've paid for.",
+    "Misty Pro is a monthly subscription to a Misty server we run. We never charge for AI, and you can cancel at any time, effective at the end of the month you've paid for.",
   body: (
     <>
       <p>
-        Misty Cloud is a Misty server that we run for paying customers. You
+        Misty Pro is a Misty server that we run for paying customers. You
         don't need it to use Misty: the app, and running your own Misty server,
         are free.
       </p>
       <LegalSubheading>Payment and your account</LegalSubheading>
       <p>
-        Misty Cloud is billed monthly in advance, in US dollars, through our
+        Misty Pro is billed monthly in advance, in US dollars, through our
         payment processor, Stripe. Sales tax, VAT or GST is added where it
-        applies, worked out by Stripe from your billing address. Storage add-ons
-        are billed the same way. Your billing date is the day of the month you
+        applies, worked out by Stripe from your billing address. Your billing date is the day of the month you
         subscribed. When you subscribe, you authorize us to charge your payment
         method on each billing date until you cancel.
       </p>
       <p>
-        Your payment creates your Misty Cloud account, and we email a setup link
-        with a setup key to the address you paid with. Keep setup keys private:
-        until it's used or expires, anyone who has one can use it to get into
-        your account. You manage your subscription, payment method and invoices
-        in Stripe's customer portal.
+        Your payment adds Misty Pro to the Misty account you were signed in
+        with. If you ask for a sign-in link, we email it to that account&apos;s
+        address. Keep sign-in links private: until one is used or expires,
+        anyone who has it can use it to get into your account. You manage your subscription, payment method and invoices
+        in your account settings.
       </p>
       <LegalSubheading>What your plan includes</LegalSubheading>
       <LegalList
@@ -53,7 +52,7 @@ export const cloudTermsSection: LegalSectionDef = {
       />
       <LegalSubheading>Cancelling and refunds</LegalSubheading>
       <p>
-        You can cancel at any time in Stripe's customer portal. Cancelling takes
+        You can cancel at any time in your account settings. Cancelling takes
         effect at the end of the billing month you've paid for, and you keep
         full access until then. Except where the law requires otherwise,
         payments aren't refundable and we don't give partial refunds or credit
@@ -61,7 +60,7 @@ export const cloudTermsSection: LegalSectionDef = {
       </p>
       <p>
         If you're a consumer in the EU, EEA or UK, you can withdraw from a new
-        subscription within 14 days for a refund. If you start using Misty Cloud in that
+        subscription within 14 days for a refund. If you start using Misty Pro in that
         time, you ask us to begin right away, and we may keep a share of the
         payment for the days you used.
       </p>
@@ -80,7 +79,8 @@ export const cloudTermsSection: LegalSectionDef = {
       </p>
       <p>
         When your subscription ends, whether you cancelled or it went unpaid,
-        your account becomes read-only for 30 days so you can export your data.
+        your account becomes read-only for 30 days so you can export your data
+        from the Misty app.
         We email you when it ends and again before the deletion date. If you
         pay again before then, your account is restored. After 30 days we
         delete your account and its data as described in our{" "}

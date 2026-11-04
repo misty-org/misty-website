@@ -14,9 +14,7 @@ const PRODUCTS = ["Misty", "Comet", "Polar", "Dia", "ChatGPT", "Claude"] as cons
 
 const yes = { yes: true } as const;
 const no = { yes: false } as const;
-/** A value with a short qualifier under it. */
-const noted = (text: string | typeof yes, note: string) => ({ value: text, note });
-type Cell = string | typeof yes | typeof no | ReturnType<typeof noted>;
+type Cell = string | typeof yes | typeof no;
 
 /**
  * Agent and browser features only, and only rows where Misty leads every column. Each cell comes from
@@ -36,9 +34,9 @@ type Cell = string | typeof yes | typeof no | ReturnType<typeof noted>;
  */
 const ROWS: { label: string; cells: Cell[] }[] = [
   { label: "Model for each job", cells: [yes, no, no, no, no, no] },
-  { label: "Model makers", cells: [noted("Any major provider", "with your own key"), "8", "Picked for you", "Picked for you", "OpenAI only", "Anthropic only"] },
-  { label: "Free browser agent", cells: [noted("Included", "you pay only your model provider"), "Paid only", "Credits", "No agent", "Limited", "Pro and up"] },
-  { label: "Sign-ins sync", cells: [noted(yes, "some sites ask again"), no, no, no, "Cloud browser only", no] },
+  { label: "Model makers", cells: ["Any major provider, with your own key", "8", "Picked for you", "Picked for you", "OpenAI only", "Anthropic only"] },
+  { label: "Free browser agent", cells: ["Included, you pay only your model provider", "Paid only", "Credits", "No agent", "Limited", "Pro and up"] },
+  { label: "Sign-ins sync", cells: ["Yes, some sites ask again", no, no, no, "Cloud browser only", no] },
   { label: "Agents help each other", cells: [yes, no, no, no, no, no] },
 ];
 
@@ -54,7 +52,6 @@ const COMPARE_SOURCES: [string, string][] = [
 
 function CellValue({ cell }: { cell: Cell }): ReactNode {
   if (typeof cell === "string") return cell;
-  if ("note" in cell) return <><CellValue cell={cell.value} /><small className="mist-compare-note">{cell.note}</small></>;
   return cell.yes
     ? <Check className="mist-compare-mark" aria-label="Yes" />
     : <X className="mist-compare-mark" data-no aria-label="No" />;

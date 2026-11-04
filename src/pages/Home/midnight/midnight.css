@@ -52,7 +52,7 @@ html:not(.dark) .mist-home {
 /* Every section pads by the same --mist-gap above and below, so all section breaks match. */
 .mist-section { position: relative; padding: calc(var(--mist-gap) * .55) 0; scroll-margin-top: 110px; }
 .mist-section-anchor { scroll-margin-top: 110px; }
-.mist-home h2:not(footer *) { font-size: clamp(32px, 3.4vw, 49px); line-height: 1.12; letter-spacing: -.045em; font-weight: 580; }
+.mist-home h2:not(footer *) { font-size: clamp(26px, 2.6vw, 36px); line-height: 1.12; letter-spacing: -.045em; font-weight: 580; }
 /* One viewport-sized wallpaper shared by every section. Its negative margin
    keeps it behind the content without allocating another viewport of space. */
 .mist-atmosphere {
@@ -120,8 +120,8 @@ html:not(.dark) .mist-home {
 .mist-mono { font-family: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0; }
 .mist-hero { position: relative; padding-top: var(--mist-nav-offset); scroll-margin-top: 110px; }
 .mist-hero-copy { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 96px 0 64px; text-align: center; }
-.mist-home h1 { max-width: 1200px; font-size: clamp(40px, 5.6vw, 80px); font-weight: 400; line-height: 1.22; letter-spacing: -.055em; text-wrap: balance; }
-.mist-home .mist-hero h1 { max-width: 1040px; font-size: clamp(36px, 5vw, 68px); white-space: nowrap; }
+.mist-home h1 { max-width: 1200px; font-size: clamp(32px, 4vw, 56px); font-weight: 400; line-height: 1.22; letter-spacing: -.055em; text-wrap: balance; }
+.mist-home .mist-hero h1 { max-width: 1040px; font-size: clamp(30px, 3.6vw, 48px); white-space: nowrap; }
 /* The second line of a heading is dimmed, so each heading reads as a statement and its turn. */
 /* The hero is one bright tone; section titles dim their second line. */
 /* Each line is its own centred block, so the headline can be written out line by line. */
@@ -244,7 +244,7 @@ html:not(.dark) .mist-home {
 .mist-sketch-tools > div { display: grid; grid-template-columns: 36px 1fr; column-gap: 12px; row-gap: 2px; padding: 14px; border: 1px solid var(--mist-raised-border); border-radius: 10px; background: var(--mist-raised); }
 .mist-sketch-tools i { grid-row: span 2; width: 36px; height: 36px; border-radius: 9px; background: linear-gradient(145deg, var(--mist-tile-a), var(--mist-tile-b)); border: 1px solid var(--mist-raised-border); }
 .mist-sketch-tools span { color: var(--mist-subtle); font-size: 13px; line-height: 1.4; }
-.mist-fine-print { color: var(--mist-subtle); font-size: 11px; margin-top: 18px !important; line-height: 1.6; }
+.mist-fine-print { color: var(--mist-subtle); font-size: 14px; margin-top: 18px !important; line-height: 1.6; }
 .mist-card-note { margin-top: 14px !important; color: var(--mist-muted); font-size: 15px; line-height: 1.6; max-width: 420px; }
 /* Chapters: each part of the story opens with a large heading, alone on its hairline. The heads
    alternate sides down the page: sync left, agents right, tools left, Spaces right, connected
@@ -386,7 +386,7 @@ html:not(.dark) .mist-home {
   .mist-hub-core [data-misty-brand-logo], .mist-hub-core svg { width: 34px; height: 34px; }
   .mist-home { --mist-gap: 36px; }
   .mist-hero-copy { padding: 64px 0 40px; }
-  .mist-home h1 { font-size: clamp(36px, 9vw, 52px); }
+  .mist-home h1 { font-size: clamp(30px, 8vw, 40px); }
   .mist-feature-grid { grid-template-columns: 1fr; gap: 16px; }
   .mist-feature-card[data-size] { grid-column: auto; min-height: 0; }
   .mist-feature-visual { flex: none; height: clamp(170px, 48vw, 340px); }
@@ -720,7 +720,7 @@ html:not(.dark) .mw { box-shadow: 0 40px 90px #0000002e, 0 0 0 1px #0000000f; }
 .mist-interlude { position: relative; padding: clamp(24px, 3svh, 40px) 0; text-align: center; scroll-margin-top: 80px; }
 .mist-interlude-copy { display: grid; justify-items: center; gap: 14px; }
 .mist-interlude h2 { width: fit-content; }
-.mist-home .mist-interlude h2 { font-size: clamp(40px, 5.4vw, 84px); font-weight: 400; line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
+.mist-home .mist-interlude h2 { font-size: clamp(30px, 3.6vw, 48px); font-weight: 400; line-height: 1.08; letter-spacing: -.055em; text-wrap: balance; }
 
 
 /* Layout: a window whose panes resize and whose virtual window switches on its own. */
@@ -746,7 +746,7 @@ html:not(.dark) .mw { box-shadow: 0 40px 90px #0000002e, 0 0 0 1px #0000000f; }
 }
 
 @media (max-width: 800px) {
-  .mist-home .mist-interlude h2 { font-size: clamp(34px, 9.5vw, 56px); }
+  .mist-home .mist-interlude h2 { font-size: clamp(28px, 7.5vw, 40px); }
 }
 
 @media (max-width: 640px) {

@@ -20,7 +20,7 @@ export function SyncChapter() {
     <Chapter id="sync" title={<>Give each computer its own setup{" "}<span>and keep them all in sync.</span></>}>
       <Tiles>
         {/* The sync tree takes a full row so the diagram has room; then a wide-narrow pair. */}
-        <Tile span={12} label="sync" title={<>Switch computers and keep going. Your tabs, panes and sign-ins<sup className="mist-tile-ref">1</sup> sync, end-to-end encrypted<sup className="mist-tile-ref">2</sup>.<small className="mist-tile-note">1. Some sites still ask you to sign in again.</small><small className="mist-tile-note">2. Misty will never track or share your synced data. All encryption keys stay local to your device.</small></>}><SyncTree /></Tile>
+        <Tile span={12} label="sync" title={<>Switch computers and keep going. Your tabs, panes and sign-ins sync, end-to-end encrypted, though some sites still ask you to sign in again.</>}><SyncTree /></Tile>
         <Tile id="foundation" span={7} label="layout" title="Tabs on top, tabs on the side, or split panes. Set up each computer its own way."><DeviceLayouts /></Tile>
         <Tile span={5} label="search" title="Bookmarks, history and your search engine, in one address bar."><AddressBar /></Tile>
       </Tiles>

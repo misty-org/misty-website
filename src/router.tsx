@@ -1,8 +1,9 @@
-import { createBrowserRouter, redirect } from "react-router";
+import { createBrowserRouter, redirect, type RouteObject } from "react-router";
 import App from "./App";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
+import ConfirmEmail from "./pages/ConfirmEmail";
 import SignInLink from "./pages/SignInLink";
 import NotFound from "./pages/NotFound";
 import Waitlist from "./pages/Waitlist";
@@ -20,8 +21,41 @@ import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
 import Invite from "./pages/Invite";
 import { marketingCopy } from "./content/marketingCopy";
+import { isDocsHost, siteLink } from "./lib/site";
 
-export const router = createBrowserRouter([
+/** Sends a `/docs/...` address to the docs host (or, there, to its own path). */
+function toDocs(path: string) {
+  const target = siteLink(path);
+  return redirect("path" in target ? target.path : target.href);
+}
+
+const notFound: RouteObject = {
+  path: "*",
+  element: <NotFound />,
+  handle: {
+    title: "Page not found | Misty",
+    description: "The requested Misty page could not be found.",
+  },
+};
+
+/** docs.mistysys.com: the docs at the root, under the site's own header and footer. */
+const docsSite: RouteObject[] = [
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      { ...docsRoutes, path: undefined },
+      {
+        // Older links that still name the docs folder.
+        path: "docs/*",
+        loader: ({ request }) => toDocs(new URL(request.url).pathname),
+      },
+      notFound,
+    ],
+  },
+];
+
+const site: RouteObject[] = [
   {
     path: "/",
     element: <App />,
@@ -69,17 +103,24 @@ export const router = createBrowserRouter([
           description: marketingCopy.metadata.kiri,
         },
       },
-      docsRoutes,
+      {
+        // The docs moved to their own host.
+        path: "docs/*",
+        loader: ({ request }) => {
+          const url = new URL(request.url);
+          return toDocs(url.pathname + url.search);
+        },
+      },
       {
         // The self-hosting page moved into the docs.
         path: "self-hosting",
-        loader: () => redirect("/docs/self-hosting"),
+        loader: () => toDocs("/docs/self-hosting"),
       },
       {
         path: "pricing",
         element: <Pricing />,
         handle: {
-          title: "Pricing | Misty and Misty Cloud",
+          title: "Pricing | Misty and Misty Pro",
           description: marketingCopy.metadata.pricing,
         },
       },
@@ -92,9 +133,9 @@ export const router = createBrowserRouter([
         path: "cloud/welcome",
         element: <CloudWelcome />,
         handle: {
-          title: "Welcome to Misty Cloud | Misty",
+          title: "Welcome to Misty Pro | Misty",
           description:
-            "Your Misty Cloud setup email is on its way. Download Misty and open its setup link.",
+            "Download Misty, choose Misty Pro and sign in with your Misty account.",
         },
       },
       {
@@ -135,7 +176,7 @@ export const router = createBrowserRouter([
         path: "privacy",
         element: <Privacy />,
         handle: {
-          title: "Privacy Policy | Misty",
+          title: "Privacy policy | Misty",
           description:
             "How Misty handles your account details, files, and Space content.",
         },
@@ -144,9 +185,9 @@ export const router = createBrowserRouter([
         path: "terms",
         element: <Terms />,
         handle: {
-          title: "Terms of Service | Misty",
+          title: "Terms of service | Misty",
           description:
-            "The agreement covering your use of Misty and Misty Cloud.",
+            "The agreement covering your use of Misty and Misty Pro.",
         },
       },
       {
@@ -190,23 +231,28 @@ export const router = createBrowserRouter([
         },
       },
       {
+        // Confirmation emails link here with the server and token in the fragment, and
+        // the server sends the person back with ?result=.
+        path: "confirm-email",
+        element: <ConfirmEmail />,
+        handle: {
+          title: "Confirm your email | Misty",
+          description: "Confirm your email to finish creating your Misty account.",
+        },
+      },
+      {
         // misty-billing sends visitors back here with ?sent=1.
         path: "sign-in",
         element: <SignInLink />,
         handle: {
           title: "Get a sign-in link | Misty",
           description:
-            "Get a sign-in link for your Misty Cloud account. It also lets you choose a new password.",
+            "Get a sign-in link for your Misty Pro account. It also lets you choose a new password.",
         },
       },
-      {
-        path: "*",
-        element: <NotFound />,
-        handle: {
-          title: "Page not found | Misty",
-          description: "The requested Misty page could not be found.",
-        },
-      },
+      notFound,
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(isDocsHost() ? docsSite : site);

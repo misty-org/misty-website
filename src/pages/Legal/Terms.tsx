@@ -72,7 +72,7 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           "Misty" means the Misty desktop application, the website at{" "}
-          {legalInfo.siteUrl}, and Misty Cloud, the Misty server we run for
+          {legalInfo.siteUrl}, and Misty Pro, the Misty server we run for
           subscribers, with its sync, Spaces, and agent tools. Misty is
           operated by{" "}
           {operatorDescription} ("we", "us", "our").
@@ -88,7 +88,7 @@ const sections: LegalSectionDef[] = [
         <p>
           If you run your own Misty server, you operate it and are responsible
           for it and the data on it. These Terms cover only this website and
-          Misty Cloud.
+          Misty Pro.
         </p>
         <p>
           The Misty name and logo belong to us. The AGPL covers the code, not
@@ -120,8 +120,8 @@ const sections: LegalSectionDef[] = [
           ChatGPT, OpenRouter, Ollama, or a provider whose API key you add, as
           described in our{" "}
           <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Sign in with
-          ChatGPT works the same on your own server and on Misty Cloud, and it
-          isn't part of what a Misty Cloud subscription sells.
+          ChatGPT works the same on your own server and on Misty Pro, and it
+          isn't part of what a Misty Pro subscription sells.
         </p>
         <LegalList
           items={[
@@ -216,7 +216,8 @@ const sections: LegalSectionDef[] = [
           Data can be lost through bugs, outages, sync conflicts, lost
           passwords, account deletion, or circumstances outside our control. You
           are responsible for keeping your own copies of anything important.
-          You can export your account data at any time from Account Settings.
+          To get a copy of your account data, email{" "}
+          <LegalEmail address={supportEmail} /> from your account email.
         </p>
       </>
     ),
@@ -262,7 +263,7 @@ const sections: LegalSectionDef[] = [
         </p>
         <p>
           If we decide to shut down a service we run, we will give at least 30
-          days' notice so you can export your data.
+          days' notice so you can get a copy of your data.
         </p>
       </>
     ),
@@ -279,7 +280,7 @@ const sections: LegalSectionDef[] = [
           Account Settings. Deleted accounts can be restored for 30 days, after
           which the data is removed as described in our{" "}
           <LegalLink to="/privacy#retention">Privacy Policy</LegalLink>. When
-          a Misty Cloud subscription ends, section 3 says what happens to the
+          a Misty Pro subscription ends, section 3 says what happens to the
           account.
         </p>
         <p>
@@ -287,7 +288,7 @@ const sections: LegalSectionDef[] = [
           materially or repeatedly break these Terms, if your use creates legal
           risk or harm for us or others, or if the law requires it. Where it's
           reasonable and lawful, we will tell you why and give you a chance to
-          export your data.
+          get a copy of your data.
         </p>
         <p>
           Sections that by their nature should survive termination will
@@ -350,7 +351,7 @@ const sections: LegalSectionDef[] = [
     inShort: "Misty is provided as-is, without guarantees.",
     body: (
       <>
-        <p className="uppercase tracking-[0.01em]">
+        <p>
           Misty is provided "as is" and "as available." To the fullest extent
           permitted by law, we disclaim all warranties, express or implied,
           including warranties of merchantability, fitness for a particular
@@ -375,7 +376,7 @@ const sections: LegalSectionDef[] = [
       "If something goes wrong, our liability is limited to US $50.",
     body: (
       <>
-        <p className="uppercase tracking-[0.01em]">
+        <p>
           To the fullest extent permitted by law, we and our service providers
           will not be liable for any indirect, incidental, special,
           consequential, exemplary, or punitive damages, or for any loss of
@@ -384,7 +385,7 @@ const sections: LegalSectionDef[] = [
           related to Misty or these Terms, even if we were told such damages
           were possible.
         </p>
-        <p className="uppercase tracking-[0.01em]">
+        <p>
           Our total liability for all claims arising out of or related to Misty
           or these Terms is limited to US $50.
         </p>
@@ -455,7 +456,7 @@ const sections: LegalSectionDef[] = [
           infringement or misuse of intellectual property.
         </p>
         <LegalSubheading>No class actions or jury trials</LegalSubheading>
-        <p className="uppercase tracking-[0.01em]">
+        <p>
           You and we each waive the right to a jury trial and to bring or take
           part in any class, collective, consolidated, or representative action.
           Claims may only be brought individually.
@@ -554,8 +555,7 @@ const sections: LegalSectionDef[] = [
 export default function Terms() {
   return (
     <LegalPage
-      title="Terms of Service"
-      summary="The agreement covering your use of Misty and Misty Cloud."
+      title="Terms of service"
       intro={
         <p className="text-base leading-7 text-muted-foreground">
           These Terms of Service ("Terms") are a contract between you and{" "}
@@ -569,7 +569,7 @@ export default function Terms() {
       highlights={[
         "You own your content. We only use it to run Misty for you, and we never sell it or train AI models on it.",
         "The Misty app is open source under the GNU AGPL-3.0. If you run your own server, you're responsible for it.",
-        "Misty Cloud is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
+        "Misty Pro is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
         "AI can be wrong, and you're responsible for what you ask agents to do.",
         "Misty isn't a backup service. Keep copies of anything important.",
         "Our liability is limited, and U.S. disputes go to individual arbitration.",

@@ -7,7 +7,8 @@ type Theme = "light" | "dark";
 
 const baseMe: MeResponse = {
   id: "user-123",
-  name: "Maya Chen",
+  username: "maya",
+  provider: "misty",
   email: "maya@misty.local",
   created_at: "2025-04-12T12:00:00Z",
 };
@@ -52,6 +53,15 @@ async function prepareAccount(
       return;
     }
 
+    if (url.pathname.endsWith("/me/invite-code")) {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ code: "abcdefghij" }),
+      });
+      return;
+    }
+
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -88,24 +98,17 @@ for (const theme of ["light", "dark"] as const) {
     await expect(page.locator("html")).toHaveClass(new RegExp(`^${theme}$`));
     const dialog = page.getByRole("dialog", { name: "Account settings" });
     await expect(
-      dialog.getByRole("heading", { level: 1, name: "Account" }),
+      dialog.getByRole("heading", { level: 1, name: "Profile" }),
     ).toBeVisible();
     await expect(
       dialog.getByRole("navigation", { name: "Account settings sections" }),
     ).toBeVisible();
-    const accountNavButton = dialog.getByRole("button", {
-      name: "Account",
+    const profileNavButton = dialog.getByRole("button", {
+      name: "Profile",
       exact: true,
     });
-    await expect(accountNavButton).toHaveAttribute("aria-current", "page");
-    const accountNavSurface = accountNavButton.locator(
-      '[data-settings-nav-surface="true"]',
-    );
-    await expect(accountNavButton).toHaveCSS(
-      "background-color",
-      "rgba(0, 0, 0, 0)",
-    );
-    await expect(accountNavSurface).toHaveCSS(
+    await expect(profileNavButton).toHaveAttribute("aria-current", "page");
+    await expect(profileNavButton).toHaveCSS(
       "background-color",
       "rgb(62, 62, 62)",
     );
@@ -118,12 +121,6 @@ for (const theme of ["light", "dark"] as const) {
       await privacyNavButton.hover();
       await expect(privacyNavButton).toHaveCSS(
         "background-color",
-        "rgba(0, 0, 0, 0)",
-      );
-      await expect(
-        privacyNavButton.locator('[data-settings-nav-surface="true"]'),
-      ).toHaveCSS(
-        "background-color",
         "rgb(43, 43, 43)",
       );
     }
@@ -133,8 +130,8 @@ for (const theme of ["light", "dark"] as const) {
     await expect(
       dialog.getByRole("button", { name: "Usage", exact: true }),
     ).toHaveCount(0);
-    await expect(dialog.getByText("Maya Chen", { exact: true })).toBeVisible();
-    await expect(dialog.getByLabel("Display name")).toHaveValue("Maya Chen");
+    await expect(dialog.getByText("maya", { exact: true })).toBeVisible();
+    await expect(dialog.getByLabel("Username")).toHaveValue("maya");
 
     await expect(dialog.getByRole("button", { name: "General" })).toHaveCount(
       0,
@@ -193,7 +190,7 @@ for (const theme of ["light", "dark"] as const) {
   });
 }
 
-test("account updates save the display name", async ({ page }) => {
+test("account updates save the username", async ({ page }) => {
   const requests: Array<{ path: string; method: string; body: string | null }> =
     [];
   await prepareAccount(page, "dark", baseMe, (route) => {
@@ -207,7 +204,7 @@ test("account updates save the display name", async ({ page }) => {
   await page.goto("/changelog");
   await openAccountSettings(page);
 
-  await page.getByRole("dialog").getByLabel("Display name").fill("Maya Rivera");
+  await page.getByRole("dialog").getByLabel("Username").fill("maya_rivera");
   await page
     .getByRole("dialog")
     .getByRole("button", { name: "Save changes" })
@@ -216,9 +213,9 @@ test("account updates save the display name", async ({ page }) => {
     "Saved.",
   );
   expect(requests).toContainEqual({
-    path: "/api/me/profile",
+    path: "/api/me/username",
     method: "PUT",
-    body: JSON.stringify({ name: "Maya Rivera" }),
+    body: JSON.stringify({ username: "maya_rivera" }),
   });
 });
 
@@ -272,16 +269,13 @@ test("privacy links to the real legal pages", async ({ page }) => {
   await expect(dialog.getByText("Coming soon")).toHaveCount(0);
 });
 
-test("the account tab owns export and deletion", async ({ page }) => {
+test("the account tab owns deletion", async ({ page }) => {
   await prepareAccount(page, "dark");
   await page.goto("/settings/account");
 
   const dialog = page.getByRole("dialog", { name: "Account settings" });
   await expect(dialog.getByLabel("Licensed device")).toHaveCount(0);
   await expect(dialog.getByLabel("Profile picture")).toBeAttached();
-  await expect(
-    dialog.getByRole("button", { name: "Download my data" }),
-  ).toBeDisabled();
 
   // Deletion stays disabled until both the password and the typed confirmation
   // are present.
@@ -333,7 +327,7 @@ test("a settings URL is addressable and keeps its path", async ({ page }) => {
     page.getByRole("dialog", { name: "Account settings" }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { level: 1, name: "Account" }),
+    page.getByRole("heading", { level: 1, name: "Profile" }),
   ).toBeVisible();
 });
 
@@ -401,4 +395,46 @@ test("a signed-out settings deep link returns after sign-in", async ({
   // The destination is carried in router state so sign-in can return to it.
   const carried = await page.evaluate(() => window.history.state?.usr?.from);
   expect(carried).toBe("/settings/privacy");
+});
+
+test("a subscriber cancels and keeps Misty Pro in settings, never at Stripe's login", async ({
+  page,
+}) => {
+  await prepareAccount(page, "dark");
+  let cancelled = false;
+  await page.route("**/account/subscription**", async (route) => {
+    const path = new URL(route.request().url()).pathname;
+    if (path.endsWith("/cancel")) cancelled = true;
+    if (path.endsWith("/resume")) cancelled = false;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({
+        subscribed: true,
+        status: "active",
+        current_period_end: "2026-12-03T12:00:00Z",
+        cancel_at_period_end: cancelled,
+      }),
+    });
+  });
+  await page.goto("/settings/subscription");
+
+  const dialog = page.getByRole("dialog", { name: "Account settings" });
+  await expect(dialog.getByText("Renews on")).toBeVisible();
+  await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+  const confirm = page.getByRole("alertdialog");
+  await expect(confirm).toContainText("You keep Misty Pro until");
+  await confirm.getByRole("button", { name: "Cancel subscription" }).click();
+  await expect(dialog.getByText("Ends on")).toBeVisible();
+  await dialog.getByRole("button", { name: "Keep subscription" }).click();
+  await expect(dialog.getByText("Renews on")).toBeVisible();
+});
+
+test("the profile page offers a link to invite someone", async ({ page }) => {
+  await prepareAccount(page, "dark");
+  await page.goto("/settings/account");
+  const dialog = page.getByRole("dialog", { name: "Account settings" });
+  await expect(dialog.getByText(/\/r\/abcdefghij$/)).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Copy your invite link" })).toBeVisible();
 });
