@@ -64,6 +64,14 @@ export const cloudTermsSection: LegalSectionDef = {
         time, you ask us to begin right away, and we may keep a share of the
         payment for the days you used.
       </p>
+      <LegalSubheading>Availability</LegalSubheading>
+      <p>
+        We work to keep Misty Pro running and to protect your data, but we make
+        no commitment about uptime, backups, or recovery. Except where the law
+        requires otherwise, outages, data loss, and security incidents don&apos;t
+        entitle you to a refund, credit, or other compensation. Sections 14 and
+        15 apply to Misty Pro.
+      </p>
       <LegalSubheading>Failed payments and price changes</LegalSubheading>
       <p>
         If a payment fails, we email you and try again for 14 days. If it's

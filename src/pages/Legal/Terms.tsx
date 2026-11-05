@@ -49,7 +49,7 @@ const sections: LegalSectionDef[] = [
         <p>
           Misty works as a browser without an account. Sync, Spaces and the
           tools agents use need an account on a Misty server, such as Misty
-          Cloud. Give us accurate information and keep it up to date. You are
+          Pro. Give us accurate information and keep it up to date. You are
           responsible for keeping your password, setup keys and devices secure
           and for all activity under your account, including actions taken by
           AI agents you start. Tell us promptly at{" "}
@@ -82,13 +82,18 @@ const sections: LegalSectionDef[] = [
           <LegalLink to="/license">GNU AGPL-3.0</LegalLink>. That license, not
           these Terms, governs how you may use, copy, change, and share the
           source code. Misty includes other open-source components, each
-          licensed under its own terms. Misty may update itself automatically
-          to fix bugs, patch security issues, or add or change features.
+          licensed under its own terms. The source code comes with no warranty
+          and the limits of liability in sections 15 and 16 of that license, and
+          nothing in these Terms restricts the rights it gives you. Misty may
+          update itself automatically to fix bugs, patch security issues, or add
+          or change features.
         </p>
         <p>
-          If you run your own Misty server, you operate it and are responsible
-          for it and the data on it. These Terms cover only this website and
-          Misty Pro.
+          These Terms cover this website, the app builds we publish, and Misty
+          Pro. If you run your own Misty server, you operate it and are solely
+          responsible for it, its security, and the data on it. We don't operate,
+          monitor, or support servers we don't run, or copies of Misty that
+          others have changed or distributed, and we aren't responsible for them.
         </p>
         <p>
           The Misty name and logo belong to us. The AGPL covers the code, not
@@ -126,7 +131,8 @@ const sections: LegalSectionDef[] = [
         <LegalList
           items={[
             "AI output can be inaccurate, incomplete, offensive, or out of date. Don't rely on it for medical, legal, financial, or other professional advice, and review it before you use or publish it.",
-            "Agents act on your instructions. You are responsible for the actions an agent takes on your behalf, including filling in forms, sending messages, making purchases, or changing settings on other websites. Review what an agent is about to do before you approve it, and don't give agents tasks you wouldn't do yourself.",
+            "Agents act on your instructions and signed in as you. You are responsible for the actions an agent takes on your behalf, including filling in forms, sending messages, making purchases, deleting content, or changing settings on other websites. Depending on the mode you choose, an agent may act without asking you first at each step. Don't give agents tasks you wouldn't do yourself.",
+            "Websites and documents can contain hidden instructions that mislead an agent. Pauses, confirmations, site blocks, and other safeguards reduce risk, but they can fail and aren't a guarantee.",
             "You must follow the terms and usage policies of the model providers you use, and you may not use AI features to create content that is illegal, infringing, or harmful.",
             "Your model provider bills you directly for the AI you use. We never charge for AI, on any plan, and aren't responsible for those charges.",
           ]}
@@ -203,9 +209,11 @@ const sections: LegalSectionDef[] = [
           synced browser data cannot be recovered by anyone, including us.
         </p>
         <p>
-          Other content, including Spaces and Library files, is protected in
-          transit but is not end-to-end encrypted. AI requests go from your
-          desktop to the model provider you chose, not through us. See our{" "}
+          Other content, including Spaces, Library files, Memory, and agent
+          conversations with what an agent reads on a signed-in page, is
+          protected in transit but is not end-to-end encrypted, and is stored on
+          the server you use. AI requests go from your desktop to the model
+          provider you chose, not through us. See our{" "}
           <LegalLink to="/privacy#security">Privacy Policy</LegalLink> for
           details.
         </p>
@@ -339,32 +347,65 @@ const sections: LegalSectionDef[] = [
         Misty lets you browse the web, install extensions, and connect
         third-party services, such as Google accounts and other apps you link.
         Those websites, extensions, and services are run by others under their
-        own terms and privacy policies. We don't control them and aren't
-        responsible for their content, security, availability, or what they do
-        with your data. You use them at your own risk.
+        own terms and privacy policies. We don't control or review them and
+        aren't responsible for their content, security, availability, or what
+        they do with your data, including any malware, phishing, or other harm
+        they cause. You use them at your own risk.
       </p>
     ),
   },
   {
     id: "disclaimers",
-    title: "Disclaimers",
-    inShort: "Misty is provided as-is, without guarantees.",
+    title: "Your risk, our efforts, and disclaimers",
+    inShort:
+      "We work to keep Misty safe and reliable, but we can't promise it will be, and you use it at your own risk.",
     body: (
       <>
         <p>
-          Misty is provided "as is" and "as available." To the fullest extent
-          permitted by law, we disclaim all warranties, express or implied,
-          including warranties of merchantability, fitness for a particular
-          purpose, title, and non-infringement. We do not guarantee that Misty
-          will be uninterrupted, secure, error-free, or compatible with your
-          devices, that data will not be lost or corrupted, or that AI output
-          will be accurate.
+          We make reasonable efforts to reduce the risks of using Misty,
+          including by testing our software, fixing problems we find, and
+          protecting the systems we run. Those efforts are not a guarantee of
+          any result. Software and online services can fail in ways no one
+          foresees, and some risks can't be removed.
         </p>
         <p>
-          You use Misty at your own risk and are responsible for any damage to
-          your devices, software, or data that results from installing or using
-          it. Some places don't allow these disclaimers, so some of them may not
-          apply to you.
+          <strong className="font-medium text-foreground">
+            You use Misty at your own risk.
+          </strong>{" "}
+          Those risks include:
+        </p>
+        <LegalList
+          items={[
+            "loss, corruption, or deletion of data, including through bugs, updates, sync conflicts, outages, lost passwords, or account closure;",
+            "unauthorized access to, or theft or exposure of, your data, accounts, or website sign-ins, including through attacks on or flaws in Misty, our service providers, or your devices;",
+            "malware, phishing, or other harmful code or content, including through websites, downloads, extensions, or connected services you use in Misty;",
+            "bugs, defects, crashes, incompatibility, or damage to your devices or software;",
+            "mistakes by AI features and agents, including actions taken after an agent is misled by content on a page; and",
+            "interruption, change, or discontinuation of Misty or of any service it depends on.",
+          ]}
+        />
+        <p>
+          You are responsible for deciding whether Misty is right for your
+          needs, keeping your own backups, and securing your devices and
+          accounts. Unless the law requires otherwise, we have no obligation to
+          repair, restore, replace, or compensate you for anything lost or
+          harmed in these ways.
+        </p>
+        <p>
+          Misty is provided "as is" and "as available." To the fullest extent
+          permitted by law, the Misty parties disclaim all warranties, express
+          or implied, including warranties of merchantability, fitness for a
+          particular purpose, title, and non-infringement. We do not guarantee
+          that Misty will be uninterrupted, secure, error-free, free of viruses
+          or other harmful code, or compatible with your devices, that data will
+          not be lost, corrupted, or accessed without permission, or that AI
+          output will be accurate.
+        </p>
+        <p>
+          The "Misty parties" are Matthew Chen personally, any company formed to
+          operate Misty, and their successors, contractors, contributors, and
+          service providers. Some places don't allow these disclaimers, so some
+          of them may not apply to you.
         </p>
       </>
     ),
@@ -373,29 +414,56 @@ const sections: LegalSectionDef[] = [
     id: "liability",
     title: "Limitation of liability",
     inShort:
-      "If something goes wrong, our liability is limited to US $50.",
+      "To the fullest extent the law allows, the Misty parties aren't liable for the losses in section 14, you agree not to bring claims for them, and any remaining liability is limited to US $50.",
     body: (
       <>
         <p>
-          To the fullest extent permitted by law, we and our service providers
-          will not be liable for any indirect, incidental, special,
-          consequential, exemplary, or punitive damages, or for any loss of
-          data, content, profits, revenue, business, or goodwill, or for damage
-          to devices or the cost of substitute services, arising out of or
-          related to Misty or these Terms, even if we were told such damages
-          were possible.
+          <strong className="font-medium text-foreground">
+            Please read this section carefully. It limits what you can recover
+            from the Misty parties and your right to bring claims against them.
+          </strong>
         </p>
         <p>
-          Our total liability for all claims arising out of or related to Misty
-          or these Terms is limited to US $50.
+          To the fullest extent permitted by law, the Misty parties will not be
+          liable for, or be required to compensate you for, any indirect,
+          incidental, special, consequential, exemplary, or punitive damages, or
+          any loss, theft, corruption, or exposure of data, content, accounts,
+          or sign-ins, any malware or other harmful code, any software defect,
+          any damage to devices, any loss of profits, revenue, business, or
+          goodwill, or the cost of substitute services, arising out of or related
+          to Misty or these Terms. This applies whatever the cause, including a
+          flaw in Misty or a failure of its security, even if we were told such
+          losses were possible and even if a remedy fails of its essential
+          purpose.
+        </p>
+        <p>
+          To the fullest extent permitted by law, you release the Misty parties
+          from, and agree not to bring, any claim for losses this section
+          excludes. If you live in California, you waive California Civil Code
+          section 1542 to that extent, which says: "A general release does not
+          extend to claims that the creditor or releasing party does not know or
+          suspect to exist in his or her favor at the time of executing the
+          release and that, if known by him or her, would have materially
+          affected his or her settlement with the debtor or released party."
+        </p>
+        <p>
+          The Misty parties' total liability for all claims arising out of or
+          related to Misty or these Terms is limited to US $50.
         </p>
         <p>
           These limits apply to every theory of liability, including contract,
-          tort (including negligence), and statute. Nothing in these Terms
-          limits liability that cannot be limited by law, such as liability for
-          fraud, or, for consumers in the EU, EEA, UK, and Switzerland, for
-          death or personal injury caused by negligence, or for gross negligence
-          or willful misconduct.
+          tort (including negligence), strict liability, and statute. They are
+          an essential part of how Misty is offered, and each one applies
+          separately.
+        </p>
+        <p>
+          Nothing in these Terms excludes or limits liability, or waives rights,
+          that the law doesn't allow to be excluded, limited, or waived.
+          Depending on where you live, that can include liability for fraud,
+          willful misconduct, gross negligence, violations of law, or death or
+          personal injury, and rights under consumer protection and privacy laws.
+          Where the law restricts this section, it applies to the greatest extent
+          the law allows.
         </p>
       </>
     ),
@@ -408,10 +476,11 @@ const sections: LegalSectionDef[] = [
     body: (
       <p>
         To the extent permitted by law, you will defend, indemnify, and hold
-        harmless {operatorName} and our service providers from any claims,
+        harmless the Misty parties, including {operatorName}, from any claims,
         damages, losses, and expenses, including reasonable legal fees, arising
         from Your Content, your use of Misty (including actions taken by agents
-        you start), or your breach of these Terms or of anyone's rights. This
+        you start, extensions you install, and any server or changed version of
+        Misty you run), or your breach of these Terms or of anyone's rights. This
         section does not apply to consumers in the EU, EEA, UK, or Switzerland
         except where local law allows it.
       </p>
@@ -560,10 +629,11 @@ export default function Terms() {
         <p className="text-base leading-7 text-muted-foreground">
           These Terms of Service ("Terms") are a contract between you and{" "}
           {operatorDescription}. By creating an account, subscribing to Misty
-          Cloud, installing the app, or using Misty, you agree to them. If you
-          don't agree, don't use Misty. Section 17 requires U.S. users to
-          resolve disputes through individual arbitration instead of class
-          actions.
+          Pro, installing the app, or using Misty, you agree to them. If you
+          don't agree, don't use Misty. Sections 14 to 16 place the risk of using
+          Misty on you and limit our liability and your right to bring claims.
+          Section 17 requires U.S. users to resolve disputes through individual
+          arbitration instead of class actions.
         </p>
       }
       highlights={[
@@ -572,7 +642,8 @@ export default function Terms() {
         "Misty Pro is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
         "AI can be wrong, and you're responsible for what you ask agents to do.",
         "Misty isn't a backup service. Keep copies of anything important.",
-        "Our liability is limited, and U.S. disputes go to individual arbitration.",
+        "We work to keep Misty safe, but we don't guarantee it. You use it at your own risk, including the risk of data loss, stolen data, malware, and software defects.",
+        "To the fullest extent the law allows, we aren't liable for those losses, any remaining liability is limited to US $50, and U.S. disputes go to individual arbitration.",
       ]}
       sections={sections}
     />

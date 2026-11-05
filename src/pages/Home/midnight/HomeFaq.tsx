@@ -35,13 +35,13 @@ const START: Faq[] = [
   },
   {
     q: "Do extensions work?",
-    a: "On a Mac with macOS 15.4 or later, you can install extensions from the Firefox Add-ons catalog and see what each one can access first. Chrome extensions are in progress, and extensions aren't available on Windows yet.",
+    a: "Partly, and we're still testing them with real extensions. On a Mac with macOS 15.4 or later, you can install Chrome and Firefox extensions and see what each one can access first. On Windows, only Chrome's Manifest V3 extensions run, with more limits. uBlock Origin Lite works, but the full uBlock Origin can't run in Misty.",
   },
 ];
 const TRUST: Faq[] = [
   {
     q: "Can Misty read my synced data?",
-    a: "No. Everything is encrypted on your device before it syncs, with a key only your devices hold. Misty never tracks, shares or reads your data.",
+    a: "No. Your synced tabs, history, bookmarks and sign-ins are encrypted on your device before they sync, with a key only your devices hold. Other data isn't sealed that way: Spaces, files, Memory and agent conversations, including what an agent reads on a signed-in page, are stored on your server, and whoever runs it can read them. On Misty Pro, that's Misty. There are no ads, analytics or data sales.",
   },
   {
     q: "Will I stay signed in on every computer?",
@@ -49,11 +49,11 @@ const TRUST: Faq[] = [
   },
   {
     q: "Can an agent act without asking me?",
-    a: "No. An agent shows you its plan first, and nothing changes until you approve it. You can take over at any point.",
+    a: "It depends on the chat's mode. Manual pauses before every change. Auto continues with work inside what you gave the chat and any approvals you chose to remember, and asks you about the rest. Payments ask first, even in Auto, unless you turn that off. You can watch an agent work and take over at any point.",
   },
   {
     q: "Do my files go through your servers?",
-    a: "No. Your computers connect to each other directly, so a file moves between them at local network speed. Both need to be on the same network, or connected through a public tunnel.",
+    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a Space or your Library are stored on your server, which on Misty Pro is ours.",
   },
 ];
 

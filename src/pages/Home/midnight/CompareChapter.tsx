@@ -17,10 +17,9 @@ const no = { yes: false } as const;
 type Cell = string | typeof yes | typeof no;
 
 /**
- * Agent and browser features only, and only rows where Misty leads every column. Each cell comes from
- * that company's own pages (read October 11, 2026) or misty/docs/plans/ai-browser-comparison.md.
- * Computer use in desktop apps and scheduled browser tasks stay off: Comet, ChatGPT and Claude lead
- * there until the parity plan closes those gaps.
+ * Agent and browser features, including rows Misty loses. Each cell comes from that company's own
+ * pages (read October 11, 2026) or misty/docs/competitors.md; "Not stated" means the company's pages
+ * don't say, and "Not checked" means nobody has read them for that row.
  * - Model for each job: only Misty sets separate models for thinking, seeing, listening and speaking.
  * - Model makers: Misty takes your own key from any major model provider.
  * - Free browser agent: Misty is free and open source, and you pay only your model provider. Perplexity lists Comet's browser agent as "No" on Free; Polar's free plan
@@ -38,6 +37,9 @@ const ROWS: { label: string; cells: Cell[] }[] = [
   { label: "Free browser agent", cells: ["Included, you pay only your model provider", "Paid only", "Credits", "No agent", "Limited", "Pro and up"] },
   { label: "Sign-ins sync", cells: ["Yes, some sites ask again", no, no, no, "Cloud browser only", no] },
   { label: "Agents help each other", cells: [yes, no, no, no, no, no] },
+  { label: "Phone apps", cells: [no, yes, no, no, "Not checked", "Not checked"] },
+  { label: "Built-in ad blocking", cells: ["By extension", yes, "Not stated", yes, "Not checked", "Not checked"] },
+  { label: "Chrome Web Store extensions", cells: ["In progress", yes, "Not stated", yes, "Not checked", "Not checked"] },
 ];
 
 /** Each company's own pages, read October 11, 2026. */

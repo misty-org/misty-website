@@ -1,9 +1,4 @@
-import {
-  HiOutlineArrowTrendingUp,
-  HiOutlineArrowUp,
-  HiOutlineFire,
-  HiOutlineMagnifyingGlass,
-} from "react-icons/hi2";
+import { ArrowUp, Flame, Search, TrendingUp } from "lucide-react";
 
 import type { SortKey } from "../types";
 
@@ -11,17 +6,17 @@ const sortOptions: { key: SortKey; label: string; icon: React.ReactNode }[] = [
   {
     key: "latest",
     label: "Latest",
-    icon: <HiOutlineArrowTrendingUp className="w-3.5 h-3.5" />,
+    icon: <TrendingUp className="w-3.5 h-3.5" />,
   },
   {
     key: "popular",
     label: "Popular",
-    icon: <HiOutlineFire className="w-3.5 h-3.5" />,
+    icon: <Flame className="w-3.5 h-3.5" />,
   },
   {
     key: "top",
     label: "Most Replies",
-    icon: <HiOutlineArrowUp className="w-3.5 h-3.5" />,
+    icon: <ArrowUp className="w-3.5 h-3.5" />,
   },
 ];
 
@@ -39,7 +34,7 @@ export default function ForumToolbar({
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
       <div className="relative w-full sm:w-72">
-        <HiOutlineMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
         <input
           type="text"
           placeholder="Search threads..."

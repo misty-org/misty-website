@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaApple, FaWindows } from "react-icons/fa";
+import { AppleMark, WindowsMark } from "@/components/ui/SocialMarks";
 import { NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
@@ -36,9 +36,9 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
             aria-label={`Download Misty for ${downloadBuild.platform}`}
           >
             {downloadBuild.platform === "macOS" ? (
-              <FaApple className="-translate-y-px" aria-hidden="true" />
+              <AppleMark className="-translate-y-px" aria-hidden="true" />
             ) : (
-              <FaWindows className="-translate-y-px" aria-hidden="true" />
+              <WindowsMark className="-translate-y-px" aria-hidden="true" />
             )}
             <span>Download for {downloadBuild.platform}</span>
           </a>
