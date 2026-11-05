@@ -70,13 +70,22 @@ const sections: LegalSectionDef[] = [
               isn't perfect, so add any site you want skipped.
             </>,
             <>
-              <strong className="font-medium text-foreground">Listen and Read screen:</strong>{" "}
-              these only run when you start them, and we store what they produce
-              whether or not Memory is on. Listen stores a transcript of what it
-              hears. Read screen stores the words on the window in front of you
-              until you stop it, and never keeps a picture or video of your
-              screen. It skips Misty's own windows, private windows, password
-              managers, sign-in pages, and apps you list.
+              <strong className="font-medium text-foreground">Reading the screen:</strong>{" "}
+              on a Mac, this is on by default while Misty is open and Memory is
+              on, including when you're using other apps, once you allow screen
+              access in System Settings. It keeps the words on the window in
+              front of you, with the app's name and the window's title, on our
+              servers until you turn it off in Settings → Memory. It never keeps
+              a picture or video of your screen. It pauses after the idle time
+              you choose, and skips Misty's own windows, private windows,
+              password managers, sign-in pages, password fields, and apps you
+              list. Recognizing these isn't perfect, so list any app you want
+              skipped.
+            </>,
+            <>
+              <strong className="font-medium text-foreground">Listen:</strong>{" "}
+              this only runs when you start it, and we store the transcript of
+              what it hears whether or not Memory is on.
             </>,
             <>
               <strong className="font-medium text-foreground">Voice and screenshots:</strong>{" "}
@@ -361,7 +370,7 @@ const sections: LegalSectionDef[] = [
           items={[
             "Account details and content: while your account is open.",
             "Agent conversations: until you delete them or they pass the period you set in Settings → Agents → Conversation retention, which also removes older turns, tool output, and screenshots from conversations still in use.",
-            "Memory: until you forget it or delete your account. Words read from your screen are removed after the time you choose in Settings → Memory, 30 days unless you change it, the next time you read a screen.",
+            "Memory: until you forget it or delete your account. Words read from your screen are removed after the time you choose in Settings → Memory, 30 days unless you change it, the next time Misty starts reading.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
             "After a Misty Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
@@ -385,7 +394,7 @@ const sections: LegalSectionDef[] = [
           items={[
             `Get a copy: email ${supportEmail} from your account email and we'll send you a copy of your account data. Synced browser data isn't included because we can't decrypt it.`,
             "Correct: update your name, email, and profile picture in Account Settings.",
-            "Memory: turn it off, pause it, skip sites, forget recent or everything, or export it in Settings → Memory. Turning it off stops keeping pages and dictation, and doesn't remove what's already kept. Listen and Read screen still store what they produce when you start them.",
+            "Memory: turn it off, pause it, skip sites, forget recent or everything, or export it in Settings → Memory. Turning it off stops keeping pages and dictation and stops reading the screen, and doesn't remove what's already kept. You can turn off reading the screen by itself in the same place. Listen still stores what it produces when you start it.",
             "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete Spaces you own that have other members.",
             "Opt out: turn off product update emails in Account Settings, or use the unsubscribe link in any email.",
           ]}
