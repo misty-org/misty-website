@@ -1,5 +1,4 @@
-import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
-import { VscBug, VscComment, VscLightbulb, VscMegaphone } from "react-icons/vsc";
+import { Bug, Lightbulb, Megaphone, MessageSquare, MessagesSquare } from "lucide-react";
 
 import type { Category } from "../types";
 
@@ -13,27 +12,27 @@ const categories: {
   {
     key: "all",
     label: "All",
-    icon: <HiOutlineChatBubbleLeftRight className="w-4 h-4" />,
+    icon: <MessagesSquare className="w-4 h-4" />,
   },
   {
     key: "general",
     label: "General",
-    icon: <VscComment className="w-4 h-4" />,
+    icon: <MessageSquare className="w-4 h-4" />,
   },
   {
     key: "feature-requests",
     label: "Feature Requests",
-    icon: <VscLightbulb className="w-4 h-4" />,
+    icon: <Lightbulb className="w-4 h-4" />,
   },
   {
     key: "bug-reports",
     label: "Bug Reports",
-    icon: <VscBug className="w-4 h-4" />,
+    icon: <Bug className="w-4 h-4" />,
   },
   {
     key: "show-and-tell",
     label: "Show & Tell",
-    icon: <VscMegaphone className="w-4 h-4" />,
+    icon: <Megaphone className="w-4 h-4" />,
   },
 ];
 

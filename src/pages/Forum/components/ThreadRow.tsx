@@ -1,4 +1,4 @@
-import { HiOutlineChatBubbleLeftRight, HiOutlineEye } from "react-icons/hi2";
+import { Eye, MessagesSquare } from "lucide-react";
 
 import type { Thread } from "../types";
 import ForumAvatar from "./ForumAvatar";
@@ -32,11 +32,11 @@ export default function ThreadRow({
       </div>
       <div className="hidden sm:flex items-center gap-5 shrink-0 pt-1">
         <div className="flex items-center gap-1.5 text-text-muted">
-          <HiOutlineChatBubbleLeftRight className="w-3.5 h-3.5" />
+          <MessagesSquare className="w-3.5 h-3.5" />
           <span className="text-xs">{thread.replies.length}</span>
         </div>
         <div className="flex items-center gap-1.5 text-text-muted">
-          <HiOutlineEye className="w-3.5 h-3.5" />
+          <Eye className="w-3.5 h-3.5" />
           <span className="text-xs">{thread.views}</span>
         </div>
       </div>

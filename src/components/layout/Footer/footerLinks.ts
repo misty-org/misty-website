@@ -1,11 +1,11 @@
-import type { IconType } from "react-icons";
 import {
-  FaDiscord,
-  FaGithub,
-  FaInstagram,
-  FaXTwitter,
-  FaYoutube,
-} from "react-icons/fa6";
+  DiscordMark,
+  GithubMark,
+  InstagramMark,
+  XMark,
+  YoutubeMark,
+  type MarkIcon,
+} from "@/components/ui/SocialMarks";
 
 import { RELEASES_URL, REPO_URL } from "@/lib/site";
 
@@ -48,16 +48,16 @@ export const legalLinks: { to: string; text: string }[] = [
 export const socialLinks: {
   label: string;
   href: string;
-  icon: IconType;
+  icon: MarkIcon;
   placeholder?: boolean;
 }[] = [
   {
     label: "GitHub",
     href: REPO_URL,
-    icon: FaGithub,
+    icon: GithubMark,
   },
-  { label: "X.com", href: "#", icon: FaXTwitter, placeholder: true },
-  { label: "Discord", href: "#", icon: FaDiscord, placeholder: true },
-  { label: "YouTube", href: "#", icon: FaYoutube, placeholder: true },
-  { label: "Instagram", href: "#", icon: FaInstagram, placeholder: true },
+  { label: "X.com", href: "#", icon: XMark, placeholder: true },
+  { label: "Discord", href: "#", icon: DiscordMark, placeholder: true },
+  { label: "YouTube", href: "#", icon: YoutubeMark, placeholder: true },
+  { label: "Instagram", href: "#", icon: InstagramMark, placeholder: true },
 ];

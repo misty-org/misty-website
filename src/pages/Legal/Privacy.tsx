@@ -24,7 +24,7 @@ const sections: LegalSectionDef[] = [
           "Our website has no analytics or tracking scripts.",
           "The Misty app sends no usage analytics or crash reports.",
           "We don't train AI models on your content.",
-          "We can't read your synced browser data. It's end-to-end encrypted with a password only you know. Memory is separate and isn't end-to-end encrypted, as section 2 explains.",
+          "We can't read your synced browser data. It's end-to-end encrypted with a password only you know. Memory and agent conversations are separate and aren't end-to-end encrypted, as sections 2 and 3 explain.",
         ]}
       />
     ),
@@ -82,7 +82,12 @@ const sections: LegalSectionDef[] = [
               <strong className="font-medium text-foreground">Voice and screenshots:</strong>{" "}
               when you use voice features, the audio you record; when an agent
               works in the browser for you, screenshots and page content it
-              needs for that task.
+              needs for that task. Each conversation is stored on the server with
+              its tool output and screenshots, including what the agent reads on
+              a page you're signed in to. Your model and search keys are never
+              stored there, fields named like a credential are replaced before
+              storing, and a result marked redacted, such as a connected app's,
+              is stored only as a record that the call happened.
             </>,
             <>
               <strong className="font-medium text-foreground">Connected accounts:</strong>{" "}
@@ -135,7 +140,7 @@ const sections: LegalSectionDef[] = [
     id: "security",
     title: "Encryption and security",
     inShort:
-      "Browser sync is end-to-end encrypted. Spaces, files, Memory, and AI requests are not, so we can technically access Spaces, files, and Memory.",
+      "Browser sync is end-to-end encrypted. Spaces, files, Memory, agent conversations, and AI requests are not, so we can technically access Spaces, files, Memory, and agent conversations.",
     body: (
       <>
         <LegalTable
@@ -157,9 +162,14 @@ const sections: LegalSectionDef[] = [
               "Yes. Needed for search and recaps",
             ],
             [
-              "AI requests, voice audio, agent screenshots",
+              "Agent conversations, with tool output, screenshots, and what an agent reads on signed-in pages",
+              "Encrypted in transit (TLS); stored on our servers. Other Misty users can't read them",
+              "Yes. Needed to keep your conversations and let you continue them",
+            ],
+            [
+              "AI requests and voice audio on their way to your model provider",
               "Sent from your desktop straight to the model provider you chose, encrypted in transit (TLS)",
-              "No. They don't pass through Misty Pro, but the provider handling them can read them",
+              "No. The request doesn't pass through Misty Pro, but the provider handling it can read it. What an agent keeps in its conversation is covered above",
             ],
             [
               "Connected-account tokens",
@@ -174,10 +184,11 @@ const sections: LegalSectionDef[] = [
           ]}
         />
         <p>
-          Because Space content and Memory are not end-to-end encrypted, we (and anyone who
-          gained unauthorized access to our systems) could technically access
-          it. We only access it when needed to run the service, fix a problem
-          you report, prevent abuse, or comply with the law.
+          Because Space content, Memory, and agent conversations are not
+          end-to-end encrypted, we (and anyone who gained unauthorized access to
+          our systems) could technically access them. We only access them when
+          needed to run the service, fix a problem you report, prevent abuse, or
+          comply with the law.
         </p>
         <p>
           We use reasonable technical and organizational measures to protect
@@ -185,7 +196,9 @@ const sections: LegalSectionDef[] = [
           separated backups. No system is perfectly secure, and we can't
           guarantee your information will never be accessed, lost, or changed
           without permission. If a breach affects your personal information, we
-          will notify you and the authorities as the law requires.
+          will notify you and the authorities as the law requires. Sections 14
+          and 15 of our <LegalLink to="/terms#disclaimers">Terms of Service</LegalLink>{" "}
+          explain how the risk of these events is allocated.
         </p>
       </>
     ),
@@ -347,6 +360,7 @@ const sections: LegalSectionDef[] = [
         <LegalList
           items={[
             "Account details and content: while your account is open.",
+            "Agent conversations: until you delete them or they pass the period you set in Settings → Agents → Conversation retention, which also removes older turns, tool output, and screenshots from conversations still in use.",
             "Memory: until you forget it or delete your account. Words read from your screen are removed after the time you choose in Settings → Memory, 30 days unless you change it, the next time you read a screen.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
             "After a Misty Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
@@ -505,7 +519,7 @@ export default function Privacy() {
       highlights={[
         "We don't sell your data, show ads, or use advertising trackers.",
         "Neither our website nor the app has analytics or crash reporting.",
-        "Browser sync is end-to-end encrypted. Spaces, files, and AI requests are not.",
+        "Browser sync is end-to-end encrypted. Spaces, files, Memory, agent conversations, and AI requests are not.",
         "Misty hosts no model. AI requests go from your desktop to the model provider you choose, and Misty never charges for AI or sees your model keys.",
         "If you subscribe to Misty Pro, Stripe handles your card. We never see the full number.",
         "You can delete your account anytime in Account Settings, or email us for a copy of your data.",

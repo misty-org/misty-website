@@ -1,9 +1,4 @@
-import {
-  HiOutlineArrowUp,
-  HiOutlineChatBubbleLeftRight,
-  HiOutlineChevronLeft,
-  HiOutlineEye,
-} from "react-icons/hi2";
+import { ArrowUp, ChevronLeft, Eye, MessagesSquare } from "lucide-react";
 
 import type { Reply, Thread } from "../types";
 import ForumAvatar from "./ForumAvatar";
@@ -24,7 +19,7 @@ function ReplyCard({ reply }: { reply: Reply }) {
         </div>
         {reply.likes > 0 && (
           <div className="flex items-center gap-1 text-text-muted">
-            <HiOutlineArrowUp className="w-3.5 h-3.5" />
+            <ArrowUp className="w-3.5 h-3.5" />
             <span className="text-xs">{reply.likes}</span>
           </div>
         )}
@@ -65,7 +60,7 @@ export default function ThreadDetail({
         onClick={onBack}
         className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6 cursor-pointer"
       >
-        <HiOutlineChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="w-4 h-4" />
         Back to threads
       </button>
 
@@ -93,11 +88,11 @@ export default function ThreadDetail({
         </div>
         <div className="px-6 py-3 border-t border-border/50 flex items-center gap-4">
           <div className="flex items-center gap-1.5 text-text-muted">
-            <HiOutlineEye className="w-3.5 h-3.5" />
+            <Eye className="w-3.5 h-3.5" />
             <span className="text-xs">{thread.views} views</span>
           </div>
           <div className="flex items-center gap-1.5 text-text-muted">
-            <HiOutlineChatBubbleLeftRight className="w-3.5 h-3.5" />
+            <MessagesSquare className="w-3.5 h-3.5" />
             <span className="text-xs">
               {thread.replies.length}{" "}
               {thread.replies.length === 1 ? "reply" : "replies"}
