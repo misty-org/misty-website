@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest";
 import { resolveApiBase } from "../lib/apiBase";
 
 describe("resolveApiBase", () => {
-  it("keeps API requests same-origin by default", () => {
-    expect(resolveApiBase("")).toBe("/api");
-    expect(resolveApiBase("   ")).toBe("/api");
+  it("uses Misty's API by default", () => {
+    expect(resolveApiBase("")).toBe("https://api.mistysys.com/v1");
+    expect(resolveApiBase("   ")).toBe("https://api.mistysys.com/v1");
   });
 
   it("normalizes an explicitly configured API base", () => {
