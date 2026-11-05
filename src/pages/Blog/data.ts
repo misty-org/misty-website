@@ -1,4 +1,4 @@
-export interface BlogPost {
+interface BlogPost {
   title: string;
   date: string;
   summary: string;
@@ -17,9 +17,3 @@ export const posts: BlogPost[] = [
       "This post documents Misty's original file-first direction. Misty is now a browser workspace with native tools, agents, and encrypted sync across computers.",
   },
 ];
-
-export const tagColors: Record<string, string> = {
-  Announcement: "bg-primary/10 text-primary border-primary/20",
-  Archive: "bg-muted text-foreground/75 border-border",
-  Engineering: "bg-success/10 text-success border-success/20",
-};

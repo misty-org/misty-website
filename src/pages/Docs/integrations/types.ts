@@ -15,7 +15,7 @@ export interface EnvVariable {
   optional?: boolean;
 }
 
-export interface IntegrationTable {
+interface IntegrationTable {
   columns: string[];
   rows: string[][];
 }

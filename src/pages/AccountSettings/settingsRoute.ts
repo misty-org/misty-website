@@ -1,6 +1,6 @@
 import { TABS, type Tab } from "./tabs";
 
-export const SETTINGS_PATH = "/settings";
+const SETTINGS_PATH = "/settings";
 
 /**
  * The settings dialog is reachable two ways, and they behave differently on

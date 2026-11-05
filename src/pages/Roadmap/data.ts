@@ -1,11 +1,11 @@
-export type PhaseStatus = "available" | "pilot" | "development";
+type PhaseStatus = "available" | "pilot" | "development";
 
-export interface RoadmapItem {
+interface RoadmapItem {
   title: string;
   description: string;
 }
 
-export interface RoadmapPhase {
+interface RoadmapPhase {
   label: string;
   status: PhaseStatus;
   items: RoadmapItem[];

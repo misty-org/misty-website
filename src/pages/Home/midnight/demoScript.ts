@@ -27,20 +27,12 @@ export type World = {
   replied: boolean;
 };
 
-export const START_WORLD: World = {
-  docWriting: false, docWritten: false, slackDraft: false, posted: false,
-  gmailQuery: "", emailOpen: false, replyDraft: false, replied: false,
-};
-
-/** Changes left half-done when a run is stopped or declined. */
-export const UNFINISHED: Partial<World> = { docWriting: false, slackDraft: false };
-
 export type Approval = { ask: string; target: string; after: string; done: string; declined: string; decline?: Partial<World> };
 
 /** `start` applies as the agent reaches the step, `finish` once it completes. */
 export type Step = { icon: BrandIcon; text: string; tab: TabId; start?: Partial<World>; finish?: Partial<World>; approve?: Approval };
 
-export type Scenario = {
+type Scenario = {
   id: string;
   prompt: string;
   /** The short label offered under "Try asking". */
@@ -56,8 +48,6 @@ export const SUMMARY = [
   "Press embargo moved to Oct 27, per Ravi's email.",
   "Support macros due Friday; Sam owns the FAQ.",
 ] as const;
-
-export const REPLY = "Hi Ravi, confirmed: Oct 27 at 9am PT works for us. We still ship Oct 28, so the timing lines up. Thanks for the heads up!";
 
 const launch: Scenario = {
   id: "launch",
@@ -110,14 +100,3 @@ const open: Scenario = {
 };
 
 export const SCENARIOS = [launch, reply, open] as const;
-
-export const UNKNOWN_REPLY = "This demo only has three sample tabs, so I can't do that one here. In Misty I work in any site you're signed in to. Try one of these:";
-
-/** Maps whatever the visitor typed to the closest task, or none. */
-export function matchScenario(text: string): Scenario | null {
-  const ask = text.toLowerCase();
-  if (/ravi|embargo|reply|respond|write back|email back/.test(ask)) return reply;
-  if (/still open|open item|left|remaining|to-?do|blocker|status|missing|outstanding|what'?s open/.test(ask)) return open;
-  if (/catch|summar|recap|update|post|slack|launch plan|launch|gmail/.test(ask)) return launch;
-  return null;
-}

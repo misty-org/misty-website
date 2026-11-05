@@ -9,7 +9,7 @@ export type ReleaseBuild = {
   note: string;
 };
 
-export interface Release {
+interface Release {
   version: string;
   label: string;
   builds: ReleaseBuild[];

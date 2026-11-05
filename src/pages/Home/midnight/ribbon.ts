@@ -5,9 +5,9 @@
  * one per strand.
  */
 
-export type Point = { x: number; y: number };
+type Point = { x: number; y: number };
 /** A stop the centerline passes through, heading along (dx, dy). */
-export type Heading = Point & { dx: number; dy: number };
+type Heading = Point & { dx: number; dy: number };
 
 export const RIBBON = {
   /** Strands braided into the rope. */
@@ -120,7 +120,7 @@ export function sampleCenterline(stops: readonly Heading[]): Sample[] {
 
 type Rgb = readonly [number, number, number];
 /** One pastel per strand; they come from the page's CSS, so they follow the theme. */
-export type Palette = readonly Rgb[];
+type Palette = readonly Rgb[];
 
 /**
  * Draws one frame. `extent` (0–1) is how much of the rope has been paid out from its start; `extent` (0–1) is how much of the rope is out, `turn` (radians) winds the braid, and `time` moves the streaks.

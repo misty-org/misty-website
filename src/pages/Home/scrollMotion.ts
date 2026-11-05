@@ -1,35 +1,7 @@
-export const SCROLL_PHASE_HEIGHT_SVH = 130;
+
 
 function clamp(value: number) {
   return Math.min(1, Math.max(0, value));
-}
-
-/** A long ease-out that enters promptly but takes most of its phase to settle. */
-export function slowSlideProgress(progress: number) {
-  const clamped = clamp(progress);
-  return 1 - Math.pow(1 - clamped, 2);
-}
-
-/**
- * Reserve one full scroll phase for a section entrance, then hand the
- * remaining progress to the section's own beats.
- */
-export function splitEntranceProgress(
-  progress: number,
-  contentPhaseCount: number,
-) {
-  const safeContentPhaseCount = Math.max(1, contentPhaseCount);
-  const position = clamp(progress) * (safeContentPhaseCount + 1);
-
-  return {
-    entranceProgress: slowSlideProgress(position),
-    contentProgress: clamp((position - 1) / safeContentPhaseCount),
-  };
-}
-
-/** Include one entrance phase and one viewport for the final sticky hold. */
-export function scrollTrackHeight(contentPhaseCount: number) {
-  return (Math.max(0, contentPhaseCount) + 1) * SCROLL_PHASE_HEIGHT_SVH + 100;
 }
 
 export const HERO_ZOOM_DURATION_SCALE = 1.8;
@@ -50,7 +22,7 @@ export function heroZoomMotion(progress: number) {
 }
 
 /** Soft acceleration and deceleration with no abrupt velocity at either end. */
-export function smoothProgress(value: number) {
+function smoothProgress(value: number) {
   const t = clamp(value);
   return t * t * t * (t * (t * 6 - 15) + 10);
 }
@@ -60,7 +32,7 @@ export const SHOWCASE_PANEL_ENDS = [0.16, 0.32, 0.5, 0.66, 0.84, 1] as const;
 
 export const SHOWCASE_CAMERA_ENDS = [0.31, 0.36, 0.64, 0.68, 0.96, 1] as const;
 
-export type RailSample = { x: number; y: number; rail: number; distance: number };
+type RailSample = { x: number; y: number; rail: number; distance: number };
 
 /** Give descents more scroll room to compensate for the camera's travel. */
 export function showcaseTravelDistance(dx: number, dy: number) {

@@ -1,9 +1,9 @@
-export interface ChangelogGroup {
+interface ChangelogGroup {
   heading: string;
   changes: string[];
 }
 
-export interface ChangelogEntry {
+interface ChangelogEntry {
   version: string;
   date: string;
   summary: string;

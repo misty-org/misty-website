@@ -70,3 +70,6 @@ artifacts/
 /output/
 /.tmp-cap.mjs
 /.claude/launch.json
+
+# TypeScript build cache
+*.tsbuildinfo

@@ -8,7 +8,7 @@ export type ProductScreenshotSlotId =
   | "agent-workspace"
   | "private-files";
 
-export type ProductScreenshotSlot = {
+type ProductScreenshotSlot = {
   filename: string;
   src?: string;
   width: number;

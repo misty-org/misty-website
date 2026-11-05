@@ -1,7 +1,7 @@
 import { useEffect, useState, type RefObject } from "react";
 
 /** Where a stepper pins and follows scroll; elsewhere the steps are buttons. Keep in sync with midnight.css. */
-export const PINNED = "(min-width: 1000px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)";
+const PINNED = "(min-width: 1000px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)";
 
 /**
  * A pinned scene: the viewport holds still while scrolling moves through `count` steps. The

@@ -4,7 +4,7 @@
  * sit together in a labeled band; the vault sits above every device.
  */
 export type Layout = "wide" | "stacked";
-export type Point = readonly [number, number];
+type Point = readonly [number, number];
 export type Level = "window" | "tab" | "pane" | "page";
 export type Kind = "vault" | "device" | Level;
 export type Glyph = { brand: string } | { icon: "monitor" | "laptop" | "window" | "split" | "stacked" | "single" };
@@ -12,7 +12,7 @@ export type Span = readonly [number, number];
 export type Variant = { label: string; glyph: Glyph; spans?: Span[] };
 export type TreeNode = { id: string; parent: string; kind: "device" | Level; device: number; dx: number; variants: Variant[] };
 
-export const LEVELS: { id: Level; label: string }[] = [
+const LEVELS: { id: Level; label: string }[] = [
   { id: "window", label: "Windows" },
   { id: "tab", label: "Tabs" },
   { id: "pane", label: "Panes" },
@@ -53,7 +53,7 @@ export type Placed = TreeNode & Box & { depth: number };
 
 /** Tabs, panes and pages show only their logo or icon; devices and the vault carry a name. */
 export const labeled = (kind: Kind) => kind === "device" || kind === "vault";
-export const labeledWidth = (label: string, measure: Measure) => CHIP.glyph + CHIP.gap + measure(label, CHIP.font) + CHIP.pad * 2;
+const labeledWidth = (label: string, measure: Measure) => CHIP.glyph + CHIP.gap + measure(label, CHIP.font) + CHIP.pad * 2;
 
 export function place(layout: Layout, nodes: TreeNode[], measure: Measure): Map<string, Placed> {
   const g = GEOMETRY[layout];

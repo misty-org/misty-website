@@ -8,7 +8,7 @@ import { FilesView } from "./views/FilesView";
 import { LibraryView } from "./views/LibraryView";
 import { SpaceView } from "./views/SpaceView";
 
-export type MockupView = "space" | "files" | "agent" | "library";
+type MockupView = "space" | "files" | "agent" | "library";
 
 /**
  * Each surface pairs with the status line it earns.

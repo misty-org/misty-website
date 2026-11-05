@@ -5,7 +5,7 @@ export interface DocsNavItem {
   label: string;
 }
 
-export interface DocsNavGroup {
+interface DocsNavGroup {
   label: string;
   items: DocsNavItem[];
 }
