@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { Puzzle } from "lucide-react";
 import { NavLink } from "react-router";
 import { Chapter } from "./Chapter";
 import { Tile, Tiles } from "./Tiles";
@@ -30,17 +29,6 @@ function KiriCard() {
     <div className="mist-kiri-crop">
       <img src="/screenshots/misty-kiri-extensions.webp" width={2000} height={1254} loading="lazy"
         alt="Misty showing Dark Reader on Firefox Add-ons above uBlock Origin Lite on the Chrome Web Store" />
-    </div>
-  );
-}
-
-/** The two extension catalogs Misty installs from. */
-export function ExtensionStores() {
-  return (
-    <div className="mist-tile-sheet" aria-hidden="true">
-      <header><Puzzle size={16} strokeWidth={1.75} /><i /><small>Extensions</small></header>
-      <div><b>Chrome Web Store</b><small>Supported</small></div>
-      <div><b>Firefox Add-ons</b><small>Supported</small></div>
     </div>
   );
 }

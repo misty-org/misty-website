@@ -12,13 +12,12 @@ import type { Stage } from "./useStageLoop";
  * A rebuilt Misty window, drawn in HTML so it stays sharp at any size. One agent task plays
  * out in stages: asked, planned, working through connected apps, then waiting for approval
  * before it posts anything. Agents ask before sending, sharing, deleting or paying.
- * The hero's interactive version lives in DemoWindow and shares this chrome.
  */
 
 const RAIL = [House, Globe, FolderOpen, ArrowLeftRight, Bot, LayoutPanelLeft, Puzzle];
 
 /** The tab strip. Given `onOpen`, the tabs are buttons. */
-export function WindowBar({ active, onOpen }: { active: TabId; onOpen?: (tab: TabId) => void }) {
+function WindowBar({ active, onOpen }: { active: TabId; onOpen?: (tab: TabId) => void }) {
   return (
     <div className="mw-bar">
       <span className="mw-lights"><i /><i /><i /></span>
@@ -33,7 +32,7 @@ export function WindowBar({ active, onOpen }: { active: TabId; onOpen?: (tab: Ta
   );
 }
 
-export function Rail() {
+function Rail() {
   return (
     <nav className="mw-rail" aria-hidden="true">
       <span className="mw-logo"><BrandLogo className="size-5" /></span>
@@ -43,13 +42,13 @@ export function Rail() {
   );
 }
 
-export function PanelHead() {
+function PanelHead() {
   return <header className="mw-panel-head"><BrandLogo className="size-4" />Misty</header>;
 }
 
-export type StepState = "done" | "active" | "next" | "skipped";
+type StepState = "done" | "active" | "next" | "skipped";
 
-export function StepList({ steps, stateOf }: { steps: readonly Step[]; stateOf: (index: number) => StepState }) {
+function StepList({ steps, stateOf }: { steps: readonly Step[]; stateOf: (index: number) => StepState }) {
   return (
     <ol className="mw-steps">
       {steps.map((step, index) => {
@@ -112,7 +111,7 @@ function AgentPanel({ stage, after }: { stage: Stage; after?: Aftermath }) {
 }
 
 /** The looping, non-interactive window the Agents chapter steps through. */
-export function MistyWindow({ stage, after }: { stage: Stage; after?: Aftermath }) {
+function MistyWindow({ stage, after }: { stage: Stage; after?: Aftermath }) {
   return (
     <div className="mw" role="img" aria-label="Misty agent catching up on a launch from Slack and Gmail, updating a Google Doc, and asking before it posts">
       <WindowBar active="doc" />
@@ -126,7 +125,7 @@ export function MistyWindow({ stage, after }: { stage: Stage; after?: Aftermath 
 }
 
 /** Draws a window at one desktop size and scales it to fit, so phones see the same layout. */
-export function ScaledFrame({ width = 1180, height = 720, children }: { width?: number; height?: number; children: (scale: number) => ReactNode }) {
+function ScaledFrame({ width = 1180, height = 720, children }: { width?: number; height?: number; children: (scale: number) => ReactNode }) {
   const frame = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   useEffect(() => {

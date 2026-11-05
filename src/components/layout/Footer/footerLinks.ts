@@ -9,7 +9,7 @@ import {
 
 import { RELEASES_URL, REPO_URL } from "@/lib/site";
 
-export interface FooterColumn {
+interface FooterColumn {
   label: string;
   links: { to: string; text: string; external?: boolean }[];
 }

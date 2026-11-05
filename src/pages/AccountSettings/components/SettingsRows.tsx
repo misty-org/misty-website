@@ -6,7 +6,6 @@ import {
 } from "@/components/settings";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 
 /** Padding for rows that hold custom content instead of a label/value pair. */
 export const customRowClass =
@@ -45,17 +44,6 @@ export function GhostRow({ label, value }: { label: string; value: string }) {
     <DesktopSettingsRow label={label}>
       <span className="text-sm italic text-muted-foreground">{value}</span>
     </DesktopSettingsRow>
-  );
-}
-
-export function LoadingRow({ label }: { label: string }) {
-  return (
-    <div
-      className={`${customRowClass} flex min-h-16 items-center gap-2 text-muted-foreground`}
-    >
-      <Spinner aria-hidden="true" className="size-4" />
-      <span className="text-sm">{label}</span>
-    </div>
   );
 }
 

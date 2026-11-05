@@ -131,51 +131,6 @@ export function avatarUrl(version: number | undefined): string {
   return `${apiBase}/me/avatar?v=${version ?? 0}`;
 }
 
-export interface AccountExportManifest {
-  account_data: Record<string, unknown>;
-  documents: {
-    kind: "note" | "drawing";
-    id: string;
-    space_id: string;
-    title: string;
-    acl_version: number;
-    created_at: string;
-    updated_at: string;
-    // Signed and short-lived; stripped from the copy written into the archive.
-    download_url: string;
-    expires_at: string;
-  }[];
-  assets: {
-    kind: "note" | "drawing" | "library" | "message_attachment";
-    id: string;
-    parent_id: string;
-    filename: string;
-    mime_type: string;
-    byte_size: number;
-    sha256: string;
-    created_at: string;
-    download: {
-      url: string;
-      expires_at: string;
-      filename: string;
-      mime_type: string;
-      byte_size: number;
-      sha256: string;
-    };
-  }[];
-}
-
-export async function requestExportManifest(
-  password: string,
-): Promise<AccountExportManifest> {
-  const res = await apiFetch("/me/export", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password }),
-  });
-  return res.json();
-}
-
 export interface AccountDeletionResponse {
   status?: string;
   scheduled_purge_at?: string;

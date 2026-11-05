@@ -5,10 +5,10 @@ import { SiteLink } from "@/components/SiteLink";
 const TOKEN = /(`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
 const LINK = /^\[([^\]]+)\]\(([^)\s]+)\)$/;
 
-export const docLinkClass =
+const docLinkClass =
   "text-foreground underline underline-offset-4 transition-opacity hover:opacity-75";
 
-export function InlineCode({ children }: { children: string }) {
+function InlineCode({ children }: { children: string }) {
   return (
     <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em] text-foreground [overflow-wrap:anywhere]">
       {children}
@@ -16,7 +16,7 @@ export function InlineCode({ children }: { children: string }) {
   );
 }
 
-export function DocLink({
+function DocLink({
   href,
   children,
 }: {

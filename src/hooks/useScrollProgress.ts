@@ -123,20 +123,3 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>({
 
   return { ref, progress, approachProgress };
 }
-
-/**
- * Where a 0…1 progress value lands across `count` beats.
- *
- * `index` is the active beat; `within` is how far through that beat we are,
- * which is what lets a progress bar fill continuously instead of stepping.
- */
-export function beatPosition(progress: number, count: number) {
-  const raw = progress * count;
-  const index = Math.min(count - 1, Math.floor(raw));
-  return { index, within: Math.min(1, Math.max(0, raw - index)) };
-}
-
-/** Cubic ease-out, for scroll-driven transforms that should settle rather than ramp. */
-export function easeOut(t: number) {
-  return 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
-}

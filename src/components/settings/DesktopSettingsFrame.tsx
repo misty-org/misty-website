@@ -4,13 +4,13 @@ import { X, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export interface DesktopSettingsNavEntry<Id extends string = string> {
+interface DesktopSettingsNavEntry<Id extends string = string> {
   id: Id;
   label: string;
   icon: LucideIcon;
 }
 
-export interface DesktopSettingsNavGroup<Id extends string = string> {
+interface DesktopSettingsNavGroup<Id extends string = string> {
   /** A plain muted label naming the feature the pages belong to. */
   label: string;
   items: readonly DesktopSettingsNavEntry<Id>[];

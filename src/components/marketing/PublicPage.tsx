@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-export const publicPageContainer = "site-container";
+const publicPageContainer = "site-container";
 
 export function PublicPage({
   children,
