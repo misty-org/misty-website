@@ -90,5 +90,4 @@ Configure Cloudflare Workers Builds with:
 - Root directory: the repository root.
 - Build command: `npm run build`.
 - Deploy command: `npx wrangler deploy`.
-- Build environment variable: `MISTY_PUBLIC_API_URL=https://api.mistysys.com/v1`.
 - Custom domain: `mistysys.com`.

@@ -1,10 +1,10 @@
-const SAME_ORIGIN_API_BASE = "/api";
+const MISTY_API_BASE = "https://api.mistysys.com/v1";
 
 export function resolveApiBase(
   rawApiBase = import.meta.env.MISTY_PUBLIC_API_URL,
 ) {
   const configuredApiBase = rawApiBase?.trim().replace(/\/+$/, "");
-  return configuredApiBase || SAME_ORIGIN_API_BASE;
+  return configuredApiBase || MISTY_API_BASE;
 }
 
 export const apiBase = resolveApiBase();

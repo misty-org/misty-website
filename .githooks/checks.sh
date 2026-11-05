@@ -9,8 +9,8 @@ root=$(git rev-parse --show-toplevel)
 cd "$root"
 
 web() { npm run typecheck && npm run lint && npm test; }
-# The production bundle, built against the public API as before.
-build() { MISTY_PUBLIC_API_URL=https://mistysys.com/api NODE_OPTIONS=--max-old-space-size=4096 npm run build; }
+# The production bundle, which calls api.mistysys.com unless told otherwise.
+build() { NODE_OPTIONS=--max-old-space-size=4096 npm run build; }
 gitleaks_image=zricethezav/gitleaks@sha256:e1b35e12a8c6fa8901f060459cfb6b2fc4c484d3afbe3b029733a3bbfab07055
 # Scans commits, never the working folder: git-ignored .env files stay out.
 # On push, only the commits the remote does not have yet.
