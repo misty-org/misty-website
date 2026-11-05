@@ -24,7 +24,7 @@ const sections: LegalSectionDef[] = [
           "Our website has no analytics or tracking scripts.",
           "The Misty app sends no usage analytics or crash reports.",
           "We don't train AI models on your content.",
-          "We can't read your synced browser data. It's end-to-end encrypted with a password only you know.",
+          "We can't read your synced browser data. It's end-to-end encrypted with a password only you know. Memory is separate and isn't end-to-end encrypted, as section 2 explains.",
         ]}
       />
     ),
@@ -57,6 +57,26 @@ const sections: LegalSectionDef[] = [
               if you turn on sync, your tabs, history, bookmarks, website
               sign-ins, and extension data. This is encrypted on your device
               before it reaches us, so we can only store it, not read it.
+            </>,
+            <>
+              <strong className="font-medium text-foreground">Memory:</strong>{" "}
+              Memory is on by default and you can turn it off in Settings →
+              Memory. While it's on, Misty keeps the address, title, and
+              readable text of pages you read, and what you dictate, on our
+              servers so it can search them and write your recaps. It doesn't
+              keep private windows, sites you list, or the banking, health,
+              sign-in, password manager, and email sites it recognizes, and it
+              drops the text of password and payment fields. Recognizing a site
+              isn't perfect, so add any site you want skipped.
+            </>,
+            <>
+              <strong className="font-medium text-foreground">Listen and Read screen:</strong>{" "}
+              these only run when you start them, and we store what they produce
+              whether or not Memory is on. Listen stores a transcript of what it
+              hears. Read screen stores the words on the window in front of you
+              until you stop it, and never keeps a picture or video of your
+              screen. It skips Misty's own windows, private windows, password
+              managers, sign-in pages, and apps you list.
             </>,
             <>
               <strong className="font-medium text-foreground">Voice and screenshots:</strong>{" "}
@@ -115,7 +135,7 @@ const sections: LegalSectionDef[] = [
     id: "security",
     title: "Encryption and security",
     inShort:
-      "Browser sync is end-to-end encrypted. Spaces, files, and AI requests are not, so we can technically access them.",
+      "Browser sync is end-to-end encrypted. Spaces, files, Memory, and AI requests are not, so we can technically access Spaces, files, and Memory.",
     body: (
       <>
         <LegalTable
@@ -130,6 +150,11 @@ const sections: LegalSectionDef[] = [
               "Spaces, notes, drawings, Library files, messages",
               "Encrypted in transit (TLS); stored on our servers",
               "Yes. Needed for search, AI, sharing, and export",
+            ],
+            [
+              "Memory, transcripts, words read from your screen, and recaps",
+              "Encrypted in transit (TLS); stored on our servers",
+              "Yes. Needed for search and recaps",
             ],
             [
               "AI requests, voice audio, agent screenshots",
@@ -149,7 +174,7 @@ const sections: LegalSectionDef[] = [
           ]}
         />
         <p>
-          Because Space content is not end-to-end encrypted, we (and anyone who
+          Because Space content and Memory are not end-to-end encrypted, we (and anyone who
           gained unauthorized access to our systems) could technically access
           it. We only access it when needed to run the service, fix a problem
           you report, prevent abuse, or comply with the law.
@@ -172,7 +197,7 @@ const sections: LegalSectionDef[] = [
     body: (
       <LegalList
         items={[
-          "to provide Misty: syncing, Spaces, sharing, search, and AI features;",
+          "to provide Misty: syncing, Spaces, sharing, search, Memory, and AI features;",
           "to create and manage your account;",
           "to send service emails, such as sign-in and security notices and important changes;",
           "to send product update emails, only if you choose to receive them;",
@@ -198,7 +223,10 @@ const sections: LegalSectionDef[] = [
           provider. Depending on the feature, this can include your prompt,
           relevant Space or Library content, page content and screenshots for
           agent tasks, voice audio, and media for transcription or search
-          indexing.
+          indexing. It also includes your Memory: each morning, unless you turn
+          off Morning brief in Settings → Memory, your desktop sends what Memory
+          kept from your last active day to your provider to write a recap, on
+          your own key. Asking for a recap does the same.
         </p>
         <p>
           Your model keys and sign-ins, including Sign in with ChatGPT, stay on
@@ -319,6 +347,7 @@ const sections: LegalSectionDef[] = [
         <LegalList
           items={[
             "Account details and content: while your account is open.",
+            "Memory: until you forget it or delete your account. Words read from your screen are removed after the time you choose in Settings → Memory, 30 days unless you change it, the next time you read a screen.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
             "After a Misty Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
@@ -342,6 +371,7 @@ const sections: LegalSectionDef[] = [
           items={[
             `Get a copy: email ${supportEmail} from your account email and we'll send you a copy of your account data. Synced browser data isn't included because we can't decrypt it.`,
             "Correct: update your name, email, and profile picture in Account Settings.",
+            "Memory: turn it off, pause it, skip sites, forget recent or everything, or export it in Settings → Memory. Turning it off stops keeping pages and dictation, and doesn't remove what's already kept. Listen and Read screen still store what they produce when you start them.",
             "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete Spaces you own that have other members.",
             "Opt out: turn off product update emails in Account Settings, or use the unsubscribe link in any email.",
           ]}
@@ -393,7 +423,8 @@ const sections: LegalSectionDef[] = [
           the rights described in section 9. In the past 12 months we have
           collected these categories of personal information, for the purposes
           in section 4: identifiers (name, email, IP address); internet
-          activity limited to your use of Misty; commercial information, if you
+          activity limited to your use of Misty, including the pages Memory
+          keeps while it's on; commercial information, if you
           subscribe to Misty Pro (your plan and payment history); and content
           you choose to store.
         </p>
