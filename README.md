@@ -27,7 +27,7 @@ domain:
   in the Cloudflare dashboard (Workers & Pages → misty-website → Settings →
   Domains & Routes), which also makes its DNS record and certificate.
 
-Each env file under the server's `server/.env/` has one data file in
+Each env file under `~/.misty/server/prod/` has one data file in
 `src/pages/Docs/integrations/`; its variable tables, steps and example are
 plain data, so a renamed or added variable is a one-line change there.
 
