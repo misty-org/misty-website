@@ -104,7 +104,7 @@ export default function SelfHosting() {
       <DocSection id="install" title="Install">
         <Steps
           items={[
-            "Clone Misty on the host and create `~/.misty/server/prod/`, readable only by you.",
+            "Clone misty-server on the host and create `~/.misty/server/prod/`, readable only by you.",
             "Write the four files, following each file's page.",
             "Start the stack from the `server` folder. The first start builds the images, so it takes a few minutes.",
             "Watch the setup container's log. Once the tunnel connects, the API answers at `https://MISTY_HOSTNAME/health`, and on the host at `http://127.0.0.1:8081/health`.",
@@ -113,10 +113,10 @@ export default function SelfHosting() {
         />
         <CodeBlock
           label="Install and start"
-          code={`git clone https://github.com/misty-org/misty.git
-cd misty/server
-mkdir -m 700 .env
-# write the four files under .env/
+          code={`git clone https://github.com/misty-org/misty-server.git
+cd misty-server
+mkdir -p -m 700 ~/.misty/server/prod
+# write the four files under ~/.misty/server/prod/
 docker compose up -d --build
 docker compose ps
 docker compose logs setup`}

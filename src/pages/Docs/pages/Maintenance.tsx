@@ -20,9 +20,8 @@ export default function Maintenance() {
         />
         <CodeBlock
           label="Update"
-          code={`cd misty
+          code={`cd misty-server
 git pull
-cd server
 docker compose up -d --build`}
         />
         <P text="Update the desktop app on each computer too. A much older app may not be able to talk to a newer server." />
