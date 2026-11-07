@@ -53,8 +53,8 @@ export default function IntegrationPage({ doc }: { doc: IntegrationDoc }) {
 
       <DocSection id="steps" title="Get the values">
         <Steps items={doc.steps} />
-        <CodeBlock code={doc.example} label={`~/.misty/server/prod/${doc.file}`} />
-        <P text="Keep the file out of Git. Misty's `.gitignore` already ignores everything under `~/.misty/server/prod/`." />
+        <CodeBlock code={doc.example} label={`~/.misty/.env/server/${doc.file}`} />
+        <P text="Keep the file out of Git. Misty's `.gitignore` already ignores everything under `~/.misty/.env/server/`." />
       </DocSection>
     </DocPage>
   );

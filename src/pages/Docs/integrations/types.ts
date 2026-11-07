@@ -1,7 +1,7 @@
 /**
- * One env file under `~/.misty/server/prod/` and how to fill it in. Text fields accept
+ * One env file under `~/.misty/.env/server/` and how to fill it in. Text fields accept
  * `code` and [text](href) markup (see RichText). Variable names follow
- * misty's docs/self-hosting.md; when the server renames one, change it here
+ * the server's setup; when the server renames one, change it here
  * and nowhere else. Generated secrets never go in these files: the setup
  * container keeps them in the stack's `secrets` volume.
  */
@@ -30,7 +30,7 @@ export interface IntegrationSection {
 export interface IntegrationDoc {
   /** The page's path under /docs/self-hosting/. */
   slug: string;
-  /** The file under `~/.misty/server/prod/`. */
+  /** The file under `~/.misty/.env/server/`. */
   file: string;
   /** The service the file configures. */
   service: string;

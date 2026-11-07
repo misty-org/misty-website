@@ -24,7 +24,7 @@ const sections: LegalSectionDef[] = [
           "Our website has no analytics or tracking scripts.",
           "The Misty app sends no usage analytics or crash reports.",
           "We don't train AI models on your content.",
-          "We can't read your synced browser data. It's end-to-end encrypted with a password only you know. Memory and agent conversations are separate and aren't end-to-end encrypted, as sections 2 and 3 explain.",
+          "We can't read your synced browser data. It's end-to-end encrypted with a password only you know. Memory and what an agent sends our servers while it runs are separate and aren't end-to-end encrypted, as sections 2 and 3 explain.",
         ]}
       />
     ),
@@ -49,8 +49,9 @@ const sections: LegalSectionDef[] = [
             <>
               <strong className="font-medium text-foreground">Your content:</strong>{" "}
               notes, drawings, files, Library items, messages, and other
-              material you create in or upload to Spaces, plus AI conversations,
-              agent tasks, and their results.
+              material you create in or upload to Spaces, plus agent schedules
+              and workflows and their results. Agent conversations are covered
+              below.
             </>,
             <>
               <strong className="font-medium text-foreground">Synced browser data:</strong>{" "}
@@ -91,12 +92,34 @@ const sections: LegalSectionDef[] = [
               <strong className="font-medium text-foreground">Voice and screenshots:</strong>{" "}
               when you use voice features, the audio you record; when an agent
               works in the browser for you, screenshots and page content it
-              needs for that task. Each conversation is stored on the server with
-              its tool output and screenshots, including what the agent reads on
-              a page you're signed in to. Your model and search keys are never
-              stored there, fields named like a credential are replaced before
-              storing, and a result marked redacted, such as a connected app's,
-              is stored only as a record that the call happened.
+              needs for that task, as the next two items explain.
+            </>,
+            <>
+              <strong className="font-medium text-foreground">Agent conversations:</strong>{" "}
+              each conversation, with its messages, is stored on the computer
+              that started it. It doesn't sync and we don't keep a copy, so a
+              lost computer loses its conversations. Our servers keep a small
+              record of each one: its owner, Space, agent, model, generated
+              title, and the computer that keeps it, along with its plans, goals,
+              questions, mode, and any attachments a turn sent to the model. A
+              conversation a schedule starts has no computer yet, so our servers
+              hold it until one of your computers takes it. Conversations from
+              before we moved them to your computer stay on our servers, with
+              their tool output and screenshots, until their retention period
+              ends, and Misty no longer shows them.
+            </>,
+            <>
+              <strong className="font-medium text-foreground">Agent runs:</strong>{" "}
+              to run a turn, our servers receive your prompt, the conversation's
+              earlier turns and running notes, and the results of the agent's
+              tools, which can include screenshots and what the agent reads on a
+              page you're signed in to. We hold this as run data for about 24
+              hours, so the app can rejoin a run after a reload, and then delete
+              it. Your model and search keys are never sent. A result marked
+              redacted, such as a connected app's, stays sealed: when an agent
+              changes something in a connected app, we keep a record that the
+              call happened and an encrypted copy of its result, so the change
+              isn't made twice.
             </>,
             <>
               <strong className="font-medium text-foreground">Connected accounts:</strong>{" "}
@@ -149,7 +172,7 @@ const sections: LegalSectionDef[] = [
     id: "security",
     title: "Encryption and security",
     inShort:
-      "Browser sync is end-to-end encrypted. Spaces, files, Memory, agent conversations, and AI requests are not, so we can technically access Spaces, files, Memory, and agent conversations.",
+      "Browser sync is end-to-end encrypted. Spaces, files, Memory, agent runs, and AI requests are not, so we can technically access Spaces, files, Memory, and what an agent sends our servers. Agent conversations stay on your computer.",
     body: (
       <>
         <LegalTable
@@ -171,14 +194,29 @@ const sections: LegalSectionDef[] = [
               "Yes. Needed for search and recaps",
             ],
             [
-              "Agent conversations, with tool output, screenshots, and what an agent reads on signed-in pages",
-              "Encrypted in transit (TLS); stored on our servers. Other Misty users can't read them",
-              "Yes. Needed to keep your conversations and let you continue them",
+              "Agent conversations on your computer",
+              "Stored on the computer that started them. Not encrypted at rest, and never synced",
+              "No. We don't keep a copy, though each turn passes through our servers as the next row explains",
+            ],
+            [
+              "An agent run: your prompt, the conversation's earlier turns and notes, tool results, screenshots, and what an agent reads on signed-in pages",
+              "Encrypted in transit (TLS); held on our servers as run data for about 24 hours. Other Misty users can't read it",
+              "Yes. Needed to run the agent",
+            ],
+            [
+              "What stays for each conversation: its owner, Space, agent, model, generated title, plans, goals, questions, mode, and attachments sent to the model",
+              "Encrypted in transit (TLS); stored on our servers until you delete the conversation. Other Misty users can't read it",
+              "Yes. Needed to start and title its runs",
+            ],
+            [
+              "Agent conversations from before we moved them to your computer, and ones a schedule started that no computer has taken yet, with their replies and steps. The older ones also have tool output and screenshots",
+              "Encrypted in transit (TLS); stored on our servers until their retention period ends. Other Misty users can't read them",
+              "Yes. They stay only until they expire or, for a schedule's, until a computer takes them",
             ],
             [
               "AI requests and voice audio on their way to your model provider",
               "Sent from your desktop straight to the model provider you chose, encrypted in transit (TLS)",
-              "No. The request doesn't pass through Misty Pro, but the provider handling it can read it. What an agent keeps in its conversation is covered above",
+              "No. The request doesn't pass through Misty Pro, but the provider handling it can read it. What our servers receive while an agent runs is covered above",
             ],
             [
               "Connected-account tokens",
@@ -193,9 +231,11 @@ const sections: LegalSectionDef[] = [
           ]}
         />
         <p>
-          Because Space content, Memory, and agent conversations are not
-          end-to-end encrypted, we (and anyone who gained unauthorized access to
-          our systems) could technically access them. We only access them when
+          Because Space content, Memory, and what our servers hold for agent
+          runs and conversations are not end-to-end encrypted, we (and anyone who
+          gained unauthorized access to our systems) could technically access
+          them. Anyone with access to your computer could read the agent
+          conversations stored on it. We only access what we hold when
           needed to run the service, fix a problem you report, prevent abuse, or
           comply with the law.
         </p>
@@ -369,11 +409,15 @@ const sections: LegalSectionDef[] = [
         <LegalList
           items={[
             "Account details and content: while your account is open.",
-            "Agent conversations: until you delete them or they pass the period you set in Settings → Agents → Conversation retention, which also removes older turns, tool output, and screenshots from conversations still in use.",
+            "Agent conversations on your computer: until you delete them there. Deleting your Misty account doesn't remove them, because we can't reach them.",
+            "Agent run data: about 24 hours, then deleted. If a run made a change you accepted, such as an AI edit to selected text in a note, we keep that run, without the conversation's earlier turns, as the record of the change until you delete your account.",
+            "What our servers keep for a conversation: until you delete the conversation, leave its Space, or delete your account.",
+            "Agent conversations held on our servers, meaning ones from before we moved them to your computer and ones a schedule started that no computer has taken yet: 30 days after their last activity, or the period you chose if you changed it. You can ask us to delete the older ones sooner.",
+            "Records of what an agent changed in a connected app: until you delete your account.",
             "Memory: until you forget it or delete your account. Words read from your screen are removed after the time you choose in Settings → Memory, 30 days unless you change it, the next time Misty starts reading.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
             "After a Misty Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
-            "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
+            "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten. This includes agent run data still within its 24 hours when a backup ran.",
             "Content in shared Spaces: content you added to a Space other people still use stays with that Space, attributed to a deleted user.",
             "Server logs: kept for a limited period for security and troubleshooting.",
             "Billing records: kept as long as tax and accounting law requires, which can be up to 7 years.",
@@ -392,10 +436,10 @@ const sections: LegalSectionDef[] = [
       <>
         <LegalList
           items={[
-            `Get a copy: email ${supportEmail} from your account email and we'll send you a copy of your account data. Synced browser data isn't included because we can't decrypt it.`,
+            `Get a copy: email ${supportEmail} from your account email and we'll send you a copy of your account data. Synced browser data isn't included because we can't decrypt it, and agent conversations aren't included because they stay on your computer.`,
             "Correct: update your name, email, and profile picture in Account Settings.",
             "Memory: turn it off, pause it, skip sites, forget recent or everything, or export it in Settings → Memory. Turning it off stops keeping pages and dictation and stops reading the screen, and doesn't remove what's already kept. You can turn off reading the screen by itself in the same place. Listen still stores what it produces when you start it.",
-            "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete Spaces you own that have other members.",
+            "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete Spaces you own that have other members. Delete an agent conversation in Misty on the computer that keeps it, which also removes what our servers keep for it.",
             "Opt out: turn off product update emails in Account Settings, or use the unsubscribe link in any email.",
           ]}
         />
@@ -528,7 +572,8 @@ export default function Privacy() {
       highlights={[
         "We don't sell your data, show ads, or use advertising trackers.",
         "Neither our website nor the app has analytics or crash reporting.",
-        "Browser sync is end-to-end encrypted. Spaces, files, Memory, agent conversations, and AI requests are not.",
+        "Agent conversations stay on the computer that started them. Our servers see an agent's work while it runs and hold it for about 24 hours.",
+        "Browser sync is end-to-end encrypted. Spaces, files, Memory, agent runs, and AI requests are not.",
         "Misty hosts no model. AI requests go from your desktop to the model provider you choose, and Misty never charges for AI or sees your model keys.",
         "If you subscribe to Misty Pro, Stripe handles your card. We never see the full number.",
         "You can delete your account anytime in Account Settings, or email us for a copy of your data.",

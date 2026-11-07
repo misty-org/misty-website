@@ -11,7 +11,7 @@ import {
 import { DocPage } from "../components/DocPage";
 import { integrationDocs } from "../integrations";
 
-const ENV_TREE = `~/.misty/server/prod/
+const ENV_TREE = `~/.misty/.env/server/
 ${integrationDocs
   .map(
     (doc, index) =>
@@ -84,7 +84,7 @@ export default function SelfHosting() {
       </DocSection>
 
       <DocSection id="files" title="The files">
-        <P text="Everything you configure lives in four files directly under `~/.misty/server/prod/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
+        <P text="Everything you configure lives in four files directly under `~/.misty/.env/server/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
         <CodeBlock code={ENV_TREE} label="The server folder" />
         <DocTable
           columns={["File", "What it's for", "Page"]}
@@ -98,13 +98,13 @@ export default function SelfHosting() {
       </DocSection>
 
       <DocSection id="email" title="Email (optional)">
-        <P text="Email is the one optional part of a server. Without it, Misty gives you links to pass on. To have the server send sign-in links, Space invitations, closing notices and email confirmations, which new password accounts then need, create `~/.misty/server/prod/mailjet.env` with `MAILJET_API_KEY`, `MAILJET_SECRET_KEY` and `MAILJET_FROM_EMAIL`, an address you've verified in Mailjet with its SPF and DKIM records, and optionally `MAILJET_FROM_NAME`. Then restart the API with `docker compose up -d api`." />
+        <P text="Email is the one optional part of a server. Without it, Misty gives you links to pass on. To have the server send sign-in links, Space invitations, closing notices and email confirmations, which new password accounts then need, create `~/.misty/.env/server/mailjet.env` with `MAILJET_API_KEY`, `MAILJET_SECRET_KEY` and `MAILJET_FROM_EMAIL`, an address you've verified in Mailjet with its SPF and DKIM records, and optionally `MAILJET_FROM_NAME`. Then restart the API with `docker compose up -d api`." />
       </DocSection>
 
       <DocSection id="install" title="Install">
         <Steps
           items={[
-            "Clone misty-server on the host and create `~/.misty/server/prod/`, readable only by you.",
+            "Clone misty-server on the host and create `~/.misty/.env/server/`, readable only by you.",
             "Write the four files, following each file's page.",
             "Start the stack from the `server` folder. The first start builds the images, so it takes a few minutes.",
             "Watch the setup container's log. Once the tunnel connects, the API answers at `https://MISTY_HOSTNAME/health`, and on the host at `http://127.0.0.1:8081/health`.",
@@ -115,8 +115,8 @@ export default function SelfHosting() {
           label="Install and start"
           code={`git clone https://github.com/misty-org/misty-server.git
 cd misty-server
-mkdir -p -m 700 ~/.misty/server/prod
-# write the four files under ~/.misty/server/prod/
+mkdir -p -m 700 ~/.misty/.env/server
+# write the four files under ~/.misty/.env/server/
 docker compose up -d --build
 docker compose ps
 docker compose logs setup`}

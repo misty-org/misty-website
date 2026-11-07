@@ -11,7 +11,7 @@ export const RELEASES_URL = `${REPO_URL}/releases`;
 /** Misty Pro's server, its `MISTY_HOSTNAME`; in development, the dev server. */
 export const CLOUD_HOST = import.meta.env.DEV ? "dev-api.mistysys.com" : "api.mistysys.com";
 
-/** misty-billing, which answers checkout with a redirect to Stripe Checkout; in development, the one on this computer. */
+/** misty-cloud, which answers checkout with a redirect to Stripe Checkout; in development, the one on this computer. */
 export const BILLING_URL = import.meta.env.DEV ? "http://127.0.0.1:8091" : "https://billing.mistysys.com";
 
 /** Where a signed-in person's checkout is posted, with the server's proof of their account. */

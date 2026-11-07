@@ -41,7 +41,7 @@ const START: Faq[] = [
 const TRUST: Faq[] = [
   {
     q: "Can Misty read my synced data?",
-    a: "No. Your synced tabs, history, bookmarks and sign-ins are encrypted on your device before they sync, with a key only your devices hold. Other data isn't sealed that way: Spaces, files, Memory and agent conversations, including what an agent reads on a signed-in page, are stored on your server, and whoever runs it can read them. On Misty Pro, that's Misty. There are no ads, analytics or data sales.",
+    a: "No. Your synced tabs, history, bookmarks and sign-ins are encrypted on your device before they sync, with a key only your devices hold. Other data isn't sealed that way: Spaces, files and Memory are stored on your server, and whoever runs it can read them. On Misty Pro, that's Misty. Agent conversations stay on the computer that started them, but while an agent runs, your server sees its prompt, the conversation's history and its tool results, including what it reads on a signed-in page, and holds them for about 24 hours. There are no ads, analytics or data sales.",
   },
   {
     q: "Will I stay signed in on every computer?",
