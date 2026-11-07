@@ -37,7 +37,7 @@ export const googleEnv: IntegrationDoc = {
     "Under Audience, choose External. While the app is in testing, only the test users you add can sign in; publish it to let anyone sign in.",
     "Under Data Access, add the `openid`, `email` and `profile` scopes.",
     "Under Clients, create a client of type Web application. Add your redirect URI under Authorized redirect URIs.",
-    "Copy the client ID and client secret into `~/.misty/server/prod/google.env`.",
+    "Copy the client ID and client secret into `~/.misty/.env/server/google.env`.",
   ],
   example: `GOOGLE_CLIENT_ID=<your client ID>.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=<your client secret>`,

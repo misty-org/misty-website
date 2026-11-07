@@ -5,8 +5,8 @@ import "./compare.css";
 
 /**
  * Why another AI browser: Misty beside the AI browsers and chat apps people already pay for.
- * Every competitor cell comes from that company's own pages (see COMPARE_SOURCES and
- * misty/docs/plans/ai-browser-comparison.md). Add a row only when every cell is a plain yes, no or
+ * Every competitor cell comes from that company's own pages (see COMPARE_SOURCES).
+ * Add a row only when every cell is a plain yes, no or
  * short fact, and recheck the cells before each release.
  */
 
@@ -18,7 +18,7 @@ type Cell = string | typeof yes | typeof no;
 
 /**
  * Agent and browser features, including rows Misty loses. Each cell comes from that company's own
- * pages (read October 11, 2026) or misty/docs/competitors.md; "Not stated" means the company's pages
+ * pages (read October 11, 2026); "Not stated" means the company's pages
  * don't say, and "Not checked" means nobody has read them for that row.
  * - Model for each job: only Misty sets separate models for thinking, seeing, listening and speaking.
  * - Model makers: Misty takes your own key from any major model provider.

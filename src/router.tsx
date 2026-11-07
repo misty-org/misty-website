@@ -241,7 +241,7 @@ const site: RouteObject[] = [
         },
       },
       {
-        // misty-billing sends visitors back here with ?sent=1.
+        // misty-cloud sends visitors back here with ?sent=1.
         path: "sign-in",
         element: <SignInLink />,
         handle: {

@@ -4,7 +4,7 @@ import { googleEnv } from "./google";
 import { mistyEnv } from "./misty";
 import type { IntegrationDoc } from "./types";
 
-/** The four files under `~/.misty/server/prod/`, in the order the docs list them. */
+/** The four files under `~/.misty/.env/server/`, in the order the docs list them. */
 export const integrationDocs: IntegrationDoc[] = [
   mistyEnv,
   cloudflareEnv,

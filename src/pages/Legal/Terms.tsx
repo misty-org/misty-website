@@ -209,11 +209,15 @@ const sections: LegalSectionDef[] = [
           synced browser data cannot be recovered by anyone, including us.
         </p>
         <p>
-          Other content, including Spaces, Library files, Memory, and agent
-          conversations with what an agent reads on a signed-in page, is
+          Other content, including Spaces, Library files, and Memory, is
           protected in transit but is not end-to-end encrypted, and is stored on
-          the server you use. AI requests go from your desktop to the model
-          provider you chose, not through us. See our{" "}
+          the server you use. Agent conversations are stored on the computer
+          that started them and don't sync, so a lost computer loses them. While
+          an agent runs, the server you use receives its prompt, the
+          conversation's history, and its tool results, including what it reads
+          on a signed-in page, and holds them for about 24 hours. AI requests go
+          from your desktop to the model provider you chose, not through us. See
+          our{" "}
           <LegalLink to="/privacy#security">Privacy Policy</LegalLink> for
           details.
         </p>

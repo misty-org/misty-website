@@ -27,7 +27,7 @@ domain:
   in the Cloudflare dashboard (Workers & Pages → misty-website → Settings →
   Domains & Routes), which also makes its DNS record and certificate.
 
-Each env file under `~/.misty/server/prod/` has one data file in
+Each env file under `~/.misty/.env/server/` has one data file in
 `src/pages/Docs/integrations/`; its variable tables, steps and example are
 plain data, so a renamed or added variable is a one-line change there.
 
@@ -38,7 +38,7 @@ plain data, so a renamed or added variable is a one-line change there.
   fragment in the browser, keeps it only in memory, clears it from the address
   bar and offers `misty://setup?server=<host>&key=<key>`. The fragment never
   reaches the website, and nothing on the page sends or logs it.
-- "Get Misty Pro" links to misty-billing at
+- "Get Misty Pro" links to misty-cloud at
   `https://billing.mistysys.com/checkout?plan=cloud` (`&storage=1` adds the
   storage add-on), which redirects to Stripe Checkout. Its success URL is
   `/cloud/welcome`.

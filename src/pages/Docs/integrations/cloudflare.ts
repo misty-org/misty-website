@@ -119,7 +119,7 @@ export const cloudflareEnv: IntegrationDoc = {
     "Open R2 Object Storage and turn it on.",
     "On your domain's Overview page, copy the Zone ID and Account ID from the API section.",
     "Create an account API token with the permissions above, limited to your account and zone. Copy it; Cloudflare shows it once.",
-    "Write the three values into `~/.misty/server/prod/cloudflare.env`.",
+    "Write the three values into `~/.misty/.env/server/cloudflare.env`.",
   ],
   example: `CLOUDFLARE_API_TOKEN=<your API token>
 CLOUDFLARE_ACCOUNT_ID=<your account ID>
