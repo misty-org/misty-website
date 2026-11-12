@@ -15,6 +15,7 @@ import Kiri from "./pages/Kiri";
 import Pricing from "./pages/Pricing";
 import Setup from "./pages/Setup";
 import CloudWelcome from "./pages/CloudWelcome";
+import Connected from "./pages/Connected";
 import { docsRoutes } from "./pages/Docs/routes";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
@@ -127,6 +128,15 @@ const site: RouteObject[] = [
       {
         path: "cloud",
         loader: () => redirect("/pricing"),
+      },
+      {
+        // Where the desktop app sends the browser after an app's direct sign-in, on Misty Cloud.
+        path: "connected",
+        element: <Connected />,
+        handle: {
+          title: "You're connected | Misty",
+          description: "The app is connected. Go back to Misty to use it.",
+        },
       },
       {
         // Stripe Checkout's success URL.
