@@ -1,0 +1,14 @@
+{
+  "google-docs": {
+    "url": "https://www.gstatic.com/images/branding/productlogos/docs_2026/v2/web/192px.svg",
+    "collection": "Google product assets"
+  },
+  "slack": {
+    "url": "https://raw.githubusercontent.com/gilbarbara/logos/main/logos/slack-icon.svg",
+    "collection": "gilbarbara/logos"
+  },
+  "gmail": {
+    "url": "https://www.gstatic.com/images/branding/productlogos/gmail_2026/v2/web/192px.svg",
+    "collection": "Google product assets"
+  }
+}

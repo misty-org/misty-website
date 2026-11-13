@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" class="dark" style="color-scheme: dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/misty-white.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Misty | Build together with AI</title>
+    <meta
+      name="description"
+      content="Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens."
+    />
+    <meta name="theme-color" content="#18181b" />
+    <link rel="canonical" href="https://mistysys.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Misty" />
+    <meta
+      property="og:title"
+      content="Misty | Build together with AI"
+    />
+    <meta
+      property="og:description"
+      content="Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens."
+    />
+    <meta property="og:url" content="https://mistysys.com/" />
+    <meta property="og:image" content="https://mistysys.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The Misty mark above the words Build together with AI, on a black background"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Misty | Build together with AI"
+    />
+    <meta
+      name="twitter:description"
+      content="Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens."
+    />
+    <meta name="twitter:image" content="https://mistysys.com/og.png" />
+    <script>
+      (() => {
+        try {
+          if (localStorage.getItem("misty-ui-theme") !== "light") return;
+          document.documentElement.classList.replace("dark", "light");
+          document.documentElement.style.colorScheme = "light";
+          document.querySelector('link[rel="icon"]').href = "/misty-black.png";
+        } catch {
+          // Without storage the page stays in the default dark theme.
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
