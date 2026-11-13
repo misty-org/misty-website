@@ -1,5 +1,4 @@
 import { NavLink } from "react-router";
-import { posts } from "@/pages/Blog/data";
 import { changelog } from "@/pages/Changelog/data";
 import { phases } from "@/pages/Roadmap/data";
 
@@ -28,15 +27,11 @@ function ResourceColumn({ id, title, cards, href, linkLabel }: {
   );
 }
 
-/** The latest from the blog, changelog and roadmap, side by side in three columns. */
+/** The latest from the changelog and roadmap, side by side in two columns. */
 export function ResourcePreview() {
   return (
     <section id="resources" aria-label="Updates and resources" className="mist-container mist-resource-grid">
       <span id="updates" className="absolute scroll-mt-24" />
-      <ResourceColumn id="blog" title="Blog" href="/blog" linkLabel="Visit blog" cards={[
-        ...posts.slice(0, 1).map(post => ({ title: post.title, href: "/blog" })),
-        { title: "A shared home for your project’s context", href: "/blog" },
-      ]} />
       <ResourceColumn id="changelog" title="Changelog" href="/changelog" linkLabel="Visit changelog" cards={changelog.flatMap(entry => entry.groups.map(group => ({
         title: group.heading,
         href: "/changelog",

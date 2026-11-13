@@ -1,47 +1,30 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { Chapter, ChapterHead } from "./Chapter";
-import { ScaledWindow, type Aftermath } from "./MistyWindow";
+import { ScaledWindow } from "./MistyWindow";
 import { useStageLoop, type Stage } from "./useStageLoop";
 import { usePinnedSteps } from "./usePinnedSteps";
-import { DeviceLayouts } from "./DeviceLayouts";
-import { SyncTree } from "./SyncTree";
-import { AddressBar } from "./BrowserChapters";
-import { Tile, Tiles } from "./Tiles";
 
 /**
- * The Work part of the homepage story, agents in your tabs and the apps they connect, plus
- * the Browser part's Sync chapter (the rest is in BrowserChapters.tsx; Spaces is in SpacesChapter.tsx).
- * Each chapter uses a different layout so the page keeps changing pace. The comparison
- * with other AI browsers is in CompareChapter.tsx. Claims follow SELLING-POINTS.md and its checklist.
+ * The Work part of the homepage story: any AI, the apps it connects to and the browser it works
+ * in, plus the closing chapter on the Lab, the Studio and where things run. Spaces is in
+ * SpacesChapter.tsx. Each chapter uses a different layout so the page keeps changing pace.
  */
-
-export function SyncChapter() {
-  return (
-    <Chapter id="sync" title={<>Give each computer its own setup{" "}<span>and keep them all in sync.</span></>}>
-      <Tiles>
-        {/* The sync tree takes a full row so the diagram has room; then a wide-narrow pair. */}
-        <Tile span={12} label="sync" title={<>Switch computers and keep going. Your tabs, panes and sign-ins sync, end-to-end encrypted, though some sites still ask you to sign in again.</>}><SyncTree /></Tile>
-        <Tile id="foundation" span={7} label="layout" title="Tabs on top, tabs on the side, or split panes. Set up each computer its own way."><DeviceLayouts /></Tile>
-        <Tile span={5} label="search" title="Bookmarks, history and your search engine, in one address bar."><AddressBar /></Tile>
-      </Tiles>
-    </Chapter>
-  );
-}
 
 /**
  * The Work part as one pinned scene: one task, start to finish, with the connected apps in the
  * middle. Most steps show a window state (the working step loops stages 2–4); the apps step swaps
- * the window for the Integrations screenshot. Claims follow SELLING-POINTS.md and misty/src/features/agents/PRODUCT.md.
+ * the window for the Integrations screenshot. Claims follow misty/src/features/agents.
  */
-type WorkStep = { title: string; note: string; link?: { text: string; href: string }; stage?: Stage; loop?: boolean; after?: Aftermath; apps?: boolean };
+type WorkStep = { title: string; note: string; link?: { text: string; href: string }; stage?: Stage; loop?: boolean; apps?: boolean };
 const WORK_STEPS: WorkStep[] = [
-  // The screenshot fades the window back, so it keeps the opening prompt underneath until the plan is shown.
-  { title: "Connect your apps once.", note: "Connect any of 1,500+ apps through ", link: { text: "Composio", href: "https://composio.dev" }, stage: 0, apps: true },
+  { title: "Pick any AI you like.", note: "Claude Code, Codex, Antigravity, OpenCode and more, side by side. Misty installs it, helps you sign in and keeps your past chats.", stage: 0 },
+  // The screenshot fades the window back, so it keeps the opening prompt underneath.
+  { title: "Connect your apps once.", note: "Agents use the apps you sign in to, through the app's own sign-in or your own key from ", link: { text: "Composio", href: "https://composio.dev" }, stage: 0, apps: true },
   { title: "Ask in one sentence.", note: "Describe the task in plain words.", stage: 0 },
-  { title: "Watch it work live in tabs and windows.", note: "Take over whenever you want.", stage: 2, loop: true },
-  { title: "Save it as a workflow.", note: "Run it again any time, or on a schedule with your connected apps.", stage: 6, after: "workflow" },
+  { title: "Watch it work live.", note: "It works on web pages in its own browser. Take over whenever you want.", stage: 2, loop: true },
+  { title: "Approve what matters.", note: "Choose how much it does on its own. In Manual mode it asks before every change.", stage: 5 },
 ];
-const agentsTitle = <>Agents that work across{" "}<span>your browser and your apps.</span></>;
+const agentsTitle = <>Agents that work across{" "}<span>your apps, while you watch.</span></>;
 
 /** Misty's integrations page, shown for the apps step in place of the window. */
 function IntegrationsShot() {
@@ -79,7 +62,7 @@ export function AgentsChapter() {
   const looping = step.loop === true;
   const [loopStage, setLoopStage] = useStageLoop(section, 2, looping, 1700, 4);
   useEffect(() => { if (looping) setLoopStage(2); }, [looping, setLoopStage]);
-  // The apps step keeps the window on the plan underneath the screenshot.
+  // The apps step keeps the window on the prompt underneath the screenshot.
   const stage = looping ? loopStage : step.stage ?? 1;
 
   return (
@@ -100,11 +83,33 @@ export function AgentsChapter() {
               ))}
             </ol>
             <div className="mist-steps-media" data-apps={step.apps === true}>
-              <div className="mist-steps-window"><ScaledWindow stage={stage} after={step.after} width={900} height={620} /></div>
+              <div className="mist-steps-window"><ScaledWindow stage={stage} width={900} height={620} /></div>
               <div className="mist-steps-apps" aria-hidden={!step.apps}><IntegrationsShot /></div>
             </div>
           </div>
         </div>
+      </div>
+    </Chapter>
+  );
+}
+
+/** The rest of the app in three short points: the Lab, the Studio, and what runs where. */
+const MORE_POINTS: { title: string; text: string }[] = [
+  { title: "The Lab", text: "Make notebooks from your sources, with summaries, mind maps, flashcards, quizzes and audio overviews." },
+  { title: "The Studio", text: "A 3D room where you see your agents, and your teammates' agents, at work." },
+  { title: "Your computer, your keys", text: "Agents, their model calls and their chats run on your computer, with your own keys. A Space lives on a Misty server: Misty Pro, or one you run yourself." },
+];
+
+export function MoreChapter() {
+  return (
+    <Chapter id="more" title={<>More in Misty:{" "}<span>the Lab, the Studio, and what runs where.</span></>}>
+      <div className="mist-points" data-reveal-stagger>
+        {MORE_POINTS.map(point => (
+          <div key={point.title}>
+            <h3>{point.title}</h3>
+            <p>{point.text}</p>
+          </div>
+        ))}
       </div>
     </Chapter>
   );

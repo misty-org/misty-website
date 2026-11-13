@@ -2,12 +2,8 @@ import Footer from "@/components/layout/Footer";
 import { DownloadSection } from "@/pages/Download/DownloadSection";
 import { HomeCtaButtons } from "../components/HomeCtaButtons";
 import { ResourcePreview } from "../sections/ResourcePreview";
-import { EngineChapter } from "./BrowserChapters";
-import { AgentsChapter, SyncChapter } from "./Chapters";
+import { AgentsChapter, MoreChapter } from "./Chapters";
 import { SpacesChapter } from "./SpacesChapter";
-import { TileRoute } from "./Tiles";
-import { BROWSER_ROUTE } from "./browserRoute";
-import { CompareChapter } from "./CompareChapter";
 import { HomeFaq } from "./HomeFaq";
 import { Interlude } from "./Interludes";
 import { useReveal } from "./useReveal";
@@ -34,14 +30,14 @@ function Mist() {
   );
 }
 
-/** The hero screenshot shows Misty's split workspace and assistant together. */
+/** The hero screenshot: web pages side by side, with an agent chat and a Space's group chat. */
 function HeroDemo() {
   return (
     <div className="mist-container mist-hero-demo">
       <img
         className="mist-hero-screenshot"
         src="/screenshots/home/hero-layout.png"
-        alt="Misty showing a split browser workspace with Space.com, YouTube, Gmail, and its assistant and shared chat panels."
+        alt="Misty with web pages side by side, an agent chat and a Space's group chat."
         width={1919}
         height={1029}
         fetchPriority="high"
@@ -58,24 +54,22 @@ export function MidnightHome() {
       {SHOW_MIST && <Mist />}
       <section id="overview" className="mist-hero" aria-labelledby="mist-hero-title" data-mist-scene>
         <div className="mist-container mist-hero-copy">
-          <h1 id="mist-hero-title" data-write>The agentic browser workspace</h1>
+          <h1 id="mist-hero-title" data-write>Build together with AI</h1>
+          <p className="mist-hero-lede">
+            Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people,
+            and see what everyone's agents are doing as it happens.
+          </p>
           <HomeCtaButtons className="mist-hero-actions justify-center" />
         </div>
         <HeroDemo />
       </section>
-      {/* The story has three parts: browser, work and space. Work and space open with a one-line interlude. */}
+      {/* The story has two parts, work and space, each opened by a one-line interlude, then the rest of the app. */}
       <div id="features">
-        {/* One bundle of lines snakes through every Browser tile. */}
-        <TileRoute route={BROWSER_ROUTE}>
-          <EngineChapter />
-          <SyncChapter />
-        </TileRoute>
         <Interlude term="work" before="It does your" after="for you" />
         <AgentsChapter />
-        {/* Right after the agents, when a visitor is weighing Misty against other AI browsers. */}
-        <CompareChapter />
-        <Interlude term="space" before="It organizes everything in a" />
+        <Interlude term="space" before="Build together in a" />
         <SpacesChapter />
+        <MoreChapter />
       </div>
       <HomeFaq />
       <div className="mist-resources mist-section" data-mist-scene data-reveal>

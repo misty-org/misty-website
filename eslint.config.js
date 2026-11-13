@@ -27,10 +27,6 @@ export default defineConfig([
           allowExportNames: [
             'useAuth',
             'useTheme',
-            'buttonVariants',
-            'badgeVariants',
-            'tabsListVariants',
-            'toggleVariants',
           ],
         },
       ],

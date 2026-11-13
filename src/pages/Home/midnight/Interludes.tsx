@@ -1,10 +1,10 @@
 /**
- * The story has three parts: browser, work and space. A one-line interlude opens each part with its
- * term written in the highlighted serif. Each term keeps one marker color everywhere it appears.
+ * The story has two parts: work and space. A one-line interlude opens each part with its term
+ * written in the highlighted serif. Each term keeps one marker color everywhere it appears.
  */
 
-type Term = "browser" | "work" | "space";
-const TONE: Record<Term, string> = { browser: "yellow", work: "blue", space: "green" };
+type Term = "work" | "space";
+const TONE: Record<Term, string> = { work: "blue", space: "green" };
 
 export function Interlude({ term, before, after }: { term: Term; before: string; after?: string }) {
   return (

@@ -41,7 +41,7 @@ interface SignInProps {
 export default function SignIn({ onSignedIn }: SignInProps = {}) {
   const { refreshSession } = useAuth();
   const location = useLocation();
-  // The nav links have always set this state; until now nothing read it.
+  // The nav links set this state to the page the visitor came from.
   const returnTo = safeInternalPath(
     (location.state as { from?: string } | null)?.from,
   );

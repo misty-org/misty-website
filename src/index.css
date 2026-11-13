@@ -56,9 +56,6 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
-  --misty-extension-artwork-background: var(--muted);
-  --misty-extension-artwork-border: var(--border);
-  --misty-extension-artwork-foreground: var(--foreground);
 }
 
 .dark {
@@ -1022,7 +1019,6 @@ button:disabled {
   display: none;
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -1077,237 +1073,6 @@ button:disabled {
   }
 }
 
-/* ── Hero entrance animations ────────────────────────────────────────── */
-
-.hero-animate {
-  opacity: 0;
-  transform: translateY(1rem);
-  animation: hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.hero-animate-delay-1 {
-  animation-delay: 0.05s;
-}
-.hero-animate-delay-2 {
-  animation-delay: 0.15s;
-}
-.hero-animate-delay-3 {
-  animation-delay: 0.25s;
-}
-.hero-animate-delay-4 {
-  animation-delay: 0.35s;
-}
-.hero-animate-delay-5 {
-  animation-delay: 0.5s;
-}
-
-@keyframes hero-fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* The static layout is also the reduced-motion and narrow-screen fallback:
-   centered message, product directly below it, then the web-app action. */
-.hero-scroll-layout {
-  display: flex;
-  min-height: calc(100svh - var(--site-nav-height));
-  flex-direction: column;
-  align-items: center;
-  gap: clamp(2.5rem, 7svh, 5rem);
-  padding-bottom: clamp(2.5rem, 6svh, 4.5rem);
-}
-
-.hero-scroll-copy {
-  display: flex;
-  width: min(100%, 62rem);
-  min-height: calc(100svh - var(--site-nav-height));
-  justify-content: center;
-  padding-block: clamp(3.5rem, 9svh, 7rem);
-}
-
-.hero-scroll-product {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(100%, var(--site-content-max));
-}
-
-.hero-scroll-shot {
-  width: 100%;
-}
-
-.hero-scroll-shot [data-screenshot-status="capture"] > figure {
-  border-radius: var(--hero-shot-radius, 14px);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-}
-
-.hero-scroll-product-cta {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--hero-shot-radius, 14px);
-  background: rgb(0 0 0 / 45%);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .hero-scroll-product-cta {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 300ms ease;
-  }
-
-  .hero-scroll-product-cta[data-visible="true"],
-  .hero-scroll-product-cta:focus-within {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-scroll-product-cta { transition: none; }
-}
-
-/* On larger screens, the hero becomes a pinned camera move. The headline
-   scales toward the viewer while the product rises from below and expands
-   into the shared content rail. */
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  .hero-scroll-track {
-    height: calc(100svh + 80svh * var(--home-scroll-travel-scale, 1));
-  }
-
-  .hero-scroll-stage {
-    position: sticky;
-    top: var(--site-nav-height);
-    height: calc(100svh - var(--site-nav-height));
-    overflow: hidden;
-  }
-
-  .hero-scroll-layout {
-    position: relative;
-    display: block;
-    height: 100%;
-    min-height: 0;
-    max-width: none;
-    padding: 0;
-  }
-
-  .hero-scroll-copy {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: min(calc(100vw - (2 * var(--site-gutter))), 62rem);
-    min-height: 0;
-    padding-block: 0;
-    opacity: var(--hero-copy-opacity, 1);
-    transform: translate3d(-50%, calc(-50% + var(--hero-copy-shift, 0)), 0);
-    transform-origin: center;
-    will-change: opacity, transform;
-  }
-
-  .hero-scroll-zoom-group {
-    transform: scale(var(--hero-copy-scale, 1));
-    transform-origin: center;
-    will-change: transform;
-  }
-
-  .hero-scroll-product {
-    --hero-cta-height: 2.75rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: calc(min(100%, var(--site-container-max)) - (2 * var(--site-gutter)));
-    opacity: var(--hero-product-opacity, 0);
-    transform: translate3d(-50%, calc(-50% + var(--hero-product-shift, 0px)), 0) scale(var(--hero-product-scale, 0.94));
-    transform-origin: center center;
-    will-change: opacity, transform;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-scroll-shot {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .hero-scroll-shot [data-screenshot-slot] {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .hero-scroll-shot [data-screenshot-status="capture"] > figure {
-    width: 100%;
-    max-width: 100%;
-    border-radius: var(--hero-shot-radius, 14px);
-    overflow: hidden;
-    margin-inline: auto;
-    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
-  }
-
-  .hero-scroll-shot [data-screenshot-status="capture"] img {
-    width: 100%;
-    height: auto;
-    /* Match the shared content rail; preserve the capture's aspect ratio. */
-    max-height: none;
-    object-fit: contain;
-    object-position: top center;
-  }
-
-  .hero-scroll-product-cta > a {
-    height: var(--hero-cta-height);
-    padding-inline: 1.75rem;
-    font-size: 1rem;
-  }
-}
-
-.typing-cursor {
-  display: inline-block;
-  width: 0.055em;
-  height: 0.82em;
-  margin-left: 0.1em;
-  background: currentColor;
-  vertical-align: -0.05em;
-}
-
-.typing-cursor-blinking {
-  animation: typing-cursor-blink 900ms steps(1, end) infinite;
-}
-
-@keyframes typing-cursor-blink {
-  0%,
-  48% {
-    opacity: 1;
-  }
-
-  49%,
-  100% {
-    opacity: 0;
-  }
-}
-
-/* ── Scroll-triggered reveal (used by sections below the fold) ─────── */
-
-@media (prefers-reduced-motion: no-preference) {
-  .reveal {
-    opacity: 0;
-    transform: translateY(1rem);
-    transition:
-      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1315,57 +1080,6 @@ button:disabled {
     animation: none !important;
     transition-duration: 0.01ms !important;
   }
-
-  .hero-animate,
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .typing-cursor {
-    display: none;
-  }
-}
-
-/* ── App-native mockup surfaces ──────────────────────────────────────────
- *
- * Marketing chrome renders in Inter. Anything *inside* a product mockup
- * renders in the platform UI font instead, because the mockup is pretending
- * to be the real desktop app rather than a picture of it. Keeping the two
- * stacks distinct is most of why a hand-built mockup reads as a real window.
- *
- * The palette below is the desktop app's own charcoal/cream scale, copied
- * verbatim from the Misty app's styles. When the app's palette moves,
- * these move with it.
- */
-.app-chrome {
-  --app-workspace: #0f0f0f;
-  --app-bg: #131313;
-  --app-sidebar: #161616;
-  --app-card: #191919;
-  --app-border: #262626;
-  --app-hover: #2b2b2b;
-  --app-active: #3e3e3e;
-  --app-ink: #e0e0e0;
-  --app-ink-bright: #f1f1f1;
-  --app-ink-muted: #c9c9ce;
-
-  font-family:
-    -apple-system, system-ui, "SF Pro Display", "SF Pro Text", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
-  color: var(--app-ink);
-  background-color: var(--app-bg);
-  /* The app runs at a 16px root; the marketing site runs at 17px. Without
-     this the mockup's type comes out a size too large for its own chrome. */
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-}
-
-.app-chrome h1,
-.app-chrome h2,
-.app-chrome h3,
-.app-chrome h4 {
-  font-family: inherit;
 }
 
 /* ── Full-bleed dark band ────────────────────────────────────────────────
@@ -1413,11 +1127,8 @@ button:disabled {
 }
 
 /*
- * Under reduced motion the pinned track is dropped outright and the stacked
- * fallback takes over at every width. Unpinning in place would leave the
- * beats stacked in one grid cell on top of each other; swapping to the list
- * that already exists for small screens is both simpler and the only version
- * where every beat is actually readable.
+ * Under reduced motion the small-screen stacked list replaces the pinned track
+ * at every width. Unpinned in place, the beats would pile up in one grid cell.
  */
 @media (prefers-reduced-motion: reduce) {
   .pin-track {
@@ -1496,12 +1207,9 @@ button:disabled {
 
 
 @media (max-width: 767px) {
-  .hero-scroll-layout { min-height: 0; gap: 1.5rem; padding-bottom: 2rem; }
-  .hero-scroll-copy { min-height: 0; padding-block: 3rem 1rem; }
   .home-page { --scroll-edge-depth: clamp(48px, 8svh, 72px); }
   .home-content-rail > section + section { margin-top: 2.5rem; }
   .chapter-intro { padding-block: 2.5rem; }
-  .hero-scroll-product-cta { position: static; display: flex; margin-top: 1.5rem; background: transparent; opacity: 1; pointer-events: auto; }
   .feature-bento-card-media { height: auto; aspect-ratio: 3 / 2; margin-bottom: 1rem; padding-bottom: 0; }
   .feature-bento-preview, .feature-bento-preview > * { height: 100%; }
   .feature-bento-preview img { height: 100%; object-fit: contain; }
@@ -1512,15 +1220,11 @@ button:disabled {
 
 .mobile-path-marker, .mobile-path-rail { display: none; }
 @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-  .hero-scroll-product { opacity: .6; transform: translateY(24px) scale(.96); transition: opacity 650ms ease, transform 800ms cubic-bezier(.22,1,.36,1); }
-  .hero-scroll-product[data-in-view="true"] { opacity: 1; transform: translateY(0) scale(1); }
   .mobile-card-reveal { opacity: 0; translate: 0 20px; transition: opacity 450ms ease, translate 600ms cubic-bezier(.22,1,.36,1); }
   .mobile-card-reveal.visible { opacity: 1; translate: 0 0; }
   .feature-logo-scene { padding-left: 24px; }
   .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
-
-  .hero-scroll-zoom-group { opacity: calc(1 - var(--mobile-hero-exit, 0)); scale: calc(1 + .1 * var(--mobile-hero-exit, 0)); }
 }
 
 
@@ -1598,35 +1302,11 @@ button:disabled {
 }
 
 
-.mobile-screenshot-preview { position: relative; width: 100%; height: 100%; }
-.mobile-screenshot-trigger { display: none; }
-.mobile-screenshot-dialog {
-  width: calc(100% - 2rem);
-  max-width: 60rem;
-  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 2rem);
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
-  gap: .75rem;
-  padding: 1rem;
-  overflow: hidden;
-}
-.mobile-screenshot-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.mobile-screenshot-toolbar button { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; }
-.mobile-screenshot-canvas { min-height: 0; overflow: auto; overscroll-behavior: contain; border-radius: 8px; }
-.mobile-screenshot-canvas img { display: block; width: 100%; height: auto; max-width: none; }
-.mobile-screenshot-canvas[data-zoomed="true"] img { width: max(100%, 900px); }
-.mobile-screenshot-zoom { display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border: 1px solid var(--marketing-border-strong); border-radius: 8px; }
-.mobile-screenshot-dialog button:focus-visible, .mobile-screenshot-canvas:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: -2px; }
 @media (max-width: 767px) {
   .feature-logo-scene { gap: 2.5rem; }
-  .mobile-screenshot-trigger { position: absolute; inset: 0; display: flex; align-items: end; justify-content: end; padding: .5rem; border-radius: 12px; pointer-events: auto; }
-  .mobile-screenshot-trigger span { display: inline-flex; align-items: center; gap: .35rem; padding: .4rem .55rem; border-radius: 6px; background: rgb(0 0 0 / 75%); color: white; font-size: .7rem; }
-  .mobile-screenshot-trigger:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: -2px; }
 }
 @media (min-width: 768px) and (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
   .feature-logo-scene { padding-left: 24px; }
   .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
   .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .mobile-screenshot-dialog { animation: none !important; }
 }

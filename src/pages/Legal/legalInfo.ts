@@ -13,7 +13,7 @@ export const legalInfo = {
   /** The one address for help, privacy requests and copyright notices. */
   supportEmail: SUPPORT_EMAIL,
   siteUrl: "https://mistysys.com",
-  lastUpdated: "November 5, 2026",
+  lastUpdated: "November 12, 2026",
   minimumAge: 13,
   minimumAgeEeaUk: 16,
 } as const;

@@ -1,3 +1,0 @@
-;
-export { MistyAppMockup,  } from "./MistyAppMockup";
-;

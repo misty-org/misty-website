@@ -47,9 +47,9 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          Misty works as a browser without an account. Sync, Spaces and the
-          tools agents use need an account on a Misty server, such as Misty
-          Pro. Give us accurate information and keep it up to date. You are
+          Misty works on one computer without an account. Spaces need an
+          account on a Misty server, such as Misty Pro. Give us accurate
+          information and keep it up to date. You are
           responsible for keeping your password, setup keys and devices secure
           and for all activity under your account, including actions taken by
           AI agents you start. Tell us promptly at{" "}
@@ -73,7 +73,7 @@ const sections: LegalSectionDef[] = [
         <p>
           "Misty" means the Misty desktop application, the website at{" "}
           {legalInfo.siteUrl}, and Misty Pro, the Misty server we run for
-          subscribers, with its sync, Spaces, and agent tools. Misty is
+          subscribers, with its Spaces. Misty is
           operated by{" "}
           {operatorDescription} ("we", "us", "our").
         </p>
@@ -117,22 +117,23 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          Misty includes AI features, such as chat, voice, search over your
-          Spaces and Library, and agents that can browse, read pages, and take
-          actions in the browser on your behalf. Misty hosts no model. Agents
-          run on your desktop, and these features run on models that are your
-          own, called from your device: your ChatGPT plan through Sign in with
-          ChatGPT, OpenRouter, Ollama, or a provider whose API key you add, as
-          described in our{" "}
-          <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Sign in with
-          ChatGPT works the same on your own server and on Misty Pro, and it
+          Misty includes AI features, such as chat, voice, the Lab, and agents
+          that can read and change files, run commands, work on web pages in
+          Misty's browser for agents, use apps you connect, and, if you allow
+          it, use your computer's screen, keyboard, and mouse. Misty hosts no
+          model. Agents run on your computer, on AI that is your own: an AI
+          tool such as Claude Code or Codex signed in with your own account, a
+          provider whose API key you add, or a model that runs on your
+          computer, as described in our{" "}
+          <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Your account
+          or plan with an AI provider is between you and that provider, and it
           isn't part of what a Misty Pro subscription sells.
         </p>
         <LegalList
           items={[
             "AI output can be inaccurate, incomplete, offensive, or out of date. Don't rely on it for medical, legal, financial, or other professional advice, and review it before you use or publish it.",
-            "Agents act on your instructions and signed in as you. You are responsible for the actions an agent takes on your behalf, including filling in forms, sending messages, making purchases, deleting content, or changing settings on other websites. Depending on the mode you choose, an agent may act without asking you first at each step. Don't give agents tasks you wouldn't do yourself.",
-            "Websites and documents can contain hidden instructions that mislead an agent. Pauses, confirmations, site blocks, and other safeguards reduce risk, but they can fail and aren't a guarantee.",
+            "Agents act on your instructions, on your computer, and signed in as you. You are responsible for the actions an agent takes on your behalf, including running commands, changing or deleting files, filling in forms, sending messages, making purchases, or changing settings in apps and on websites. Depending on the mode and access you choose, an agent may act without asking you first at each step. Don't give agents tasks you wouldn't do yourself.",
+            "Websites, documents, and files can contain hidden instructions that mislead an agent. Pauses, confirmations, access settings, and other safeguards reduce risk, but they can fail and aren't a guarantee.",
             "You must follow the terms and usage policies of the model providers you use, and you may not use AI features to create content that is illegal, infringing, or harmful.",
             "Your model provider bills you directly for the AI you use. We never charge for AI, on any plan, and aren't responsible for those charges.",
           ]}
@@ -159,9 +160,11 @@ const sections: LegalSectionDef[] = [
           process, transmit, and display Your Content only as needed to
           operate, secure, and provide Misty to you and to the people you share
           it with. This includes sending relevant parts of it to our service
-          providers, such as Composio when an agent acts in an app you
-          connected, when you use a feature that needs them. We don't sell Your Content and we don't use it to train AI
-          models.
+          providers, such as our hosting and email providers, when needed to
+          run the feature you use. We don't send Your Content to AI providers:
+          your computer does that, on your own account, when you or your
+          agents use AI. We don't sell Your Content and we don't use it to
+          train AI models.
         </p>
         <p>
           You are responsible for Your Content. You confirm you have the rights
@@ -188,6 +191,13 @@ const sections: LegalSectionDef[] = [
           messages in a group chat. Only invite people you trust.
         </p>
         <p>
+          Members of a Space also see the agents you add to it: each agent's
+          name, what kind of work it's doing, and which files it's changing,
+          as our <LegalLink to="/privacy#collect">Privacy Policy</LegalLink>{" "}
+          explains. What an agent posts or saves in a Space is treated as
+          content you added.
+        </p>
+        <p>
           The owner of a Space controls its membership. We are not responsible
           for what other members do with content you share with them, and
           disputes between members are between those members.
@@ -196,28 +206,18 @@ const sections: LegalSectionDef[] = [
     ),
   },
   {
-    id: "sync",
-    title: "Sync, encryption, and backups",
+    id: "backups",
+    title: "Encryption and backups",
     inShort:
-      "Browser sync is end-to-end encrypted, so if you lose your sync password, we can't recover that data. Keep your own backups.",
+      "Spaces aren't end-to-end encrypted, and agent chats live only on your computer. Keep your own backups.",
     body: (
       <>
         <p>
-          Browser sync (your tabs, history, bookmarks, and website sign-ins) is
-          end-to-end encrypted with a sync password that only you know. We
-          never have that password and cannot reset it. If you lose it, your
-          synced browser data cannot be recovered by anyone, including us.
-        </p>
-        <p>
-          Other content, including Spaces, Library files, and Memory, is
-          protected in transit but is not end-to-end encrypted, and is stored on
-          the server you use. Agent conversations are stored on the computer
-          that started them and don't sync, so a lost computer loses them. While
-          an agent runs, the server you use receives its prompt, the
-          conversation's history, and its tool results, including what it reads
-          on a signed-in page, and holds them for about 24 hours. AI requests go
-          from your desktop to the model provider you chose, not through us. See
-          our{" "}
+          Spaces, their files, and voice transcripts are protected in transit
+          but are not end-to-end encrypted, and are stored on the server you
+          use. Agent chats are stored on the computer they ran on and don't
+          sync, so a lost computer loses them. AI requests go from your
+          computer to the provider you chose, not through us. See our{" "}
           <LegalLink to="/privacy#security">Privacy Policy</LegalLink> for
           details.
         </p>
@@ -225,8 +225,8 @@ const sections: LegalSectionDef[] = [
           <strong className="font-medium text-foreground">
             Misty is not a backup service.
           </strong>{" "}
-          Data can be lost through bugs, outages, sync conflicts, lost
-          passwords, account deletion, or circumstances outside our control. You
+          Data can be lost through bugs, outages, lost or broken computers,
+          account deletion, or circumstances outside our control. You
           are responsible for keeping your own copies of anything important.
           To get a copy of your account data, email{" "}
           <LegalEmail address={supportEmail} /> from your account email.
@@ -248,7 +248,7 @@ const sections: LegalSectionDef[] = [
             "send spam, run scams, or impersonate anyone;",
             "access accounts, systems, or data you aren't authorized to access, or probe, scan, or test the security of Misty without our written permission;",
             "interfere with or overload services we run, or get around their usage limits or security features;",
-            "use agents or automation to scrape, attack, or abuse other websites, or to violate other websites' terms.",
+            "use agents or automation to scrape, attack, or abuse other websites or services, or to violate their terms.",
           ]}
         />
         <p>
@@ -345,13 +345,14 @@ const sections: LegalSectionDef[] = [
     id: "third-party",
     title: "Third-party websites and services",
     inShort:
-      "Misty is a browser. The websites you visit and services you connect are not ours.",
+      "The AI tools, websites, apps, and services you use through Misty are not ours.",
     body: (
       <p>
-        Misty lets you browse the web, install extensions, and connect
-        third-party services, such as Google accounts and other apps you link.
-        Those websites, extensions, and services are run by others under their
-        own terms and privacy policies. We don't control or review them and
+        Misty can install and run AI tools made by others, such as Claude Code
+        and Codex, open websites in its browser for agents, add plugins and
+        skills, and connect to apps and services you sign in to, such as
+        Composio and Google. Those tools, websites, plugins, apps, and services
+        are run by others under their own terms and privacy policies. We don't control or review them and
         aren't responsible for their content, security, availability, or what
         they do with your data, including any malware, phishing, or other harm
         they cause. You use them at your own risk.
@@ -380,11 +381,11 @@ const sections: LegalSectionDef[] = [
         </p>
         <LegalList
           items={[
-            "loss, corruption, or deletion of data, including through bugs, updates, sync conflicts, outages, lost passwords, or account closure;",
-            "unauthorized access to, or theft or exposure of, your data, accounts, or website sign-ins, including through attacks on or flaws in Misty, our service providers, or your devices;",
-            "malware, phishing, or other harmful code or content, including through websites, downloads, extensions, or connected services you use in Misty;",
+            "loss, corruption, or deletion of data, including through bugs, updates, outages, lost or broken computers, or account closure;",
+            "unauthorized access to, or theft or exposure of, your data, accounts, keys, or sign-ins, including through attacks on or flaws in Misty, our service providers, or your devices;",
+            "malware, phishing, or other harmful code or content, including through websites, downloads, AI tools, plugins, skills, or connected services you use in Misty;",
             "bugs, defects, crashes, incompatibility, or damage to your devices or software;",
-            "mistakes by AI features and agents, including actions taken after an agent is misled by content on a page; and",
+            "mistakes by AI features and agents, including commands they run, files they change, and actions taken after an agent is misled by content on a page; and",
             "interruption, change, or discontinuation of Misty or of any service it depends on.",
           ]}
         />
@@ -483,8 +484,8 @@ const sections: LegalSectionDef[] = [
         harmless the Misty parties, including {operatorName}, from any claims,
         damages, losses, and expenses, including reasonable legal fees, arising
         from Your Content, your use of Misty (including actions taken by agents
-        you start, extensions you install, and any server or changed version of
-        Misty you run), or your breach of these Terms or of anyone's rights. This
+        you start, AI tools, plugins, and skills you install, and any server or
+        changed version of Misty you run), or your breach of these Terms or of anyone's rights. This
         section does not apply to consumers in the EU, EEA, UK, or Switzerland
         except where local law allows it.
       </p>

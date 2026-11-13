@@ -17,5 +17,4 @@ export const resourceLinks: NavLinkEntry[] = [
   { to: "/blog", label: "Blog" },
   { to: "/changelog", label: "Changelog" },
   { to: "/roadmap", label: "Roadmap" },
-  { to: "/kiri", label: "Kiri" },
 ];

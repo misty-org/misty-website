@@ -40,14 +40,12 @@ export const cloudTermsSection: LegalSectionDef = {
       <LegalList
         items={[
           <>
-            Your plan includes the storage, number of devices and app actions
-            shown on our{" "}
+            Your plan includes the storage and other limits shown on our{" "}
             <LegalLink to="/pricing">pricing page</LegalLink> when you
             subscribe.
           </>,
-          "App actions reset each month on your billing date and don't carry over.",
-          "When you reach a limit, the features that need it stop until your next billing date or until you add capacity. You can always open, download and delete what you have, and the rest of Misty keeps working.",
-          "We never charge for AI. Misty hosts no model and doesn't supply model access: AI runs on the models you choose, including Sign in with ChatGPT, called from your own device, and you pay your model provider directly.",
+          "When you reach a limit, Misty Pro refuses what would go over it, such as a new upload, until you make room. You can always open, download and delete what you have, and the rest of Misty keeps working.",
+          "We never charge for AI. Misty hosts no model and doesn't supply model access: AI runs on the models and AI tools you choose, from your own computer, and you pay your provider directly.",
         ]}
       />
       <LegalSubheading>Cancelling and refunds</LegalSubheading>
@@ -75,8 +73,8 @@ export const cloudTermsSection: LegalSectionDef = {
       <LegalSubheading>Failed payments and price changes</LegalSubheading>
       <p>
         If a payment fails, we email you and try again for 14 days. If it's
-        still unpaid after that, we suspend your account, which keeps your data but
-        stops sync and the tools agents use. Paying the amount due lifts the
+        still unpaid after that, we suspend your account, which keeps your data
+        but stops you signing in and using your Spaces on Misty Pro. Paying the amount due lifts the
         suspension. If it stays unpaid, your subscription ends, as described
         below.
       </p>

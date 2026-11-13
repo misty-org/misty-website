@@ -5,7 +5,7 @@ export const mistyEnv: IntegrationDoc = {
   file: "misty.env",
   service: "The server",
   summary:
-    "The server's own settings: its hostname, its name and the websites allowed to call it.",
+    "The server's own settings: its hostname, its name, the websites allowed to call it and who may sign in.",
   purpose: [
     "`misty.env` holds the few settings that belong to the server itself. The server's address comes from `MISTY_HOSTNAME`: the API answers at `https://MISTY_HOSTNAME/v1`, and the setup container points the Cloudflare Tunnel and DNS at that hostname.",
     "Secrets never go in this file. The setup container generates every one of them, such as database passwords and signing keys, into the stack's `secrets` volume on first boot ([Secrets](/docs/self-hosting#secrets)).",
@@ -33,6 +33,14 @@ export const mistyEnv: IntegrationDoc = {
         "The `https://` origins of websites you run against this API, separated by commas.",
       howTo:
         "Only needed if you run a website against this server. The app is always allowed.",
+      optional: true,
+    },
+    {
+      name: "MISTY_ALLOWED_EMAILS",
+      about:
+        "The emails allowed on this server, separated by commas. When it's set, only those emails can sign up or sign in, and the owner can always sign in.",
+      howTo:
+        "Leave it out to let in anyone with an account or an open invitation ([Accounts on your server](/docs/self-hosting#accounts)).",
       optional: true,
     },
   ],

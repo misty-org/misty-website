@@ -64,8 +64,8 @@ export default function Models() {
       <DocSection id="how" title="How it works">
         <Paragraphs
           items={[
-            "You pick models in the last step of the setup wizard, and later in Settings → Models. Keys and sign-ins stay in Misty's credential store on this computer, locked by a key in the system keychain, and your desktop calls the provider directly. No key or model choice ever goes to a Misty server, and a server never calls a model.",
-            "Settings belong to the device and never sync, so each computer has its own keys and sign-ins.",
+            "You pick models in Settings → Models. Keys and sign-ins stay in Misty's credential store on this computer, locked by a key in the system keychain, and your desktop calls the provider directly. No key or model choice ever goes to a Misty server, and a server never calls a model.",
+            "Settings belong to the device and stay on it, so each computer has its own keys and sign-ins.",
             "Because the call comes from your desktop, everything below works the same on your own server and on Misty Pro, including Sign in with ChatGPT and a local Ollama. None of it is part of what Misty Pro sells.",
           ]}
         />
@@ -93,10 +93,19 @@ export default function Models() {
         />
       </DocSection>
 
-      <DocSection id="claude" title="Claude">
+      <DocSection id="engines" title="Engines">
         <Paragraphs
           items={[
-            "Anthropic doesn't allow third-party apps to use Claude subscriptions such as Pro or Max, so Misty has no Claude sign-in. To use Claude models, add an Anthropic API key from [console.anthropic.com](https://console.anthropic.com), which Anthropic bills per token, or reach them through OpenRouter.",
+            "Chat with Claude Code, Codex, OpenCode and other engines, each under your own sign-in. Misty runs them on your computer, and each engine keeps its own sign-in there.",
+            "For Misty's own agent, the models on this page apply. To use Claude there, add an Anthropic API key from [console.anthropic.com](https://console.anthropic.com), which Anthropic bills per token, or reach it through OpenRouter.",
+          ]}
+        />
+      </DocSection>
+
+      <DocSection id="apps" title="Connected apps">
+        <Paragraphs
+          items={[
+            "Agents act in apps such as Gmail, Slack and Google Calendar. Apps that offer their own sign-in connect directly, starting from the last setup step. For the rest, add your own Composio key in Settings → Models → Connected apps. The key stays on this computer and goes only to Composio.",
           ]}
         />
       </DocSection>
@@ -116,13 +125,13 @@ export default function Models() {
       <DocSection id="agents" title="Agents need a desktop">
         <Paragraphs
           items={[
-            "Agents run on your desktop, where your models are. A run you start in the app begins at once. A run that starts somewhere else, such as an email to your agent, a Slack mention or a schedule, waits until one of your desktops is online, and then that desktop keeps the chat.",
+            "Agents run on your desktop, where your models are. A run you start in the app begins at once. A run that starts somewhere else, such as a mention in Space chat or a schedule, waits until one of your desktops is online, and then that desktop keeps the chat.",
           ]}
         />
         <Note>
-          Misty Pro charges for storage, devices and app actions, never for
-          AI or web search. Whatever you spend on models and searches goes to
-          your provider, not to Misty.
+          Misty Pro charges for the server and its storage, never for AI, web
+          search or connected apps. Whatever you spend on models and searches
+          goes to your provider, not to Misty.
         </Note>
       </DocSection>
     </DocPage>
