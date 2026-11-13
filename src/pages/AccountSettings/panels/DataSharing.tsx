@@ -37,10 +37,7 @@ const PREFERENCES: {
   },
 ];
 
-/**
- * The three server-backed account preferences. Until now they were stored on
- * the users table and reachable from no client at all.
- */
+/** The three server-backed account preferences. */
 export function DataSharing() {
   const [settings, setSettings] = useState<AccountSettingsResponse | null>(null);
   const [loadError, setLoadError] = useState("");

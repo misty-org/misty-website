@@ -2,7 +2,6 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
-import { sites } from './build/sites-vite-plugin'
 
 function isLocalApiBase(value?: string) {
   const apiBase = value?.trim();
@@ -58,7 +57,7 @@ export default defineConfig(({ command, mode }) => {
   }
 
   return {
-    plugins: [react(), tailwindcss(), sites()],
+    plugins: [react(), tailwindcss()],
     define: {
       "import.meta.env.MISTY_PUBLIC_API_URL": JSON.stringify(apiBase ?? ""),
     },

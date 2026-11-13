@@ -6,7 +6,7 @@ export function DownloadSection() {
     <section id="download" className="mist-closing" aria-labelledby="download-title" data-mist-scene>
       {/* One staggered reveal: the heading rises first and the button follows, never the other way round. */}
       <div className="mist-container mist-close-content" data-reveal-stagger>
-        <h2 id="download-title">Ready to build your browser workspace?</h2>
+        <h2 id="download-title">Ready to build together with AI?</h2>
         <div className="mist-closing-actions flex flex-wrap items-center justify-center gap-3">
           <DownloadCtaButton />
         </div>

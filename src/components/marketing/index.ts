@@ -1,3 +1,2 @@
 export { PageHeader } from "./PageHeader";
-export { PublicPage,  } from "./PublicPage";
-;
+export { PublicPage } from "./PublicPage";

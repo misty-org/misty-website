@@ -69,8 +69,8 @@ export default function Invite() {
       <AuthCard
         footer={
           <p className="text-center text-base leading-7 text-pretty text-muted-foreground">
-            Misty is a free, open-source browser workspace with native tools, agents and encrypted
-            sync.
+            Misty is one shared workspace where people and agents collaborate. It's free and open
+            source.
           </p>
         }
       >

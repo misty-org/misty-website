@@ -1,6 +1,7 @@
-import type { RouteObject } from "react-router";
+import { redirect, type RouteObject } from "react-router";
 
 import { marketingCopy } from "@/content/marketingCopy";
+import { siteLink } from "@/lib/site";
 import DocsLayout from "./DocsLayout";
 import IntegrationPage from "./IntegrationPage";
 import { integrationDocs } from "./integrations";
@@ -11,6 +12,12 @@ import Overview from "./pages/Overview";
 import SelfHosting from "./pages/SelfHosting";
 
 const docsTitle = (page: string) => `${page} | Misty docs`;
+
+/** Sends an old docs address to its new page, on whichever host this is. */
+function movedTo(path: string) {
+  const target = siteLink(path);
+  return redirect("path" in target ? target.path : target.href);
+}
 
 /**
  * The docs pages, served at the root of docs.mistysys.com (the router drops this route's
@@ -34,7 +41,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Connect the app"),
         description:
-          "Connect the Misty app to Misty Pro or your own server, or use it as a browser only.",
+          "Connect the Misty app to Misty Pro or your own server, or use it on this computer only.",
       },
     },
     {
@@ -43,7 +50,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Models"),
         description:
-          "The models Misty can use, from Sign in with ChatGPT to your own API keys, and what each costs.",
+          "The AI Misty can use, from Claude Code and Codex to your own API keys, and what each costs.",
       },
     },
     {
@@ -52,7 +59,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Run a server"),
         description:
-          "Run your own Misty server with one Compose file, four env files and a setup container.",
+          "Run your own Misty server with one Compose file, three env files and a setup container.",
       },
     },
     ...integrationDocs.map((doc) => ({
@@ -63,6 +70,11 @@ export const docsRoutes: RouteObject = {
         description: `${doc.file}: ${doc.summary}`,
       },
     })),
+    {
+      // composio.env is gone: the Composio key now lives on each computer.
+      path: "self-hosting/composio",
+      loader: () => movedTo("/docs/models#apps"),
+    },
     {
       path: "maintenance",
       element: <Maintenance />,

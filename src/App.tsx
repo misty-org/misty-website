@@ -89,10 +89,10 @@ export default function App() {
       .reverse()
       .find((routeMatch) => Boolean(routeMatch.handle as Handle | undefined));
     const handle = match?.handle as Handle | undefined;
-    const title = handle?.title ?? "Misty | The agentic browser workspace";
+    const title = handle?.title ?? "Misty | Build together with AI";
     const description =
       handle?.description ??
-      "Misty is a free, open-source browser workspace with native tools, agents, and encrypted sync for your tabs and website sign-ins across computers.";
+      "Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens.";
     const canonicalUrl = new URL(
       location.pathname,
       isDocsHost() ? DOCS_URL : SITE_URL,

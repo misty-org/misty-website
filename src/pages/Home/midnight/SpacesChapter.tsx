@@ -6,8 +6,8 @@ import "./spaces.css";
 
 /**
  * The Space part of the homepage story: an island of tabs, one per thing a Space holds, over one
- * large screenshot. Claims follow SELLING-POINTS.md and misty/src/features (spaces, journal,
- * planner, library).
+ * large screenshot. Claims follow misty/src/features/spaces (chat, journal, planner, calendar,
+ * library).
  */
 
 /**
@@ -16,8 +16,8 @@ import "./spaces.css";
  */
 const SPACE_TABS: { id: string; name: string; icon: LucideIcon; title: string; src?: string }[] = [
   { id: "chat", name: "Chat", icon: MessagesSquare, title: "Chat with people and agents in one thread.", src: "/screenshots/spaces/chat.webp" },
-  { id: "journal", name: "Journal", icon: NotebookPen, title: "Write notes and draw together, live.", src: "/screenshots/spaces/journal.webp" },
-  { id: "planner", name: "Planner", icon: ListTodo, title: "Plan tasks, agendas and roadmaps.", src: "/screenshots/spaces/planner.webp" },
+  { id: "journal", name: "Journal", icon: NotebookPen, title: "Write docs and draw together, live.", src: "/screenshots/spaces/journal.webp" },
+  { id: "planner", name: "Planner", icon: ListTodo, title: "Plan tasks and dates on a shared calendar.", src: "/screenshots/spaces/planner.webp" },
   { id: "library", name: "Library", icon: FolderOpen, title: "Keep project files in one shared library." },
 ];
 
@@ -40,7 +40,7 @@ export function SpacesChapter() {
   const [index, setIndex] = useState(0);
   const current = SPACE_TABS[index];
   return (
-    <Chapter id="spaces" title={<>A space for{" "}<span>every project.</span></>}>
+    <Chapter id="spaces" title={<>A space for your people{" "}<span>and their agents.</span></>}>
       <div className="mist-space" data-reveal>
         <div className="mist-space-island" role="tablist" aria-label="Apps in a Space">
           {SPACE_TABS.map(({ id, name, icon: Icon }, position) => (

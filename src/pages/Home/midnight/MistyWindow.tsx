@@ -1,43 +1,27 @@
 import { memo, useEffect, useRef, useState, type ReactNode } from "react";
 import {
-  ArrowLeftRight, Bell, Bot, Check, FolderOpen, Globe, House,
-  LayoutPanelLeft, Plus, Puzzle, Search, Settings, X,
+  Armchair, Check, FlaskConical, Orbit, Search, Settings, UsersRound, Waypoints,
 } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { brand, SCENARIOS, TABS, type Step, type TabId } from "./demoScript";
+import { brand, LAUNCH, TABS, type Step } from "./demoScript";
 import { DocPage, PageFrame } from "./demoPages";
 import type { Stage } from "./useStageLoop";
 
 /**
- * A rebuilt Misty window, drawn in HTML so it stays sharp at any size. One agent task plays
- * out in stages: asked, planned, working through connected apps, then waiting for approval
- * before it posts anything. Agents ask before sending, sharing, deleting or paying.
+ * A rebuilt Misty window, drawn in HTML so it stays sharp at any size: the agent's own browser
+ * beside its chat. One agent task plays out in stages: asked, working through connected apps,
+ * then waiting for approval before it posts anything.
  */
 
-const RAIL = [House, Globe, FolderOpen, ArrowLeftRight, Bot, LayoutPanelLeft, Puzzle];
-
-/** The tab strip. Given `onOpen`, the tabs are buttons. */
-function WindowBar({ active, onOpen }: { active: TabId; onOpen?: (tab: TabId) => void }) {
-  return (
-    <div className="mw-bar">
-      <span className="mw-lights"><i /><i /><i /></span>
-      {TABS.map(tab => {
-        const content = <><img src={brand(tab.icon)} alt="" />{tab.label}<X size={12} /></>;
-        return onOpen
-          ? <button key={tab.id} type="button" className="mw-tab" data-active={tab.id === active} aria-pressed={tab.id === active} onClick={() => onOpen(tab.id)}>{content}</button>
-          : <span key={tab.id} className="mw-tab" data-active={tab.id === active}>{content}</span>;
-      })}
-      <Plus size={14} className="mw-new-tab" />
-    </div>
-  );
-}
+/** The sidebar's places: agents, the Space, the Studio, the Lab and integrations. */
+const RAIL = [UsersRound, Orbit, Armchair, FlaskConical, Waypoints];
 
 function Rail() {
   return (
     <nav className="mw-rail" aria-hidden="true">
       <span className="mw-logo"><BrandLogo className="size-5" /></span>
-      {RAIL.map((Icon, index) => <span key={index} data-active={Icon === Bot}><Icon size={16} strokeWidth={1.75} /></span>)}
-      <span className="mw-rail-end"><Search size={16} strokeWidth={1.75} /><Bell size={16} strokeWidth={1.75} /><Settings size={16} strokeWidth={1.75} /></span>
+      {RAIL.map((Icon, index) => <span key={index} data-active={Icon === UsersRound}><Icon size={16} strokeWidth={1.75} /></span>)}
+      <span className="mw-rail-end"><Search size={16} strokeWidth={1.75} /><Settings size={16} strokeWidth={1.75} /></span>
     </nav>
   );
 }
@@ -64,17 +48,13 @@ function StepList({ steps, stateOf }: { steps: readonly Step[]; stateOf: (index:
   );
 }
 
-const [LOOP] = SCENARIOS;
+const LOOP = LAUNCH;
 
-/** What the finished task leads to: saved as a workflow, or picked up again on another computer. */
-export type Aftermath = "workflow" | "handoff";
-
-function AgentPanel({ stage, after }: { stage: Stage; after?: Aftermath }) {
+function AgentPanel({ stage }: { stage: Stage }) {
   return (
     <aside className="mw-panel">
       <PanelHead />
       <div className="mw-thread">
-        {after === "handoff" && <p className="mw-handoff"><span className="mw-mono">Continued on Studio desktop</span>Started on This Mac · synced to your account</p>}
         {stage >= 1 && <p className="mw-you">{LOOP.prompt}</p>}
         {stage === 1 && (
           <div className="mw-plan">
@@ -94,13 +74,6 @@ function AgentPanel({ stage, after }: { stage: Stage; after?: Aftermath }) {
           </div>
         )}
         {stage === 6 && <p className="mw-done"><Check size={13} strokeWidth={2.5} /> Posted to #launch</p>}
-        {stage === 6 && after === "workflow" && (
-          <div className="mw-plan mw-saved">
-            <span className="mw-mono">Saved as a workflow</span>
-            <p><b>Launch catch-up</b>Slack and Gmail into the Launch plan, then #launch</p>
-            <div className="mw-actions"><b>Run now</b><em>Schedule</em></div>
-          </div>
-        )}
       </div>
       <div className="mw-composer" data-typing={stage === 0}>
         <p>{stage === 0 ? LOOP.prompt : "Ask Misty to do something…"}</p>
@@ -111,14 +84,13 @@ function AgentPanel({ stage, after }: { stage: Stage; after?: Aftermath }) {
 }
 
 /** The looping, non-interactive window the Agents chapter steps through. */
-function MistyWindow({ stage, after }: { stage: Stage; after?: Aftermath }) {
+function MistyWindow({ stage }: { stage: Stage }) {
   return (
-    <div className="mw" role="img" aria-label="Misty agent catching up on a launch from Slack and Gmail, updating a Google Doc, and asking before it posts">
-      <WindowBar active="doc" />
+    <div className="mw" role="img" aria-label="Misty agent catching up on a launch from Slack and Gmail, updating a Google Doc in its own browser, and asking before it posts">
       <div className="mw-body">
         <Rail />
-        <PageFrame url={TABS[0].url}><DocPage writing={stage === 4} written={stage >= 5} /></PageFrame>
-        <AgentPanel stage={stage} after={after} />
+        <PageFrame tabs={TABS} active="doc" url={TABS[0].url}><DocPage writing={stage === 4} written={stage >= 5} /></PageFrame>
+        <AgentPanel stage={stage} />
       </div>
     </div>
   );
@@ -145,6 +117,6 @@ function ScaledFrame({ width = 1180, height = 720, children }: { width?: number;
 }
 
 /** Memoized: a step change elsewhere in the scene shouldn't re-render the whole window mid-scroll. */
-export const ScaledWindow = memo(function ScaledWindow({ stage, after, width, height }: { stage: Stage; after?: Aftermath; width?: number; height?: number }) {
-  return <ScaledFrame width={width} height={height}>{() => <MistyWindow stage={stage} after={after} />}</ScaledFrame>;
+export const ScaledWindow = memo(function ScaledWindow({ stage, width, height }: { stage: Stage; width?: number; height?: number }) {
+  return <ScaledFrame width={width} height={height}>{() => <MistyWindow stage={stage} />}</ScaledFrame>;
 });

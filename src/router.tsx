@@ -6,12 +6,10 @@ import Register from "./pages/Register";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import SignInLink from "./pages/SignInLink";
 import NotFound from "./pages/NotFound";
-import Waitlist from "./pages/Waitlist";
 import Settings from "./pages/AccountSettings";
 import Changelog from "./pages/Changelog";
 import Blog from "./pages/Blog";
 import Roadmap from "./pages/Roadmap";
-import Kiri from "./pages/Kiri";
 import Pricing from "./pages/Pricing";
 import Setup from "./pages/Setup";
 import CloudWelcome from "./pages/CloudWelcome";
@@ -65,7 +63,7 @@ const site: RouteObject[] = [
         index: true,
         element: <Home />,
         handle: {
-          title: "Misty | The agentic browser workspace",
+          title: "Misty | Build together with AI",
           description: marketingCopy.metadata.home,
         },
       },
@@ -97,12 +95,9 @@ const site: RouteObject[] = [
         },
       },
       {
+        // The Kiri page is gone; old links land on the homepage.
         path: "kiri",
-        element: <Kiri />,
-        handle: {
-          title: "Kiri | How Misty runs Chrome and Firefox extensions",
-          description: marketingCopy.metadata.kiri,
-        },
+        loader: () => redirect("/"),
       },
       {
         // The docs moved to their own host.
@@ -209,12 +204,9 @@ const site: RouteObject[] = [
         },
       },
       {
+        // The waitlist is gone; old links go to the download.
         path: "waitlist",
-        element: <Waitlist />,
-        handle: {
-          title: "Join Misty | Misty",
-          description: marketingCopy.metadata.waitlist,
-        },
+        loader: () => redirect("/download"),
       },
       {
         path: "signin",
@@ -237,7 +229,7 @@ const site: RouteObject[] = [
         element: <Invite />,
         handle: {
           title: "You're invited | Misty",
-          description: "A friend invited you to Misty, the free, open-source agentic browser.",
+          description: "A friend invited you to Misty, a shared workspace for people and their AI agents.",
         },
       },
       {

@@ -7,9 +7,7 @@ import "./faq.css";
 
 /**
  * Questions and answers as a plain accordion on the right, with a "Q&A" heading centered in the space on the left. Only what the
- * page above doesn't already show: cost, accounts, models, platforms, importing, extensions, privacy, sign-ins, agent
- * approval and files.
- * Answers follow SELLING-POINTS.md and its fine print.
+ * page above doesn't already show: cost, accounts, models, platforms, privacy, agent approval and files.
  */
 type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
@@ -19,7 +17,7 @@ const START: Faq[] = [
   },
   {
     q: "Do I need an account?",
-    a: <>No. Misty works as a browser without signing in. Sync and Spaces need a Misty server, either your own or Misty Pro. See the <SiteLink to="/docs">docs</SiteLink>.</>,
+    a: <>No. Misty works on one computer without a server. Spaces and teammates need a Misty server, either your own or Misty Pro. See the <SiteLink to="/docs">docs</SiteLink>.</>,
   },
   {
     q: "Which AI models can I use?",
@@ -29,23 +27,11 @@ const START: Faq[] = [
     q: "Which computers does Misty run on?",
     a: "Mac and Windows. Misty uses the web engine your computer already has, so the app stays small and gets security fixes from Apple and Microsoft.",
   },
-  {
-    q: "Can I bring my profile from another browser?",
-    a: "Yes. You can import your profile and settings from Chrome, Safari, Firefox or Zen.",
-  },
-  {
-    q: "Do extensions work?",
-    a: "Partly, and we're still testing them with real extensions. On a Mac with macOS 15.4 or later, you can install Chrome and Firefox extensions and see what each one can access first. On Windows, only Chrome's Manifest V3 extensions run, with more limits. uBlock Origin Lite works, but the full uBlock Origin can't run in Misty.",
-  },
 ];
 const TRUST: Faq[] = [
   {
-    q: "Can Misty read my synced data?",
-    a: "No. Your synced tabs, history, bookmarks and sign-ins are encrypted on your device before they sync, with a key only your devices hold. Other data isn't sealed that way: Spaces, files and Memory are stored on your server, and whoever runs it can read them. On Misty Pro, that's Misty. Agent conversations stay on the computer that started them, but while an agent runs, your server sees its prompt, the conversation's history and its tool results, including what it reads on a signed-in page, and holds them for about 24 hours. There are no ads, analytics or data sales.",
-  },
-  {
-    q: "Will I stay signed in on every computer?",
-    a: "On most sites, yes. Some sites tie a sign-in to one device and ask you to sign in again, and Misty shows which ones did.",
+    q: "Can Misty read my data?",
+    a: "Agents, their model calls and their chats stay on your computer. A Misty server stores your Spaces, with their messages and files, and your account details, and whoever runs it can read them. On Misty Pro, that's Misty. There are no ads, analytics or data sales.",
   },
   {
     q: "Can an agent act without asking me?",

@@ -8,22 +8,23 @@ const WHERE_THINGS_RUN = [
   [
     "The desktop app",
     "Your computer",
-    "Browsing, agents and every model call.",
+    "Chats with your AI, agents, the agent browser and every model call.",
   ],
   [
     "The Misty server",
     "Your own host, or Misty Pro",
-    "Accounts, encrypted sync, Spaces, Library files and the tools agents call.",
+    "Accounts, Spaces, group chat, docs and drawings, tasks, the planner and files.",
   ],
   [
     "Cloudflare",
     "Your Cloudflare account, or Misty Pro's",
-    "HTTPS for the server, file storage in R2, and the Workers that save notes and read pages.",
+    "HTTPS for the server, file storage in R2, and the Worker that saves docs and drawings as people edit them together.",
   ],
+  ["Google", "Your Google Cloud project", "Google sign-in."],
   [
-    "Composio, Google",
-    "Their own services",
-    "App actions and Google sign-in.",
+    "Composio",
+    "Your own Composio key, on your computer",
+    "Apps agents act in that don't offer their own sign-in, such as Gmail.",
   ],
 ];
 
@@ -31,14 +32,14 @@ const WHERE_THINGS_RUN = [
 export default function Overview() {
   return (
     <DocPage title="What Misty is">
-      <P text="Misty is a desktop browser with agents built in. It works on its own, and a Misty server adds sync, Spaces and the tools agents use." />
+      <P text="Misty is one shared workspace where people and agents build together. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens. It works on one computer on its own, and a Misty server adds accounts and Spaces." />
 
       <DocSection id="two-ways" title="Free or Misty Pro">
         <Paragraphs
           items={[
-            "Misty is free and open source under the GNU AGPL-3.0, with every feature. On Free you set everything up yourself: the server, and your own Cloudflare, Composio and Google accounts. [Run a server](/docs/self-hosting) walks through it.",
-            "Misty Pro is a server that's already configured, for $10 a month plus tax where it applies. You make a Misty account here, subscribe, then choose Misty Pro in the app and sign in. See [pricing](/pricing).",
-            "Without a server, Misty is a browser, and everything stays on your computer.",
+            "Misty is free and open source under the GNU AGPL-3.0, with every feature. On Free you set everything up yourself: the server, and your own Cloudflare and Google accounts. [Run a server](/docs/self-hosting) walks through it.",
+            "Misty Pro is a server that's already configured, for $10 a month plus tax where it applies. You make a Misty account here, subscribe, then choose Misty Cloud in the app and sign in. See [pricing](/pricing).",
+            "Without a server, Misty runs on this computer only, with no Spaces to share.",
           ]}
         />
       </DocSection>
@@ -46,8 +47,9 @@ export default function Overview() {
       <DocSection id="ai" title="AI runs on your own models">
         <Paragraphs
           items={[
+            "Chat with the AI you already use, such as Claude Code, Codex or OpenCode, under your own sign-in.",
             "Misty hosts no model and never charges for AI, on Free or on Misty Pro. The models are your own: you sign in with ChatGPT to use your ChatGPT plan, or use OpenRouter, Ollama Cloud, a local Ollama, or your own API keys. [Models](/docs/models) explains what each costs.",
-            "Agents run on your desktop. The desktop calls the model you chose, and the server never calls a model or holds a model key. An agent run needs one of your desktops to be online; a run that starts from an email or a schedule waits until one is.",
+            "Agents run on your desktop. The desktop calls the model you chose, and the server never calls a model or holds a model key. An agent run needs one of your desktops to be online; a run that starts from a mention in Space chat or a schedule waits until one is.",
           ]}
         />
       </DocSection>

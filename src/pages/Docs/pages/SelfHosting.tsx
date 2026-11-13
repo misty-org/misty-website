@@ -36,7 +36,7 @@ const SERVICES = [
   [
     "`api`",
     "Always",
-    "Accounts, encrypted sync, Spaces, files and the tools agents call.",
+    "Accounts, Spaces, chat, docs, drawings, tasks, the planner and files.",
   ],
   [
     "`cloudflared`",
@@ -48,16 +48,21 @@ const SERVICES = [
     "Always",
     "Encrypted database backups to R2 every night at 03:00 UTC.",
   ],
+  [
+    "`alerts`",
+    "Always",
+    "Records an alert when the API fails its health check, fails 5% of requests, runs low on disk or misses a backup. The console and the owner's app show it. Nothing is emailed.",
+  ],
   ["`console`", "Always, on `127.0.0.1:7070` only", "The operator console."],
 ];
 
 const ROTATIONS = [
   [
-    "`MISTY_AUTH_SIGNING_KEY`, `MISTY_AGENT_RUNTIME_CONTROL_SECRET`, `MISTY_OPERATOR_TOKEN`, `JOURNAL_COLLAB_CONTROL_SECRET`, `JOURNAL_COLLAB_PROJECTION_SECRET`",
+    "`MISTY_AUTH_SIGNING_KEY`, `MISTY_OPERATOR_TOKEN`, `JOURNAL_COLLAB_CONTROL_SECRET`, `JOURNAL_COLLAB_PROJECTION_SECRET`",
     "The old value stays valid in its `*_PREVIOUS` slot until you retire it.",
   ],
   [
-    "`MISTY_DEVICE_TICKET_PRIVATE_KEY`, `JOURNAL_COLLAB_TICKET_PRIVATE_KEY`",
+    "`JOURNAL_COLLAB_TICKET_PRIVATE_KEY`",
     "The old public key stays valid until you retire it.",
   ],
   [
@@ -66,25 +71,25 @@ const ROTATIONS = [
   ],
 ];
 
-/** Running your own server: one Compose file, four env files and the setup container. */
+/** Running your own server: one Compose file, three env files and the setup container. */
 export default function SelfHosting() {
   return (
     <DocPage title="Run a server">
-      <P text="A Misty server is one Compose file and four env files. A setup container does the rest on every start." />
+      <P text="A Misty server is one Compose file and three env files. A setup container does the rest on every start." />
 
       <DocSection id="what-you-need" title="What you need">
         <BulletList
           items={[
             "A VPS or other always-on Linux or macOS computer with Docker Engine and Compose v2. Two CPU cores and 2 GB of memory are enough for a small server, since agents run on each person's desktop.",
             "Git, to get the code. Everything else builds inside the containers.",
-            "A domain on Cloudflare, and accounts with Composio and Google Cloud. Each one is a required part of every server; turning one off means changing the code.",
+            "A domain on Cloudflare and a Google Cloud account. Both are required parts of every server; turning one off means changing the code.",
             "The Misty app only connects to a server on an https domain, so plain http, IP addresses, localhost and domains that point to a private address won't work.",
           ]}
         />
       </DocSection>
 
       <DocSection id="files" title="The files">
-        <P text="Everything you configure lives in four files directly under `~/.misty/.env/server/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
+        <P text="Everything you configure lives in three files directly under `~/.misty/.env/server/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
         <CodeBlock code={ENV_TREE} label="The server folder" />
         <DocTable
           columns={["File", "What it's for", "Page"]}
@@ -105,10 +110,10 @@ export default function SelfHosting() {
         <Steps
           items={[
             "Clone misty-server on the host and create `~/.misty/.env/server/`, readable only by you.",
-            "Write the four files, following each file's page.",
+            "Write the three files, following each file's page.",
             "Start the stack from the `server` folder. The first start builds the images, so it takes a few minutes.",
             "Watch the setup container's log. Once the tunnel connects, the API answers at `https://MISTY_HOSTNAME/health`, and on the host at `http://127.0.0.1:8081/health`.",
-            "Open the Misty app, choose My own server and enter `https://MISTY_HOSTNAME`, then create the first account ([Connect the app](/docs/connect)).",
+            "Open the Misty app, choose Self-hosted and enter `https://MISTY_HOSTNAME`, then create the first account ([Connect the app](/docs/connect)).",
           ]}
         />
         <CodeBlock
@@ -116,7 +121,7 @@ export default function SelfHosting() {
           code={`git clone https://github.com/misty-org/misty-server.git
 cd misty-server
 mkdir -p -m 700 ~/.misty/.env/server
-# write the four files under ~/.misty/.env/server/
+# write the three files under ~/.misty/.env/server/
 docker compose up -d --build
 docker compose ps
 docker compose logs setup`}
@@ -160,8 +165,8 @@ docker compose run --rm setup retire MISTY_AUTH_SIGNING_KEY`}
       <DocSection id="accounts" title="Accounts on your server">
         <Paragraphs
           items={[
-            "On a fresh server, the first account registers itself from the app's sign-in screen and owns the server. After that, a person can sign up only while a Space invitation to their email is open, or when you make their account in the console, or the operator account API makes it, and hand them a sign-in link. There is no setting for this, and existing accounts always sign in.",
-            "To bring someone in, or to let someone who forgot their password back in, open the console, choose the account and copy its sign-in link, then send it to them. With Mailjet set up (below), the server emails it for you.",
+            "On a fresh server, the first account registers itself from the app's sign-in screen and owns the server. After that, a person can sign up only while a Space invitation to their email is open, or when you make their account in the console or the operator account API. To limit the server to a list of people, set `MISTY_ALLOWED_EMAILS` in misty.env (comma-separated); then only those emails can sign up or sign in, and the owner can always sign in.",
+            "To bring someone in, or to let someone who forgot their password back in, open the console, choose the account and copy its sign-in link, then send it to them. With email set up ([Email](/docs/self-hosting#email)), the server emails it for you.",
             "People sign in with Misty, an email and password kept on your server, or with Google through your own `google.env` client. There is no central Misty account.",
             "The operator console listens on `127.0.0.1:7070` on the server only, and its sign-in link is in `docker compose logs console`. From another computer, forward the port over SSH: `ssh -L 7070:127.0.0.1:7070 you@server`.",
           ]}

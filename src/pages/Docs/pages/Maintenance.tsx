@@ -31,7 +31,7 @@ docker compose up -d --build`}
         <Paragraphs
           items={[
             "The `backups` service dumps the database every night at 03:00 UTC, encrypts the dump to the server's backup key with [age](https://age-encryption.org), and uploads it to the `misty-<host>-backups` bucket in R2. That bucket has a 30-day lock, so no credential on the server can delete or overwrite a backup in that time, and backups expire a day after their lock ends.",
-            "Library files live in the Library bucket on your Cloudflare account. Synced browser data is encrypted on each device, so a backup only ever holds it encrypted.",
+            "Library files live in the Library bucket on your Cloudflare account, not in the database backup.",
           ]}
         />
         <CodeBlock
@@ -62,7 +62,7 @@ docker compose up -d`}
           items={[
             "`docker compose down` stops the server and keeps all its data and secrets.",
             "`docker compose down --volumes` deletes the volumes, and with them the database and the secrets. It's the only command that destroys data.",
-            "The tunnel, buckets and Workers stay in your Cloudflare account until you delete them there. Deleting the R2 buckets removes the files and backups.",
+            "The tunnel, buckets and Worker stay in your Cloudflare account until you delete them there. Deleting the R2 buckets removes the files and backups.",
           ]}
         />
       </DocSection>
@@ -70,7 +70,7 @@ docker compose up -d`}
       <DocSection id="changing" title="Changing the server">
         <Paragraphs
           items={[
-            "Misty is licensed under the [GNU AGPL-3.0-or-later](/license), and the AGPL covers servers. If you change Misty's server or its Workers and let other people use your server, you must offer those people the source code of your changed version under the same license, for example with a link on your sign-in page or in your server's description.",
+            "Misty is licensed under the [GNU AGPL-3.0-or-later](/license), and the AGPL covers servers. If you change Misty's server or its Worker and let other people use your server, you must offer those people the source code of your changed version under the same license, for example with a link on your sign-in page or in your server's description.",
             "Running Misty unchanged, or changing it only for yourself, needs nothing extra.",
             "A changed version you share or let others use must have its own name and logo, and it may say it's based on Misty. Misty's `NOTICE` adds one term under the AGPL's section 7(b): every copy, changed or not, keeps the author attribution in its About screen ([License](/license)).",
             "Every service on these pages is a required part of the server. Removing one, such as running without Cloudflare, means changing the code, and that version is yours to maintain.",

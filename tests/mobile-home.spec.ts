@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }, info) => {
   await page.goto("/");
 });
 
-test("the full homepage fits phone widths and loads both device previews", async ({ page }) => {
+test("the full homepage fits phone widths", async ({ page }) => {
   for (const width of [320, 390, 768]) {
     await page.setViewportSize({ width, height: 844 });
     for (const section of await page.locator(".mist-home section[data-mist-scene]").all()) {
@@ -14,7 +14,6 @@ test("the full homepage fits phone widths and loads both device previews", async
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   }
-  await expect(page.locator('#foundation .mist-screen')).toHaveCount(2);
 });
 
 test("phone visitors have a download CTA and working product previews", async ({ page }) => {

@@ -69,7 +69,6 @@ artifacts/
 # Local visual experiments and generated screenshots
 /output/
 /.tmp-cap.mjs
-/.claude/launch.json
 
 # TypeScript build cache
 *.tsbuildinfo

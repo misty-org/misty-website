@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("the homepage ends with a call to download", async ({ page }, info) => {
   await page.goto("/download");
   const section = page.locator("#download");
-  await expect(section.getByRole("heading", { level: 2, name: "Ready to build your browser workspace?" })).toBeInViewport();
+  await expect(section.getByRole("heading", { level: 2, name: "Ready to build together with AI?" })).toBeInViewport();
   // The hero's button again: the visitor's own build on desktop, every release on a phone.
   const button = info.project.name === "mobile-chromium"
     ? section.getByRole("link", { name: "Download Misty" })

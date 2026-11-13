@@ -7,14 +7,14 @@ const publicRoutes = [
   {
     name: "home",
     path: "/",
-    title: "Misty | The agentic browser workspace",
+    title: "Misty | Build together with AI",
   },
   {
     name: "download",
     path: "/download",
     title: "Download Misty | macOS and Windows beta",
   },
-  { name: "pricing", path: "/pricing", title: "Pricing | Misty and Misty Cloud" },
+  { name: "pricing", path: "/pricing", title: "Pricing | Misty and Misty Pro" },
   { name: "docs", path: "/docs", title: "Docs | Misty" },
   {
     name: "docs self-hosting",
@@ -50,12 +50,6 @@ const publicRoutes = [
     path: "/roadmap",
     title: "Roadmap | What Misty is building",
   },
-  {
-    name: "kiri",
-    path: "/kiri",
-    title: "Kiri | How Misty runs Chrome and Firefox extensions",
-  },
-  { name: "legacy join", path: "/waitlist", title: "Join Misty | Misty" },
   { name: "sign in", path: "/signin", title: "Sign in | Misty" },
   {
     name: "register",
@@ -161,12 +155,24 @@ test("settings redirects signed-out visitors without an API server", async ({
   ).toBeVisible();
 });
 
+test("removed pages send old links on", async ({ page }) => {
+  await prepareApiLessPage(page, "dark");
+
+  await page.goto("/kiri");
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveTitle("Misty | Build together with AI");
+
+  await page.goto("/waitlist");
+  await expect(page).toHaveURL(/\/download$/);
+  await expect(page).toHaveTitle(/^Download Misty/);
+});
+
 test("public pages share the footer's horizontal alignment rail", async ({
   page,
 }) => {
   await prepareApiLessPage(page, "dark");
 
-  for (const path of ["/", "/download", "/waitlist", "/signin"]) {
+  for (const path of ["/", "/download", "/signin"]) {
     await page.goto(path);
 
     const pageRail = page.locator("main .site-container").first();

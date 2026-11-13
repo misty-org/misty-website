@@ -31,7 +31,6 @@ export const columns: FooterColumn[] = [
       { to: "/blog", text: "Blog" },
       { to: "/roadmap", text: "Roadmap" },
       { to: "/changelog", text: "Changelog" },
-      { to: "/kiri", text: "Kiri" },
       { to: REPO_URL, text: "GitHub", external: true },
       { to: RELEASES_URL, text: "Releases", external: true },
     ],
