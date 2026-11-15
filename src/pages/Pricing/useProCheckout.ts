@@ -7,7 +7,7 @@ import { CLOUD_CHECKOUT_URL, SUBSCRIPTION_SETTINGS_PATH } from "@/lib/site";
 import { fetchSubscription } from "@/pages/AccountSettings/api";
 
 /**
- * Misty Pro needs a Misty account. "Get Misty Pro" sends someone signed out through
+ * Pro needs a Misty account. "Get Pro" sends someone signed out through
  * sign-in or sign-up first, and they come back here to continue to checkout. Someone
  * already subscribed manages their plan in account settings instead.
  */

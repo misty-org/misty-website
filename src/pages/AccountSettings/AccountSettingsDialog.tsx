@@ -58,7 +58,7 @@ export function AccountSettingsDialog({
           event.preventDefault();
           dialogRef.current?.focus({ preventScroll: true });
         }}
-        className="h-[min(760px,calc(100dvh-64px))] w-[min(980px,calc(100vw-64px))] max-w-none gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-[0_28px_90px_rgba(0,0,0,0.62)] ring-0 dark:border-[#262626] dark:bg-[#191919] max-[640px]:h-[calc(100dvh-24px)] max-[640px]:w-[calc(100vw-24px)] sm:max-w-none"
+        className="h-[min(47.5rem,calc(100dvh-4rem))] w-[min(61.25rem,calc(100vw-4rem))] max-w-none gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 ring-0 dark:border-[#262626] dark:bg-[#191919] max-[704px]:h-[calc(100dvh-1.5rem)] max-[704px]:w-[calc(100vw-1.5rem)] sm:max-w-none"
       >
         <DialogTitle className="sr-only">Account settings</DialogTitle>
         <DialogDescription className="sr-only">

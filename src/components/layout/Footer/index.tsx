@@ -70,7 +70,7 @@ export default function Footer({ className }: { className?: string } = {}) {
   return (
     <footer
       className={cn(
-        "relative z-10 bg-background",
+        "relative z-10",
         location.pathname === "/" && "home-content-rail",
         className,
       )}

@@ -82,14 +82,14 @@ export default function DocsLayout() {
   }
 
   return (
-    <div className="docs-shell grid w-full grid-cols-[minmax(0,1fr)] gap-x-8 px-[var(--site-gutter)] pb-24 min-[1000px]:grid-cols-[clamp(200px,18.3vw,264px)_minmax(0,1fr)] min-[1000px]:pl-3 min-[1000px]:pr-4">
+    <div className="docs-shell site-container grid grid-cols-[minmax(0,1fr)] gap-x-8 pb-24 min-[1100px]:grid-cols-[clamp(12.5rem,18.3vw,16.5rem)_minmax(0,1fr)]">
       <nav
         aria-label="Docs"
-        className="pt-2.5 min-[1000px]:sticky min-[1000px]:top-[var(--site-nav-height)] min-[1000px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1000px]:self-start min-[1000px]:overflow-y-auto min-[1000px]:pb-6 min-[1000px]:[scrollbar-width:thin]"
+        className="pt-2.5 min-[1100px]:sticky min-[1100px]:top-[var(--site-nav-height)] min-[1100px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1100px]:self-start min-[1100px]:overflow-y-auto min-[1100px]:pb-6 min-[1100px]:[scrollbar-width:thin]"
       >
         <details
           key={pathname}
-          className="group rounded-lg border border-border min-[1000px]:hidden"
+          className="group rounded-lg border border-border min-[1100px]:hidden"
         >
           <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm text-foreground [&::-webkit-details-marker]:hidden">
             <span>
@@ -105,7 +105,7 @@ export default function DocsLayout() {
             <DocsNavList open={open} onOpenChange={setOpen} />
           </div>
         </details>
-        <div className="hidden min-[1000px]:block">
+        <div className="hidden min-[1100px]:block">
           <DocsNavList open={open} onOpenChange={setOpen} />
         </div>
       </nav>

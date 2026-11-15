@@ -61,7 +61,7 @@ export function AccountPanel({
                 onChange={(event) => setUsername(event.target.value)}
               />
             </div>
-            <div className="flex items-center gap-3 max-[520px]:flex-col max-[520px]:items-stretch">
+            <div className="flex items-center gap-3 max-[572px]:flex-col max-[572px]:items-stretch">
               <Button
                 type="button"
                 onClick={save}

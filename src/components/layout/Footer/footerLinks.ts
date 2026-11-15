@@ -7,7 +7,7 @@ import {
   type MarkIcon,
 } from "@/components/ui/SocialMarks";
 
-import { RELEASES_URL, REPO_URL } from "@/lib/site";
+import { DISCORD_URL, RELEASES_URL, REPO_URL } from "@/lib/site";
 
 interface FooterColumn {
   label: string;
@@ -56,7 +56,7 @@ export const socialLinks: {
     icon: GithubMark,
   },
   { label: "X.com", href: "#", icon: XMark, placeholder: true },
-  { label: "Discord", href: "#", icon: DiscordMark, placeholder: true },
+  { label: "Discord", href: DISCORD_URL, icon: DiscordMark },
   { label: "YouTube", href: "#", icon: YoutubeMark, placeholder: true },
   { label: "Instagram", href: "#", icon: InstagramMark, placeholder: true },
 ];

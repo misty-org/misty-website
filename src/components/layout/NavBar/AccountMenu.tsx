@@ -30,7 +30,6 @@ export default function AccountMenu({
           variant="ghost"
           size="icon-sm"
           aria-label="Open account menu"
-          className="rounded-full"
         >
           <Avatar className="size-8">
             <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">

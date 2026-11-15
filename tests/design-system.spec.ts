@@ -1,17 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const zincCharts = [
-  "oklch(0.871 0.006 286.286)",
-  "oklch(0.552 0.016 285.938)",
-  "oklch(0.442 0.017 285.786)",
-  "oklch(0.37 0.013 285.805)",
-  "oklch(0.274 0.006 286.033)",
-];
-
-test("the canonical shadcn preset fonts and tokens are active", async ({ page }) => {
-  await page.addInitScript(() => {
-    window.localStorage.setItem("misty-ui-theme", "light");
-  });
+test("the site uses the app's design system: its font, palette, corners and 110% root", async ({ page }) => {
   await page.route("**/api/**", (route) =>
     route.fulfill({
       status: 401,
@@ -21,32 +10,31 @@ test("the canonical shadcn preset fonts and tokens are active", async ({ page })
   );
 
   await page.goto("/");
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
 
-  const preset = await page.evaluate(() => {
-    const rootStyles = getComputedStyle(document.documentElement);
+  const system = await page.evaluate(() => {
+    const root = document.documentElement;
+    const rootStyles = getComputedStyle(root);
     const heading = document.querySelector("h1");
 
     return {
+      dark: root.classList.contains("dark"),
       bodyFont: getComputedStyle(document.body).fontFamily,
       headingFont: heading ? getComputedStyle(heading).fontFamily : "",
-      fontsLoaded: {
-        inter: document.fonts.check('16px "Inter Variable"'),
-      },
+      rootFontSize: rootStyles.fontSize,
+      background: rootStyles.getPropertyValue("--misty-theme-bg").trim(),
       radius: rootStyles.getPropertyValue("--radius").trim(),
       overscrollBehaviorY: rootStyles.overscrollBehaviorY,
-      charts: Array.from({ length: 5 }, (_, index) =>
-        rootStyles.getPropertyValue(`--chart-${index + 1}`).trim(),
-      ),
     };
   });
 
-  expect(preset.bodyFont).toContain("Inter Variable");
-  expect(preset.headingFont).toContain("Inter Variable");
-  expect(preset.fontsLoaded).toEqual({ inter: true });
-  expect(preset.radius).toBe("0.625rem");
-  expect(preset.overscrollBehaviorY).toBe("auto");
-  expect(preset.charts).toEqual(zincCharts);
+  // Dark only, like the app's default theme (src/styles/misty-theme.css).
+  expect(system.dark).toBe(true);
+  // One face everywhere, the system font, as in the app.
+  expect(system.bodyFont).toContain("-apple-system");
+  expect(system.headingFont).toContain("-apple-system");
+  // The app's 110% root, so every rem size matches the desktop app's.
+  expect(system.rootFontSize).toBe("17.6px");
+  expect(system.background).toBe("#131313");
+  expect(system.radius).toBe("0.5625rem");
+  expect(system.overscrollBehaviorY).toBe("auto");
 });

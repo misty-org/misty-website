@@ -71,7 +71,7 @@ function LinkMissing({ invalid }: { invalid: boolean }) {
           <p>
             Open the link in your setup email again, or type the server address and setup key from
             the email into Misty's setup wizard. For a new key, ask whoever runs your server. For
-            Misty Pro, write to{" "}
+            Pro, write to{" "}
             <a href={`mailto:${SUPPORT_EMAIL}`} className={linkClass}>
               {SUPPORT_EMAIL}
             </a>

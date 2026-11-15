@@ -7,9 +7,9 @@
     <title>Misty | Build together with AI</title>
     <meta
       name="description"
-      content="Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens."
+      content="Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share."
     />
-    <meta name="theme-color" content="#18181b" />
+    <meta name="theme-color" content="#131313" />
     <link rel="canonical" href="https://mistysys.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Misty" />
@@ -19,7 +19,7 @@
     />
     <meta
       property="og:description"
-      content="Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens."
+      content="Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share."
     />
     <meta property="og:url" content="https://mistysys.com/" />
     <meta property="og:image" content="https://mistysys.com/og.png" />
@@ -36,21 +36,9 @@
     />
     <meta
       name="twitter:description"
-      content="Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens."
+      content="Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share."
     />
     <meta name="twitter:image" content="https://mistysys.com/og.png" />
-    <script>
-      (() => {
-        try {
-          if (localStorage.getItem("misty-ui-theme") !== "light") return;
-          document.documentElement.classList.replace("dark", "light");
-          document.documentElement.style.colorScheme = "light";
-          document.querySelector('link[rel="icon"]').href = "/misty-black.png";
-        } catch {
-          // Without storage the page stays in the default dark theme.
-        }
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>

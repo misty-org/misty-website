@@ -16,10 +16,9 @@ test("the full homepage fits phone widths", async ({ page }) => {
   }
 });
 
-test("phone visitors have a download CTA and working product previews", async ({ page }) => {
+test("phone visitors have a download CTA and the feature tiles", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page.locator(".mist-hero").getByRole("link", { name: "Download Misty" })).toHaveAttribute("href", "https://github.com/misty-org/misty/releases");
-  await page.locator('#mist-space-tab-library').click();
-  await page.locator('[data-image-slot="shared"]').scrollIntoViewIfNeeded();
-  await expect(page.locator('[data-image-slot="shared"]')).toBeVisible();
+  await page.locator(".mist-tile").last().scrollIntoViewIfNeeded();
+  await expect(page.locator(".mist-tile")).toHaveCount(4);
 });

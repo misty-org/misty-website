@@ -1,0 +1,103 @@
+/* Drawn stand-ins for the screenshots inside an open tile (ShotSketches.tsx): neutral app surfaces in the tiles'
+   own colors, borders for depth, no shadows. Each fills the screenshot frame, which bleeds off the bottom edge. */
+.mist-zoom-mock { height: 100%; }
+.mist-mock {
+  display: flex; flex-direction: column; gap: 1.25rem; height: 100%; padding: 1.25rem 1.5rem 0; overflow: hidden;
+  color: var(--mist-ink); font-size: 0.875rem; line-height: 1.45;
+}
+.mist-mock :is(svg, img) { flex: none; }
+.mist-mock small { display: inline-flex; align-items: center; gap: 0.375rem; color: var(--mist-subtle); font-size: 0.8125rem; white-space: nowrap; }
+.mist-mock b { font-weight: 500; }
+.mist-mock h4 { margin: 0; color: var(--mist-subtle); font-size: 0.75rem; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; }
+.mist-mock p { margin: 0; color: var(--mist-text-2, var(--mist-subtle)); }
+
+/* The bar across the top: icon, title, and a note on the right. */
+.mist-mock-bar {
+  display: flex; align-items: center; gap: 0.625rem; padding-bottom: 1rem; border-bottom: 1px solid var(--mist-raised-border);
+  color: var(--mist-subtle);
+}
+.mist-mock-bar b { color: var(--mist-ink); }
+.mist-mock-bar small { margin-left: auto; }
+
+/* A line of icon, name and a note pushed right. */
+.mist-mock-line { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.mist-mock-line b { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mist-mock-line small { margin-left: auto; }
+
+/* Cards in a grid, two or three across. */
+.mist-mock-cards { display: grid; gap: 0.75rem; align-content: start; }
+.mist-mock-cards[data-columns="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.mist-mock-cards[data-columns="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mist-mock-card {
+  display: grid; gap: 0.625rem; align-content: start; padding: 1rem 1.125rem;
+  border: 1px solid var(--mist-raised-border); border-radius: 0.75rem; background: var(--mist-raised-2);
+}
+.mist-mock-card[data-add] { border-style: dashed; background: transparent; color: var(--mist-subtle); }
+.mist-mock-column { display: grid; gap: 0.625rem; align-content: start; }
+
+/* Rows, alone or under a group label. */
+.mist-mock-groups { display: grid; gap: 0.5rem; align-content: start; }
+.mist-mock-groups section { display: grid; gap: 0.5rem; }
+.mist-mock-groups section + section { margin-top: 0.5rem; }
+.mist-mock-row {
+  display: flex; align-items: center; gap: 0.75rem; min-width: 0; padding: 0.75rem 1rem;
+  border: 1px solid var(--mist-raised-border); border-radius: 0.75rem; background: var(--mist-raised-2); color: var(--mist-subtle);
+}
+.mist-mock-row b { flex: none; color: var(--mist-ink); }
+.mist-mock-row span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mist-mock-row small { margin-left: auto; }
+
+/* A chat thread: your messages sit right on a raised surface, everyone else's left with their icon. */
+.mist-mock-thread { display: grid; gap: 0.875rem; align-content: start; width: min(100%, 46rem); margin-inline: auto; }
+.mist-mock-message { display: flex; gap: 0.75rem; align-items: flex-start; }
+.mist-mock-message > :is(svg, .mist-mock-person) { margin-top: 0.125rem; }
+.mist-mock-message p b { display: block; margin-bottom: 0.125rem; color: var(--mist-ink); }
+.mist-mock-message[data-from=you] {
+  justify-self: end; max-width: 80%; padding: 0.75rem 1rem;
+  border: 1px solid var(--mist-raised-border); border-radius: 0.75rem; background: var(--mist-raised-2);
+}
+.mist-mock-person {
+  display: inline-grid; place-items: center; flex: none; width: 1.25rem; height: 1.25rem; border-radius: 0.375rem;
+  background: var(--mist-raised); color: var(--mist-ink); font-size: 0.6875rem; font-weight: 600;
+  border: 1px solid var(--mist-border-strong);
+}
+/* The question an agent stops on, in the waiting tone's place: its answers as the app's plain buttons. */
+.mist-mock-ask {
+  display: grid; gap: 0.875rem; padding: 1rem 1.125rem;
+  border: 1px solid var(--mist-border-strong); border-radius: 0.75rem; background: var(--mist-raised-2);
+}
+.mist-mock-actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
+.mist-mock-actions span {
+  padding: 0.375rem 0.875rem; border: 1px solid var(--mist-raised-border); border-radius: 0.5rem; color: var(--mist-ink); font-size: 0.8125rem;
+}
+.mist-mock-actions span[data-primary] { border-color: transparent; background: var(--mist-ink); color: var(--mist-card); }
+.mist-mock-composer {
+  display: flex; align-items: center; justify-content: space-between; width: min(100%, 46rem); margin: auto auto 1.25rem;
+  padding: 0.75rem 1rem; border: 1px solid var(--mist-raised-border); border-radius: 0.75rem; color: var(--mist-subtle);
+}
+
+/* A Journal page: the doc and a drawing side by side. */
+.mist-mock-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+.mist-mock-doc { display: grid; gap: 0.75rem; }
+.mist-mock-doc h4 { color: var(--mist-ink); font-size: 1.125rem; letter-spacing: -.01em; text-transform: none; }
+.mist-mock-drawing { width: 100%; height: auto; padding: 1rem; border: 1px solid var(--mist-raised-border); border-radius: 0.75rem; }
+.mist-mock-drawing :is(rect, path) { fill: none; stroke: var(--mist-border-strong); stroke-width: 1.5; }
+.mist-mock-drawing rect { fill: var(--mist-raised-2); }
+.mist-mock-drawing text { fill: var(--mist-ink); font-size: 12px; text-anchor: middle; }
+
+/* A Lab notebook: code cells and the chart they draw. */
+.mist-mock-notebook { display: grid; gap: 0.625rem; align-content: start; }
+.mist-mock-notebook code {
+  display: flex; gap: 1rem; padding: 0.75rem 1rem; border: 1px solid var(--mist-raised-border); border-radius: 0.625rem;
+  background: var(--mist-raised-2); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8125rem;
+}
+.mist-mock-chart {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; align-items: end; gap: 0.625rem; height: 11rem; margin: 0.5rem 0 0;
+  padding: 1rem 1rem 2rem; position: relative; border: 1px solid var(--mist-raised-border); border-radius: 0.625rem;
+}
+.mist-mock-chart i { height: var(--h); border-radius: 0.25rem 0.25rem 0 0; background: var(--tone-working); }
+.mist-mock-chart figcaption { position: absolute; left: 1rem; bottom: 0.625rem; color: var(--mist-subtle); font-size: 0.75rem; }
+
+/* The Studio's room, drawn large. */
+.mist-mock-room { display: grid; flex: 1; place-items: center; min-height: 0; }
+.mist-mock-room .mist-studio { scale: 1.45; }

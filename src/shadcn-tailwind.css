@@ -546,7 +546,7 @@
 }
 
 @utility shimmer {
-  --_spread: var(--shimmer-spread, calc(3ch + 40px));
+  --_spread: var(--shimmer-spread, calc(3ch + 2.5rem));
   --_base: currentColor;
   --_highlight: var(
     --shimmer-color,

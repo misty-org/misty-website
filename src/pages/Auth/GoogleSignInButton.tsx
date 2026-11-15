@@ -47,7 +47,7 @@ export default function GoogleSignInButton({
         {starting ? (
           <Spinner aria-hidden="true" />
         ) : (
-          <img src={googleLogo} alt="" aria-hidden="true" className="size-[18px]" />
+          <img src={googleLogo} alt="" aria-hidden="true" className="size-[1.125rem]" />
         )}
         Continue with Google
       </Button>

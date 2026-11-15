@@ -19,7 +19,7 @@ export default function AuthCard({
   footer,
 }: AuthCardProps) {
   return (
-    <Card className="w-full flex-col gap-0 rounded-xl bg-card p-6 text-card-foreground shadow-xl ring-1 ring-foreground/10 sm:p-8">
+    <Card className="w-full flex-col gap-0 rounded-xl bg-card p-6 text-card-foreground ring-1 ring-foreground/10 sm:p-8">
       {title ? (
         <CardHeader className="p-0">
           <CardTitle

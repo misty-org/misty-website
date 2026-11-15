@@ -21,7 +21,7 @@ export function DocSection({
       >
         {title}
       </h2>
-      <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-5 text-base leading-[27px] text-foreground/90">
+      <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-5 text-base leading-[1.6875rem] text-foreground/90">
         {children}
       </div>
     </section>
@@ -53,7 +53,7 @@ export function Steps({ items }: { items: string[] }) {
     <ol className="grid gap-3">
       {items.map((text, index) => (
         <li key={text} className="grid grid-cols-[2rem_1fr] gap-2">
-          <span className="font-mono text-sm leading-[27px] text-muted-foreground">
+          <span className="font-mono text-sm leading-[1.6875rem] text-muted-foreground">
             {String(index + 1).padStart(2, "0")}
           </span>
           <span>
@@ -95,7 +95,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
     <div className="relative rounded-lg border border-border bg-muted/40">
       <pre
         aria-label={label}
-        className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-[13px] leading-6 text-foreground"
+        className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-[0.8125rem] leading-6 text-foreground"
       >
         <code>{code}</code>
       </pre>
@@ -150,7 +150,7 @@ export function DocTable({
                     scope="row"
                     className={
                       monoFirstColumn
-                        ? "whitespace-nowrap py-2.5 pr-4 font-mono text-[13px] font-normal text-foreground"
+                        ? "whitespace-nowrap py-2.5 pr-4 font-mono text-[0.8125rem] font-normal text-foreground"
                         : "py-2.5 pr-4 font-normal text-foreground"
                     }
                   >

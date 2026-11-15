@@ -92,7 +92,7 @@ export default function App() {
     const title = handle?.title ?? "Misty | Build together with AI";
     const description =
       handle?.description ??
-      "Misty is one shared workspace where people and agents collaborate. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens.";
+      "Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share.";
     const canonicalUrl = new URL(
       location.pathname,
       isDocsHost() ? DOCS_URL : SITE_URL,
@@ -199,7 +199,7 @@ export default function App() {
       <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
         <a
           href="#main-content"
-          className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-background px-4 py-2 text-sm font-medium text-foreground shadow-lg focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-ring"
+          className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-background px-4 py-2 text-sm font-medium text-foreground focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-ring"
           onClick={() => mainRef.current?.focus()}
         >
           Skip to content
