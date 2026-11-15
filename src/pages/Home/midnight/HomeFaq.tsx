@@ -14,11 +14,11 @@ type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
   {
     q: "Is Misty free?",
-    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you run your own server. Pro is a server that's already set up, for $10 a month. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
+    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included, on Misty Cloud or your own server. Misty+ adds storage for $8 a month, and Boosts raise a Space's level for $2 each. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
   },
   {
     q: "Do I need an account?",
-    a: <>No. Misty works on one computer without a server. Spaces and teammates need a Misty server, either your own or Pro. See the <SiteLink to="/docs">docs</SiteLink>.</>,
+    a: <>No. Misty works on one computer without a server. Spaces and teammates need a Misty server, either Misty Cloud or your own. See the <SiteLink to="/docs">docs</SiteLink>.</>,
   },
   {
     q: "Which AI models can I use?",
@@ -32,7 +32,7 @@ const START: Faq[] = [
 const TRUST: Faq[] = [
   {
     q: "Can Misty read my data?",
-    a: "Agents, their model calls and their chats stay on your computer. A Misty server stores your Spaces, with their messages and files, and your account details, and whoever runs it can read them. On Pro, that's Misty. There are no ads, analytics or data sales.",
+    a: "Agents, their model calls and their chats stay on your computer. A Misty server stores your Spaces, with their messages and files, and your account details, and whoever runs it can read them. On Misty Cloud, that's us. There are no ads, analytics or data sales.",
   },
   {
     q: "Can an agent act without asking me?",
@@ -40,7 +40,7 @@ const TRUST: Faq[] = [
   },
   {
     q: "Do my files go through your servers?",
-    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a Space or your Library are stored on your server, which on Pro is ours.",
+    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a Space or your Library are stored on your server, which on Misty Cloud is ours.",
   },
 ];
 

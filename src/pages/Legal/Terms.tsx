@@ -48,7 +48,7 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           Misty works on one computer without an account. Spaces need an
-          account on a Misty server, such as Pro. Give us accurate
+          account on a Misty server, such as Misty Cloud. Give us accurate
           information and keep it up to date. You are
           responsible for keeping your password, setup keys and devices secure
           and for all activity under your account, including actions taken by
@@ -72,8 +72,8 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           "Misty" means the Misty desktop application, the website at{" "}
-          {legalInfo.siteUrl}, and Pro, the Misty server we run for
-          subscribers, with its Spaces. Misty is
+          {legalInfo.siteUrl}, and Misty Cloud, the Misty server we run,
+          with its Spaces. Misty is
           operated by{" "}
           {operatorDescription} ("we", "us", "our").
         </p>
@@ -90,7 +90,7 @@ const sections: LegalSectionDef[] = [
         </p>
         <p>
           These Terms cover this website, the app builds we publish, and Misty
-          Pro. If you run your own Misty server, you operate it and are solely
+          Cloud. If you run your own Misty server, you operate it and are solely
           responsible for it, its security, and the data on it. We don't operate,
           monitor, or support servers we don't run, or copies of Misty that
           others have changed or distributed, and we aren't responsible for them.
@@ -127,7 +127,7 @@ const sections: LegalSectionDef[] = [
           computer, as described in our{" "}
           <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Your account
           or plan with an AI provider is between you and that provider, and it
-          isn't part of what a Pro subscription sells.
+          isn't part of what Misty+ or Boosts sell.
         </p>
         <LegalList
           items={[
@@ -292,7 +292,7 @@ const sections: LegalSectionDef[] = [
           Account Settings. Deleted accounts can be restored for 30 days, after
           which the data is removed as described in our{" "}
           <LegalLink to="/privacy#retention">Privacy Policy</LegalLink>. When
-          a Pro subscription ends, section 3 says what happens to the
+          Misty+ or a Boost ends, section 3 says what happens to the
           account.
         </p>
         <p>
@@ -633,8 +633,8 @@ export default function Terms() {
       intro={
         <p className="text-base leading-7 text-muted-foreground">
           These Terms of Service ("Terms") are a contract between you and{" "}
-          {operatorDescription}. By creating an account, subscribing to Misty
-          Pro, installing the app, or using Misty, you agree to them. If you
+          {operatorDescription}. By creating an account, subscribing to Misty+
+          or Boosts, installing the app, or using Misty, you agree to them. If you
           don't agree, don't use Misty. Sections 14 to 16 place the risk of using
           Misty on you and limit our liability and your right to bring claims.
           Section 17 requires U.S. users to resolve disputes through individual
@@ -644,7 +644,7 @@ export default function Terms() {
       highlights={[
         "You own your content. We only use it to run Misty for you, and we never sell it or train AI models on it.",
         "The Misty app is open source under the GNU AGPL-3.0. If you run your own server, you're responsible for it.",
-        "Pro is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
+        "Misty+ and Boosts are billed in advance, plus tax where it applies. Cancelling takes effect at the end of the period you've paid for, and we never charge for AI.",
         "AI can be wrong, and you're responsible for what you ask agents to do.",
         "Misty isn't a backup service. Keep copies of anything important.",
         "We work to keep Misty safe, but we don't guarantee it. You use it at your own risk, including the risk of data loss, stolen data, malware, and software defects.",

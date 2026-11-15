@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 import { AccountPanel } from "./panels/AccountPanel";
+import { BoostsPanel } from "./panels/BoostsPanel";
 import { PrivacyPanel } from "./panels/PrivacyPanel";
 import { SubscriptionPanel } from "./panels/SubscriptionPanel";
 import { TAB_GROUPS, TABS, type Tab } from "./tabs";
@@ -100,6 +101,8 @@ export function AccountSettingsDialog({
           {tab === "subscription" ? (
             <SubscriptionPanel onClose={() => onOpenChange(false)} />
           ) : null}
+
+          {tab === "boosts" ? <BoostsPanel onClose={() => onOpenChange(false)} /> : null}
 
           {tab === "privacy" ? <PrivacyPanel /> : null}
         </DesktopSettingsFrame>

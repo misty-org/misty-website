@@ -13,7 +13,7 @@ const CHOICES = [
   [
     "Misty Cloud",
     "Your Misty account's email and password, or Continue with Google.",
-    "Spaces with your people, on Pro.",
+    "Spaces with your people, on our server. Free, with Misty+ and Boosts for more."
   ],
   [
     "Self-hosted",
@@ -40,10 +40,10 @@ export default function Connect() {
         />
       </DocSection>
 
-      <DocSection id="cloud" title="Misty Cloud (Pro)">
+      <DocSection id="cloud" title="Misty Cloud">
         <Steps
           items={[
-            "Make a Misty account on this site and subscribe on [Pricing](/pricing).",
+            "Make a Misty account on this site. It's free; for more storage, or to raise a Space's level, see [Pricing](/pricing).",
             "Install Misty from [Download](/download).",
             "Choose Misty Cloud in the setup wizard and sign in with your Misty account. This computer becomes your first device.",
             "Pick an AI to start with, such as Claude Code or Codex, and sign in to it. Then choose which apps agents can use ([Models](/docs/models)).",

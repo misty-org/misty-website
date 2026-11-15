@@ -11,15 +11,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { marketingCopy } from "@/content/marketingCopy";
-import { DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH } from "@/lib/site";
-import { useProCheckout } from "./useProCheckout";
+import { BOOSTS_SETTINGS_PATH, DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH, SUPPORT_EMAIL } from "@/lib/site";
+import { usePlanCheckout } from "./usePlanCheckout";
 import {
-  cloudIncludes,
-  cloudPlan,
-  cloudTagline,
-  freeIncludes,
-  freeTagline,
+  boost,
+  includes,
+  levelRows,
+  plans,
   pricingQuestions,
+  spaceLevels,
+  storagePerBoost,
+  taglines,
 } from "./plans";
 import { SiteLink } from "@/components/SiteLink";
 
@@ -113,6 +115,13 @@ function PricingQuestions() {
             className="text-foreground underline underline-offset-4"
           >
             Discord
+          </a>{" "}
+          or email{" "}
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="text-foreground underline underline-offset-4"
+          >
+            {SUPPORT_EMAIL}
           </a>
           .
         </p>
@@ -134,12 +143,12 @@ function PricingQuestions() {
   );
 }
 
-/** Checkout, or for someone already subscribed, the way to their plan. */
-function ProAction({ checkout }: { checkout: ReturnType<typeof useProCheckout> }) {
+/** Misty+'s buttons: checkout (monthly, or yearly), or for someone who has it, their subscription. */
+function PlusAction({ checkout }: { checkout: ReturnType<typeof usePlanCheckout> }) {
   if (checkout.checking) {
     return <Skeleton aria-hidden="true" className={buttonSkeletonClass} />;
   }
-  if (checkout.subscribed) {
+  if (checkout.plan === "plus") {
     return (
       <Button asChild variant="outline" size="lg">
         <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>Manage subscription</SiteLink>
@@ -148,13 +157,19 @@ function ProAction({ checkout }: { checkout: ReturnType<typeof useProCheckout> }
   }
   return (
     <div className="flex flex-col items-start gap-2">
-      <Button
-        size="lg"
-        disabled={checkout.starting}
-        onClick={() => void checkout.start()}
-      >
-        Get Pro
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button size="lg" disabled={checkout.starting !== null} onClick={() => void checkout.start("plus")}>
+          Get {plans.plus.name}
+        </Button>
+        <Button
+          size="lg"
+          variant="outline"
+          disabled={checkout.starting !== null}
+          onClick={() => void checkout.start("plus_yearly")}
+        >
+          ${plans.plus.yearly} a year
+        </Button>
+      </div>
       {checkout.error ? (
         <p role="alert" className="text-base text-muted-foreground">
           {checkout.error}
@@ -164,9 +179,65 @@ function ProAction({ checkout }: { checkout: ReturnType<typeof useProCheckout> }
   );
 }
 
-/** Free and Pro side by side, then the questions people ask. */
+/** What each Space level allows, beside a short heading, like the questions below it. */
+function SpaceLevels() {
+  return (
+    <section
+      aria-labelledby="space-levels"
+      className="mt-24 grid items-start gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.7fr)] md:gap-16"
+    >
+      <div className="grid gap-2">
+        <h2
+          id="space-levels"
+          className="text-xl font-medium tracking-[-0.02em] text-foreground sm:text-2xl"
+        >
+          Space levels
+        </h2>
+        <p className="text-base text-muted-foreground">
+          Boosts from everyone in a Space add up. Each Boost past a level adds {storagePerBoost} more
+          shared storage.
+        </p>
+      </div>
+      <div className="overflow-x-auto rounded-xl border border-border">
+        <table className="w-full min-w-[32rem] text-left text-sm">
+          <thead>
+            <tr className="border-b border-border">
+              <th scope="col" className="px-4 py-3 font-normal text-muted-foreground">
+                <span className="sr-only">Limit</span>
+              </th>
+              {spaceLevels.map((level) => (
+                <th key={level.name} scope="col" className="px-4 py-3 font-medium text-foreground">
+                  {level.name}
+                  <span className="block text-xs font-normal text-muted-foreground">
+                    {level.boosts ? `${level.boosts} Boosts` : "No Boosts"}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {levelRows.map((row) => (
+              <tr key={row.key} className="border-b border-border last:border-b-0">
+                <th scope="row" className="px-4 py-3 font-normal text-muted-foreground">
+                  {row.label}
+                </th>
+                {spaceLevels.map((level) => (
+                  <td key={level.name} className="px-4 py-3 text-foreground">
+                    {level[row.key]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+/** Free, Misty+ and Boosts side by side, then Space levels and the questions people ask. */
 export default function Pricing() {
-  const checkout = useProCheckout();
+  const checkout = usePlanCheckout();
   return (
     <PublicPage>
       <div>
@@ -174,16 +245,16 @@ export default function Pricing() {
           {marketingCopy.pricing.title}
         </h1>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           <PlanCard
-            name="Free"
-            tagline={freeTagline}
+            name={plans.free.name}
+            tagline={taglines.free}
             price="$0"
             period="/month"
             items={[
-              ...freeIncludes,
+              ...includes.free,
               <>
-                Share Spaces by hosting them yourself, with{" "}
+                Or host your own server, with every Space unlimited, using{" "}
                 <SiteLink to="/docs/self-hosting">our guide</SiteLink>
               </>,
             ]}
@@ -194,15 +265,28 @@ export default function Pricing() {
             }
           />
           <PlanCard
-            name="Pro"
-            tagline={cloudTagline}
-            price={`$${cloudPlan.price}`}
+            name={plans.plus.name}
+            tagline={taglines.plus}
+            price={`$${plans.plus.monthly}`}
             period="/month plus tax"
-            items={cloudIncludes}
-            action={<ProAction checkout={checkout} />}
+            items={[...includes.plus]}
+            action={<PlusAction checkout={checkout} />}
+          />
+          <PlanCard
+            name={boost.name}
+            tagline={taglines.boost}
+            price={`$${boost.price}`}
+            period="/month per Boost"
+            items={[...includes.boost]}
+            action={
+              <Button asChild variant="outline" size="lg">
+                <SiteLink to={BOOSTS_SETTINGS_PATH}>Boost a Space</SiteLink>
+              </Button>
+            }
           />
         </div>
 
+        <SpaceLevels />
         <PricingQuestions />
       </div>
     </PublicPage>

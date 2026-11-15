@@ -26,8 +26,8 @@ export default function PaymentFailedCard({
       >
         <div className="grid gap-6">
           <p role="status" className="text-base leading-7 text-pretty text-foreground">
-            Your Pro payment failed, so your account is suspended. Your data is safe, and the
-            account comes back once the payment goes through.
+            A payment for your plan failed, so your account is suspended. Your data is safe,
+            and the account comes back once the payment goes through.
           </p>
           <Button
             type="button"

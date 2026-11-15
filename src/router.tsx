@@ -138,7 +138,7 @@ const site: RouteObject[] = [
         path: "cloud/welcome",
         element: <CloudWelcome />,
         handle: {
-          title: "Welcome to Pro | Misty",
+          title: "Thanks for subscribing | Misty",
           description:
             "Download Misty, choose Misty Cloud and sign in with your Misty account.",
         },
@@ -192,7 +192,7 @@ const site: RouteObject[] = [
         handle: {
           title: "Terms of service | Misty",
           description:
-            "The agreement covering your use of Misty and Pro.",
+            "The agreement covering your use of Misty and Misty Cloud.",
         },
       },
       {
@@ -249,7 +249,7 @@ const site: RouteObject[] = [
         handle: {
           title: "Get a sign-in link | Misty",
           description:
-            "Get a sign-in link for your Pro account. It also lets you choose a new password.",
+            "Get a sign-in link for your Misty Cloud account. It also lets you choose a new password.",
         },
       },
       notFound,
