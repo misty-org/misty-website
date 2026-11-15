@@ -16,7 +16,7 @@ export const marketingCopy: MarketingCopy = {
   metadata: {
     home: "Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share.",
     pricing:
-      "Misty is free with every feature when you run the server yourself. Pro is a configured server for $10 a month, and AI is never charged for.",
+      "Misty is free with every feature, on Misty Cloud or a server you run yourself. Misty+ adds storage for $8 a month, Boosts raise a Space's level for $2 each, and AI is never charged for.",
     docs:
       "How Misty works, how to run your own Misty server, how to connect the app, and which models you can use.",
     download:

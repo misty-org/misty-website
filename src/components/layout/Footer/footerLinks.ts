@@ -7,7 +7,7 @@ import {
   type MarkIcon,
 } from "@/components/ui/SocialMarks";
 
-import { DISCORD_URL, RELEASES_URL, REPO_URL } from "@/lib/site";
+import { DISCORD_URL, RELEASES_URL, REPO_URL, SUPPORT_EMAIL } from "@/lib/site";
 
 interface FooterColumn {
   label: string;
@@ -33,6 +33,7 @@ export const columns: FooterColumn[] = [
       { to: "/changelog", text: "Changelog" },
       { to: REPO_URL, text: "GitHub", external: true },
       { to: RELEASES_URL, text: "Releases", external: true },
+      { to: `mailto:${SUPPORT_EMAIL}`, text: "Support", external: true },
     ],
   },
 ];

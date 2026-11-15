@@ -66,7 +66,7 @@ export default function Models() {
           items={[
             "You pick models in Settings → Models. Keys and sign-ins stay in Misty's credential store on this computer, locked by a key in the system keychain, and your desktop calls the provider directly. No key or model choice ever goes to a Misty server, and a server never calls a model.",
             "Settings belong to the device and stay on it, so each computer has its own keys and sign-ins.",
-            "Because the call comes from your desktop, everything below works the same on your own server and on Pro, including Sign in with ChatGPT and a local Ollama. None of it is part of what Pro sells.",
+            "Because the call comes from your desktop, everything below works the same on your own server and on Misty Cloud, including Sign in with ChatGPT and a local Ollama. None of it is part of what Misty+ or Boosts sell.",
           ]}
         />
       </DocSection>
@@ -129,7 +129,7 @@ export default function Models() {
           ]}
         />
         <Note>
-          Pro charges for the server and its storage, never for AI, web
+          Misty+ and Boosts charge for storage and Space levels, never for AI, web
           search or connected apps. Whatever you spend on models and searches
           goes to your provider, not to Misty.
         </Note>

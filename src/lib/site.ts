@@ -10,7 +10,7 @@ export const RELEASES_URL = `${REPO_URL}/releases`;
 /** The community server, as the app's README links it. */
 export const DISCORD_URL = "https://discord.gg/B5WgSw6uX";
 
-/** Pro's server, its `MISTY_HOSTNAME`; in development, the dev server. */
+/** Misty Cloud's server, its `MISTY_HOSTNAME`; in development, the dev server. */
 export const CLOUD_HOST = import.meta.env.DEV ? "dev-api.mistysys.com" : "api.mistysys.com";
 
 /** misty-cloud, which answers checkout with a redirect to Stripe Checkout; in development, the one on this computer. */
@@ -21,6 +21,12 @@ export const CLOUD_CHECKOUT_URL = `${BILLING_URL}/checkout`;
 
 /** Reads a signed-in person's subscription; `/cancel` and `/resume` change it. Each takes their proof. */
 export const ACCOUNT_SUBSCRIPTION_URL = `${BILLING_URL}/account/subscription`;
+
+/** Gives a Space Misty+'s included Boosts (`/assign`) or changes the Boosts bought for it (`/quantity`). */
+export const ACCOUNT_BOOSTS_URL = `${BILLING_URL}/account/boosts`;
+
+/** Where a signed-in person gives and buys Boosts; `?space=` opens one Space. */
+export const BOOSTS_SETTINGS_PATH = "/settings/boosts";
 
 /** Answers a signed-in person's proof with a Stripe page for their card and invoices, already signed in. */
 export const ACCOUNT_PORTAL_URL = `${BILLING_URL}/account/portal`;

@@ -27,14 +27,14 @@ const STEPS: AuthStep[] = [
   },
 ];
 
-/** Where Stripe Checkout returns after a successful Pro payment. */
+/** Where Stripe Checkout returns after a successful Misty+ or Boost payment. */
 export default function CloudWelcome() {
   return (
-    <AuthShell title="Welcome to Pro" wide>
+    <AuthShell title="Thanks for subscribing" wide>
       <AuthCard
         footer={
           <nav
-            aria-label="Pro help"
+            aria-label="Subscription help"
             className="flex flex-wrap justify-center gap-x-6 gap-y-2"
           >
             <SiteLink to="/docs/connect#cloud" className={footerLinkClass}>

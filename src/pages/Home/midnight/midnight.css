@@ -262,9 +262,9 @@
 @keyframes mist-blink { 50% { opacity: 0; } }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Hero entrance: the headline, then its buttons, then the live window. */
-  /* The headline writes itself out; the buttons rise in as it finishes. */
-  .mist-hero-copy > :not(h1) { animation: mist-rise .8s var(--mist-ease) .75s both; }
+  /* Hero entrance: the headline fades and rises in, then its lede and buttons just after. */
+  .mist-hero-copy > * { animation: mist-rise .8s var(--mist-ease) .1s both; }
+  .mist-hero-copy > :not(h1) { animation-delay: .25s; }
 
   /* Reveal once on scroll. Individual `translate` keeps hover transforms free. */
   .mist-home[data-motion=ready] [data-reveal]:not([data-revealed]),
