@@ -48,7 +48,7 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           Misty works on one computer without an account. Spaces need an
-          account on a Misty server, such as Misty Pro. Give us accurate
+          account on a Misty server, such as Pro. Give us accurate
           information and keep it up to date. You are
           responsible for keeping your password, setup keys and devices secure
           and for all activity under your account, including actions taken by
@@ -72,7 +72,7 @@ const sections: LegalSectionDef[] = [
       <>
         <p>
           "Misty" means the Misty desktop application, the website at{" "}
-          {legalInfo.siteUrl}, and Misty Pro, the Misty server we run for
+          {legalInfo.siteUrl}, and Pro, the Misty server we run for
           subscribers, with its Spaces. Misty is
           operated by{" "}
           {operatorDescription} ("we", "us", "our").
@@ -127,7 +127,7 @@ const sections: LegalSectionDef[] = [
           computer, as described in our{" "}
           <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Your account
           or plan with an AI provider is between you and that provider, and it
-          isn't part of what a Misty Pro subscription sells.
+          isn't part of what a Pro subscription sells.
         </p>
         <LegalList
           items={[
@@ -292,7 +292,7 @@ const sections: LegalSectionDef[] = [
           Account Settings. Deleted accounts can be restored for 30 days, after
           which the data is removed as described in our{" "}
           <LegalLink to="/privacy#retention">Privacy Policy</LegalLink>. When
-          a Misty Pro subscription ends, section 3 says what happens to the
+          a Pro subscription ends, section 3 says what happens to the
           account.
         </p>
         <p>
@@ -351,7 +351,7 @@ const sections: LegalSectionDef[] = [
         Misty can install and run AI tools made by others, such as Claude Code
         and Codex, open websites in its browser for agents, add plugins and
         skills, and connect to apps and services you sign in to, such as
-        Composio and Google. Those tools, websites, plugins, apps, and services
+        Gmail, Slack, and Google Calendar. Those tools, websites, plugins, apps, and services
         are run by others under their own terms and privacy policies. We don't control or review them and
         aren't responsible for their content, security, availability, or what
         they do with your data, including any malware, phishing, or other harm
@@ -644,7 +644,7 @@ export default function Terms() {
       highlights={[
         "You own your content. We only use it to run Misty for you, and we never sell it or train AI models on it.",
         "The Misty app is open source under the GNU AGPL-3.0. If you run your own server, you're responsible for it.",
-        "Misty Pro is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
+        "Pro is billed monthly, plus tax where it applies. Cancelling takes effect at the end of the month you've paid for, and we never charge for AI.",
         "AI can be wrong, and you're responsible for what you ask agents to do.",
         "Misty isn't a backup service. Keep copies of anything important.",
         "We work to keep Misty safe, but we don't guarantee it. You use it at your own risk, including the risk of data loss, stolen data, malware, and software defects.",

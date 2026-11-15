@@ -1,178 +1,100 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./shadcn-tailwind.css";
-@import "@fontsource-variable/inter";
+@import "./styles/misty-theme.css";
 
+/* The site is dark only: <html> always carries .dark, so components' dark: styles always apply. */
 @custom-variant dark (&:is(.dark *));
 
+/* The shadcn names the site's components read, pointed at the app's palette (styles/misty-theme.css). */
 :root {
-  --site-container-max: 1280px;
+  color-scheme: dark;
+  --site-container-max: 80rem;
   --site-gutter: clamp(1.5rem, 4vw, 4rem);
-  --site-nav-height: calc(4.5rem + 2px);
+  --site-nav-height: calc(4.5rem + 0.125rem);
   --site-content-max: calc(
     var(--site-container-max) - var(--site-gutter) - var(--site-gutter)
   );
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
-  --success: oklch(0.47 0.15 149.214);
-  --success-foreground: oklch(0.985 0 0);
-  --primary-hover: oklch(0.274 0.006 286.033);
-  --primary-active: oklch(0.37 0.013 285.805);
-  --chart-1: oklch(0.871 0.006 286.286);
-  --chart-2: oklch(0.552 0.016 285.938);
-  --chart-3: oklch(0.442 0.017 285.786);
-  --chart-4: oklch(0.37 0.013 285.805);
-  --chart-5: oklch(0.274 0.006 286.033);
-  --radius: 0.625rem;
-  --showcase-surface: oklch(0.141 0.005 285.823);
-  --showcase-foreground: oklch(0.985 0 0);
-  --marketing-surface: oklch(1 0 0);
-  --marketing-border: oklch(0.92 0.004 286.32);
-  --marketing-border-strong: oklch(0.83 0.007 286.26);
-  --marketing-foreground: oklch(0.141 0.005 285.823);
-  --marketing-muted: oklch(0.45 0.016 285.938);
-  --misty-folder-accent: oklch(0.82 0.14 84);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.21 0.006 285.885);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.705 0.015 286.067);
+  --background: var(--misty-theme-bg);
+  --foreground: var(--misty-theme-text);
+  --card: var(--misty-theme-card);
+  --card-foreground: var(--misty-theme-text);
+  --popover: var(--misty-theme-card);
+  --popover-foreground: var(--misty-theme-text);
+  --primary: var(--misty-theme-text-bright);
+  --primary-foreground: var(--misty-theme-bg);
+  --primary-hover: var(--color-cream-action-hover);
+  --primary-active: var(--color-cream-action-hover);
+  --secondary: var(--misty-theme-hover);
+  --secondary-foreground: var(--misty-theme-text-bright);
+  --muted: var(--misty-theme-hover);
+  --muted-foreground: var(--misty-theme-text-muted);
+  --accent: var(--misty-theme-hover);
+  --accent-foreground: var(--misty-theme-text-bright);
+  --destructive: var(--misty-theme-danger);
+  --border: var(--misty-theme-border);
+  --input: var(--misty-theme-border-strong);
+  --ring: var(--misty-theme-border-strong);
+  --success: var(--color-tone-green);
+  --success-foreground: var(--misty-theme-bg);
+  --chart-1: #d6d6d6;
+  --chart-2: #8c8c8c;
+  --chart-3: #555555;
+  --chart-4: #3e3e3e;
+  --chart-5: #2b2b2b;
+  --radius: 0.5625rem;
+  --showcase-surface: var(--misty-theme-workspace);
+  --showcase-foreground: var(--misty-theme-text-bright);
+  --marketing-surface: var(--misty-theme-card);
+  --marketing-border: var(--misty-theme-border);
+  --marketing-border-strong: var(--misty-theme-border-strong);
+  --marketing-foreground: var(--misty-theme-text-bright);
+  --marketing-muted: var(--misty-theme-text-muted);
+  --misty-folder-accent: var(--color-tone-amber);
+  --sidebar: var(--misty-theme-sidebar);
+  --sidebar-foreground: var(--misty-theme-text);
+  --sidebar-primary: var(--misty-theme-text-bright);
+  --sidebar-primary-foreground: var(--misty-theme-bg);
+  --sidebar-accent: var(--misty-theme-hover);
+  --sidebar-accent-foreground: var(--misty-theme-text-bright);
+  --sidebar-border: var(--misty-theme-border);
+  --sidebar-ring: var(--misty-theme-border-strong);
 }
 
-.dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.88 0.004 286);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --success: oklch(0.723 0.219 149.579);
-  --success-foreground: oklch(0.141 0.005 285.823);
-  --primary-hover: oklch(0.985 0 0);
-  --primary-active: oklch(0.87 0.006 286.286);
-  --chart-1: oklch(0.871 0.006 286.286);
-  --chart-2: oklch(0.552 0.016 285.938);
-  --chart-3: oklch(0.442 0.017 285.786);
-  --chart-4: oklch(0.37 0.013 285.805);
-  --chart-5: oklch(0.274 0.006 286.033);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.552 0.016 285.938);
-  --marketing-surface: oklch(0.16 0.006 285.823);
-  --marketing-border: oklch(1 0 0 / 10%);
-  --marketing-border-strong: oklch(1 0 0 / 18%);
-  --marketing-foreground: oklch(0.985 0 0);
-  --marketing-muted: oklch(0.705 0.015 286.067);
-}
-
-/* The docs keep exact reading sizes, apart from the public site's 17px root. */
+/* The docs keep the app's reading sizes for Tailwind's own steps. */
 .docs-shell {
-  --spacing: 4px;
-  --text-xs: 12px;
-  --text-xs--line-height: 18px;
-  --text-sm: 14px;
-  --text-sm--line-height: 20px;
-  --text-base: 16px;
-  --text-base--line-height: 24px;
-  --text-2xl: 24px;
+  --spacing: 0.25rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-2xl: 1.5rem;
 }
 
-/* With no highlight in the sidebar, only this step in brightness marks the current page. */
-.dark .docs-shell {
-  --muted-foreground: oklch(0.72 0 0);
-}
-
-/* Account settings intentionally mirrors the desktop app's denser 16px-root
-   geometry and its quieter frame dividers without changing the public site. */
+/* Account settings mirrors the desktop app's settings: its denser sizes and its sidebar rows. */
 .account-settings {
-  --spacing: 4px;
-  --text-xs: 12px;
-  --text-xs--line-height: 16px;
-  --text-sm: 14px;
-  --text-sm--line-height: 20px;
-  --text-base: 16px;
-  --text-base--line-height: 24px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 10px;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.552 0.016 285.938);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --border: oklch(0.92 0.004 286.32 / 78%);
-  --input: oklch(0.92 0.004 286.32);
-  --settings-nav-hover: #e8e8ec;
-  --settings-nav-selected: #d8d8de;
-  --settings-info: oklch(0.45 0.17 248.18);
-  --settings-success: oklch(0.47 0.15 149.214);
-  --settings-warning: oklch(0.554 0.135 66.442);
-  --settings-danger: oklch(0.577 0.245 27.325);
+  --spacing: 0.25rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --sidebar-foreground: var(--misty-theme-text);
+  --sidebar-accent: var(--misty-theme-active);
+  --muted-foreground: var(--misty-theme-text-muted);
+  --settings-nav-hover: var(--misty-theme-hover);
+  --settings-nav-selected: var(--misty-theme-active);
+  --settings-info: var(--color-tone-blue);
+  --settings-success: var(--color-tone-green);
+  --settings-warning: var(--color-tone-amber);
+  --settings-danger: var(--misty-theme-danger);
 }
 
-.dark .account-settings {
-  --background: #131313;
-  --foreground: #e0e0e0;
-  --card: #191919;
-  --card-foreground: #e0e0e0;
-  --sidebar: #161616;
-  --sidebar-foreground: #c9c9ce;
-  --sidebar-accent: #3e3e3e;
-  --sidebar-accent-foreground: #f1f1f1;
-  --muted: #2b2b2b;
-  --muted-foreground: #c9c9ce;
-  --accent: #2b2b2b;
-  --accent-foreground: #f1f1f1;
-  --border: #262626;
-  --input: #2f2f2f;
-  --settings-nav-hover: #2b2b2b;
-  --settings-nav-selected: #3e3e3e;
-  --settings-info: oklch(0.685 0.169 237.323);
-  --settings-success: oklch(0.723 0.219 149.579);
-  --settings-warning: oklch(0.795 0.184 86.047);
-  --settings-danger: oklch(0.704 0.191 22.216);
-}
-
-/* The public Store is a faithful, read-only rendering of the desktop Store.
-   These local tokens keep its app chrome independent from marketing themes. */
+/* The theme's names as Tailwind colors. Fonts and corners come from styles/misty-theme.css. */
 @theme inline {
-  --font-sans: "Inter Variable", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -195,13 +117,17 @@
   --color-success-foreground: var(--success-foreground);
   --color-showcase: var(--showcase-surface);
   --color-showcase-foreground: var(--showcase-foreground);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  /* Larger panels than the app has (hero frames) still step up from its 12px panel corner. */
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.25rem;
+  --radius-4xl: 1.5rem;
+  /* Window-width breakpoints a step up from Tailwind's (40, 48, 64, 80, 96rem), like the app's:
+     media queries ignore the 110% root, so these move with the larger sizes. */
+  --breakpoint-sm: 44rem;
+  --breakpoint-md: 52.8rem;
+  --breakpoint-lg: 70.4rem;
+  --breakpoint-xl: 88rem;
+  --breakpoint-2xl: 105.6rem;
 
   /* Temporary compatibility aliases while page code moves to semantic names. */
   --color-bg: var(--background);
@@ -213,7 +139,6 @@
   --color-text-secondary: var(--muted-foreground);
   --color-primary-hover: var(--primary-hover);
   --color-primary-active: var(--primary-active);
-  --color-danger: var(--destructive);
   --color-danger-hover: color-mix(
     in oklch,
     var(--destructive) 85%,
@@ -224,7 +149,7 @@
     var(--success) 85%,
     var(--foreground)
   );
-  --font-heading: "Inter Variable", sans-serif;
+  --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -240,8 +165,10 @@
   --color-chart-1: var(--chart-1);
 }
 
+/* The app's 110% root (misty/src/styles/App.css): every size is in rem, so the site's type,
+   controls and spacing come out the same size as the desktop app's. */
 html {
-  font-size: 17px;
+  font-size: 110%;
   scroll-behavior: auto;
   /* Never set overscroll-behavior on the root: in Misty's WKWebView it blocks
      wheel scrolling entirely. Misty disables rubber-banding natively instead. */
@@ -256,12 +183,6 @@ select {
   text-transform: none;
 }
 
-@media (max-width: 639px) {
-  html {
-    font-size: 16.5px;
-  }
-}
-
 body {
   min-height: 100vh;
   min-width: 0;
@@ -273,7 +194,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* One outer alignment rail for every public page and shared site surface. */
+/* One outer alignment rail for every public page and shared site surface, matching the homepage's
+   .mist-container and the navbar: --site-content-max wide, --site-gutter from the window's edges. */
 .site-container {
   width: 100%;
   max-width: var(--site-container-max);
@@ -295,16 +217,12 @@ body {
   margin-top: 2rem;
 }
 
-#resources {
-  row-gap: clamp(2.5rem, 5svh, 3.5rem);
-}
-
 /* The content scrolls normally through a fixed, direction-independent fade.
    These overlays never intercept input or change the layout. */
 .home-page {
   /* Shorten scroll travel uniformly; keep viewport sizes and phase ratios intact. */
   --home-scroll-travel-scale: 0.91;
-  --scroll-edge-depth: clamp(120px, 21svh, 240px);
+  --scroll-edge-depth: clamp(7.5rem, 21svh, 15rem);
   --scroll-fade-ratio: 0.75;
   --scroll-fade-depth: calc(var(--scroll-edge-depth) * var(--scroll-fade-ratio));
 }
@@ -318,13 +236,13 @@ body {
 }
 .home-scroll-edge-fade::before {
   top: 0;
-  height: calc(var(--site-nav-height, 72px) + var(--scroll-edge-depth));
-  background: linear-gradient(to bottom, var(--background) calc(var(--site-nav-height, 72px) + 16px), transparent calc(var(--site-nav-height, 72px) + var(--scroll-fade-depth)));
+  height: calc(var(--site-nav-height, 4.5rem) + var(--scroll-edge-depth));
+  background: linear-gradient(to bottom, var(--background) calc(var(--site-nav-height, 4.5rem) + 1rem), transparent calc(var(--site-nav-height, 4.5rem) + var(--scroll-fade-depth)));
 }
 .home-scroll-edge-fade::after {
   bottom: 0;
   height: var(--scroll-edge-depth);
-  background: linear-gradient(to top, var(--background) 16px, transparent var(--scroll-fade-depth));
+  background: linear-gradient(to top, var(--background) 1rem, transparent var(--scroll-fade-depth));
 }
 
 .chapter-intro { padding-block: clamp(3rem, 8svh, 6rem); }
@@ -443,7 +361,7 @@ body {
   height: 17.5%;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 844.8px) {
   .feature-bento-stage-inner {
     --site-gutter: clamp(2rem, 2.5vw, 2.5rem);
   }
@@ -508,7 +426,7 @@ body {
   filter: none;
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1125.3px) {
   .feature-bento-story {
     height: auto;
   }
@@ -698,7 +616,7 @@ body {
 .foundation-section {
   position: relative;
   z-index: 11;
-  scroll-margin-top: var(--site-nav-height, 72px);
+  scroll-margin-top: var(--site-nav-height, 4.5rem);
   overflow-x: clip;
 }
 
@@ -745,18 +663,14 @@ body {
   background: none;
   color: var(--marketing-muted);
 }
-@media (max-width: 1023px) and (min-height: 480px) and (prefers-reduced-motion: no-preference), (min-width: 1024px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+@media (max-width: 1125.3px) and (min-height: 528px) and (prefers-reduced-motion: no-preference), (min-width: 1126.4px) and (min-height: 770px) and (prefers-reduced-motion: no-preference) {
   .home-content-rail > section:has(~ #foundation) {
     translate: var(--foundation-previous-shift, 0px) 0;
   }
   .foundation-section {
-    --foundation-stage-height: clamp(240px, 30svh, 320px);
+    --foundation-stage-height: clamp(15rem, 30svh, 20rem);
     /* Reserve the viewport during the hold, then close that space on exit. */
-    padding-bottom: calc(max(0px, (100svh - var(--site-nav-height, 72px) - var(--foundation-stage-height)) / 2) * (1 - var(--foundation-release, 0)));
-    overflow-anchor: none;
-  }
-  .home-content-rail > #resources {
-    margin-top: calc(clamp(3rem, 7svh, 6rem) - var(--foundation-release, 0) * var(--foundation-tail-space, 0px));
+    padding-bottom: calc(max(0px, (100svh - var(--site-nav-height, 4.5rem) - var(--foundation-stage-height)) / 2) * (1 - var(--foundation-release, 0)));
     overflow-anchor: none;
   }
   .foundation-story {
@@ -764,7 +678,7 @@ body {
   }
   .foundation-stage {
     position: sticky;
-    top: calc(var(--site-nav-height, 72px) + (100svh - var(--site-nav-height, 72px) - var(--foundation-stage-height)) / 2);
+    top: calc(var(--site-nav-height, 4.5rem) + (100svh - var(--site-nav-height, 4.5rem) - var(--foundation-stage-height)) / 2);
     display: grid;
     height: var(--foundation-stage-height);
     align-items: center;
@@ -802,7 +716,7 @@ body {
     z-index: 0;
     inset-inline: 0;
     top: 50%;
-    height: calc(100svh - var(--site-nav-height, 72px));
+    height: calc(100svh - var(--site-nav-height, 4.5rem));
     transform: translateY(-50%);
     overflow: hidden;
     pointer-events: none;
@@ -819,13 +733,12 @@ body {
     animation-play-state: var(--foundation-rain-state, paused);
   }
   .foundation-rain-screenshot {
-    width: calc(clamp(260px, 28vw, 420px) * var(--screenshot-size, 1));
+    width: calc(clamp(16.25rem, 28vw, 26.25rem) * var(--screenshot-size, 1));
     margin: 0;
     overflow: hidden;
     border: 1px solid rgb(255 255 255 / 20%);
-    border-radius: 10px;
+    border-radius: 0.625rem;
     background: #111;
-    box-shadow: 0 12px 32px rgb(0 0 0 / 25%);
     opacity: 0.75;
   }
   .foundation-rain-screenshot img {
@@ -841,15 +754,15 @@ body {
 }
 
 .feature-grid { display: grid; gap: 1.5rem; }
-.feature-grid-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--marketing-border); border-radius: 12px; background: var(--marketing-surface); }
-.feature-grid-media { height: 320px; margin-top: 1.5rem; padding: 0 1.5rem 1.5rem; overflow: hidden; }
+.feature-grid-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid var(--marketing-border); border-radius: 0.75rem; background: var(--marketing-surface); }
+.feature-grid-media { height: 20rem; margin-top: 1.5rem; padding: 0 1.5rem 1.5rem; overflow: hidden; }
 .feature-grid-media > * { height: 100%; min-height: 0; }
-@media (min-width: 1024px) {
+@media (min-width: 1126.4px) {
   .feature-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
   .feature-grid-wide { grid-column: span 7; }
   .feature-grid-narrow { grid-column: span 5; }
 }
-@media (max-width: 767px) { .feature-grid-media { height: 250px; } }
+@media (max-width: 843.7px) { .feature-grid-media { height: 15.625rem; } }
 
 .brand-marquee-panel {
   margin-top: 1rem;
@@ -920,7 +833,7 @@ body {
 
 .brand-marquee-link:focus-visible {
   border-radius: 0.35rem;
-  outline: 2px solid var(--ring);
+  outline: 0.125rem solid var(--ring);
   outline-offset: 0.3rem;
   opacity: 1;
 }
@@ -932,7 +845,7 @@ body {
   object-fit: contain;
 }
 
-.dark .brand-marquee-logo-invert-dark {
+.brand-marquee-logo-invert-dark {
   filter: invert(1) brightness(1.08);
 }
 
@@ -996,12 +909,6 @@ body {
   color: var(--foreground);
 }
 
-/* Disable Inter contextual alternates in inputs (fixes @ jiggle) */
-input,
-textarea {
-  font-variant-ligatures: no-contextual;
-}
-
 button {
   cursor: pointer;
 }
@@ -1020,15 +927,15 @@ button:disabled {
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 0.1875rem;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
@@ -1088,18 +995,9 @@ button:disabled {
  * child component keeps working unchanged inside the band — in either theme.
  */
 .marketing-dark {
-  --marketing-surface: #161616;
-  --marketing-border: rgba(255, 255, 255, 0.1);
-  --marketing-border-strong: rgba(255, 255, 255, 0.18);
-  --marketing-foreground: #f1f1f1;
-  --marketing-muted: #c9c9ce;
-
-  background-color: #0f0f0f;
-  color: var(--marketing-foreground);
-}
-
-.dark .marketing-dark {
+  --marketing-surface: var(--misty-theme-sidebar);
   background-color: var(--background);
+  color: var(--marketing-foreground);
 }
 
 /* ── Scroll-pinned sections ──────────────────────────────────────────────
@@ -1111,9 +1009,9 @@ button:disabled {
  */
 .pin-stage {
   position: sticky;
-  top: var(--site-nav-height, 72px);
+  top: var(--site-nav-height, 4.5rem);
   display: flex;
-  height: calc(100svh - var(--site-nav-height, 72px));
+  height: calc(100svh - var(--site-nav-height, 4.5rem));
   align-items: center;
   overflow: hidden;
 }
@@ -1142,14 +1040,14 @@ button:disabled {
 
 }
 
-@media (max-height: 699px) {
+@media (max-height: 768.9px) {
   .pin-track { display: none !important; }
   .pin-stacked { display: block !important; }
 }
 
 /* Keep the path camera in a stable viewport. */
 .feature-bento-stage-inner { padding-block: 0; }
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 1126.4px) and (prefers-reduced-motion: no-preference) {
   .feature-logo-scene {
     /* Fit a complete row, its rail bends, and Misty in the clear viewport. */
     height: var(--feature-scene-height);
@@ -1157,14 +1055,14 @@ button:disabled {
     will-change: transform;
   }
 }
-@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+@media (max-width: 1125.3px), (prefers-reduced-motion: reduce) {
   .feature-bento-stage-inner { padding-block: 1.5rem 2rem; }
   .feature-logo-scene { gap: 2rem; }
-  .feature-bento-card-media { height: 300px; }
+  .feature-bento-card-media { height: 18.75rem; }
   .feature-bento-preview, .feature-bento-preview > * { height: 100%; }
 }
 
-@media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 844.8px) and (min-height: 770px) and (prefers-reduced-motion: no-preference) {
   .pin-stage { height: clamp(34rem, 72svh, 48rem); }
   .pin-scene { padding-block: 1.5rem 3rem; }
 }
@@ -1172,70 +1070,65 @@ button:disabled {
 
 /* Center the walkthrough panels within the available viewport. */
 #how-it-works .pin-stacked { padding-top: 2rem; }
-@media (min-width: 768px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 844.8px) and (min-height: 770px) and (prefers-reduced-motion: no-preference) {
   #how-it-works .pin-stage {
-    --walkthrough-stage-height: min(calc(100svh - var(--site-nav-height, 72px) - 2rem), max(36rem, 68svh));
+    --walkthrough-stage-height: min(calc(100svh - var(--site-nav-height, 4.5rem) - 2rem), max(36rem, 68svh));
     height: var(--walkthrough-stage-height);
-    top: calc(var(--site-nav-height, 72px) + (100svh - var(--site-nav-height, 72px) - var(--walkthrough-stage-height)) / 2);
+    top: calc(var(--site-nav-height, 4.5rem) + (100svh - var(--site-nav-height, 4.5rem) - var(--walkthrough-stage-height)) / 2);
   }
 }
 
 /* Consistent reading sizes across the explanatory and resource panels. */
-.feature-bento-card-copy p,
-#resources article > p,
-#resources .divide-y p { font-size: 16px; line-height: 1.6; }
-#resources aside p { font-size: 14px; line-height: 1.6; }
-#resources article > h3 { font-size: 24px; line-height: 1.25; }
-#resources .divide-y h3 { font-size: 16px; line-height: 1.4; }
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+.feature-bento-card-copy p { font-size: 1rem; line-height: 1.6; }
+@media (min-width: 1126.4px) and (prefers-reduced-motion: no-preference) {
   .feature-bento-story {
     /* The shared page overlays own the only top and bottom fades. */
-    --feature-stage-height: calc(100svh - var(--site-nav-height, 72px));
+    --feature-stage-height: calc(100svh - var(--site-nav-height, 4.5rem));
     /* Larger rows use the available space instead of a small centered island. */
-    --feature-scene-height: min(max(125rem, 260svh), calc((var(--feature-stage-height) - 2 * var(--scroll-fade-depth) - 32px) / 0.22));
+    --feature-scene-height: min(max(125rem, 260svh), calc((var(--feature-stage-height) - 2 * var(--scroll-fade-depth) - 2rem) / 0.22));
     /* Trim the camera's empty framing before the first and after the last row. */
-    margin-top: -48px;
-    margin-bottom: calc(32px - var(--feature-stage-height) / 2 + var(--feature-scene-height) * 0.0875);
+    margin-top: -3rem;
+    margin-bottom: calc(2rem - var(--feature-stage-height) / 2 + var(--feature-scene-height) * 0.0875);
   }
 
   .feature-bento-stage {
     height: var(--feature-stage-height);
-    top: var(--site-nav-height, 72px);
+    top: var(--site-nav-height, 4.5rem);
   }
 }
 
 
 
-@media (max-width: 767px) {
-  .home-page { --scroll-edge-depth: clamp(48px, 8svh, 72px); }
+@media (max-width: 843.7px) {
+  .home-page { --scroll-edge-depth: clamp(3rem, 8svh, 4.5rem); }
   .home-content-rail > section + section { margin-top: 2.5rem; }
   .chapter-intro { padding-block: 2.5rem; }
   .feature-bento-card-media { height: auto; aspect-ratio: 3 / 2; margin-bottom: 1rem; padding-bottom: 0; }
   .feature-bento-preview, .feature-bento-preview > * { height: 100%; }
   .feature-bento-preview img { height: 100%; object-fit: contain; }
   aside[aria-label="Page section navigation"] { top: auto; bottom: 1.5rem; translate: var(--tw-translate-x) 0; --tw-translate-y: 0; }
-  aside[aria-label="Page section navigation"] > button { width: 44px; height: 48px; top: auto; bottom: 0; translate: none; --tw-translate-y: 0; }
-  [aria-label="Primary navigation"] button[aria-label] { min-width: 44px; min-height: 44px; }
+  aside[aria-label="Page section navigation"] > button { width: 2.75rem; height: 3rem; top: auto; bottom: 0; translate: none; --tw-translate-y: 0; }
+  [aria-label="Primary navigation"] button[aria-label] { min-width: 2.75rem; min-height: 2.75rem; }
 }
 
 .mobile-path-marker, .mobile-path-rail { display: none; }
-@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-  .mobile-card-reveal { opacity: 0; translate: 0 20px; transition: opacity 450ms ease, translate 600ms cubic-bezier(.22,1,.36,1); }
+@media (max-width: 843.7px) and (prefers-reduced-motion: no-preference) {
+  .mobile-card-reveal { opacity: 0; translate: 0 1.25rem; transition: opacity 450ms ease, translate 600ms cubic-bezier(.22,1,.36,1); }
   .mobile-card-reveal.visible { opacity: 1; translate: 0 0; }
-  .feature-logo-scene { padding-left: 24px; }
+  .feature-logo-scene { padding-left: 1.5rem; }
   .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-  .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
+  .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 1.5rem) - 1rem), calc(var(--mobile-marker-y, 1.5rem) - 1rem)); pointer-events: none; }
 }
 
 
 
 /* Keep one example in focus while retaining the surrounding context. */
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 1126.4px) and (prefers-reduced-motion: no-preference) {
   .feature-bento-card[data-active="false"] > div { opacity: .42; }
   .feature-bento-card[data-active="true"] > div { opacity: 1; }
 }
 .feature-bento-card > div { transition: opacity 450ms ease; }
-@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+@media (max-width: 1125.3px) and (prefers-reduced-motion: no-preference) {
   .feature-bento-card[data-mobile-active="false"] > div { opacity: .42; }
   .feature-bento-card[data-mobile-active="true"] > div { opacity: 1; }
   .feature-bento-card[data-mobile-active="true"] { border-color: var(--marketing-foreground); }
@@ -1245,14 +1138,14 @@ button:disabled {
 /* The floating bar owns its viewport offset at every responsive width.
    Keeping the gap outside a sticky box avoids Firefox scrolling its padding. */
 .site-pinned-navbar {
-  --navbar-edge-gap: 12px;
+  --navbar-edge-gap: 0.75rem;
   position: fixed;
   top: var(--navbar-edge-gap);
   top: calc(var(--navbar-edge-gap) + env(safe-area-inset-top, 0px));
   padding-top: 0;
   padding-bottom: 0;
 }
-@media (max-width: 767px) {
+@media (max-width: 843.7px) {
   .site-pinned-navbar > div {
     max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 2 * var(--navbar-edge-gap));
     overflow-y: auto;
@@ -1261,18 +1154,15 @@ button:disabled {
 
 
 /* Keep the phone story compact, with screenshots falling behind readable type. */
-@media (max-width: 1023px) and (min-height: 480px) and (prefers-reduced-motion: no-preference) {
-  .foundation-section { --foundation-stage-height: clamp(180px, 30svh, 240px); }
+@media (max-width: 1125.3px) and (min-height: 528px) and (prefers-reduced-motion: no-preference) {
+  .foundation-section { --foundation-stage-height: clamp(11.25rem, 30svh, 15rem); }
   .foundation-story { --foundation-travel: 150svh; }
   .foundation-title-light { --foundation-dim: color-mix(in srgb, var(--marketing-foreground) 65%, var(--background)); }
-  .foundation-rain-screenshot { width: calc(clamp(210px, 76vw, 360px) * var(--screenshot-size, 1)); opacity: .65; --rain-crop: 1.12; }
+  .foundation-rain-screenshot { width: calc(clamp(13.125rem, 76vw, 22.5rem) * var(--screenshot-size, 1)); opacity: .65; --rain-crop: 1.12; }
 }
 
-.resource-flat-card { display: block; min-height: 108px; padding: 16px; border: 1px solid var(--marketing-border); border-radius: 10px; background: var(--marketing-surface); transition: background-color 160ms; }
-.resource-flat-card:hover { background: var(--marketing-border); }
-.resource-flat-card:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: 3px; }
 .mobile-walkthrough { display: none; }
-@media (max-width: 767px) {
+@media (max-width: 843.7px) {
   #how-it-works .walkthrough-static { display: none !important; }
   .mobile-walkthrough { display: block; padding-block: 1rem 2rem; }
   .mobile-walkthrough-track {
@@ -1287,26 +1177,26 @@ button:disabled {
   }
   .mobile-walkthrough-track::-webkit-scrollbar { display: none; }
   .mobile-walkthrough-card { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; }
-  .mobile-walkthrough-media { aspect-ratio: 8 / 5; overflow: hidden; border-radius: 12px; }
+  .mobile-walkthrough-media { aspect-ratio: 8 / 5; overflow: hidden; border-radius: 0.75rem; }
   .mobile-walkthrough-card h3 { margin-top: 1.5rem; font-size: 1.5rem; font-weight: 500; line-height: 1.15; letter-spacing: -.03em; }
   .mobile-walkthrough-card p { margin-top: .75rem; font-size: 1rem; line-height: 1.6; color: var(--marketing-muted); }
   .mobile-walkthrough-controls { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: 1rem; }
   .mobile-walkthrough-controls p { font-size: .75rem; color: var(--marketing-muted); }
-  .mobile-walkthrough-controls button { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; }
-  .mobile-walkthrough-controls button span { width: 6px; height: 6px; border-radius: 50%; background: var(--marketing-muted); opacity: .4; transition: width 180ms, opacity 180ms; }
-  .mobile-walkthrough-controls button[aria-current="true"] span { width: 18px; border-radius: 4px; background: var(--marketing-foreground); opacity: 1; }
-  .mobile-walkthrough-controls button:focus-visible { outline: 2px solid var(--marketing-foreground); outline-offset: -4px; }
+  .mobile-walkthrough-controls button { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%; }
+  .mobile-walkthrough-controls button span { width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--marketing-muted); opacity: .4; transition: width 180ms, opacity 180ms; }
+  .mobile-walkthrough-controls button[aria-current="true"] span { width: 1.125rem; border-radius: 0.25rem; background: var(--marketing-foreground); opacity: 1; }
+  .mobile-walkthrough-controls button:focus-visible { outline: 0.125rem solid var(--marketing-foreground); outline-offset: -0.25rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mobile-walkthrough-controls button span { transition: none; }
 }
 
 
-@media (max-width: 767px) {
+@media (max-width: 843.7px) {
   .feature-logo-scene { gap: 2.5rem; }
 }
-@media (min-width: 768px) and (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
-  .feature-logo-scene { padding-left: 24px; }
+@media (min-width: 844.8px) and (max-width: 1125.3px) and (prefers-reduced-motion: no-preference) {
+  .feature-logo-scene { padding-left: 1.5rem; }
   .mobile-path-rail { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-  .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 24px) - 16px), calc(var(--mobile-marker-y, 24px) - 16px)); pointer-events: none; }
+  .mobile-path-marker { display: block; position: absolute; z-index: 20; left: 0; top: 0; transform: translate(calc(var(--mobile-marker-x, 1.5rem) - 1rem), calc(var(--mobile-marker-y, 1.5rem) - 1rem)); pointer-events: none; }
 }

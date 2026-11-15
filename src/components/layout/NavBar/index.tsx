@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 
 import { useAuth } from "@/AuthContext";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { ModeToggle } from "@/components/theme/mode-toggle";
+import NavbarSocials from "./NavbarSocials";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { toInitials } from "@/lib/format";
@@ -65,7 +65,7 @@ export default function Navbar({
             className="pointer-events-auto w-full will-change-[max-width]"
             style={{
               // Start at full container width and compact the bar after scrolling.
-              maxWidth: scrolled ? "820px" : "var(--site-content-max)",
+              maxWidth: scrolled ? "51.25rem" : "var(--site-content-max)",
               transition: `max-width 0.45s ${
                 scrolled ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
               }`,
@@ -88,6 +88,9 @@ export default function Navbar({
                     <BrandLogo />
                     <span>Misty</span>
                   </SiteLink>
+                  {/* The socials sit beside the logo, split from it by a hairline; NavbarSocials hides them on phones. */}
+                  <span aria-hidden="true" className="ml-1 hidden h-5 w-px bg-border md:block" />
+                  <NavbarSocials />
                 </div>
 
                 <DesktopNav
@@ -102,7 +105,6 @@ export default function Navbar({
                 />
 
                 <div className="flex items-center gap-1 md:hidden">
-                  <ModeToggle />
                   <CollapsibleTrigger asChild>
                     <Button
                       variant="ghost"

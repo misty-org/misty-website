@@ -11,7 +11,7 @@ export default function AuthShell({ title, children, wide }: AuthShellProps) {
   return (
     <section
       aria-labelledby="auth-page-title"
-      className="site-container min-h-[calc(100vh-4rem)] bg-background pb-24 pt-8 text-foreground sm:pt-12"
+      className="site-container min-h-[calc(100vh-4rem)] pb-24 pt-8 text-foreground sm:pt-12"
     >
       <div className={`mx-auto flex w-full flex-col gap-8 ${wide ? "max-w-xl" : "max-w-md"}`}>
         <h1

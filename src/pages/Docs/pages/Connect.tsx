@@ -13,7 +13,7 @@ const CHOICES = [
   [
     "Misty Cloud",
     "Your Misty account's email and password, or Continue with Google.",
-    "Spaces with your people, on Misty Pro.",
+    "Spaces with your people, on Pro.",
   ],
   [
     "Self-hosted",
@@ -40,7 +40,7 @@ export default function Connect() {
         />
       </DocSection>
 
-      <DocSection id="cloud" title="Misty Cloud (Misty Pro)">
+      <DocSection id="cloud" title="Misty Cloud (Pro)">
         <Steps
           items={[
             "Make a Misty account on this site and subscribe on [Pricing](/pricing).",

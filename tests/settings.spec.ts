@@ -397,7 +397,7 @@ test("a signed-out settings deep link returns after sign-in", async ({
   expect(carried).toBe("/settings/privacy");
 });
 
-test("a subscriber cancels and keeps Misty Pro in settings, never at Stripe's login", async ({
+test("a subscriber cancels and keeps Pro in settings, never at Stripe's login", async ({
   page,
 }) => {
   await prepareAccount(page, "dark");
@@ -424,7 +424,7 @@ test("a subscriber cancels and keeps Misty Pro in settings, never at Stripe's lo
   await expect(dialog.getByText("Renews on")).toBeVisible();
   await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
   const confirm = page.getByRole("alertdialog");
-  await expect(confirm).toContainText("You keep Misty Pro until");
+  await expect(confirm).toContainText("You keep Pro until");
   await confirm.getByRole("button", { name: "Cancel subscription" }).click();
   await expect(dialog.getByText("Ends on")).toBeVisible();
   await dialog.getByRole("button", { name: "Keep subscription" }).click();

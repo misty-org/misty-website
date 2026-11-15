@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AppleMark, WindowsMark } from "@/components/ui/SocialMarks";
-import { NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -14,7 +13,7 @@ function detectDownloadBuild(): ReleaseBuild | undefined {
 }
 
 /** The hero's primary button: the visitor's own desktop build, or every release on other devices. */
-export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
+export function DownloadCtaButton() {
   const [downloadBuild] = useState(detectDownloadBuild);
 
   return (
@@ -23,12 +22,6 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
         asChild
         size="lg"
         data-cta="download"
-        className={cn(
-          "h-11 rounded-full px-6 text-sm hover:opacity-85",
-          dark
-            ? "bg-white text-[#09090b] hover:bg-white"
-            : "bg-[var(--marketing-foreground)] text-[var(--marketing-surface)]",
-        )}
       >
         {downloadBuild ? (
           <a
@@ -52,29 +45,10 @@ export function DownloadCtaButton({ dark = false }: { dark?: boolean }) {
   );
 }
 
-export function HomeCtaButtons({
-  className,
-  dark = false,
-}: {
-  className?: string;
-  dark?: boolean;
-}) {
+export function HomeCtaButtons({ className }: { className?: string }) {
   return (
     <div className={cn("flex flex-wrap items-center gap-3", className)}>
-      <DownloadCtaButton dark={dark} />
-      <Button
-        asChild
-        variant="outline"
-        size="lg"
-        className={cn(
-          "h-11 rounded-full bg-transparent px-6 text-sm",
-          dark
-            ? "border-white/30 text-white hover:bg-white/10 hover:text-white"
-            : "border-[var(--marketing-border-strong)] text-[var(--marketing-foreground)] hover:bg-[var(--secondary)]",
-        )}
-      >
-        <NavLink to="/download" data-cta="secondary">Get Misty</NavLink>
-      </Button>
+      <DownloadCtaButton />
     </div>
   );
 }

@@ -32,7 +32,7 @@ export function Row({
 }) {
   return (
     <DesktopSettingsRow label={label} description={description}>
-      <span className="text-right text-sm text-foreground max-[760px]:text-left">
+      <span className="text-right text-sm text-foreground max-[836px]:text-left">
         {children}
       </span>
     </DesktopSettingsRow>

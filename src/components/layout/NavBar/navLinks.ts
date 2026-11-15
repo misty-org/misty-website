@@ -8,12 +8,12 @@ export interface NavLinkEntry {
 
 export const navItems: NavLinkEntry[] = [
   { to: "/download", label: "Download" },
-  { to: "/docs", label: "Docs" },
   { to: "/pricing", label: "Pricing" },
   { to: REPO_URL, label: "GitHub", external: true },
 ];
 
 export const resourceLinks: NavLinkEntry[] = [
+  { to: "/docs", label: "Docs" },
   { to: "/blog", label: "Blog" },
   { to: "/changelog", label: "Changelog" },
   { to: "/roadmap", label: "Roadmap" },

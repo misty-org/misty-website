@@ -41,7 +41,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Connect the app"),
         description:
-          "Connect the Misty app to Misty Pro or your own server, or use it on this computer only.",
+          "Connect the Misty app to Pro or your own server, or use it on this computer only.",
       },
     },
     {
@@ -71,7 +71,7 @@ export const docsRoutes: RouteObject = {
       },
     })),
     {
-      // composio.env is gone: the Composio key now lives on each computer.
+      // An old docs page; connected apps are explained under Models now.
       path: "self-hosting/composio",
       loader: () => movedTo("/docs/models#apps"),
     },

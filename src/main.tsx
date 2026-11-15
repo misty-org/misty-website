@@ -3,13 +3,12 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 
 import { router } from "./router";
-import { ThemeProvider } from "./components/theme/theme-provider";
+/* Inter, bundled (weight and optical-size axes), the same face as the desktop app. */
+import "@fontsource-variable/inter/opsz.css";
 import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <RouterProvider router={router} />
   </StrictMode>
 );

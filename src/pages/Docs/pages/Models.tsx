@@ -66,7 +66,7 @@ export default function Models() {
           items={[
             "You pick models in Settings → Models. Keys and sign-ins stay in Misty's credential store on this computer, locked by a key in the system keychain, and your desktop calls the provider directly. No key or model choice ever goes to a Misty server, and a server never calls a model.",
             "Settings belong to the device and stay on it, so each computer has its own keys and sign-ins.",
-            "Because the call comes from your desktop, everything below works the same on your own server and on Misty Pro, including Sign in with ChatGPT and a local Ollama. None of it is part of what Misty Pro sells.",
+            "Because the call comes from your desktop, everything below works the same on your own server and on Pro, including Sign in with ChatGPT and a local Ollama. None of it is part of what Pro sells.",
           ]}
         />
       </DocSection>
@@ -105,7 +105,7 @@ export default function Models() {
       <DocSection id="apps" title="Connected apps">
         <Paragraphs
           items={[
-            "Agents act in apps such as Gmail, Slack and Google Calendar. Apps that offer their own sign-in connect directly, starting from the last setup step. For the rest, add your own Composio key in Settings → Models → Connected apps. The key stays on this computer and goes only to Composio.",
+            "Agents act in apps such as Gmail, Slack and Google Calendar. You sign in to each app on its maker's own page, from the last setup step or Agents → Apps, and every agent can use it. Your sign-ins stay in this computer's keychain.",
           ]}
         />
       </DocSection>
@@ -129,7 +129,7 @@ export default function Models() {
           ]}
         />
         <Note>
-          Misty Pro charges for the server and its storage, never for AI, web
+          Pro charges for the server and its storage, never for AI, web
           search or connected apps. Whatever you spend on models and searches
           goes to your provider, not to Misty.
         </Note>

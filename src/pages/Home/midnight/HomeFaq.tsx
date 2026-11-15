@@ -3,21 +3,22 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 
 import { SiteLink } from "@/components/SiteLink";
+import { DISCORD_URL } from "@/lib/site";
 import "./faq.css";
 
 /**
- * Questions and answers as a plain accordion on the right, with a "Q&A" heading centered in the space on the left. Only what the
+ * Questions and answers as a plain accordion on the right, under a heading at the top of the left column with where to ask the rest. Only what the
  * page above doesn't already show: cost, accounts, models, platforms, privacy, agent approval and files.
  */
 type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
   {
     q: "Is Misty free?",
-    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you run your own server. Misty Pro is a server that's already set up, for $10 a month. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
+    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included when you run your own server. Pro is a server that's already set up, for $10 a month. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
   },
   {
     q: "Do I need an account?",
-    a: <>No. Misty works on one computer without a server. Spaces and teammates need a Misty server, either your own or Misty Pro. See the <SiteLink to="/docs">docs</SiteLink>.</>,
+    a: <>No. Misty works on one computer without a server. Spaces and teammates need a Misty server, either your own or Pro. See the <SiteLink to="/docs">docs</SiteLink>.</>,
   },
   {
     q: "Which AI models can I use?",
@@ -31,7 +32,7 @@ const START: Faq[] = [
 const TRUST: Faq[] = [
   {
     q: "Can Misty read my data?",
-    a: "Agents, their model calls and their chats stay on your computer. A Misty server stores your Spaces, with their messages and files, and your account details, and whoever runs it can read them. On Misty Pro, that's Misty. There are no ads, analytics or data sales.",
+    a: "Agents, their model calls and their chats stay on your computer. A Misty server stores your Spaces, with their messages and files, and your account details, and whoever runs it can read them. On Pro, that's Misty. There are no ads, analytics or data sales.",
   },
   {
     q: "Can an agent act without asking me?",
@@ -39,7 +40,7 @@ const TRUST: Faq[] = [
   },
   {
     q: "Do my files go through your servers?",
-    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a Space or your Library are stored on your server, which on Misty Pro is ours.",
+    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a Space or your Library are stored on your server, which on Pro is ours.",
   },
 ];
 
@@ -48,7 +49,8 @@ export function HomeFaq() {
     <section id="faq" className="mist-faq mist-section" aria-labelledby="faq-title" data-mist-scene>
       <div className="mist-container mist-faq-layout">
         <div className="mist-faq-head">
-          <h2 id="faq-title" aria-label="Questions and answers" data-reveal>Q&amp;A</h2>
+          <h2 id="faq-title" data-reveal>Questions</h2>
+          <p data-reveal>Something else? Ask on <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">Discord</a>.</p>
         </div>
         <div className="mist-faq-list" data-reveal-stagger>
           {[...START, ...TRUST].map(({ q, a }) => (

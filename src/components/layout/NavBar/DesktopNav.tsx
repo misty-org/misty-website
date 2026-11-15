@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,12 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import AccountMenu from "./AccountMenu";
-import NavbarSocials from "./NavbarSocials";
 import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
 import { SiteLink } from "@/components/SiteLink";
 
+/** The app's row states: a light wash on hover, a stronger one on the page you're on or a menu that's open. */
 const desktopLinkClass =
-  "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none";
+const desktopLinkActiveClass = "bg-control-active text-cream-bright hover:bg-control-active hover:text-cream-bright";
 
 function DesktopNavLink({ to, label, external }: NavLinkEntry) {
   if (external) {
@@ -31,7 +31,7 @@ function DesktopNavLink({ to, label, external }: NavLinkEntry) {
       className={({ isActive }) =>
         cn(
           desktopLinkClass,
-          isActive && "text-foreground",
+          isActive && desktopLinkActiveClass,
         )
       }
     >
@@ -103,8 +103,8 @@ export default function DesktopNav({
             onPointerDown={(event) => event.preventDefault()}
             onClick={(event) => event.preventDefault()}
             className={cn(
-              "h-auto rounded-md bg-transparent px-2 py-1 text-sm font-normal text-muted-foreground hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-              resourcesActive && "text-foreground",
+              "h-auto rounded-md bg-transparent px-2 py-1 text-sm font-normal text-muted-foreground hover:bg-control-hover hover:text-foreground aria-expanded:bg-control-active aria-expanded:text-cream-bright",
+              resourcesActive && desktopLinkActiveClass,
             )}
           >
             Resources
@@ -138,12 +138,6 @@ export default function DesktopNav({
       </DropdownMenu>
 
       <div className="ml-3 flex items-center gap-2 border-l border-border pl-4">
-        <NavbarSocials />
-
-        {/* The theme toggle sits in its own group between the socials and the account. */}
-        <span aria-hidden="true" className="mx-1 h-5 w-px bg-border" />
-        <ModeToggle />
-
         {signedIn ? (
           <AccountMenu
             displayName={displayName}
@@ -153,7 +147,7 @@ export default function DesktopNav({
             onSignOut={onSignOut}
           />
         ) : (
-          <Button asChild size="sm" className="rounded-full px-4">
+          <Button asChild size="sm">
             <SiteLink to="/signin" state={{ from: currentPath }}>Sign in</SiteLink>
           </Button>
         )}

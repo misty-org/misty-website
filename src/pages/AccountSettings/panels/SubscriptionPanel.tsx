@@ -35,7 +35,7 @@ function longDate(value?: string) {
   });
 }
 
-/** Misty Pro for this account: when it renews or ends, and cancelling it. */
+/** Pro for this account: when it renews or ends, and cancelling it. */
 export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
   const [state, setState] = useState<SubscriptionState | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -127,7 +127,7 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
   return (
     <div className="grid gap-4">
       <Section title="Plan">
-        <Row label="Plan">Misty Pro</Row>
+        <Row label="Plan">Pro</Row>
         <Row label={state.cancel_at_period_end ? "Ends on" : "Renews on"}>{ends}</Row>
         <DesktopSettingsRow label={pastDue ? "Your last payment failed" : "Card and invoices"}>
           <Button
@@ -142,7 +142,7 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
           </Button>
         </DesktopSettingsRow>
         {state.cancel_at_period_end ? (
-          <DesktopSettingsRow label="Keep Misty Pro after this month">
+          <DesktopSettingsRow label="Keep Pro after this month">
             <Button
               type="button"
               variant="outline"
@@ -179,14 +179,14 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel Misty Pro?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel Pro?</AlertDialogTitle>
             <AlertDialogDescription>
-              You keep Misty Pro until {ends}. After that your account is read-only for 30 days so
+              You keep Pro until {ends}. After that your account is read-only for 30 days so
               you can export your data from the Misty app, and then it's deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Misty Pro</AlertDialogCancel>
+            <AlertDialogCancel>Keep Pro</AlertDialogCancel>
             <AlertDialogAction onClick={() => void change("cancel")}>
               Cancel subscription
             </AlertDialogAction>

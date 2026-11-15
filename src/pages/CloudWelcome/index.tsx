@@ -16,7 +16,7 @@ const STEPS: AuthStep[] = [
       </Button>
     ),
   },
-  { text: "In Misty, choose Misty Pro and sign in with your Misty account." },
+  { text: "In Misty, choose Misty Cloud and sign in with your Misty account." },
   {
     text: "Pick your models. AI runs on your own ChatGPT plan, OpenRouter, Ollama or API key, and Misty never charges for it.",
     action: (
@@ -27,14 +27,14 @@ const STEPS: AuthStep[] = [
   },
 ];
 
-/** Where Stripe Checkout returns after a successful Misty Pro payment. */
+/** Where Stripe Checkout returns after a successful Pro payment. */
 export default function CloudWelcome() {
   return (
-    <AuthShell title="Welcome to Misty Pro" wide>
+    <AuthShell title="Welcome to Pro" wide>
       <AuthCard
         footer={
           <nav
-            aria-label="Misty Pro help"
+            aria-label="Pro help"
             className="flex flex-wrap justify-center gap-x-6 gap-y-2"
           >
             <SiteLink to="/docs/connect#cloud" className={footerLinkClass}>

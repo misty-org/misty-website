@@ -60,7 +60,7 @@ test("the desktop theme toggle sits after the social links and a divider", async
   expect(divider!.height).toBeLessThan(26);
 });
 
-test("the primary links include Download, Docs, Pricing and GitHub", async ({
+test("the primary links include Download, Pricing and GitHub, with Docs under Resources", async ({
   page,
 }, testInfo) => {
   const mobile = testInfo.project.name === "mobile-chromium";
@@ -76,10 +76,17 @@ test("the primary links include Download, Docs, Pricing and GitHub", async ({
   ).toBeVisible();
   const labels = await linkContainer
     .locator("a")
-    .filter({ hasText: /^(Download|Docs|Pricing|GitHub)$/ })
+    .filter({ hasText: /^(Download|Pricing|GitHub)$/ })
     .allTextContents();
 
-  expect(labels).toEqual(["Download", "Docs", "Pricing", "GitHub"]);
+  expect(labels).toEqual(["Download", "Pricing", "GitHub"]);
+  // Docs sits in the Resources menu (a section of the mobile menu), first of its links.
+  if (mobile) {
+    await expect(linkContainer.getByRole("link", { name: "Docs", exact: true })).toBeVisible();
+  } else {
+    await linkContainer.getByRole("button", { name: "Resources" }).hover();
+    await expect(page.getByRole("menuitem").first()).toHaveText("Docs");
+  }
   await expect(
     linkContainer.getByRole("link", { name: "GitHub", exact: true }),
   ).toHaveAttribute("href", "https://github.com/misty-org/misty");

@@ -11,32 +11,34 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { marketingCopy } from "@/content/marketingCopy";
-import { SUBSCRIPTION_SETTINGS_PATH } from "@/lib/site";
+import { DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH } from "@/lib/site";
 import { useProCheckout } from "./useProCheckout";
 import {
   cloudIncludes,
   cloudPlan,
-  compareRows,
+  cloudTagline,
   freeIncludes,
+  freeTagline,
   pricingQuestions,
 } from "./plans";
 import { SiteLink } from "@/components/SiteLink";
 
-const sectionHeading =
-  "text-center text-xl font-medium tracking-[-0.02em] text-foreground sm:text-2xl";
-const buttonClass = "h-11 w-full rounded-full";
+/** A plan's button is as wide as its label, like the app's; the skeleton holds that place. */
+const buttonSkeletonClass = "h-9 w-40 rounded-lg";
 
 function PlanCard({
   name,
+  tagline,
   price,
   period,
   items,
   action,
 }: {
   name: string;
+  tagline: string;
   price: string;
   period: string;
-  items: string[];
+  items: ReactNode[];
   action: ReactNode;
 }) {
   const id = `plan-${name.toLowerCase().replace(/\s+/g, "-")}`;
@@ -48,57 +50,22 @@ function PlanCard({
       <h2 id={id} className="text-xl font-medium text-foreground">
         {name}
       </h2>
+      <p className="mt-1 text-base text-muted-foreground">{tagline}</p>
       <p className="mt-4 flex items-baseline gap-2">
         <span className="text-4xl font-medium tracking-[-0.03em] text-foreground">
           {price}
         </span>
         <span className="text-base text-muted-foreground">{period}</span>
       </p>
-      <div className="mt-6">{action}</div>
+      <div className="mt-6 flex">{action}</div>
       <ul className="mt-8 grid gap-3 border-t border-border pt-6 text-base leading-7 text-foreground/85">
-        {items.map((item) => (
-          <li key={item} className="grid grid-cols-[1.25rem_1fr] gap-2.5">
+        {items.map((item, index) => (
+          <li key={index} className="grid grid-cols-[1.25rem_1fr] gap-2.5">
             <Check aria-hidden="true" className="mt-1.5 size-4 text-foreground" />
             <span>{item}</span>
           </li>
         ))}
       </ul>
-    </section>
-  );
-}
-
-function ComparePlans() {
-  return (
-    <section aria-labelledby="compare-plans" className="mt-24">
-      <h2 id="compare-plans" className={sectionHeading}>
-        Compare plans
-      </h2>
-      <div className="mt-8 overflow-x-auto">
-        <table className="w-full min-w-[34rem] border-collapse text-left text-base leading-6">
-          <thead>
-            <tr className="border-b border-border">
-              <td className="w-1/4" />
-              <th scope="col" className="w-[37.5%] py-3 pr-4 font-medium text-foreground">
-                Free
-              </th>
-              <th scope="col" className="w-[37.5%] py-3 font-medium text-foreground">
-                Misty Pro
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {compareRows.map(([label, free, pro]) => (
-              <tr key={label} className="border-b border-border/60 align-top">
-                <th scope="row" className="py-4 pr-4 font-normal text-foreground">
-                  {label}
-                </th>
-                <td className="py-4 pr-4 text-muted-foreground">{free}</td>
-                <td className="py-4 text-muted-foreground">{pro}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </section>
   );
 }
@@ -124,11 +91,33 @@ function Question({
 
 function PricingQuestions() {
   return (
-    <section aria-labelledby="pricing-questions" className="mt-24">
-      <h2 id="pricing-questions" className={sectionHeading}>
-        Questions
-      </h2>
-      <Accordion type="multiple" className="mt-8 border-t border-border">
+    // Two columns, like the homepage's: the heading and where to ask the rest on the left, the
+    // questions on the right, so the list never stretches across the whole page alone.
+    <section
+      aria-labelledby="pricing-questions"
+      className="mt-24 grid items-start gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.7fr)] md:gap-16"
+    >
+      <div className="grid gap-2">
+        <h2
+          id="pricing-questions"
+          className="text-xl font-medium tracking-[-0.02em] text-foreground sm:text-2xl"
+        >
+          Questions
+        </h2>
+        <p className="text-base text-muted-foreground">
+          Something else? Ask on{" "}
+          <a
+            href={DISCORD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground underline underline-offset-4"
+          >
+            Discord
+          </a>
+          .
+        </p>
+      </div>
+      <Accordion type="multiple" className="border-t border-border">
         {pricingQuestions.map(({ question, answer }) => (
           <Question key={question} question={question}>
             {answer}
@@ -148,24 +137,23 @@ function PricingQuestions() {
 /** Checkout, or for someone already subscribed, the way to their plan. */
 function ProAction({ checkout }: { checkout: ReturnType<typeof useProCheckout> }) {
   if (checkout.checking) {
-    return <Skeleton aria-hidden="true" className={buttonClass} />;
+    return <Skeleton aria-hidden="true" className={buttonSkeletonClass} />;
   }
   if (checkout.subscribed) {
     return (
-      <Button asChild variant="outline" size="lg" className={buttonClass}>
+      <Button asChild variant="outline" size="lg">
         <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>Manage subscription</SiteLink>
       </Button>
     );
   }
   return (
-    <div className="grid gap-2">
+    <div className="flex flex-col items-start gap-2">
       <Button
         size="lg"
-        className={buttonClass}
         disabled={checkout.starting}
         onClick={() => void checkout.start()}
       >
-        Get Misty Pro
+        Get Pro
       </Button>
       {checkout.error ? (
         <p role="alert" className="text-base text-muted-foreground">
@@ -176,12 +164,12 @@ function ProAction({ checkout }: { checkout: ReturnType<typeof useProCheckout> }
   );
 }
 
-/** Free and Misty Pro side by side, then the two compared, then the questions people ask. */
+/** Free and Pro side by side, then the questions people ask. */
 export default function Pricing() {
   const checkout = useProCheckout();
   return (
     <PublicPage>
-      <div className="mx-auto max-w-4xl">
+      <div>
         <h1 className="pb-12 text-center marketing-heading text-foreground">
           {marketingCopy.pricing.title}
         </h1>
@@ -189,19 +177,25 @@ export default function Pricing() {
         <div className="grid gap-4 md:grid-cols-2">
           <PlanCard
             name="Free"
+            tagline={freeTagline}
             price="$0"
             period="/month"
-            items={freeIncludes}
+            items={[
+              ...freeIncludes,
+              <>
+                Share Spaces by hosting them yourself, with{" "}
+                <SiteLink to="/docs/self-hosting">our guide</SiteLink>
+              </>,
+            ]}
             action={
-              <Button asChild variant="outline" size="lg" className={buttonClass}>
-                <SiteLink to="/docs/self-hosting">
-                  Read the self-hosting guide
-                </SiteLink>
+              <Button asChild variant="outline" size="lg">
+                <SiteLink to="/download">Download Misty</SiteLink>
               </Button>
             }
           />
           <PlanCard
-            name="Misty Pro"
+            name="Pro"
+            tagline={cloudTagline}
             price={`$${cloudPlan.price}`}
             period="/month plus tax"
             items={cloudIncludes}
@@ -209,7 +203,6 @@ export default function Pricing() {
           />
         </div>
 
-        <ComparePlans />
         <PricingQuestions />
       </div>
     </PublicPage>

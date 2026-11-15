@@ -7,8 +7,10 @@ export const SITE_URL = "https://mistysys.com";
 export const DOCS_URL = "https://docs.mistysys.com";
 export const REPO_URL = "https://github.com/misty-org/misty";
 export const RELEASES_URL = `${REPO_URL}/releases`;
+/** The community server, as the app's README links it. */
+export const DISCORD_URL = "https://discord.gg/B5WgSw6uX";
 
-/** Misty Pro's server, its `MISTY_HOSTNAME`; in development, the dev server. */
+/** Pro's server, its `MISTY_HOSTNAME`; in development, the dev server. */
 export const CLOUD_HOST = import.meta.env.DEV ? "dev-api.mistysys.com" : "api.mistysys.com";
 
 /** misty-cloud, which answers checkout with a redirect to Stripe Checkout; in development, the one on this computer. */

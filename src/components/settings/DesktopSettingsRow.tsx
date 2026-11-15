@@ -20,26 +20,26 @@ export function DesktopSettingsRow({
       aria-disabled={muted || undefined}
       className={cn(
         "grid min-h-14 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-8 gap-y-3 border-b border-border px-5 py-3 last:border-b-0",
-        "max-[760px]:grid-cols-1 max-[760px]:items-start",
+        "max-[836px]:grid-cols-1 max-[836px]:items-start",
         last && "border-b-0",
       )}
     >
       <div className="grid min-w-0 gap-1">
         <strong
           className={cn(
-            "text-[15px] font-medium leading-6",
+            "text-[0.9375rem] font-medium leading-6",
             muted ? "text-muted-foreground" : "text-foreground",
           )}
         >
           {label}
         </strong>
         {description ? (
-          <span className="text-sm leading-[22px] text-muted-foreground">
+          <span className="text-sm leading-[1.375rem] text-muted-foreground">
             {description}
           </span>
         ) : null}
       </div>
-      <div className="flex min-w-0 items-center justify-end max-[760px]:w-full max-[760px]:justify-start">
+      <div className="flex min-w-0 items-center justify-end max-[836px]:w-full max-[836px]:justify-start">
         {children}
       </div>
     </div>

@@ -14,7 +14,7 @@ const publicRoutes = [
     path: "/download",
     title: "Download Misty | macOS and Windows beta",
   },
-  { name: "pricing", path: "/pricing", title: "Pricing | Misty and Misty Pro" },
+  { name: "pricing", path: "/pricing", title: "Pricing | Misty" },
   { name: "docs", path: "/docs", title: "Docs | Misty" },
   {
     name: "docs self-hosting",

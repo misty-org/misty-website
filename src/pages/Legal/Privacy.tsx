@@ -91,7 +91,7 @@ const sections: LegalSectionDef[] = [
             </>,
             <>
               <strong className="font-medium text-foreground">Billing details:</strong>{" "}
-              if you subscribe to Misty Pro, Stripe collects your payment
+              if you subscribe to Pro, Stripe collects your payment
               card and billing address, and uses the address to work out sales
               tax or VAT. We receive your email address and Stripe's records of
               your subscription, such as its status, billing date, and any
@@ -133,7 +133,7 @@ const sections: LegalSectionDef[] = [
     id: "security",
     title: "Encryption and security",
     inShort:
-      "Spaces, files, and voice transcripts are stored on the server you use and aren't end-to-end encrypted, so on Misty Pro we can technically access them. Agent chats, prompts, and your keys stay on your computer.",
+      "Spaces, files, and voice transcripts are stored on the server you use and aren't end-to-end encrypted, so on Pro we can technically access them. Agent chats, prompts, and your keys stay on your computer.",
     body: (
       <>
         <LegalTable
@@ -165,7 +165,7 @@ const sections: LegalSectionDef[] = [
               "No. They don't pass through Misty, but the provider handling them can read them",
             ],
             [
-              "Your model, search, transcription, and Composio keys, and sign-ins for apps you connect",
+              "Your model, search, and transcription keys, and sign-ins for apps you connect",
               "Kept on your computer, sealed with a key held in your system keychain",
               "No. They're never sent to our servers",
             ],
@@ -180,7 +180,7 @@ const sections: LegalSectionDef[] = [
           Because Space content, voice transcripts, and what a Space shows of
           your agents are not end-to-end encrypted, we (and anyone who gained
           unauthorized access to our systems) could technically access what
-          Misty Pro holds. Anyone with access to your computer could read the
+          Pro holds. Anyone with access to your computer could read the
           agent chats stored on it. We only access what we hold when needed to
           run the service, fix a problem you report, prevent abuse, or comply
           with the law.
@@ -240,18 +240,16 @@ const sections: LegalSectionDef[] = [
         <p>
           Your keys stay on your computer, sealed with a key held in your
           system keychain. An AI tool you sign in to keeps its own sign-in on
-          your computer. No Misty server, Misty Pro included, receives them or
+          your computer. No Misty server, Pro included, receives them or
           calls a model. The provider processes your content under the terms
           you accepted with it, and it bills you directly. Check its policy on
           training and data retention. We don't train AI models on your
           content.
         </p>
         <p>
-          Agents can use apps you connect. If you connect apps through
-          Composio, your computer calls Composio on your own Composio key,
-          under a random ID instead of your name or email. If you connect an
-          app through its own sign-in, its tokens stay in your computer's
-          keychain. Neither passes through our servers.
+          Agents can use apps you connect. You connect an app through its own
+          sign-in, on its maker's page, and its tokens stay in your computer's
+          keychain. They don't pass through our servers.
         </p>
         <p>
           Only the content needed for the feature you use is sent. If you don't
@@ -282,21 +280,21 @@ const sections: LegalSectionDef[] = [
             ],
             [
               "OVHcloud",
-              "Hosts the Misty Pro server and its database",
+              "Hosts the Pro server and its database",
               "Account data and content",
             ],
             ["Mailjet", "Sending account email, such as setup keys, sign-in links, and Space invitations", "Name, email address, email content"],
             [
               "Stripe",
-              "Payments and tax for Misty Pro",
+              "Payments and tax for Pro",
               "Email address, billing details, payment card",
             ],
             ["Google", "Sign in with Google, if you use it", "Name, email, profile picture"],
           ]}
         />
         <p>
-          The services you choose yourself, such as your AI provider, Composio,
-          or an app you connect, aren't our service providers. Your computer
+          The services you choose yourself, such as your AI provider or an app
+          you connect, aren't our service providers. Your computer
           talks to them directly on your own account, under their terms, as
           section 5 explains.
         </p>
@@ -331,12 +329,6 @@ const sections: LegalSectionDef[] = [
               "Cookie (first-party)",
               "Keep you signed in and protect your session",
               "Until you sign out or the session expires",
-            ],
-            [
-              "misty-ui-theme",
-              "Local storage",
-              "Remember light or dark theme",
-              "Until you clear it",
             ],
             [
               "misty-scroll-positions",
@@ -376,7 +368,7 @@ const sections: LegalSectionDef[] = [
             "Your agents in a Space: an agent's listing stays until you or the Space's owner take it out. Its lines in the activity log stay with the Space.",
             "Voice transcripts: until you ask us to delete them or you delete your account.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
-            "After a Misty Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
+            "After a Pro subscription ends, whether cancelled or unpaid: the account is read-only for 30 days so you can export your data from the Misty app. We email you a warning before the deletion date, then delete the account the same way.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
             "Content in shared Spaces: content you added to a Space other people still use stays with that Space, attributed to a deleted user.",
             "Emails we send: our record of each one, with its address, is removed 30 days after it's sent.",
@@ -452,7 +444,7 @@ const sections: LegalSectionDef[] = [
           collected these categories of personal information, for the purposes
           in section 4: identifiers (name, email, IP address); internet
           activity limited to your use of Misty; commercial information, if you
-          subscribe to Misty Pro (your plan and payment history); audio
+          subscribe to Pro (your plan and payment history); audio
           information, limited to the voice transcripts you save; and content
           you choose to store.
         </p>
@@ -526,7 +518,7 @@ export default function Privacy() {
         <p className="text-base leading-7 text-muted-foreground">
           This policy explains what information Misty collects, why, who we
           share it with, and the choices you have. It applies to the Misty app,
-          this website, and Misty Pro. A self-hosted Misty server is run by
+          this website, and Pro. A self-hosted Misty server is run by
           its operator, not Misty, and that operator handles the data on it.
         </p>
       }
@@ -536,7 +528,7 @@ export default function Privacy() {
         "Agent chats, prompts, and model calls stay on your computer and go only to the AI provider you chose. Our servers see only what your agents add to a Space and what a Space shows its members: each agent's name, what kind of work it's doing, and the files it's changing.",
         "Spaces, files, and voice transcripts are stored on the server you use. They aren't end-to-end encrypted.",
         "Misty hosts no model. Misty never charges for AI or sees your model keys.",
-        "If you subscribe to Misty Pro, Stripe handles your card. We never see the full number.",
+        "If you subscribe to Pro, Stripe handles your card. We never see the full number.",
         "You can delete your account anytime in Account Settings, or email us for a copy of your data.",
       ]}
       sections={sections}

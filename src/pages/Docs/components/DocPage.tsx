@@ -76,24 +76,24 @@ export function DocPage({
   }, []);
 
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)] gap-x-8 min-[1000px]:grid-cols-[minmax(0,1fr)_clamp(170px,16.7vw,240px)]">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-x-8 min-[1100px]:grid-cols-[minmax(0,1fr)_clamp(10.625rem,16.7vw,15rem)]">
       <article
         ref={articleRef}
-        className="mx-auto w-full min-w-0 max-w-[768px] pt-8 min-[1000px]:pt-[58px]"
+        className="mx-auto w-full min-w-0 max-w-[48rem] pt-8 min-[1100px]:pt-[3.625rem]"
       >
-        <h1 className="text-[32px] font-semibold leading-10 tracking-[-0.04em] text-foreground sm:text-[40px] sm:leading-12">
+        <h1 className="text-[2rem] font-medium leading-10 tracking-[-0.04em] text-foreground sm:text-[2.5rem] sm:leading-12">
           {title}
         </h1>
         <DocContentsDisclosure headings={headings} />
 
-        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-12 text-base leading-[27px] text-foreground/90">
+        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-12 text-base leading-[1.6875rem] text-foreground/90">
           {children}
         </div>
 
         {previous || next ? (
           <nav
             aria-label="Docs pages"
-            className="sticky bottom-0 z-10 -mx-4 mt-16 flex gap-4 bg-background px-4 pb-[calc(16px+env(safe-area-inset-bottom,0px))] pt-4 sm:mx-0 sm:px-0 before:pointer-events-none before:absolute before:inset-x-0 before:bottom-full before:h-8 before:bg-gradient-to-t before:from-background before:to-transparent"
+            className="sticky bottom-0 z-10 -mx-4 mt-16 flex gap-4 bg-background px-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))] pt-4 sm:mx-0 sm:px-0 before:pointer-events-none before:absolute before:inset-x-0 before:bottom-full before:h-8 before:bg-gradient-to-t before:from-background before:to-transparent"
           >
             {previous ? (
               <PagerLink item={previous} direction="previous" fromGroup={group} />

@@ -84,7 +84,7 @@ export function DocContents({ headings }: { headings: DocHeading[] }) {
   return (
     <nav
       aria-label="On this page"
-      className="hidden pt-2.5 min-[1000px]:sticky min-[1000px]:top-[var(--site-nav-height)] min-[1000px]:block min-[1000px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1000px]:self-start min-[1000px]:overflow-y-auto min-[1000px]:[scrollbar-width:thin]"
+      className="hidden pt-2.5 min-[1100px]:sticky min-[1100px]:top-[var(--site-nav-height)] min-[1100px]:block min-[1100px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1100px]:self-start min-[1100px]:overflow-y-auto min-[1100px]:[scrollbar-width:thin]"
     >
       <p className="pb-2 text-sm text-muted-foreground">On this page</p>
       <ContentsList headings={headings} current={current} />
@@ -98,7 +98,7 @@ export function DocContentsDisclosure({ headings }: { headings: DocHeading[] }) 
 
   return (
     <details
-      className="group mt-6 rounded-lg border border-border min-[1000px]:hidden"
+      className="group mt-6 rounded-lg border border-border min-[1100px]:hidden"
       onClick={(event) => {
         if ((event.target as HTMLElement).closest("a")) {
           event.currentTarget.open = false;

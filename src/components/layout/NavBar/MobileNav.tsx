@@ -6,7 +6,7 @@ import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
 import { SiteLink } from "@/components/SiteLink";
 
 const mobileLinkClass =
-  "px-0 py-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "-mx-3 rounded-md px-3 py-3 text-sm text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none";
 
 function MobileNavLink({
   link,
@@ -34,7 +34,7 @@ function MobileNavLink({
       to={link.to}
       onClick={onNavigate}
       className={({ isActive }) =>
-        cn(mobileLinkClass, isActive && "text-foreground")
+        cn(mobileLinkClass, isActive && "bg-control-active text-cream-bright")
       }
     >
       {link.label}

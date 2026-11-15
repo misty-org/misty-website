@@ -1,0 +1,121 @@
+/* The Misty app's design system, for the website. Copied from the app's
+   misty/src/styles/theme.css (its default dark palette, type roles, corners and shared colors),
+   so the site and the app read as one product. Change a value there first, then here.
+
+   The site is dark only, like the app's default theme. */
+:root {
+  --misty-theme-workspace: #131313;
+  --misty-theme-bg: #131313;
+  --misty-theme-sidebar: #161616;
+  --misty-theme-card: #191919;
+  --misty-theme-border: #262626;
+  /* Edges of fields people type into or pick from: stronger than the row hairline. */
+  --misty-theme-border-strong: #3c3c3c;
+  --misty-theme-hover: #2b2b2b;
+  --misty-theme-active: #3e3e3e;
+  --misty-theme-text: #e0e0e0;
+  --misty-theme-text-bright: #f1f1f1;
+  --misty-theme-text-muted: #8c8c8c;
+  --misty-theme-danger: #c94747;
+  /* The top band every surface shares: 48px, so a 32px control in it has 8px above and below. */
+  --ui-header: 3rem;
+}
+
+/* Type. One face, Inter (bundled; the system font is only its fallback), as in the app. Monospace is for code itself, never URLs, paths or names.
+   Sizes come from roles, each with its own line height:
+     micro 11 · caption 12 · meta 13 · control 14 (buttons, fields, menu rows, tabs) · body 15
+     · page 16 (reading) · title 18 · display 24.
+   Corners: 4 for marks and chips, 7 for small controls and rows, 9 for controls, fields and
+   menus, 12 for panels and dialogs. */
+@theme {
+  --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-micro: 0.6875rem;
+  --text-micro--line-height: 0.875rem;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.125rem;
+  --text-control: 0.875rem;
+  --text-control--line-height: 1.25rem;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.375rem;
+  --text-page: 1rem;
+  --text-page--line-height: 1.5rem;
+  --text-title: 1.125rem;
+  --text-title--line-height: 1.5rem;
+  --text-display: 1.5rem;
+  --text-display--line-height: 1.875rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.4375rem;
+  --radius-lg: 0.5625rem;
+  --radius-xl: 0.75rem;
+}
+
+@theme inline {
+  --color-charcoal-workspace: var(--misty-theme-workspace);
+  --color-window-chrome: var(--misty-theme-workspace);
+  --color-pane: var(--misty-theme-bg);
+  --color-charcoal-bg: var(--misty-theme-bg);
+  --color-charcoal-sidebar: var(--misty-theme-sidebar);
+  --color-charcoal-card: var(--misty-theme-card);
+  --color-charcoal-border: var(--misty-theme-border);
+  --color-charcoal-border-strong: var(--misty-theme-border-strong);
+  --color-charcoal-hover: var(--misty-theme-hover);
+  --color-charcoal-active: var(--misty-theme-active);
+
+  --color-cream: var(--misty-theme-text);
+  --color-cream-bright: var(--misty-theme-text-bright);
+  --color-cream-action-hover: color-mix(
+    in srgb,
+    var(--misty-theme-text-bright) 85%,
+    var(--misty-theme-bg)
+  );
+  --color-cream-muted: var(--misty-theme-text-muted);
+  --color-control-hover: color-mix(in srgb, var(--misty-theme-text) 10%, transparent);
+  --color-control-active: color-mix(in srgb, var(--misty-theme-text) 16%, transparent);
+  --color-row-hover: color-mix(in srgb, var(--misty-theme-text) 5%, transparent);
+  --color-row-active: color-mix(in srgb, var(--misty-theme-text) 9%, transparent);
+  --color-danger: var(--misty-theme-danger);
+  --color-danger-wash: color-mix(in srgb, var(--misty-theme-danger) 14%, transparent);
+  --color-scrim: rgb(0 0 0 / 0.45);
+  --color-ink-on-color: #202124;
+
+  --color-tone-blue: color-mix(in srgb, #4f86e8 72%, var(--misty-theme-text));
+  --color-tone-red: color-mix(in srgb, #e5533d 72%, var(--misty-theme-text));
+  --color-tone-green: color-mix(in srgb, #3fa463 72%, var(--misty-theme-text));
+  --color-tone-orange: color-mix(in srgb, #e8833a 72%, var(--misty-theme-text));
+  --color-tone-violet: color-mix(in srgb, #8b5cf6 72%, var(--misty-theme-text));
+  --color-tone-pink: color-mix(in srgb, #e0559b 72%, var(--misty-theme-text));
+  --color-tone-amber: color-mix(in srgb, #d9a21b 72%, var(--misty-theme-text));
+  --color-tone-teal: color-mix(in srgb, #14a39a 72%, var(--misty-theme-text));
+  --color-tone-sand: color-mix(in srgb, #a88a5a 72%, var(--misty-theme-text));
+
+  --color-avatar-red: #eab7ab;
+  --color-avatar-orange: #f0c38e;
+  --color-avatar-yellow: #f0d58c;
+  --color-avatar-green: #c5cf8e;
+  --color-avatar-blue: #a0c4d4;
+  --color-avatar-purple: #d3b3c9;
+  --color-avatar-gray: #d5c9b8;
+  --color-avatar-ink: #3c3836;
+}
+
+/* What a state means by color, as in the app: an agent idle, working, waiting, failed or done. */
+:root {
+  --tone-idle: color-mix(in srgb, var(--misty-theme-text-muted) 70%, transparent);
+  --tone-working: var(--color-tone-blue);
+  --tone-waiting: var(--color-tone-amber);
+  --tone-failed: var(--color-tone-red);
+  --tone-done: var(--color-tone-green);
+}
+
+@theme inline {
+  --color-state-idle: var(--tone-idle);
+  --color-state-working: var(--tone-working);
+  --color-state-waiting: var(--tone-waiting);
+  --color-state-failed: var(--tone-failed);
+  --color-state-done: var(--tone-done);
+}
