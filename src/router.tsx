@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
 import ConfirmEmail from "./pages/ConfirmEmail";
+import ContinueFromApp from "./pages/ContinueFromApp";
 import SignInLink from "./pages/SignInLink";
 import NotFound from "./pages/NotFound";
 import Settings from "./pages/AccountSettings";
@@ -11,6 +12,7 @@ import Changelog from "./pages/Changelog";
 import Blog from "./pages/Blog";
 import Roadmap from "./pages/Roadmap";
 import Pricing from "./pages/Pricing";
+import Download from "./pages/Download";
 import Setup from "./pages/Setup";
 import CloudWelcome from "./pages/CloudWelcome";
 import Connected from "./pages/Connected";
@@ -87,8 +89,7 @@ const site: RouteObject[] = [
       },
       {
         path: "download",
-        // The homepage, scrolled to this section.
-        element: <Home />,
+        element: <Download />,
         handle: {
           title: "Download Misty | macOS and Windows beta",
           description: marketingCopy.metadata.download,
@@ -183,7 +184,7 @@ const site: RouteObject[] = [
         handle: {
           title: "Privacy policy | Misty",
           description:
-            "How Misty handles your account details, files, and Space content.",
+            "How Misty handles your account details, files, and space content.",
         },
       },
       {
@@ -240,6 +241,15 @@ const site: RouteObject[] = [
         handle: {
           title: "Confirm your email | Misty",
           description: "Confirm your email to finish creating your Misty account.",
+        },
+      },
+      {
+        // The app opens this signed in as its account, with a hand-off code in the fragment.
+        path: "continue",
+        element: <ContinueFromApp />,
+        handle: {
+          title: "Continue from Misty | Misty",
+          description: "Continue from the Misty app, signed in to the same account.",
         },
       },
       {

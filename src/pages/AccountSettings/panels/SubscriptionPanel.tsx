@@ -219,7 +219,7 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
             <AlertDialogTitle>Cancel {plans.plus.name}?</AlertDialogTitle>
             <AlertDialogDescription>
               You keep {plans.plus.name} until {ends}. Then your account moves to Free, with{" "}
-              {plans.free.storage} of storage, and your included Boosts leave their Spaces. Nothing is
+              {plans.free.storage} of storage, and your included Boosts leave their spaces. Nothing is
               deleted: if you're over, you can still open, download and delete everything, but you
               can't add more until you're under.
             </AlertDialogDescription>

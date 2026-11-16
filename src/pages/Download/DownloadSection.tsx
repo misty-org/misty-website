@@ -1,6 +1,6 @@
 import { DownloadCtaButton } from "@/pages/Home/components/HomeCtaButtons";
 
-/** The closing section: one last call to download, with the hero's button. /download scrolls here. */
+/** The closing section: one last call to download, with the hero's button. */
 export function DownloadSection() {
   return (
     <section id="download" className="mist-closing" aria-labelledby="download-title" data-mist-scene>

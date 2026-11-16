@@ -21,9 +21,9 @@ export const changelog: ChangelogEntry[] = [
       {
         heading: "Space collaboration",
         changes: [
-          "Create a Space to keep a project's people, conversations, tasks, and shared resources together",
-          "Durable Space Chat with shared conversations and Library references",
-          "Invite existing Misty accounts, manage membership, and transfer Space ownership",
+          "Create a space to keep a project's people, conversations, tasks, and shared resources together",
+          "Durable space Chat with shared conversations and Library references",
+          "Invite existing Misty accounts, manage membership, and transfer space ownership",
         ],
       },
       {
@@ -36,15 +36,15 @@ export const changelog: ChangelogEntry[] = [
       {
         heading: "Library",
         changes: [
-          "Collect the useful files and references a Space needs in one curated Library",
+          "Collect the useful files and references a space needs in one curated Library",
           "Upload, preview, find, download, and organize shared resources without turning the Library into another raw file browser",
         ],
       },
       {
         heading: "Beta availability",
         changes: [
-          "Access is opening in approved, invite-only cohorts while the Space beta is tested",
-          "Permission-scoped agents in Spaces are being tested during the beta",
+          "Access is opening in approved, invite-only cohorts while the space beta is tested",
+          "Permission-scoped agents in spaces are being tested during the beta",
           "Google Calendar, Slack, and Notion connections are in pilot work; Discord support is coming after configuration and reliability testing",
         ],
       },

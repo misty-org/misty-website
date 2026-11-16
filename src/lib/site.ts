@@ -22,10 +22,10 @@ export const CLOUD_CHECKOUT_URL = `${BILLING_URL}/checkout`;
 /** Reads a signed-in person's subscription; `/cancel` and `/resume` change it. Each takes their proof. */
 export const ACCOUNT_SUBSCRIPTION_URL = `${BILLING_URL}/account/subscription`;
 
-/** Gives a Space Misty+'s included Boosts (`/assign`) or changes the Boosts bought for it (`/quantity`). */
+/** Gives a space Misty+'s included Boosts (`/assign`) or changes the Boosts bought for it (`/quantity`). */
 export const ACCOUNT_BOOSTS_URL = `${BILLING_URL}/account/boosts`;
 
-/** Where a signed-in person gives and buys Boosts; `?space=` opens one Space. */
+/** Where a signed-in person gives and buys Boosts; `?space=` opens one space. */
 export const BOOSTS_SETTINGS_PATH = "/settings/boosts";
 
 /** Answers a signed-in person's proof with a Stripe page for their card and invoices, already signed in. */

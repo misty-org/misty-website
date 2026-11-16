@@ -1,12 +1,12 @@
 /**
- * Misty Cloud's plans and Space levels, in one place. The numbers match what the Cloud server
+ * Misty Cloud's plans and space levels, in one place. The numbers match what the Cloud server
  * and billing enforce (misty-cloud's plan.go, and the server's MISTY_SIGNUP_LIMITS and
- * MISTY_SPACE_LEVELS); change them together. Self-hosted Misty has none of this: every Space
+ * MISTY_SPACE_LEVELS); change them together. Self-hosted Misty has none of this: every space
  * there is unlimited.
  */
 export type PlanId = "free" | "plus";
-/** What checkout sells: Misty+ monthly or yearly, or Boosts for a Space. */
-export type CheckoutPlan = "plus" | "plus_yearly" | "boost";
+/** What checkout sells: Misty+ monthly or yearly, or Boosts for a space. */
+export type CheckoutPlan = "plus" | "plus_yearly" | "boost" | "boost_yearly";
 
 export const plans = {
   free: { name: "Free", storage: "5 GB" },
@@ -20,7 +20,13 @@ export const plans = {
   },
 } as const;
 
-export const boost = { name: "Boosts", price: 2 } as const;
+/** One Boost, billed monthly or yearly. */
+export const boost = { name: "Boosts", price: 2, yearly: 18 } as const;
+
+/** What paying yearly saves against twelve months, in whole percent. */
+export function yearlySaving(monthly: number, yearly: number): number {
+  return Math.round((1 - yearly / (monthly * 12)) * 100);
+}
 
 export function planName(plan: string | undefined): string {
   return plan === "plus" ? plans.plus.name : plans.free.name;
@@ -28,33 +34,33 @@ export function planName(plan: string | undefined): string {
 
 /** One line under each card's name, saying who it's for. */
 export const taglines = {
-  free: "Misty Cloud, or your own server.",
-  plus: "More room, and Boosts to give.",
-  boost: "Raise a Space's level for everyone in it.",
+  free: "Misty Cloud or your own server.",
+  plus: "More storage, and Boosts to give.",
+  boost: "Level up a space for everyone.",
 } as const;
 
 /**
- * What each card includes, in plain words. Setup details (a VPS, a domain on Cloudflare, https)
- * stay in the "What do I need to host my own server?" question; Free's last line, which links
- * to the self-hosting guide, is in index.tsx.
+ * What each card includes, in a few words each so the cards stay short. Setup details (a VPS, a
+ * domain on Cloudflare, https) stay in the "What do I need to host my own server?" question;
+ * Free's last line, which links to the self-hosting guide, is in index.tsx.
  */
 export const includes = {
   free: [
     "Every feature",
-    "Works with the AI you already use, like Claude Code, Codex and Antigravity",
-    `${plans.free.storage} of storage on Misty Cloud`,
-    "Make and join as many Spaces as you like",
+    "Works with Claude Code, Codex and Antigravity",
+    `${plans.free.storage} on Misty Cloud`,
+    "Unlimited spaces",
   ],
   plus: [
     "Everything in Free",
     `${plans.plus.storage} of storage`,
-    `Files up to ${plans.plus.upload} in any Space`,
-    `${plans.plus.boosts} Boosts to give your Spaces, moved once a week`,
+    `Files up to ${plans.plus.upload}`,
+    `${plans.plus.boosts} Boosts, movable weekly`,
   ],
   boost: [
-    "Anyone in a Space can boost it",
-    "Boosts from everyone add up to the Space's level",
-    "Each level raises members, shared storage and agents",
+    "Anyone in a space can boost it",
+    "Boosts add up to a level",
+    "More members, storage and agents",
   ],
 } as const;
 
@@ -83,12 +89,12 @@ export const levelRows: { label: string; key: "members" | "storage" | "upload" |
 export const pricingQuestions: { question: string; answer: string }[] = [
   {
     question: "What does a Boost do?",
-    answer: `A Boost is $${boost.price} a month for one Space. Boosts from everyone in a Space add up, and at 2, 7 and 14 the Space reaches the next level, which raises how many people and agents it holds and gives it its own storage. Each Boost past a level adds ${storagePerBoost} more.`,
+    answer: `A Boost is $${boost.price} a month or $${boost.yearly} a year for one space. Boosts from everyone in a space add up, and at 2, 7 and 14 the space reaches the next level, which raises how many people and agents it holds and gives it its own storage. Each Boost past a level adds ${storagePerBoost} more.`,
   },
   {
-    question: "Whose storage does a Space use?",
+    question: "Whose storage does a space use?",
     answer:
-      "A Space below Level 1 stores files in the storage of whoever added them. From Level 1 a Space has its own storage, so its files no longer count against anyone's.",
+      "A Space below Level 1 stores files in the storage of whoever added them. From Level 1 a space has its own storage, so its files no longer count against anyone's.",
   },
   {
     question: "What happens if Boosts or Misty+ end?",
@@ -98,7 +104,7 @@ export const pricingQuestions: { question: string; answer: string }[] = [
   {
     question: "How do Misty+ Boosts work?",
     answer:
-      "Misty+ comes with 3 Boosts. Give them to any Spaces you're in from your account settings. You can move them to a different Space once a week.",
+      "Misty+ comes with 3 Boosts. Give them to any spaces you're in from your account settings. You can move them to a different space once a week.",
   },
   {
     question: "Do you charge for AI?",

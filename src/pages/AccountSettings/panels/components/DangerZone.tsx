@@ -79,7 +79,7 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
   return (
     <div className={`${customRowClass} flex flex-col gap-3`}>
       <p className="text-sm leading-relaxed text-muted-foreground">
-        Deleting your account removes your profile, private files, and Space
+        Deleting your account removes your profile, private files, and space
         memberships after a 30-day recovery window. This cannot be undone once
         the window closes.
       </p>

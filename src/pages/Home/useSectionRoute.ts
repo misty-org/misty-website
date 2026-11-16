@@ -1,15 +1,19 @@
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router";
 
-/** Paths that are the homepage scrolled to one of its sections. */
-const SECTION_BY_PATH: Record<string, string> = { "/download": "download" };
-export const isHomePath = (pathname: string) => pathname === "/" || pathname in SECTION_BY_PATH;
+import { isDocsHost } from "@/lib/site";
+
+/** Paths that are the homepage scrolled to one of its sections; none today, /download is its own page. */
+const SECTION_BY_PATH: Record<string, string> = {};
+/** On the docs host `/` is the docs' own first page, never the homepage. */
+export const isHomePath = (pathname: string) =>
+  !isDocsHost() && (pathname === "/" || pathname in SECTION_BY_PATH);
 
 /** How long a direct visit keeps its section aligned while images and fonts change the page height. */
 const SETTLE_MS = 2000;
 
 /**
- * /download renders the homepage, then scrolls to its section: instantly on
+ * A section path renders the homepage, then scrolls to its section: instantly on
  * first load, smoothly when the navbar or footer links there. Following a link back to /
  * returns to the top. Back and forward keep the position the browser restores.
  */

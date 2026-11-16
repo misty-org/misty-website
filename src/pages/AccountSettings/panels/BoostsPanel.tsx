@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { DesktopSettingsRow } from "@/components/settings";
+import { BillingToggle } from "@/components/BillingToggle";
 import { SiteLink } from "@/components/SiteLink";
 import {
   AlertDialog,
@@ -18,7 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import { fetchAccountProof, postProofForm } from "@/lib/accountProof";
 import { CLOUD_CHECKOUT_URL } from "@/lib/site";
-import { boost, plans } from "@/pages/Pricing/plans";
+import { boost, plans, yearlySaving } from "@/pages/Pricing/plans";
 import {
   assignBoosts,
   fetchSpaceBoosts,
@@ -77,8 +78,9 @@ function Stepper({
 }
 
 /**
- * The account's Boosts: Misty+'s included ones to give, and Boosts bought for each Space it's
- * in, with each Space's level. `?space=` (from the app's Boost button) opens that Space.
+ * The account's Boosts: Misty+'s included ones to give, and Boosts bought for each space it's
+ * in, with each space's level. `?space=` (from the app's Boost button) opens that space, and
+ * `?billing=yearly` (from the pricing page) starts new Boosts on yearly billing.
  */
 export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const [searchParams] = useSearchParams();
@@ -89,6 +91,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const [editing, setEditing] = useState<string | null>(searchParams.get("space"));
   const [included, setIncluded] = useState(0);
   const [bought, setBought] = useState(0);
+  const [yearly, setYearly] = useState(searchParams.get("billing") === "yearly");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -98,7 +101,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
         .then(async ([state, list]) => {
           setSubscription(state);
           setSpaces(list);
-          // The Space the app asked for opens with what it has now.
+          // The space the app asked for opens with what it has now.
           const asked = searchParams.get("space");
           if (asked) {
             setIncluded(state.boosts?.assigned.find((a) => a.space_id === asked)?.boosts ?? 0);
@@ -125,7 +128,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const boughtHere = (spaceId: string) => boosts?.bought.find((b) => b.space_id === spaceId);
   const assignedTotal = boosts?.assigned.reduce((sum, a) => sum + a.boosts, 0) ?? 0;
 
-  // Opening a Space's dialog starts from what it has now.
+  // Opening a space's dialog starts from what it has now.
   function openSpace(spaceId: string) {
     setIncluded(assignedHere(spaceId));
     setBought(boughtHere(spaceId)?.quantity ?? 0);
@@ -142,7 +145,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
       const existing = boughtHere(spaceId);
       if (!existing && bought > 0) {
         postProofForm(CLOUD_CHECKOUT_URL, await fetchAccountProof(), {
-          plan: "boost",
+          plan: yearly ? "boost_yearly" : "boost",
           space_id: spaceId,
           quantity: String(bought),
         });
@@ -195,6 +198,10 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const existing = editingSpace ? boughtHere(editingSpace.id) : undefined;
   const includedMax = editingSpace ? includedTotal - assignedTotal + assignedHere(editingSpace.id) : 0;
   const checkoutNext = editingSpace && !existing && bought > 0;
+  // Boosts already bought keep the billing they were bought with; new ones take the choice.
+  const billedYearly = existing ? existing.interval === "year" : yearly;
+  const each = billedYearly ? boost.yearly : boost.price;
+  const per = billedYearly ? "year" : "month";
 
   return (
     <div className="grid gap-4">
@@ -217,7 +224,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
         )}
       </Section>
 
-      <Section title="Your Spaces">
+      <Section title="Your spaces">
         {spaces.map((space) => {
           const mine = assignedHere(space.id) + (boughtHere(space.id)?.quantity ?? 0);
           return (
@@ -253,17 +260,25 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
             <div className="flex items-center justify-between gap-4">
               <span className="text-sm text-foreground">
                 Bought Boosts
-                <span className="block text-xs text-muted-foreground">{`$${boost.price} a month each · $${bought * boost.price} a month`}</span>
+                <span className="block text-xs text-muted-foreground">{`$${each} a ${per} each · $${bought * each} a ${per}`}</span>
               </span>
               <Stepper label="Bought Boosts" value={bought} min={0} max={50} onChange={setBought} />
             </div>
+            {checkoutNext ? (
+              <BillingToggle
+                label="Boost billing period"
+                saving={yearlySaving(boost.price, boost.yearly)}
+                yearly={yearly}
+                onChange={setYearly}
+              />
+            ) : null}
             {existing && bought !== existing.quantity ? (
               <p className="text-xs text-muted-foreground">
                 {bought === 0
                   ? `These Boosts end on ${longDate(existing.current_period_end)}.`
                   : bought > existing.quantity
-                    ? "Your card is charged for the rest of this month today."
-                    : "What's left of this month is credited toward your next bills."}
+                    ? `Your card is charged for the rest of this ${per} today.`
+                    : `What's left of this ${per} is credited toward your next bills.`}
               </p>
             ) : null}
             {error ? (

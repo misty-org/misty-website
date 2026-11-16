@@ -43,7 +43,7 @@ function Chats() {
   );
 }
 
-/** What a Space holds, each part with its own icon; the Lab's notebooks live here now. */
+/** What a space holds, each part with its own icon; the Lab's notebooks live here now. */
 function Space() {
   return (
     <div className="mist-tile-sheet" aria-hidden="true">
@@ -94,7 +94,7 @@ const FEATURES: readonly Feature[] = [
       shot("space-journal.webp", "A Space's Journal with docs and drawings", "Journal", <NotebookPen size={14} />, <SpaceJournal />),
       shot("space-planner.webp", "A Space's Planner with tasks and dates", "Planner", <ListTodo size={14} />, <SpacePlanner />),
       shot("space-library.webp", "A Space's Library of shared files", "Library", <FolderOpen size={14} />, <SpaceLibrary />),
-      shot("space-lab.webp", "A notebook in a Space's Lab", "Lab", <FlaskConical size={14} />, <SpaceLab />),
+      shot("space-lab.webp", "A notebook in a space's Lab", "Lab", <FlaskConical size={14} />, <SpaceLab />),
     ],
   },
   {

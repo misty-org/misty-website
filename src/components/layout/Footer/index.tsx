@@ -4,6 +4,7 @@ import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 import { columns, legalLinks, socialLinks } from "./footerLinks";
 import { SiteLink } from "@/components/SiteLink";
+import { isHomePath } from "@/pages/Home/useSectionRoute";
 
 const linkClass =
   "w-fit text-sm leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
@@ -71,13 +72,13 @@ export default function Footer({ className }: { className?: string } = {}) {
     <footer
       className={cn(
         "relative z-10",
-        location.pathname === "/" && "home-content-rail",
+        isHomePath(location.pathname) && "home-content-rail",
         className,
       )}
     >
       <div className="site-container py-6">
         <div className="px-1.5">
-          <div className="grid gap-y-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-x-20">
+          <div className="grid gap-y-8 md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-12 lg:gap-x-20">
             <div>
               <SiteLink
                 to="/"

@@ -1,6 +1,6 @@
 import type { SpaceBoostsState } from "./api";
 
-/** Where a Space stands, in one line: its level, its Boosts, and what the next level needs. */
+/** Where a space stands, in one line: its level, its Boosts, and what the next level needs. */
 export function levelLine(state: SpaceBoostsState | undefined): string {
   const level = state?.level;
   if (!level) return "";

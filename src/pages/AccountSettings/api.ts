@@ -55,10 +55,12 @@ export interface AssignedBoosts {
   boosts: number;
 }
 
-/** Boosts bought for one Space: a subscription whose quantity is how many. */
+/** Boosts bought for one space: a subscription whose quantity is how many. */
 export interface BoughtBoosts {
   space_id: string;
   quantity: number;
+  /** How often it's billed. Older answers have none, and were monthly. */
+  interval?: "month" | "year";
   status: string;
   current_period_end?: string;
   cancel_at_period_end: boolean;
@@ -68,7 +70,7 @@ export interface BoostsState {
   /** Boosts Misty+ includes; 0 without it. */
   included: number;
   assigned: AssignedBoosts[];
-  /** When included Boosts may next be taken from a Space, if they were moved this week. */
+  /** When included Boosts may next be taken from a space, if they were moved this week. */
   next_move_at?: string;
   bought: BoughtBoosts[];
 }
@@ -149,12 +151,12 @@ export function changePlan(plan: "plus" | "plus_yearly"): Promise<SubscriptionSt
   return postBilling(`${ACCOUNT_SUBSCRIPTION_URL}/plan`, { plan });
 }
 
-/** Gives a Space that many of Misty+'s included Boosts; 0 takes them back. */
+/** Gives a space that many of Misty+'s included Boosts; 0 takes them back. */
 export function assignBoosts(spaceId: string, boosts: number): Promise<SubscriptionState> {
   return postBilling(`${ACCOUNT_BOOSTS_URL}/assign`, { space_id: spaceId, boosts: String(boosts) });
 }
 
-/** Changes how many Boosts are bought for a Space now; 0 ends them with the month. */
+/** Changes how many Boosts are bought for a space now; 0 ends them with the month. */
 export function setBoughtBoosts(spaceId: string, quantity: number): Promise<SubscriptionState> {
   return postBilling(`${ACCOUNT_BOOSTS_URL}/quantity`, { space_id: spaceId, quantity: String(quantity) });
 }
@@ -244,14 +246,14 @@ export interface AccountDeletionResponse {
   status?: string;
   scheduled_purge_at?: string;
   status_token?: string;
-  /** Present on a 409: Spaces the account owns must be handed over first. */
+  /** Present on a 409: spaces the account owns must be handed over first. */
   spaces?: { id: string; name: string }[];
 }
 
 export class AccountDeletionBlockedError extends Error {
   constructor(readonly spaces: { id: string; name: string }[]) {
     super(
-      "Hand over or delete the Spaces you own before deleting the account.",
+      "Hand over or delete the spaces you own before deleting the account.",
     );
     this.name = "AccountDeletionBlockedError";
   }

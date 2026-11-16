@@ -51,7 +51,7 @@ function forgetScrollPosition(key: string) {
 
 // The router restores a saved position a few frames after the first render, which would
 // pull a direct visit away from where its URL points, so forget that position before the
-// router reads it. /download opens at its section; a #hash opens at its element.
+// router reads it. A homepage section path opens at its section; a #hash opens at its element.
 if (typeof window !== "undefined") {
   const { pathname, hash } = window.location;
   if (pathname !== "/" && isHomePath(pathname)) forgetScrollPosition("home");
@@ -92,7 +92,7 @@ export default function App() {
     const title = handle?.title ?? "Misty | Build together with AI";
     const description =
       handle?.description ??
-      "Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share.";
+      "A collaborative environment where people and their agents learn, work and create together. Bring any agent, build in spaces you share, and explore what others have made.";
     const canonicalUrl = new URL(
       location.pathname,
       isDocsHost() ? DOCS_URL : SITE_URL,
@@ -193,7 +193,7 @@ export default function App() {
 
   return (
     <AuthProvider>
-      {/* / and /download are one page; the homepage scrolls between its sections. */}
+      {/* The homepage and its section paths are one page; it scrolls between its sections. */}
       <ScrollRestoration getKey={scrollKey} storageKey={SCROLL_STORAGE_KEY} />
 
       <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">

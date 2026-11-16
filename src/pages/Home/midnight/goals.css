@@ -1,0 +1,44 @@
+/* Why Misty exists: the heading and a short statement, then each goal as a wide row, its words on one side and a
+   large panel on the other, swapping sides every row (HomeGoals). */
+.mist-goals-head { display: grid; gap: 1.25rem; max-width: 40rem; }
+.mist-home .mist-goals h2 { margin: 0; font-size: clamp(1.625rem, 2.6vw, 2.25rem); font-weight: 500; line-height: 1.1; letter-spacing: -.035em; text-wrap: balance; }
+.mist-home .mist-goals-head p { color: var(--mist-muted); font-size: 1.0625rem; line-height: 1.7; text-wrap: pretty; }
+
+.mist-goals-rows { display: grid; gap: clamp(4.5rem, 9vw, 8rem); margin-top: clamp(3.5rem, 7vw, 6rem); }
+.mist-goal {
+  display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center;
+}
+.mist-goal[data-flip] { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); }
+.mist-goal[data-flip] .mist-goal-text { order: 2; }
+.mist-goal-text { display: grid; gap: 1rem; max-width: 30rem; }
+.mist-home .mist-goal h3 {
+  margin: 0; color: var(--mist-ink); font-size: clamp(1.375rem, 2.1vw, 1.875rem); font-weight: 500; line-height: 1.15;
+  letter-spacing: -.03em; text-wrap: balance;
+}
+.mist-home .mist-goal-text p { margin: 0; color: var(--mist-muted); font-size: 1.0625rem; line-height: 1.7; text-wrap: pretty; }
+
+/* The panel: a large card in the bento's colors, its drawing cropped by the card. */
+.mist-goal-panel {
+  min-width: 0; height: clamp(22rem, 32vw, 27rem); padding-top: 0.75rem;
+  border: 1px solid var(--mist-card-border); border-radius: 1rem; background: var(--mist-card); overflow: hidden;
+}
+.mist-goal-panel .mist-mock { padding: 1.5rem 1.75rem 0; }
+.mist-goal-panel .mist-mock-card small { color: var(--mist-subtle); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mist-goal-panel { transition: border-color .25s ease; }
+  .mist-goal:hover .mist-goal-panel { border-color: var(--mist-border-strong); }
+}
+
+/* Narrower screens: the words sit above their panel, every row the same way round. */
+@media (max-width: 946px) {
+  .mist-goal, .mist-goal[data-flip] { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .mist-goal[data-flip] .mist-goal-text { order: 0; }
+  .mist-goal-text { max-width: 38rem; }
+  .mist-goals-rows { gap: 4rem; }
+}
+@media (max-width: 704px) {
+  .mist-goal-panel { height: 21rem; border-radius: 0.875rem; }
+  .mist-goal-panel .mist-mock { padding: 1.25rem 1.25rem 0; }
+  .mist-goal-panel .mist-mock-cards[data-columns="2"] { grid-template-columns: minmax(0, 1fr); }
+}

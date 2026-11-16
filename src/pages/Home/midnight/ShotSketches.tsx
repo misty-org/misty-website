@@ -22,11 +22,11 @@ type State = "working" | "waiting" | "done";
 const STATE_NOTE: Record<State, string> = { working: "Working", waiting: "Needs you", done: "Done" };
 const Dot = ({ state }: { state: State }) => <i className="mist-tile-dot" data-state={state} />;
 const Brand = ({ src }: { src: string }) => <img src={src} alt="" width={18} height={18} />;
-/** A person in a Space: their initial on a rounded square. */
-const Person = ({ name }: { name: string }) => <span className="mist-mock-person">{name[0]}</span>;
+/** A person in a space: their initial on a rounded square. */
+export const Person = ({ name }: { name: string }) => <span className="mist-mock-person">{name[0]}</span>;
 
 /** The bar across the top of each view: what it is, and a note on the right. */
-function Bar({ icon, title, note }: { icon: ReactNode; title: string; note?: ReactNode }) {
+export function Bar({ icon, title, note }: { icon: ReactNode; title: string; note?: ReactNode }) {
   return <header className="mist-mock-bar">{icon}<b>{title}</b>{note && <small>{note}</small>}</header>;
 }
 
@@ -176,7 +176,7 @@ const FILES: readonly { icon: ReactNode; name: string; note: string; who: string
   { icon: <FileVideo size={16} />, name: "Launch demo.mp4", note: "24 MB", who: "Sam" },
 ];
 
-/** The Library: the Space's shared files and who added them. */
+/** The Library: the space's shared files and who added them. */
 export function SpaceLibrary() {
   return (
     <div className="mist-mock">

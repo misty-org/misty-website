@@ -13,13 +13,13 @@ export const cloudTermsSection: LegalSectionDef = {
   id: "cloud",
   title: "Misty+ and Boosts",
   inShort:
-    "Misty+ and Boosts are subscriptions on Misty Cloud, the Misty server we run: Misty+ adds storage to your account, and a Boost raises a Space's level. We never charge for AI, and you can cancel at any time, effective at the end of the month you've paid for.",
+    "Misty+ and Boosts are subscriptions on Misty Cloud, the Misty server we run: Misty+ adds storage to your account, and a Boost raises a space's level. We never charge for AI, and you can cancel at any time, effective at the end of the month you've paid for.",
   body: (
     <>
       <p>
         Misty Cloud is a Misty server that we run. Anyone can use it on the
         Free plan. Misty+ is a paid plan with more storage and Boosts to give; a Boost is a
-        subscription that raises one Space's level for everyone in it.
+        subscription that raises one space's level for everyone in it.
         You don't need a paid plan to use Misty: the app, Misty Cloud on Free,
         and running your own Misty server are free.
       </p>
@@ -46,9 +46,9 @@ export const cloudTermsSection: LegalSectionDef = {
             <LegalLink to="/pricing">pricing page</LegalLink> when you
             subscribe.
           </>,
-          "When you reach a limit, Misty Cloud refuses what would go over it, such as a new upload or joining another Space, until you make room. You can always open, download and delete what you have, and the rest of Misty keeps working.",
+          "When you reach a limit, Misty Cloud refuses what would go over it, such as a new upload or joining another space, until you make room. You can always open, download and delete what you have, and the rest of Misty keeps working.",
           "You can switch Misty+ between monthly and yearly, and change how many Boosts you buy, in your account settings. A change takes effect right away: a larger one charges the difference for the rest of the billing period, and a smaller one credits it toward your next bills.",
-          "A Space's level comes from the Boosts its current members give it. When Boosts end, the Space drops a level and keeps everything; what's over a limit stays, and nothing new can be added until it's under.",
+          "A Space's level comes from the Boosts its current members give it. When Boosts end, the space drops a level and keeps everything; what's over a limit stays, and nothing new can be added until it's under.",
           "We never charge for AI. Misty hosts no model and doesn't supply model access: AI runs on the models and AI tools you choose, from your own computer, and you pay your provider directly.",
         ]}
       />

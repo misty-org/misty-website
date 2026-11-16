@@ -22,3 +22,4 @@ export const YoutubeMark = mark(paths.YoutubeMark);
 export const InstagramMark = mark(paths.InstagramMark);
 export const AppleMark = mark(paths.AppleMark);
 export const WindowsMark = mark(paths.WindowsMark);
+export const LinuxMark = mark(paths.LinuxMark);

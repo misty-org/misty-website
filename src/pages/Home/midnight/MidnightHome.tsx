@@ -1,9 +1,11 @@
 import Footer from "@/components/layout/Footer";
 import { DownloadSection } from "@/pages/Download/DownloadSection";
 import { HomeCtaButtons } from "../components/HomeCtaButtons";
+import { UseCasesChapter } from "./UseCases";
 import { EngineCarousel } from "./EngineCarousel";
 import { FeaturesChapter } from "./FeatureTiles";
 import { HomeFaq } from "./HomeFaq";
+import { HomeGoals } from "./HomeGoals";
 import { useReveal } from "./useReveal";
 import { useMistMotion } from "./useMistMotion";
 import "./midnight.css";
@@ -19,14 +21,14 @@ function Mist() {
   );
 }
 
-/** The hero screenshot: web pages side by side, with an agent chat and a Space's group chat. */
+/** The hero screenshot: web pages side by side, with an agent chat and a space's group chat. */
 function HeroDemo() {
   return (
     <div className="mist-container mist-hero-demo">
       <img
         className="mist-hero-screenshot"
         src="/screenshots/home/hero-layout.png"
-        alt="Misty with web pages side by side, an agent chat and a Space's group chat."
+        alt="Misty with web pages side by side, an agent chat and a space's group chat."
         width={1919}
         height={1029}
         fetchPriority="high"
@@ -43,10 +45,10 @@ export function MidnightHome() {
       {SHOW_MIST && <Mist />}
       <section id="overview" className="mist-hero" aria-labelledby="mist-hero-title" data-mist-scene>
         <div className="mist-container mist-hero-copy">
-          <h1 id="mist-hero-title" data-write>Build together with AI</h1>
+          <h1 id="mist-hero-title">Build together with AI</h1>
           <p className="mist-hero-lede">
-            Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite
-            others into a space you all share.
+            A collaborative environment where people and their agents learn, work and create together. Bring any agent,
+            build in spaces you share, and explore what others have made.
           </p>
           <HomeCtaButtons className="mist-hero-actions justify-center" />
         </div>
@@ -57,6 +59,10 @@ export function MidnightHome() {
       <div id="features">
         <FeaturesChapter />
       </div>
+      {/* What people do together with Misty, as a pinned scroll scene. */}
+      <UseCasesChapter />
+      {/* Why Misty exists: each goal as its own row, sides alternating. */}
+      <HomeGoals />
       <HomeFaq />
       {/* The call to download always closes the page. */}
       <DownloadSection />
