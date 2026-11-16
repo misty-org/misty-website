@@ -4,7 +4,6 @@ import {
   DocSection,
   Note,
   P,
-  Paragraphs,
 } from "../components/Prose";
 import { DocPage } from "../components/DocPage";
 
@@ -12,26 +11,26 @@ import { DocPage } from "../components/DocPage";
 export default function Maintenance() {
   return (
     <DocPage title="Updates and backups">
-      <DocSection id="updating" title="Updating">
-        <Paragraphs
-          items={[
-            "Pull the new version and start the stack again. The images rebuild from your checkout, migrations run on every start, and the setup container finds everything it made before.",
-          ]}
-        />
+      <P text="This page covers keeping your server up to date, backing it up and restoring it." />
+
+      <DocSection id="updating" title="Update your server">
+        <P text="Pull the new version and start the stack again. Database migrations run automatically." />
         <CodeBlock
           label="Update"
           code={`cd misty-server
 git pull
 docker compose up -d --build`}
         />
-        <P text="Update the desktop app on each computer too. A much older app may not be able to talk to a newer server." />
+        <P text="Update the Misty app on each computer too. A much older app may not work with a newer server." />
       </DocSection>
 
-      <DocSection id="backups" title="Backups">
-        <Paragraphs
+      <DocSection id="backups" title="Back up your server">
+        <P text="The server backs up its database every night at 03:00 UTC. You don't need to set anything up." />
+        <BulletList
           items={[
-            "The `backups` service dumps the database every night at 03:00 UTC, encrypts the dump to the server's backup key with [age](https://age-encryption.org), and uploads it to the `misty-<host>-backups` bucket in R2. That bucket has a 30-day lock, so no credential on the server can delete or overwrite a backup in that time, and backups expire a day after their lock ends.",
-            "Library files live in the Library bucket on your Cloudflare account, not in the database backup.",
+            "Each backup is encrypted with the server's backup key, using [age](https://age-encryption.org).",
+            "Backups go to the `misty-<host>-backups` bucket in R2. Nothing on the server can delete them for 30 days.",
+            "Files in spaces live in a separate R2 bucket. They aren't part of the database backup.",
           ]}
         />
         <CodeBlock
@@ -40,42 +39,44 @@ docker compose up -d --build`}
 docker compose exec backups misty-setup backups
 docker compose run --rm --no-deps backups backup-key`}
         />
-        <P text="Keep a copy of the backup key off the server, together with the copy of the secrets volume ([Secrets](/docs/self-hosting#secrets)). Without the key, no backup can be read." />
+        <Note>
+          Keep a copy of the backup key somewhere other than the server, with your copy of the
+          secrets. Without the key, no backup can be read.
+        </Note>
       </DocSection>
 
-      <DocSection id="restore" title="Restoring">
-        <P text="Restore onto a running stack, from the newest backup or a name from the list:" />
+      <DocSection id="restore" title="Restore a backup">
+        <P text="Restore the newest backup, or use a name from the list instead of `latest`:" />
         <CodeBlock
           label="Restore"
           code={`docker compose stop api
 docker compose exec backups misty-setup restore latest
 docker compose up -d`}
         />
-        <Note>
-          Practise a restore on a spare server. A backup that has never been
-          restored isn't a backup yet.
-        </Note>
+        <P text="Practise a restore on a spare server, so you know it works before you need it." />
       </DocSection>
 
-      <DocSection id="removing" title="Stopping and removing">
+      <DocSection id="removing" title="Stop or remove your server">
         <BulletList
           items={[
-            "`docker compose down` stops the server and keeps all its data and secrets.",
-            "`docker compose down --volumes` deletes the volumes, and with them the database and the secrets. It's the only command that destroys data.",
-            "The tunnel, buckets and Worker stay in your Cloudflare account until you delete them there. Deleting the R2 buckets removes the files and backups.",
+            "`docker compose down` stops the server. All data and secrets are kept.",
+            "`docker compose down --volumes` deletes the database and the secrets. This can't be undone.",
+            "The tunnel, R2 buckets and Worker stay in your Cloudflare account until you delete them there.",
           ]}
         />
       </DocSection>
 
-      <DocSection id="changing" title="Changing the server">
-        <Paragraphs
+      <DocSection id="changing" title="Change the server's code">
+        <P text="Misty is licensed under the [GNU AGPL-3.0-or-later](/license). Running Misty unchanged, or changing it only for yourself, needs nothing extra." />
+        <P text="If you change the server or its Worker and let other people use it:" />
+        <BulletList
           items={[
-            "Misty is licensed under the [GNU AGPL-3.0-or-later](/license), and the AGPL covers servers. If you change Misty's server or its Worker and let other people use your server, you must offer those people the source code of your changed version under the same license, for example with a link on your sign-in page or in your server's description.",
-            "Running Misty unchanged, or changing it only for yourself, needs nothing extra.",
-            "A changed version you share or let others use must have its own name and logo, and it may say it's based on Misty. Misty's `NOTICE` adds one term under the AGPL's section 7(b): every copy, changed or not, keeps the author attribution in its About screen ([License](/license)).",
-            "Every service on these pages is a required part of the server. Removing one, such as running without Cloudflare, means changing the code, and that version is yours to maintain.",
+            "Offer those people the source code of your version, under the same license. A link on your sign-in page works.",
+            "Give your version its own name and logo. You can say it's based on Misty.",
+            "Keep the author attribution in the About screen. See [License](/license).",
           ]}
         />
+        <P text="Every service on these pages is required. Removing one, such as Cloudflare, means changing the code, and that version is yours to maintain." />
       </DocSection>
     </DocPage>
   );

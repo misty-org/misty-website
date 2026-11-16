@@ -1,8 +1,11 @@
 import { Fragment } from "react";
 import { SiteLink } from "@/components/SiteLink";
 
-/** Splits on `code` spans and [text](href) links, the only markup docs data uses. */
-const TOKEN = /(`[^`]+`|\[[^\]]+\]\([^)\s]+\))/g;
+/**
+ * Splits on `code` spans, **bold** (the names of buttons, menus and settings) and
+ * [text](href) links, the only markup docs data uses.
+ */
+const TOKEN = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)\s]+\))/g;
 const LINK = /^\[([^\]]+)\]\(([^)\s]+)\)$/;
 
 const docLinkClass =
@@ -43,7 +46,7 @@ function DocLink({
 }
 
 /**
- * Plain text from the docs data, with `code` and [links](/docs/...) rendered.
+ * Plain text from the docs data, with `code`, **bold** and [links](/docs/...) rendered.
  * Keeps the data files readable and easy to update by hand.
  */
 export function RichText({ text }: { text: string }) {
@@ -53,6 +56,13 @@ export function RichText({ text }: { text: string }) {
         if (!part) return null;
         if (part.startsWith("`") && part.endsWith("`")) {
           return <InlineCode key={index}>{part.slice(1, -1)}</InlineCode>;
+        }
+        if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+          return (
+            <strong key={index} className="font-medium text-foreground">
+              {part.slice(2, -2)}
+            </strong>
+          );
         }
         const link = LINK.exec(part);
         if (link) {

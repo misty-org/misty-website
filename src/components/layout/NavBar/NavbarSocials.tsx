@@ -14,7 +14,7 @@ export default function NavbarSocials() {
           rel={placeholder ? undefined : "noopener noreferrer"}
           aria-label={placeholder ? `${label} link placeholder` : label}
           title={placeholder ? `Add Misty's ${label} URL` : `Misty on ${label}`}
-          className={`${label === "GitHub" ? "inline-flex" : "hidden lg:inline-flex"} size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none`}
+          className={`inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none`}
         >
           <Icon aria-hidden="true" className="size-3.5" />
         </a>

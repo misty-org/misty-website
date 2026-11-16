@@ -14,13 +14,13 @@ export const marketingCopy: MarketingCopy = {
     registerTitle: "Create an account",
   },
   metadata: {
-    home: "Misty is a collaborative workspace for people and their agents. Pick any agent and work on your own, or invite others into a space you all share.",
+    home: "A collaborative environment where people and their agents learn, work and create together. Bring any agent, build in spaces you share, and explore what others have made.",
     pricing:
-      "Misty is free with every feature, on Misty Cloud or a server you run yourself. Misty+ adds storage for $8 a month, Boosts raise a Space's level for $2 each, and AI is never charged for.",
+      "Misty is free with every feature, on Misty Cloud or a server you run yourself. Misty+ adds storage for $8 a month, Boosts raise a space's level for $2 each, and AI is never charged for.",
     docs:
       "How Misty works, how to run your own Misty server, how to connect the app, and which models you can use.",
     download:
-      "Download Misty for macOS and Windows. Both beta downloads are under 100 MB.",
+      "Download the latest Misty release for macOS and Windows.",
     blog: "Notes on building Misty: what I’m making, what changed my mind, and what’s next.",
     changelog:
       "Every Misty release and the changes that shipped with it, newest first.",

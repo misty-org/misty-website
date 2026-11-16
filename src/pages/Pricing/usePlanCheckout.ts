@@ -7,7 +7,7 @@ import { CLOUD_CHECKOUT_URL, SUBSCRIPTION_SETTINGS_PATH } from "@/lib/site";
 import { fetchSubscription } from "@/pages/AccountSettings/api";
 import type { PlanId } from "./plans";
 
-/** Misty+ monthly or yearly: what the pricing page sells directly. Boosts are bought per Space in settings. */
+/** Misty+ monthly or yearly: what the pricing page sells directly. Boosts are bought per space in settings. */
 export type PlusCheckout = "plus" | "plus_yearly";
 
 function plusCheckout(value: string | null): PlusCheckout | null {

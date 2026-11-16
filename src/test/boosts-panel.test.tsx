@@ -25,7 +25,7 @@ function plus(boosts: Record<string, unknown>) {
   return { subscribed: true, plan: "plus", interval: "month", status: "active", cancel_at_period_end: false, boosts };
 }
 
-/** Billing answers in order; the server answers Spaces and their levels. */
+/** Billing answers in order; the server answers spaces and their levels. */
 function stub(...billing: Response[]) {
   const calls: { url: string; body: string }[] = [];
   vi.stubGlobal(
@@ -56,7 +56,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-it("says where a Space stands and what the next level needs", () => {
+it("says where a space stands and what the next level needs", () => {
   expect(levelLine(levels.space_team as never)).toBe("Level 1 · 3 Boosts · 4 more for Level 2");
   expect(levelLine(levels.space_home as never)).toBe("Base level · 0 Boosts · 2 more for Level 1");
   expect(
@@ -64,7 +64,7 @@ it("says where a Space stands and what the next level needs", () => {
   ).toBe("Level 3 · 15 Boosts");
 });
 
-it("gives Misty+'s included Boosts to a Space", async () => {
+it("gives Misty+'s included Boosts to a space", async () => {
   const state = plus({ included: 3, assigned: [], bought: [] });
   const calls = stub(json(state), json(plus({ included: 3, assigned: [{ space_id: "space_team", boosts: 2 }], bought: [] })));
   renderPanel();
@@ -83,7 +83,7 @@ it("gives Misty+'s included Boosts to a Space", async () => {
   expect(form.get("boosts")).toBe("2");
 });
 
-it("sends someone buying a Space's first Boosts to checkout with the Space and how many", async () => {
+it("sends someone buying a space's first Boosts to checkout with the space and how many", async () => {
   stub(json({ subscribed: false, plan: "free", cancel_at_period_end: false, boosts: { included: 0, assigned: [], bought: [] } }));
   const submit = vi.spyOn(HTMLFormElement.prototype, "submit").mockImplementation(() => {});
   renderPanel("/settings/boosts?space=space_home");
@@ -104,7 +104,7 @@ it("sends someone buying a Space's first Boosts to checkout with the Space and h
   form.remove();
 });
 
-it("changes Boosts already bought for a Space, and says when the card declines", async () => {
+it("changes Boosts already bought for a space, and says when the card declines", async () => {
   const bought = { space_id: "space_team", quantity: 2, status: "active", cancel_at_period_end: false, current_period_end: "2026-12-15T00:00:00Z" };
   const calls = stub(json(plus({ included: 3, assigned: [], bought: [bought] })), json({ code: "payment_needed" }, 402));
   renderPanel("/settings/boosts?space=space_team");

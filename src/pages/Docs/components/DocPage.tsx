@@ -62,12 +62,11 @@ export function DocPage({
   children: ReactNode;
 }) {
   const pathname = docsPagePath(useLocation().pathname);
-  const index = docsPages.findIndex((page) => page.to === pathname);
-  const previous = index > 0 ? docsPages[index - 1] : undefined;
+  const pages = docsPages;
+  const index = pages.findIndex((page) => page.to === pathname);
+  const previous = index > 0 ? pages[index - 1] : undefined;
   const next =
-    index >= 0 && index < docsPages.length - 1
-      ? docsPages[index + 1]
-      : undefined;
+    index >= 0 && index < pages.length - 1 ? pages[index + 1] : undefined;
   const group = docsGroupFor(pathname);
 
   const [headings, setHeadings] = useState<DocHeading[]>([]);

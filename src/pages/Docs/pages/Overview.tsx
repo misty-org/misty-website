@@ -1,70 +1,45 @@
 import { NavLink } from "react-router";
 
-import { DocSection, DocTable, P, Paragraphs } from "../components/Prose";
 import { DocPage } from "../components/DocPage";
+import { BulletList, DocSection, P } from "../components/Prose";
 import { docsPages } from "../docsNav";
 
-const WHERE_THINGS_RUN = [
-  [
-    "The desktop app",
-    "Your computer",
-    "Chats with your AI, agents, the agent browser and every model call.",
-  ],
-  [
-    "The Misty server",
-    "Misty Cloud, or your own host",
-    "Accounts, Spaces, group chat, docs and drawings, tasks, the planner and files.",
-  ],
-  [
-    "Cloudflare",
-    "Misty Cloud's, or your own Cloudflare account",
-    "HTTPS for the server, file storage in R2, and the Worker that saves docs and drawings as people edit them together.",
-  ],
-  ["Google", "Your Google Cloud project", "Google sign-in."],
-];
-
-/** The docs' front page: the two ways to use Misty, and where to read next. */
+/** The docs' front page: what Misty is, its key ideas, and where to start. */
 export default function Overview() {
   return (
     <DocPage title="What Misty is">
-      <P text="Misty is one shared workspace where people and agents work together. Pick any AI you like, invite your people, and see what everyone's agents are doing as it happens. It works on one computer on its own, and a Misty server adds accounts and Spaces." />
+      <P text="Misty is a workspace where people and their AI agents work together." />
+      <P text="Bring the AI you already use, such as Claude Code or Codex. Invite your team. Everyone can see what each other's agents are doing as they work." />
 
-      <DocSection id="two-ways" title="Free, Misty+ and Boosts">
-        <Paragraphs
+      <DocSection id="key-ideas" title="Key ideas">
+        <BulletList
           items={[
-            "Misty is free and open source under the GNU AGPL-3.0, with every feature. On Free you can use Misty Cloud, our server, with nothing to set up: make a Misty account here, then choose Misty Cloud in the app and sign in.",
-            "Or run your own server, with your own Cloudflare and Google accounts. [Run a server](/docs/self-hosting) walks through it.",
-            "Free on Misty Cloud has 5 GB of storage, and you can make and join as many Spaces as you like. Misty+ ($8 a month or $72 a year) has 100 GB and comes with 3 Boosts. A Boost ($2 a month) raises a Space's level for everyone in it: more people, more agents and its own storage. Prices are plus tax where it applies; see [pricing](/pricing).",
-            "A server you run yourself has no levels or Boosts: every Space there is unlimited.",
-            "Without a server, Misty runs on this computer only, with no Spaces to share.",
+            "**Agents** are AI tools that do work for you, such as Claude Code and Codex. They run on your computer, under your own sign-in. See [Choose your agent](/docs/choose-agent).",
+            "**Chats** are where you give an agent a task and follow its work. See [Agent chats](/docs/chats).",
+            "**Spaces** are shared places for your team. Each space has its own group chat, docs, drawings and files. See [Spaces](/docs/spaces).",
+            "The **Studio** is a 3D room where you watch your agents work and hire new ones. See [Studio](/docs/studio).",
           ]}
         />
       </DocSection>
 
-      <DocSection id="ai" title="AI runs on your own models">
-        <Paragraphs
+      <DocSection id="servers" title="Where your account lives">
+        <P text="Spaces and accounts live on a Misty server. You can use ours or run your own." />
+        <BulletList
           items={[
-            "Chat with the AI you already use, such as Claude Code, Codex or OpenCode, under your own sign-in.",
-            "Misty hosts no model and never charges for AI, on any plan. The models are your own: you sign in with ChatGPT to use your ChatGPT plan, or use OpenRouter, Ollama Cloud, a local Ollama, or your own API keys. [Models](/docs/models) explains what each costs.",
-            "Agents run on your desktop. The desktop calls the model you chose, and the server never calls a model or holds a model key. An agent run needs one of your desktops to be online; a run that starts from a mention in Space chat or a schedule waits until one is.",
+            "**Misty Cloud** is our server. It's free, with nothing to set up. See [Plans and Boosts](/docs/plans) for more storage and bigger spaces.",
+            "**Your own server** has every feature with no limits. See [Set up a server](/docs/self-hosting).",
           ]}
         />
+        <P text="Misty is free and open source under the AGPL-3.0 license. Misty never charges for AI, because your agents run on your own plans." />
       </DocSection>
 
-      <DocSection id="where-things-run" title="Where things run">
-        <DocTable
-          columns={["Part", "Where", "What it does"]}
-          rows={WHERE_THINGS_RUN}
-        />
-      </DocSection>
-
-      <DocSection id="pages" title="Every page">
+      <DocSection id="start" title="Start here">
         <ul className="grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2">
           {docsPages.slice(1).map((page) => (
             <li key={page.to} className="bg-background">
               <NavLink
                 to={page.to}
-                className={`block px-4 py-3 text-sm text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring`}
+                className="block px-4 py-3 text-sm text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
               >
                 {page.label}
               </NavLink>

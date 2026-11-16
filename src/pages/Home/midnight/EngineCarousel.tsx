@@ -27,9 +27,9 @@ const ENGINES: readonly { id: string; name: string }[] = [
 export function EngineCarousel() {
   return (
     <section className="mist-interlude mist-engines" aria-labelledby="engines-title">
-      {/* Set like the Spaces interlude, and written out the same way as it arrives. */}
+      {/* Set like the spaces interlude, and written out the same way as it arrives. */}
       <div className="mist-container mist-interlude-copy">
-        <h2 id="engines-title" data-write>Works with your favorite agents</h2>
+        <h2 id="engines-title" data-reveal>Works with your favorite agents</h2>
       </div>
       <div className="mist-container">
         <div className="brand-marquee">

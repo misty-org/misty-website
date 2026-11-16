@@ -18,10 +18,10 @@ const STEPS: AuthStep[] = [
   },
   { text: "In Misty, choose Misty Cloud and sign in with your Misty account." },
   {
-    text: "Pick your models. AI runs on your own ChatGPT plan, OpenRouter, Ollama or API key, and Misty never charges for it.",
+    text: "Choose your agent, such as Claude Code or Codex. It runs on your own plan with that AI, and Misty never charges for AI.",
     action: (
       <Button asChild variant="outline">
-        <SiteLink to="/docs/models">Models</SiteLink>
+        <SiteLink to="/docs/choose-agent">Choose your agent</SiteLink>
       </Button>
     ),
   },
@@ -37,7 +37,7 @@ export default function CloudWelcome() {
             aria-label="Subscription help"
             className="flex flex-wrap justify-center gap-x-6 gap-y-2"
           >
-            <SiteLink to="/docs/connect#cloud" className={footerLinkClass}>
+            <SiteLink to="/docs/quickstart" className={footerLinkClass}>
               Setup guide
             </SiteLink>
             <SiteLink to={SUBSCRIPTION_SETTINGS_PATH} className={footerLinkClass}>

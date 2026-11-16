@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { holdWheelToSteps, settleStep, STEP } from "./steppedScroll";
 import "./tiles.css";
 
 /**
@@ -17,22 +18,14 @@ import "./tiles.css";
  *   3. Zoom out: the next step shrinks the card back into the tile's place, exactly the zoom in reversed, and the one
  *      after expands the next tile.
  *
- * One scroll gesture moves one step. A wheel spin or a trackpad swipe, momentum and all, counts as one gesture:
- * inside the scene its first event moves the page exactly one step (STEP pixels) and the rest of it is swallowed,
- * so a big swipe can't run past several steps. Scrolling into the scene stops at its first step (or its last,
- * coming back up), and at either end the next gesture scrolls the page on as usual. Everything else (the
- * scrollbar, the keyboard) scrolls natively.
- * What counts is how often gestures come, not how fast each one is. Gestures at about the pace of the animations
- * step as above. Gestures coming much faster than that (RUSH_GESTURES within RUSH_MS) mean you want to get
- * somewhere: the scene stops holding the scroll, the page scrolls freely either way, and the scene shows wherever
- * you are as you pass. Once the scrolling pauses (RUSH_RELEASE_MS), stepping picks up again from there.
- * The scroll position then says which step you want. What you see
+ * One scroll gesture moves one step, with the same wheel handling as every pinned scene (steppedScroll).
+ * The scroll position says which step you want. What you see
  * never follows the scroll's speed: every move is a timed animation of a fixed length (ZOOM_MS, SHOT_MS), played
  * one at a time. So a slow scroll, a fast flick and a jerky trackpad all look the same:
  *   - A jump past several screenshots of one tile (the scrollbar, a tab) goes straight there in one move.
  *   - A jump into another tile is always exactly one zoom out and one zoom in; tiles in between are skipped.
  *   - Scrolling back mid-zoom reverses the zoom from where it is, at the same speed.
- *   - A step only changes once the scroll is well into the next one (HYSTERESIS), so a wheel resting on a
+ *   - A step only changes once the scroll is well into the next one (settleStep), so a wheel resting on a
  *     boundary never flickers between two.
  * The card is a full-size panel clipped to its box (nothing is resized or re-laid out), and layout is measured only on resize, never
  * while scrolling. The tabs in an open tile scroll the page to the screenshot they name.
@@ -49,24 +42,11 @@ export type Feature = { span: 3 | 4 | 5 | 6 | 7 | 8 | 12; title: string; sketch:
 /** Where the scene pins. Keep in sync with tiles.css. */
 const PIN = "(min-width: 1000px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)";
 
-/**
- * Pixels of scroll per step, about one wheel notch. The scene's steps are: the whole bento, then for each tile one
- * step per screenshot (the first one zooms in), then the whole bento again (zooming out). Four tiles with 14
- * screenshots make 19 steps, under three screens of scroll.
+/*
+ * The scene's steps, STEP pixels of scroll each: the whole bento, then for each tile one step per screenshot (the
+ * first one zooms in), then the whole bento again (zooming out). Four tiles with 14 screenshots make 19 steps,
+ * under three screens of scroll.
  */
-const STEP = 140;
-/**
- * Wheel events closer together than this (ms) belong to one gesture, unless they turn around or a fresh swipe
- * starts during the last one's momentum (its deltas grow again after dying down).
- */
-const GESTURE_GAP = 160;
-/**
- * Rushing: this many gestures starting within RUSH_MS lets the page scroll freely, until no wheel event has come
- * for RUSH_RELEASE_MS. A zoom takes ZOOM_MS, so three gestures in 1.1s is well ahead of what the scene can show.
- */
-const RUSH_GESTURES = 3, RUSH_MS = 1100, RUSH_RELEASE_MS = 350;
-/** How far into the next step (in steps) the scroll must be before the wanted step changes, either way. */
-const HYSTERESIS = .6;
 /** How long a full zoom in or out takes, and how long one screenshot takes to slide over another, in ms. */
 const ZOOM_MS = 700, SHOT_MS = 480;
 /** The tiles' corner radius, in px (tiles.css), which the viewport's edges keep in step with as it zooms. */
@@ -203,12 +183,12 @@ export function BentoTiles({ features }: { features: readonly Feature[] }) {
       pinTop: parseFloat(getComputedStyle(room).top) || 0,
     });
 
-    // The step the scroll asks for. It moves on only once the scroll is HYSTERESIS into another step.
+    // The step the scroll asks for. It moves on only once the scroll is well into another step.
     let wantedStep = -1;
     const wanted = () => {
       geometry ??= measure();
       const raw = (geometry.pinTop - outer.getBoundingClientRect().top) / STEP;
-      if (wantedStep < 0 || Math.abs(raw - wantedStep) > HYSTERESIS) wantedStep = Math.min(last, Math.max(0, Math.round(raw)));
+      wantedStep = settleStep(raw, wantedStep, last);
       return placeOf(wantedStep, rests, features);
     };
 
@@ -351,55 +331,20 @@ export function BentoTiles({ features }: { features: readonly Feature[] }) {
     at = wanted();
     render(performance.now());
 
-    // One step per gesture (see the top of this file). `held` marks a gesture that already moved a step: the rest
-    // of it, momentum included, is swallowed. A gesture is the run of wheel events less than GESTURE_GAP apart in
-    // one direction; a new swipe during momentum shows as deltas growing again after they had died down to half.
-    // While `rushing`, the wheel is left alone entirely; `starts` holds when recent gestures began.
-    let lastAt = -Infinity, direction = 0, peak = 0, low = 0, held = false, rushing = false, starts: number[] = [];
-    const onWheel = (event: WheelEvent) => {
-      if (event.ctrlKey || event.deltaY === 0 || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    // One step per gesture, held the same way in every pinned scene.
+    const releaseWheel = holdWheelToSteps(() => {
       geometry ??= measure();
-      const size = Math.abs(event.deltaY) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
-      const dir = Math.sign(event.deltaY);
-      const now = event.timeStamp, gap = now - lastAt;
-      // A pause ends rushing and forgets the gestures before it.
-      if (gap > RUSH_RELEASE_MS) { rushing = false; starts = []; }
-      const resumed = low < peak * .5 && size > low * 2 && size > 8;
-      if (gap > GESTURE_GAP || dir !== direction || resumed) {
-        held = false;
-        peak = low = size;
-        starts = [...starts.filter(start => now - start < RUSH_MS), now];
-        if (starts.length >= RUSH_GESTURES) rushing = true;
-      } else if (size > peak) peak = low = size;
-      else low = Math.min(low, size);
-      lastAt = now;
-      direction = dir;
-      if (rushing) return;
-      if (held) { event.preventDefault(); return; }
-
-      // Where step 0 sits on the page, and how many steps into the scene the page is now (fractional).
-      const origin = outer.getBoundingClientRect().top + scrollY - geometry.pinTop;
-      const at = (scrollY - origin) / STEP, ahead = at + (dir * size) / STEP;
-      const go = (step: number) => {
-        event.preventDefault();
-        held = true;
-        scrollTo({ top: origin + step * STEP, behavior: "instant" });
-      };
-      if (at < -.01) { if (dir > 0 && ahead > 0) go(0); return; } // above the scene: stop on its first step
-      if (at > last + .01) { if (dir < 0 && ahead < last) go(last); return; } // below it: stop on its last
-      if ((dir > 0 && at >= last - .01) || (dir < 0 && at <= .01)) return; // at an end, heading out: let it go
-      go(Math.min(last, Math.max(0, Math.round(at) + dir)));
-    };
+      return outer.getBoundingClientRect().top + scrollY - geometry.pinTop;
+    }, last);
 
     const observer = new ResizeObserver(resized);
     observer.observe(room);
     addEventListener("scroll", schedule, { passive: true });
-    addEventListener("wheel", onWheel, { passive: false });
     return () => {
       cancelAnimationFrame(raf);
       observer.disconnect();
       removeEventListener("scroll", schedule);
-      removeEventListener("wheel", onWheel);
+      releaseWheel();
       outer.style.removeProperty("--scene-px");
       edge.removeAttribute("data-shown");
       bento.removeAttribute("data-busy");

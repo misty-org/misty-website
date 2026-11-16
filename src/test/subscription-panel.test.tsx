@@ -134,6 +134,6 @@ it("says a cancelled Misty+ goes back to Free and takes its Boosts back, not del
   fireEvent.click(await screen.findByRole("button", { name: "Cancel" }));
   const dialog = await screen.findByRole("alertdialog");
   expect(dialog).toHaveTextContent("moves to Free");
-  expect(dialog).toHaveTextContent("included Boosts leave their Spaces");
+  expect(dialog).toHaveTextContent("included Boosts leave their spaces");
   expect(dialog).toHaveTextContent("Nothing is deleted");
 });

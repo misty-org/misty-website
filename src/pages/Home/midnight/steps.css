@@ -1,0 +1,75 @@
+/* What you can do together: a pinned scene. The examples on the left, the Space where the current one happens on
+   the right (UseCases). It moves like the bento (Tiles): one step per scroll gesture, every move a timed animation on
+   the bento's own curve (its `ease`, easeInOutCubic) and its screenshot step's length (SHOT_MS). */
+.mist-steps { --steps-ease: cubic-bezier(.65, 0, .35, 1); --steps-ms: .48s; }
+.mist-steps-stage { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.5fr); gap: 3rem; align-items: center; }
+/* The steps run down one rail; the current one sits on the neutral row wash, which slides to it and grows to fit,
+   then the note opens. */
+.mist-steps-list { position: relative; isolation: isolate; display: grid; gap: 0.125rem; margin: 0; padding: 0; list-style: none; }
+.mist-steps-list::after {
+  content: ""; position: absolute; z-index: -1; inset: 0 0 auto; height: var(--ind-h, 0); translate: 0 var(--ind-y, 0);
+  border-radius: 0.75rem; background: var(--mist-band); pointer-events: none;
+}
+.mist-steps-list li { padding: 0 1.125rem; }
+.mist-steps-list button {
+  display: block; width: 100%; padding: 0.75rem 0; border: 0; background: none;
+  color: var(--mist-subtle); font-size: clamp(1.0625rem, 1.45vw, 1.3125rem); font-weight: 500; line-height: 1.3; letter-spacing: -.025em; text-align: left; text-wrap: balance;
+}
+.mist-steps-list button:hover { color: var(--mist-muted); }
+.mist-steps-list button[aria-current=step] { color: var(--mist-ink); }
+.mist-steps-list button:focus-visible { outline: 0.125rem solid var(--mist-ink); outline-offset: 0.125rem; border-radius: 0.25rem; }
+.mist-step-note { display: grid; grid-template-rows: 0fr; }
+.mist-step-note p { min-height: 0; overflow: hidden; margin: 0; color: var(--mist-muted); font-size: 0.875rem; line-height: 1.4; opacity: 0; }
+.mist-steps-list li:has(button[aria-current=step]) .mist-step-note { grid-template-rows: 1fr; }
+.mist-steps-list li:has(button[aria-current=step]) .mist-step-note p { padding-bottom: 0.875rem; opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .mist-steps-list button { transition: color var(--steps-ms) var(--steps-ease); }
+  .mist-steps-list::after { transition: translate var(--steps-ms) var(--steps-ease), height var(--steps-ms) var(--steps-ease); }
+  .mist-step-note { transition: grid-template-rows var(--steps-ms) var(--steps-ease); }
+  .mist-step-note p { transition: opacity .15s, padding-bottom var(--steps-ms) var(--steps-ease); }
+  .mist-steps-list li:has(button[aria-current=step]) .mist-step-note p { transition: opacity .3s var(--steps-ease) .12s, padding-bottom var(--steps-ms) var(--steps-ease); }
+}
+
+/* The scene's heading, visible and set like the other section headings. */
+.mist-home .mist-steps-head { margin: 0 0 2.5rem; font-size: clamp(1.625rem, 2.6vw, 2.25rem); font-weight: 500; line-height: 1.1; letter-spacing: -.035em; }
+
+/* The Spaces sit in one bento-style card, stacked in one cell; only the current one shows. */
+.mist-steps-media {
+  display: grid; grid-template-columns: minmax(0, 1fr); width: min(100%, 51.25rem); min-width: 0; aspect-ratio: 900 / 600;
+  border: 1px solid var(--mist-card-border); border-radius: 1rem; background: var(--mist-card); overflow: hidden;
+}
+.mist-case { grid-area: 1 / 1; min-width: 0; min-height: 0; padding-top: 0.5rem; opacity: 0; pointer-events: none; }
+.mist-case[data-active] { opacity: 1; pointer-events: auto; }
+/* What the thread made sits under it, a little apart. */
+.mist-case-result { margin-top: 0.5rem; }
+.mist-case-result small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+@media (prefers-reduced-motion: no-preference) {
+  .mist-case { transition: opacity var(--steps-ms) var(--steps-ease); }
+  /* Each time a Space comes up, its thread plays in one message after another, then what it made, each fading and
+     rising like an opening bento card's content. */
+  .mist-case[data-active] .mist-mock-thread > * { animation: mist-case-in var(--steps-ms) var(--steps-ease) both; animation-delay: calc(var(--n, 0) * 260ms + 150ms); }
+}
+@keyframes mist-case-in { from { opacity: 0; translate: 0 0.75rem; } }
+
+@media (min-width: 1000px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
+  /* The examples and the card pin together, sized to their content. The sticky offset centers them in the
+     viewport (usePinnedSteps writes --pin-h), never under the navbar, so the scene only sticks once it sits in the
+     middle of the screen. One bento step (steppedScroll's STEP, 140px) of scroll per example, plus one so the last
+     rests a moment before the page moves on. */
+  .mist-steps { --steps-nav: calc(var(--site-nav-height, 4.5rem) + 1rem); height: calc(var(--pin-h, 100svh) + var(--steps-count, 3) * 140px); }
+  .mist-steps-pin { position: sticky; top: max(var(--steps-nav), calc((100svh - var(--pin-h, 100svh)) / 2)); }
+  /* Cap the card's width so the whole scene fits one screen. */
+  .mist-steps-media { justify-self: end; width: min(100%, 51.25rem, calc((100svh - var(--steps-nav) - 12rem) * 900 / 600)); }
+}
+/* Below the pinned breakpoint the examples sit above the card. */
+@media (max-width: 999px) {
+  .mist-steps-stage { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+  .mist-steps-media { aspect-ratio: auto; min-height: 26rem; }
+}
+@media (max-width: 640px) {
+  .mist-steps-media { border-radius: 0.875rem; }
+  .mist-home .mist-steps-head { margin-bottom: 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mist-steps-list button { transition: none; }
+}

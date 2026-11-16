@@ -11,7 +11,7 @@ export const refusalMessages: Record<BillingRefusalCode, string> = {
   plus_required: "Included Boosts come with Misty+.",
   too_many_boosts: "That's more Boosts than Misty+ includes.",
   move_wait: "You moved Boosts this week. You can move them again after a week.",
-  not_a_member: "You can only boost Spaces you're in.",
+  not_a_member: "You can only boost spaces you're in.",
   other: failed,
 };
 

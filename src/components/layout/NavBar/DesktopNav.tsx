@@ -12,9 +12,13 @@ import AccountMenu from "./AccountMenu";
 import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
 import { SiteLink } from "@/components/SiteLink";
 
-/** The app's row states: a light wash on hover, a stronger one on the page you're on or a menu that's open. */
+/**
+ * The app's row states: a light wash on hover, a stronger one on the page you're on or a menu that's
+ * open. Links and the Resources button share one fixed height so their washes match.
+ */
+const desktopItemSize = "inline-flex h-7 items-center rounded-md px-2 text-sm leading-none";
 const desktopLinkClass =
-  "rounded-md px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none";
+  `${desktopItemSize} text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none`;
 const desktopLinkActiveClass = "bg-control-active text-cream-bright hover:bg-control-active hover:text-cream-bright";
 
 function DesktopNavLink({ to, label, external }: NavLinkEntry) {
@@ -103,7 +107,8 @@ export default function DesktopNav({
             onPointerDown={(event) => event.preventDefault()}
             onClick={(event) => event.preventDefault()}
             className={cn(
-              "h-auto rounded-md bg-transparent px-2 py-1 text-sm font-normal text-muted-foreground hover:bg-control-hover hover:text-foreground aria-expanded:bg-control-active aria-expanded:text-cream-bright",
+              desktopItemSize,
+              "border-0 bg-transparent font-normal text-muted-foreground hover:bg-control-hover hover:text-foreground aria-expanded:bg-control-active aria-expanded:text-cream-bright",
               resourcesActive && desktopLinkActiveClass,
             )}
           >

@@ -5,7 +5,6 @@ import {
   DocTable,
   Note,
   P,
-  Paragraphs,
   Steps,
 } from "../components/Prose";
 import { DocPage } from "../components/DocPage";
@@ -36,7 +35,7 @@ const SERVICES = [
   [
     "`api`",
     "Always",
-    "Accounts, Spaces, chat, docs, drawings, tasks, the planner and files.",
+    "Accounts, spaces, chat, docs, drawings, tasks, the planner and files.",
   ],
   [
     "`cloudflared`",
@@ -74,22 +73,26 @@ const ROTATIONS = [
 /** Running your own server: one Compose file, three env files and the setup container. */
 export default function SelfHosting() {
   return (
-    <DocPage title="Run a server">
-      <P text="A Misty server is one Compose file and three env files. A setup container does the rest on every start." />
+    <DocPage title="Set up a server">
+      <P text="This guide sets up your own Misty server. A server is one Compose file and three env files. A setup container does the rest each time it starts." />
 
       <DocSection id="what-you-need" title="What you need">
         <BulletList
           items={[
-            "A VPS or other always-on Linux or macOS computer with Docker Engine and Compose v2. Two CPU cores and 2 GB of memory are enough for a small server, since agents run on each person's desktop.",
-            "Git, to get the code. Everything else builds inside the containers.",
-            "A domain on Cloudflare and a Google Cloud account. Both are required parts of every server; turning one off means changing the code.",
-            "The Misty app only connects to a server on an https domain, so plain http, IP addresses, localhost and domains that point to a private address won't work.",
+            "An always-on Linux or macOS computer, such as a VPS, with Docker Engine and Compose v2. Two CPU cores and 2 GB of memory are enough for a small team. Agents run on each person's computer, not the server.",
+            "Git, to get the code.",
+            "A domain on Cloudflare.",
+            "A Google Cloud account.",
           ]}
         />
       </DocSection>
 
+      <DocSection id="https" title="HTTPS only">
+        <P text="The Misty app only connects to servers on an https domain. Plain http, IP addresses, localhost and private addresses won't work." />
+      </DocSection>
+
       <DocSection id="files" title="The files">
-        <P text="Everything you configure lives in three files directly under `~/.misty/.env/server/`, one per service. Each is plain `NAME=value` lines. There are no other settings to make, and no model keys: the server refuses to start if it finds one." />
+        <P text="All your settings live in three files in `~/.misty/.env/server/`, one per service. Each file is plain `NAME=value` lines." />
         <CodeBlock code={ENV_TREE} label="The server folder" />
         <DocTable
           columns={["File", "What it's for", "Page"]}
@@ -97,23 +100,30 @@ export default function SelfHosting() {
           monoFirstColumn
         />
         <Note>
-          No env file is ever committed to the repository, not even an example.
-          The pages above list every value, so you write each file yourself.
+          The repository has no example env files. Write each file yourself, using the pages
+          above.
         </Note>
       </DocSection>
 
       <DocSection id="email" title="Email (optional)">
-        <P text="Email is the one optional part of a server. Without it, Misty gives you links to pass on. To have the server send sign-in links, Space invitations, closing notices and email confirmations, which new password accounts then need, create `~/.misty/.env/server/mailjet.env` with `MAILJET_API_KEY`, `MAILJET_SECRET_KEY` and `MAILJET_FROM_EMAIL`, an address you've verified in Mailjet with its SPF and DKIM records, and optionally `MAILJET_FROM_NAME`. Then restart the API with `docker compose up -d api`." />
+        <P text="Without email, Misty gives you links to send to people yourself. With email, the server sends sign-in links, space invitations and email confirmations for you." />
+        <Steps
+          items={[
+            "In Mailjet, verify the address you'll send from, with its SPF and DKIM records.",
+            "Create `~/.misty/.env/server/mailjet.env` with `MAILJET_API_KEY`, `MAILJET_SECRET_KEY` and `MAILJET_FROM_EMAIL`. You can also set `MAILJET_FROM_NAME`.",
+            "Restart the API with `docker compose up -d api`.",
+          ]}
+        />
       </DocSection>
 
       <DocSection id="install" title="Install">
         <Steps
           items={[
-            "Clone misty-server on the host and create `~/.misty/.env/server/`, readable only by you.",
-            "Write the three files, following each file's page.",
-            "Start the stack from the `server` folder. The first start builds the images, so it takes a few minutes.",
-            "Watch the setup container's log. Once the tunnel connects, the API answers at `https://MISTY_HOSTNAME/health`, and on the host at `http://127.0.0.1:8081/health`.",
-            "Open the Misty app, choose Self-hosted and enter `https://MISTY_HOSTNAME`, then create the first account ([Connect the app](/docs/connect)).",
+            "Clone misty-server and create `~/.misty/.env/server/`, readable only by you.",
+            "Write the three env files. Each file's page lists its values.",
+            "Start the stack. The first start builds the images and takes a few minutes.",
+            "Check the setup container's log. When the tunnel connects, `https://MISTY_HOSTNAME/health` answers.",
+            "Open the Misty app, select **Use my own server** and enter your address. Then create the first account, which owns the server. See [Connect to a server](/docs/connect#own-server).",
           ]}
         />
         <CodeBlock
@@ -133,25 +143,29 @@ docker compose logs setup`}
           columns={["Service", "Runs", "What it does"]}
           rows={SERVICES}
         />
-        <P text="The Worker runs on your Cloudflare account ([cloudflare.env](/docs/self-hosting/cloudflare#what-setup-makes)). The setup container deploys it whenever it changes; you never run Wrangler or the `misty` CLI, which is only for working on Misty itself." />
+        <P text="A Cloudflare Worker also runs on your Cloudflare account. The setup container deploys it for you. See [cloudflare.env](/docs/self-hosting/cloudflare#what-setup-makes)." />
       </DocSection>
 
       <DocSection id="setup-container" title="The setup container">
-        <Paragraphs
+        <P text="On the first start, the setup container:" />
+        <BulletList
           items={[
-            "On the first start, the setup container generates every secret into the stack's `secrets` volume: database passwords, signing keys, device and collaboration keys, the operator token and the backup key. It creates the Cloudflare Tunnel, the DNS record, the two R2 buckets and their credentials, and deploys the Worker.",
-            "Every later start finds the same resources by name and never replaces a secret. Rotating a secret never touches data. Data is removed only with the whole stack: `docker compose down --volumes`, plus the R2 buckets.",
+            "Generates every secret into the stack's `secrets` volume.",
+            "Creates the Cloudflare Tunnel, the DNS record and two R2 buckets.",
+            "Deploys the Worker.",
           ]}
         />
+        <P text="Later starts reuse the same resources and never replace a secret. Your data is only removed if you run `docker compose down --volumes` and delete the R2 buckets." />
       </DocSection>
 
       <DocSection id="secrets" title="Secrets">
-        <P text="The `secrets` volume is the only copy of the server's secrets, and they never appear in the env files. Losing them while keeping the database is the one state the stack refuses: setup stops with `secrets lost` instead of making new keys that would sign everyone out and leave encrypted data unreadable. Keep a copy off the server, stored encrypted, such as in a password manager or with `age`:" />
+        <P text="The `secrets` volume holds the only copy of your server's secrets. If you lose it but keep the database, setup stops with `secrets lost`. New keys would sign everyone out and make encrypted data unreadable." />
+        <P text="Keep an encrypted copy somewhere other than the server, such as a password manager:" />
         <CodeBlock
           label="Copy the secrets"
           code={`docker compose run --rm --no-deps --entrypoint tar setup -C /run/misty/secrets -czf - . > misty-secrets.tgz`}
         />
-        <P text="To rotate a secret, keep its previous value valid, restart, and retire the old value later, once old sessions have expired:" />
+        <P text="To rotate a secret, rotate it, restart, and retire the old value once old sessions have expired:" />
         <CodeBlock
           label="Rotate a secret"
           code={`docker compose run --rm setup rotate MISTY_AUTH_SIGNING_KEY
@@ -159,18 +173,26 @@ docker compose up -d --force-recreate
 docker compose run --rm setup retire MISTY_AUTH_SIGNING_KEY`}
         />
         <DocTable columns={["Rotates", "With"]} rows={ROTATIONS} />
-        <P text="Secrets that protect stored data never rotate: the database superuser password, the Space link key, the device pairing pepper, the collaboration room salt, the document key and the backup key." />
+        <P text="Secrets that protect stored data can't be rotated. These are the database superuser password, the space link key, the device pairing pepper, the collaboration room salt, the document key and the backup key." />
       </DocSection>
 
       <DocSection id="accounts" title="Accounts on your server">
-        <Paragraphs
+        <BulletList
           items={[
-            "On a fresh server, the first account registers itself from the app's sign-in screen and owns the server. After that, a person can sign up only while a Space invitation to their email is open, or when you make their account in the console or the operator account API. To limit the server to a list of people, set `MISTY_ALLOWED_EMAILS` in misty.env (comma-separated); then only those emails can sign up or sign in, and the owner can always sign in.",
-            "To bring someone in, or to let someone who forgot their password back in, open the console, choose the account and copy its sign-in link, then send it to them. With email set up ([Email](/docs/self-hosting#email)), the server emails it for you.",
-            "People sign in with Misty, an email and password kept on your server, or with Google through your own `google.env` client. There is no central Misty account.",
-            "The operator console listens on `127.0.0.1:7070` on the server only, and its sign-in link is in `docker compose logs console`. From another computer, forward the port over SSH: `ssh -L 7070:127.0.0.1:7070 you@server`.",
+            "The first account created on a new server owns it.",
+            "After that, people can sign up only with an open space invitation, or when you create their account in the console.",
+            "To allow only certain people, set `MISTY_ALLOWED_EMAILS` in misty.env to a comma-separated list. The owner can always sign in.",
+            "People sign in with an email and password stored on your server, or with Google through your own `google.env`.",
           ]}
         />
+        <P text="To let someone in, or back in after a forgotten password:" />
+        <Steps
+          items={[
+            "Open the operator console and choose their account.",
+            "Copy its sign-in link and send it to them. With [email](/docs/self-hosting#email) set up, the server sends it for you.",
+          ]}
+        />
+        <P text="The console runs on the server at `127.0.0.1:7070`. Its sign-in link is in `docker compose logs console`. To open it from another computer, forward the port: `ssh -L 7070:127.0.0.1:7070 you@server`." />
       </DocSection>
     </DocPage>
   );

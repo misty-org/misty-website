@@ -73,7 +73,7 @@ const sections: LegalSectionDef[] = [
         <p>
           "Misty" means the Misty desktop application, the website at{" "}
           {legalInfo.siteUrl}, and Misty Cloud, the Misty server we run,
-          with its Spaces. Misty is
+          with its spaces. Misty is
           operated by{" "}
           {operatorDescription} ("we", "us", "our").
         </p>
@@ -180,25 +180,25 @@ const sections: LegalSectionDef[] = [
     id: "spaces",
     title: "Spaces and sharing",
     inShort:
-      "What you add to a shared Space is visible to its members and stays with that Space.",
+      "What you add to a shared space is visible to its members and stays with that space.",
     body: (
       <>
         <p>
           Spaces let you collaborate with people you invite. Anything you add to
-          a Space can be seen, copied, and used, including by AI agents, by
-          every member of that Space. Content you add to a shared Space stays
-          with that Space if you leave it or delete your account, much like
+          a space can be seen, copied, and used, including by AI agents, by
+          every member of that space. Content you add to a shared space stays
+          with that space if you leave it or delete your account, much like
           messages in a group chat. Only invite people you trust.
         </p>
         <p>
-          Members of a Space also see the agents you add to it: each agent's
+          Members of a space also see the agents you add to it: each agent's
           name, what kind of work it's doing, and which files it's changing,
           as our <LegalLink to="/privacy#collect">Privacy Policy</LegalLink>{" "}
-          explains. What an agent posts or saves in a Space is treated as
+          explains. What an agent posts or saves in a space is treated as
           content you added.
         </p>
         <p>
-          The owner of a Space controls its membership. We are not responsible
+          The owner of a space controls its membership. We are not responsible
           for what other members do with content you share with them, and
           disputes between members are between those members.
         </p>

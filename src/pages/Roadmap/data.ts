@@ -17,8 +17,8 @@ export const phases: RoadmapPhase[] = [
     status: "available",
     items: [
       {
-        title: "Shared Spaces",
-        description: "Create a Space and manage members.",
+        title: "Shared spaces",
+        description: "Create a space and manage members.",
       },
       {
         title: "Space chat",

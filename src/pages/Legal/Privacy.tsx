@@ -24,7 +24,7 @@ const sections: LegalSectionDef[] = [
           "Our website has no analytics or tracking scripts.",
           "The Misty app sends no usage analytics or crash reports. Your account settings have switches for them, which are off unless you turn them on, and nothing is collected either way.",
           "We don't train AI models on your content.",
-          "Your agents' chats, prompts, and model calls never reach our servers. Section 2 explains what a Space shows its other members about your agents, and what agents add to a Space.",
+          "Your agents' chats, prompts, and model calls never reach our servers. Section 2 explains what a space shows its other members about your agents, and what agents add to a space.",
         ]}
       />
     ),
@@ -33,7 +33,7 @@ const sections: LegalSectionDef[] = [
     id: "collect",
     title: "Information we collect",
     inShort:
-      "Your account details, what you put in your Spaces, what a Space shows of your agents, and basic technical data needed to run the service.",
+      "Your account details, what you put in your spaces, what a space shows of your agents, and basic technical data needed to run the service.",
     body: (
       <>
         <LegalSubheading>Information you give us</LegalSubheading>
@@ -47,38 +47,38 @@ const sections: LegalSectionDef[] = [
               from Google.
             </>,
             <>
-              <strong className="font-medium text-foreground">Your Spaces:</strong>{" "}
+              <strong className="font-medium text-foreground">Your spaces:</strong>{" "}
               the notes, docs, drawings, files, messages, tasks, calendar
-              events, and other material you or your agents add to a Space.
-              When an agent posts in a Space's chat, the message is stored as
+              events, and other material you or your agents add to a space.
+              When an agent posts in a space's chat, the message is stored as
               yours. A Lab notebook stays on your computer unless you share it
-              to a Space, where it becomes one of that Space's docs. While
-              you're in a Space, its members can see that you're there and when
+              to a space, where it becomes one of that space's docs. While
+              you're in a space, its members can see that you're there and when
               you're typing. We don't store that.
             </>,
             <>
-              <strong className="font-medium text-foreground">Your agents in a Space:</strong>{" "}
-              when you add an agent to a Space, the Space keeps the agent's
+              <strong className="font-medium text-foreground">Your agents in a space:</strong>{" "}
+              when you add an agent to a space, the space keeps the agent's
               name under yours. While the agent works, your computer tells the
-              Space's other members what it's doing: its name, a fixed code
+              space's other members what it's doing: its name, a fixed code
               for its state (working, needs you, or resting), a fixed code for
               the kind of work (such as browser, shell, or files), and the
-              paths of up to five files it's changing in the Space's linked
+              paths of up to five files it's changing in the space's linked
               folder. Misty's code sets the codes and file paths, never a
               model, and the server drops anything that isn't in that form. The server passes the
               file paths on without storing them. Each time an agent's state or
               kind of work changes, it adds a line with the agent's name and
-              the two codes to the Space's activity log. A file an agent saves
-              to a Space is stored like any other file, marked with the agent
+              the two codes to the space's activity log. A file an agent saves
+              to a space is stored like any other file, marked with the agent
               that saved it.
             </>,
             <>
               <strong className="font-medium text-foreground">Voice transcripts:</strong>{" "}
-              when you start Listen, or transcribe a file in a Space, your
+              when you start Listen, or transcribe a file in a space, your
               computer turns the audio into text with the transcription
               provider you chose, and the transcript is saved to your account.
               Only you can see it. If you make a note from it, the note goes in
-              your own Space. Dictation doesn't save anything to our servers.
+              your own space. Dictation doesn't save anything to our servers.
             </>,
             <>
               <strong className="font-medium text-foreground">Agent chats:</strong>{" "}
@@ -87,7 +87,7 @@ const sections: LegalSectionDef[] = [
               It doesn't sync and we don't keep a copy, so a lost computer
               loses its chats. Our servers never receive an agent's prompts,
               model calls, or tool results, and see what it writes only when it
-              adds something to a Space.
+              adds something to a space.
             </>,
             <>
               <strong className="font-medium text-foreground">Billing details:</strong>{" "}
@@ -108,7 +108,7 @@ const sections: LegalSectionDef[] = [
           items={[
             <>
               <strong className="font-medium text-foreground">Usage:</strong>{" "}
-              the storage you use, and how many shared Spaces you have and how
+              the storage you use, and how many shared spaces you have and how
               many people are in them, which we need to apply your plan's
               limits. Web search runs on your computer with your own search
               key, so search terms never reach us.
@@ -150,9 +150,9 @@ const sections: LegalSectionDef[] = [
               "Yes. Needed to show them to you and make notes from them",
             ],
             [
-              "What a Space shows of your agents: names, state and work codes, file paths, and its activity log",
-              "Encrypted in transit (TLS). File paths are passed on and not stored. The names and codes in the log are stored with the Space",
-              "Yes. Needed to show the Space's members what agents are doing",
+              "What a space shows of your agents: names, state and work codes, file paths, and its activity log",
+              "Encrypted in transit (TLS). File paths are passed on and not stored. The names and codes in the log are stored with the space",
+              "Yes. Needed to show the space's members what agents are doing",
             ],
             [
               "Agent chats: prompts, replies, steps, and tool results",
@@ -177,7 +177,7 @@ const sections: LegalSectionDef[] = [
           ]}
         />
         <p>
-          Because Space content, voice transcripts, and what a Space shows of
+          Because space content, voice transcripts, and what a space shows of
           your agents are not end-to-end encrypted, we (and anyone who gained
           unauthorized access to our systems) could technically access what
           Misty Cloud holds. Anyone with access to your computer could read the
@@ -205,7 +205,7 @@ const sections: LegalSectionDef[] = [
     body: (
       <LegalList
         items={[
-          "to provide Misty: Spaces, sharing, search, voice transcripts, and showing the people in a Space what its agents are doing;",
+          "to provide Misty: spaces, sharing, search, voice transcripts, and showing the people in a space what its agents are doing;",
           "to create and manage your account;",
           "to send service emails, such as sign-in and security notices and important changes;",
           "to send product update emails, only if you choose to receive them;",
@@ -232,7 +232,7 @@ const sections: LegalSectionDef[] = [
           run on your computer, which sends the content needed for each request
           straight to that provider. Depending on what you ask, this can
           include your prompt, the chat so far, files on your computer or in a
-          Space, web pages and screenshots from Misty's browser for agents,
+          space, web pages and screenshots from Misty's browser for agents,
           screenshots of your screen if you let an agent use your computer,
           and voice audio. The same goes for the other services you add keys
           for, such as web search, transcription, and speech.
@@ -254,7 +254,7 @@ const sections: LegalSectionDef[] = [
         <p>
           Only the content needed for the feature you use is sent. If you don't
           want content processed by AI providers, don't use AI features on it,
-          and don't add it to Spaces where other members use AI.
+          and don't add it to spaces where other members use AI.
         </p>
       </>
     ),
@@ -263,7 +263,7 @@ const sections: LegalSectionDef[] = [
     id: "sharing",
     title: "Who we share information with",
     inShort:
-      "Only the service providers we need to run Misty, the people you share Spaces with, and the authorities when legally required.",
+      "Only the service providers we need to run Misty, the people you share spaces with, and the authorities when legally required.",
     body: (
       <>
         <p>
@@ -283,7 +283,7 @@ const sections: LegalSectionDef[] = [
               "Hosts the Misty Cloud server and its database",
               "Account data and content",
             ],
-            ["Mailjet", "Sending account email, such as setup keys, sign-in links, and Space invitations", "Name, email address, email content"],
+            ["Mailjet", "Sending account email, such as setup keys, sign-in links, and space invitations", "Name, email address, email content"],
             [
               "Stripe",
               "Payments and tax for Misty+ and Boosts",
@@ -301,7 +301,7 @@ const sections: LegalSectionDef[] = [
         <p>We also share information:</p>
         <LegalList
           items={[
-            "with the members of any Space you share content with, including what that Space shows of your agents;",
+            "with the members of any space you share content with, including what that space shows of your agents;",
             "when required by law, such as a valid subpoena or court order, or when needed to protect someone's safety or our rights. Where allowed, we will tell you first;",
             "with a successor if Misty is transferred to a company we form or to a buyer. The successor must honor this policy, and we will notify you.",
           ]}
@@ -365,12 +365,12 @@ const sections: LegalSectionDef[] = [
             "Account details and content: while your account is open.",
             "Spaces and files you delete: kept for 30 days, then removed.",
             "Agent chats on your computer: until you delete them there. Deleting your Misty account doesn't remove them, because we can't reach them.",
-            "Your agents in a Space: an agent's listing stays until you or the Space's owner take it out. Its lines in the activity log stay with the Space.",
+            "Your agents in a space: an agent's listing stays until you or the space's owner take it out. Its lines in the activity log stay with the space.",
             "Voice transcripts: until you ask us to delete them or you delete your account.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
-            "After Misty+ or a Boost ends, whether cancelled or unpaid: the account and its Spaces keep their data on the Free plan. To delete your account and its data, use your account settings or write to us.",
+            "After Misty+ or a Boost ends, whether cancelled or unpaid: the account and its spaces keep their data on the Free plan. To delete your account and its data, use your account settings or write to us.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
-            "Content in shared Spaces: content you added to a Space other people still use stays with that Space, attributed to a deleted user.",
+            "Content in shared spaces: content you added to a space other people still use stays with that space, attributed to a deleted user.",
             "Emails we send: our record of each one, with its address, is removed 30 days after it's sent.",
             "Server logs: kept for a limited period for security and troubleshooting.",
             "Billing records: kept as long as tax and accounting law requires, which can be up to 7 years.",
@@ -391,8 +391,8 @@ const sections: LegalSectionDef[] = [
           items={[
             `Get a copy: email ${supportEmail} from your account email and we'll send you a copy of your account data. Agent chats aren't included because they stay on your computer.`,
             "Correct: update your name, email, and profile picture in Account Settings.",
-            "Your agents: take an agent out of a Space at any time, and it stops showing there. Lines it already added to the activity log stay with the Space.",
-            "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete Spaces you own that have other members. Delete an agent chat in Misty on the computer that keeps it. To delete a voice transcript, email us.",
+            "Your agents: take an agent out of a space at any time, and it stops showing there. Lines it already added to the activity log stay with the space.",
+            "Delete: delete your account in Account Settings → Profile. You will first need to hand off or delete spaces you own that have other members. Delete an agent chat in Misty on the computer that keeps it. To delete a voice transcript, email us.",
             "Opt out: turn off product update emails in Account Settings, or use the unsubscribe link in any email.",
           ]}
         />
@@ -525,7 +525,7 @@ export default function Privacy() {
       highlights={[
         "We don't sell your data, show ads, or use advertising trackers.",
         "Neither our website nor the app has analytics or crash reporting.",
-        "Agent chats, prompts, and model calls stay on your computer and go only to the AI provider you chose. Our servers see only what your agents add to a Space and what a Space shows its members: each agent's name, what kind of work it's doing, and the files it's changing.",
+        "Agent chats, prompts, and model calls stay on your computer and go only to the AI provider you chose. Our servers see only what your agents add to a space and what a space shows its members: each agent's name, what kind of work it's doing, and the files it's changing.",
         "Spaces, files, and voice transcripts are stored on the server you use. They aren't end-to-end encrypted.",
         "Misty hosts no model. Misty never charges for AI or sees your model keys.",
         "If you subscribe to Misty+ or Boosts, Stripe handles your card. We never see the full number.",

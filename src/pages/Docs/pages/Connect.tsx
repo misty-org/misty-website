@@ -1,90 +1,56 @@
-import {
-  BulletList,
-  DocSection,
-  DocTable,
-  Note,
-  P,
-  Paragraphs,
-  Steps,
-} from "../components/Prose";
 import { DocPage } from "../components/DocPage";
+import { BulletList, DocSection, Note, P, Steps } from "../components/Prose";
 
-const CHOICES = [
-  [
-    "Misty Cloud",
-    "Your Misty account's email and password, or Continue with Google.",
-    "Spaces with your people, on our server. Free, with Misty+ and Boosts for more."
-  ],
-  [
-    "Self-hosted",
-    "Your server's address, then the usual sign-in.",
-    "Spaces with your people, on a server you run.",
-  ],
-  [
-    "Only this computer",
-    "Nothing.",
-    "Chat with your AI on this computer. No Spaces to share.",
-  ],
-];
-
-/** The setup wizard the app opens with, for each kind of server. */
+/** Signing the app in to Misty Cloud or a server you run, and using a sign-in link. */
 export default function Connect() {
   return (
-    <DocPage title="Connect the app">
-      <P text="The first time Misty opens, it asks where your account lives, which AI to start with and which apps agents can use." />
+    <DocPage title="Connect to a server">
+      <P text="Your Misty account lives on a server. You can use Misty Cloud, which we run, or a server you run yourself." />
 
-      <DocSection id="choices" title="The three choices">
-        <DocTable
-          columns={["Choice", "What you enter", "What you get"]}
-          rows={CHOICES}
-        />
-      </DocSection>
-
-      <DocSection id="cloud" title="Misty Cloud">
+      <DocSection id="cloud" title="Use Misty Cloud">
+        <P text="Misty Cloud is free, with nothing to set up." />
         <Steps
           items={[
-            "Make a Misty account on this site. It's free; for more storage, or to raise a Space's level, see [Pricing](/pricing).",
-            "Install Misty from [Download](/download).",
-            "Choose Misty Cloud in the setup wizard and sign in with your Misty account. This computer becomes your first device.",
-            "Pick an AI to start with, such as Claude Code or Codex, and sign in to it. Then choose which apps agents can use ([Models](/docs/models)).",
+            "Open Misty and select **Get started**, or **Sign in** if you already have an account.",
+            "Select **Continue with Misty Cloud**.",
+            "Enter your email and password, or continue with Google.",
+          ]}
+        />
+        <P text="For more storage or bigger spaces, see [Plans and Boosts](/docs/plans)." />
+      </DocSection>
+
+      <DocSection id="own-server" title="Use your own server">
+        <Steps
+          items={[
+            "Open Misty and select **Get started** or **Sign in**.",
+            "Select **Use my own server**.",
+            "Enter the **Server address**, such as `misty.example.com`, and select **Continue**.",
+            "Sign in, or create an account. On a new server, the first account you create owns the server.",
+          ]}
+        />
+        <P text="To run a server, see [Set up a server](/docs/self-hosting)." />
+      </DocSection>
+
+      <DocSection id="sign-in-link" title="Use a sign-in link">
+        <P text="A sign-in link signs you in without a password. Use one if you forgot your password, or if the person who runs your server sent you one." />
+        <Steps
+          items={[
+            "To get a link for Misty Cloud, go to [Sign in](/sign-in) on this site and ask for one.",
+            "Open the link and choose to open it in Misty.",
+            "Or, in the app, select **Use a sign-in link** and paste it.",
           ]}
         />
         <Note>
-          Forgot your password? Get a sign-in link at{" "}
-          <a href="/sign-in" className="underline underline-offset-4">
-            mistysys.com/sign-in
-          </a>
-          . It works once and lasts seven days, so treat it like a password. Open
-          it and choose Open in Misty, or choose Use a sign-in link in the setup
-          wizard and paste it.
+          A sign-in link works once and lasts seven days. Keep it private, like a password.
         </Note>
       </DocSection>
 
-      <DocSection id="own-server" title="Self-hosted">
-        <Steps
-          items={[
-            "Choose Self-hosted (or Use my own server) and enter its address, such as `misty.example.com`.",
-            "Sign in. On a fresh server, create the first account, which owns the server. On a server you were invited to, create your account with the invited email, or sign in with Misty or with Google.",
-            "If the person who runs the server sent you a sign-in link, open it instead. It goes to the [setup page](/setup) with your server's address and offers Open in Misty, or you can choose Use a sign-in link in the setup wizard and paste it.",
-            "Pick an AI to start with, such as Claude Code or Codex, and sign in to it. Then choose which apps agents can use.",
-          ]}
-        />
-      </DocSection>
-
-      <DocSection id="only-this-computer" title="Only this computer">
-        <Paragraphs
-          items={[
-            "Only this computer uses Misty with no account. Your chats and settings stay here, and you can add a server later in Settings.",
-          ]}
-        />
-      </DocSection>
-
-      <DocSection id="devices" title="Your other computers">
+      <DocSection id="devices" title="Use Misty on another computer">
         <BulletList
           items={[
-            "Each computer you sign in on becomes one of your devices, and makes its own key when it's added.",
-            "Your Spaces live on the server, so every computer you sign in on sees the same ones.",
-            "Model keys, AI sign-ins and settings belong to each device, so set up your AI on each computer.",
+            "Install Misty and sign in with the same account.",
+            "Your spaces live on the server, so you'll see the same ones on every computer.",
+            "Agent sign-ins stay on each computer. Set up your agent again on the new one.",
           ]}
         />
       </DocSection>

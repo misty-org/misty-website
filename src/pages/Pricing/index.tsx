@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import { PublicPage } from "@/components/marketing";
 import {
@@ -22,12 +22,18 @@ import {
   spaceLevels,
   storagePerBoost,
   taglines,
+  yearlySaving,
 } from "./plans";
 import { SiteLink } from "@/components/SiteLink";
+import { BillingToggle } from "@/components/BillingToggle";
 
 /** A plan's button is as wide as its label, like the app's; the skeleton holds that place. */
 const buttonSkeletonClass = "h-9 w-40 rounded-lg";
 
+/**
+ * One plan. Side by side, each card spans the same four rows of the plans grid (heading, price,
+ * button, list), so those line up across the cards whatever their text wraps to.
+ */
 function PlanCard({
   name,
   tagline,
@@ -35,6 +41,7 @@ function PlanCard({
   period,
   items,
   action,
+  recommended = false,
 }: {
   name: string;
   tagline: string;
@@ -42,28 +49,38 @@ function PlanCard({
   period: string;
   items: ReactNode[];
   action: ReactNode;
+  recommended?: boolean;
 }) {
   const id = `plan-${name.toLowerCase().replace(/\s+/g, "-")}`;
   return (
     <section
       aria-labelledby={id}
-      className="flex flex-col rounded-xl border border-border bg-card p-6 sm:p-8"
+      className="flex flex-col rounded-xl border border-border bg-card p-6 md:row-span-4 md:grid md:grid-rows-subgrid md:gap-y-0"
     >
-      <h2 id={id} className="text-xl font-medium text-foreground">
-        {name}
-      </h2>
-      <p className="mt-1 text-base text-muted-foreground">{tagline}</p>
-      <p className="mt-4 flex items-baseline gap-2">
+      <div>
+        <div className="flex items-center gap-2">
+          <h2 id={id} className="text-xl font-medium text-foreground">
+            {name}
+          </h2>
+          {recommended ? (
+            <span className="rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground">
+              Recommended
+            </span>
+          ) : null}
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">{tagline}</p>
+      </div>
+      <p className="mt-5 flex items-baseline gap-2">
         <span className="text-4xl font-medium tracking-[-0.03em] text-foreground">
           {price}
         </span>
-        <span className="text-base text-muted-foreground">{period}</span>
+        <span className="text-sm text-muted-foreground">{period}</span>
       </p>
-      <div className="mt-6 flex">{action}</div>
-      <ul className="mt-8 grid gap-3 border-t border-border pt-6 text-base leading-7 text-foreground/85">
+      <div className="mt-5 flex">{action}</div>
+      <ul className="mt-6 grid content-start gap-2 border-t border-border pt-5 text-sm leading-6 text-foreground/85">
         {items.map((item, index) => (
-          <li key={index} className="grid grid-cols-[1.25rem_1fr] gap-2.5">
-            <Check aria-hidden="true" className="mt-1.5 size-4 text-foreground" />
+          <li key={index} className="grid grid-cols-[1rem_1fr] gap-2.5">
+            <Check aria-hidden="true" className="mt-1 size-4 text-foreground" />
             <span>{item}</span>
           </li>
         ))}
@@ -143,8 +160,8 @@ function PricingQuestions() {
   );
 }
 
-/** Misty+'s buttons: checkout (monthly, or yearly), or for someone who has it, their subscription. */
-function PlusAction({ checkout }: { checkout: ReturnType<typeof usePlanCheckout> }) {
+/** Misty+'s button: checkout for the billing period chosen, or for someone who has it, their subscription. */
+function PlusAction({ checkout, yearly }: { checkout: ReturnType<typeof usePlanCheckout>; yearly: boolean }) {
   if (checkout.checking) {
     return <Skeleton aria-hidden="true" className={buttonSkeletonClass} />;
   }
@@ -157,19 +174,13 @@ function PlusAction({ checkout }: { checkout: ReturnType<typeof usePlanCheckout>
   }
   return (
     <div className="flex flex-col items-start gap-2">
-      <div className="flex flex-wrap gap-2">
-        <Button size="lg" disabled={checkout.starting !== null} onClick={() => void checkout.start("plus")}>
-          Get {plans.plus.name}
-        </Button>
-        <Button
-          size="lg"
-          variant="outline"
-          disabled={checkout.starting !== null}
-          onClick={() => void checkout.start("plus_yearly")}
-        >
-          ${plans.plus.yearly} a year
-        </Button>
-      </div>
+      <Button
+        size="lg"
+        disabled={checkout.starting !== null}
+        onClick={() => void checkout.start(yearly ? "plus_yearly" : "plus")}
+      >
+        Get {plans.plus.name}
+      </Button>
       {checkout.error ? (
         <p role="alert" className="text-base text-muted-foreground">
           {checkout.error}
@@ -179,7 +190,7 @@ function PlusAction({ checkout }: { checkout: ReturnType<typeof usePlanCheckout>
   );
 }
 
-/** What each Space level allows, beside a short heading, like the questions below it. */
+/** What each space level allows, beside a short heading, like the questions below it. */
 function SpaceLevels() {
   return (
     <section
@@ -194,7 +205,7 @@ function SpaceLevels() {
           Space levels
         </h2>
         <p className="text-base text-muted-foreground">
-          Boosts from everyone in a Space add up. Each Boost past a level adds {storagePerBoost} more
+          Boosts from everyone in a space add up. Each Boost past a level adds {storagePerBoost} more
           shared storage.
         </p>
       </div>
@@ -235,17 +246,32 @@ function SpaceLevels() {
   );
 }
 
-/** Free, Misty+ and Boosts side by side, then Space levels and the questions people ask. */
+/** Free, Boosts and Misty+ side by side, cheapest first, then space levels and the questions people ask. */
 export default function Pricing() {
   const checkout = usePlanCheckout();
+  // One monthly/yearly choice for every paid plan, above the cards.
+  const [yearly, setYearly] = useState(false);
+  const saving = Math.min(
+    yearlySaving(boost.price, boost.yearly),
+    yearlySaving(plans.plus.monthly, plans.plus.yearly),
+  );
   return (
     <PublicPage>
       <div>
-        <h1 className="pb-12 text-center marketing-heading text-foreground">
+        <h1 className="pb-6 text-center marketing-heading text-foreground">
           {marketingCopy.pricing.title}
         </h1>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="mb-10 flex justify-center">
+          <BillingToggle
+            label="Billing period"
+            saving={saving}
+            yearly={yearly}
+            onChange={setYearly}
+          />
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3 md:gap-y-0">
           <PlanCard
             name={plans.free.name}
             tagline={taglines.free}
@@ -254,8 +280,7 @@ export default function Pricing() {
             items={[
               ...includes.free,
               <>
-                Or host your own server, with every Space unlimited, using{" "}
-                <SiteLink to="/docs/self-hosting">our guide</SiteLink>
+                Or <SiteLink to="/docs/self-hosting">host your own</SiteLink>, with no limits
               </>,
             ]}
             action={
@@ -265,24 +290,27 @@ export default function Pricing() {
             }
           />
           <PlanCard
-            name={plans.plus.name}
-            tagline={taglines.plus}
-            price={`$${plans.plus.monthly}`}
-            period="/month plus tax"
-            items={[...includes.plus]}
-            action={<PlusAction checkout={checkout} />}
-          />
-          <PlanCard
             name={boost.name}
             tagline={taglines.boost}
-            price={`$${boost.price}`}
-            period="/month per Boost"
+            price={`$${yearly ? boost.yearly : boost.price}`}
+            period={yearly ? "/year per Boost" : "/month per Boost"}
             items={[...includes.boost]}
             action={
               <Button asChild variant="outline" size="lg">
-                <SiteLink to={BOOSTS_SETTINGS_PATH}>Boost a Space</SiteLink>
+                <SiteLink to={yearly ? `${BOOSTS_SETTINGS_PATH}?billing=yearly` : BOOSTS_SETTINGS_PATH}>
+                  Boost a space
+                </SiteLink>
               </Button>
             }
+          />
+          <PlanCard
+            name={plans.plus.name}
+            tagline={taglines.plus}
+            price={`$${yearly ? plans.plus.yearly : plans.plus.monthly}`}
+            period={yearly ? "/year plus tax" : "/month plus tax"}
+            items={[...includes.plus]}
+            recommended
+            action={<PlusAction checkout={checkout} yearly={yearly} />}
           />
         </div>
 

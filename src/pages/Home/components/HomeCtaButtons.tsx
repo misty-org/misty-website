@@ -1,47 +1,44 @@
 import { useState } from "react";
-import { AppleMark, WindowsMark } from "@/components/ui/SocialMarks";
+import { AppleMark, LinuxMark, WindowsMark, type MarkIcon } from "@/components/ui/SocialMarks";
 
 import { Button } from "@/components/ui/button";
+import { SiteLink } from "@/components/SiteLink";
 import { cn } from "@/lib/utils";
-import { RELEASES_URL } from "@/lib/site";
-import { currentRelease, type ReleaseBuild } from "@/pages/Download/data";
 import { detectDownloadPlatform } from "@/pages/Download/detectPlatform";
+import { useReleases, type PlatformName } from "@/pages/Download/releases";
 
-function detectDownloadBuild(): ReleaseBuild | undefined {
-  const platform = detectDownloadPlatform();
-  return currentRelease.builds.find((build) => build.platform === platform);
-}
+const MARKS: Record<PlatformName, MarkIcon> = { macOS: AppleMark, Windows: WindowsMark, Linux: LinuxMark };
+/** The desktops Misty ships for; the button names one of these even before its release has loaded. */
+const SUPPORTED: readonly PlatformName[] = ["macOS"];
 
-/** The hero's primary button: the visitor's own desktop build, or every release on other devices. */
+/**
+ * The hero's primary button. On a desktop Misty ships for (or one the latest release has an installer for), it
+ * names that desktop with its mark and downloads the installer, or opens the download page until there is one.
+ * Everywhere else it is a plain link to the download page.
+ */
 export function DownloadCtaButton() {
-  const [downloadBuild] = useState(detectDownloadBuild);
+  const [platform] = useState(detectDownloadPlatform);
+  const releases = useReleases();
+  const builds =
+    releases.status === "ready" ? releases.latest.builds.filter((candidate) => candidate.platform === platform) : [];
+  const build = builds.find((candidate) => candidate.packageType === "DMG") ?? builds[0];
+  const named = platform && (build || SUPPORTED.includes(platform)) ? platform : undefined;
+  const Mark = named ? MARKS[named] : null;
 
   return (
-    <>
-      <Button
-        asChild
-        size="lg"
-        data-cta="download"
-      >
-        {downloadBuild ? (
-          <a
-            href={downloadBuild.href}
-            aria-label={`Download Misty for ${downloadBuild.platform}`}
-          >
-            {downloadBuild.platform === "macOS" ? (
-              <AppleMark className="-translate-y-px" aria-hidden="true" />
-            ) : (
-              <WindowsMark className="-translate-y-px" aria-hidden="true" />
-            )}
-            <span>Download for {downloadBuild.platform}</span>
-          </a>
-        ) : (
-          <a href={RELEASES_URL} target="_blank" rel="noopener noreferrer">
-            Download Misty
-          </a>
-        )}
-      </Button>
-    </>
+    <Button asChild size="lg" data-cta="download">
+      {build ? (
+        <a href={build.href} aria-label={`Download Misty for ${build.platform}`}>
+          {Mark ? <Mark className="-translate-y-px" aria-hidden="true" /> : null}
+          <span>Download for {build.platform}</span>
+        </a>
+      ) : (
+        <SiteLink to="/download">
+          {Mark ? <Mark className="-translate-y-px" aria-hidden="true" /> : null}
+          <span>{named ? `Download for ${named}` : "Download Misty"}</span>
+        </SiteLink>
+      )}
+    </Button>
   );
 }
 

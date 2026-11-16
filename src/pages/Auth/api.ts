@@ -122,4 +122,9 @@ export async function confirmEmailSignIn(token: string): Promise<void> {
   await request("/auth/confirm-email/sign-in", { token });
 }
 
+/** Signs in to the account a hand-off code from the app stands for. */
+export async function redeemWebHandoff(code: string): Promise<void> {
+  await request("/auth/web-handoff", { code });
+}
+
 

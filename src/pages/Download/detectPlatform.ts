@@ -1,4 +1,4 @@
-import type { PlatformName } from "./data";
+import type { PlatformName } from "./releases";
 
 type NavigatorWithUserAgentData = Navigator & {
   userAgentData?: { platform?: string };
