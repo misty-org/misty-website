@@ -28,7 +28,7 @@ const SERVICES = [
   [
     "`setup`",
     "Once per start",
-    "Generates secrets, checks them against your data, provisions Cloudflare.",
+    "Generates the root secret, checks it against your data, provisions Cloudflare.",
   ],
   ["`postgres`", "Always", "The database (PostgreSQL with pgvector)."],
   ["`migrate`", "Once per start", "Applies database migrations."],
@@ -63,6 +63,10 @@ const ROTATIONS = [
   [
     "`JOURNAL_COLLAB_TICKET_PRIVATE_KEY`",
     "The old public key stays valid until you retire it.",
+  ],
+  [
+    "`DB_MIGRATION_PASSWORD`",
+    "The next start moves the database onto the new password. Retire the old one after that.",
   ],
   [
     "`DB_PASSWORD`, `MISTY_METRICS_TOKEN`",
@@ -150,22 +154,24 @@ docker compose logs setup`}
         <P text="On the first start, the setup container:" />
         <BulletList
           items={[
-            "Generates every secret into the stack's `secrets` volume.",
-            "Creates the Cloudflare Tunnel, the DNS record and two R2 buckets.",
+            "Generates one root secret into the stack's `secrets` volume.",
+            "Finds your Cloudflare zone and account from `MISTY_HOSTNAME`.",
+            "Creates the Cloudflare Tunnel, the DNS record, two R2 buckets and their credentials.",
             "Deploys the Worker.",
           ]}
         />
-        <P text="Later starts reuse the same resources and never replace a secret. Your data is only removed if you run `docker compose down --volumes` and delete the R2 buckets." />
+        <P text="Later starts find the same resources by name and never replace the root secret. Rotating a key never touches data. Your data is only removed if you run `docker compose down --volumes` and delete the R2 buckets." />
       </DocSection>
 
       <DocSection id="secrets" title="Secrets">
-        <P text="The `secrets` volume holds the only copy of your server's secrets. If you lose it but keep the database, setup stops with `secrets lost`. New keys would sign everyone out and make encrypted data unreadable." />
+        <P text="The server has one secret of its own, `MISTY_SERVER_SECRET`, in the `secrets` volume. Setup derives every key from it: database passwords, signing keys, collaboration keys, the operator and metrics tokens and the backup key. The API gets only its own share, and the Worker only the values it checks with. None of them are in the env files." />
+        <P text="If you lose the volume but keep the database, setup stops with `secrets lost`. New keys would sign everyone out and make encrypted data unreadable." />
         <P text="Keep an encrypted copy somewhere other than the server, such as a password manager:" />
         <CodeBlock
           label="Copy the secrets"
           code={`docker compose run --rm --no-deps --entrypoint tar setup -C /run/misty/secrets -czf - . > misty-secrets.tgz`}
         />
-        <P text="To rotate a secret, rotate it, restart, and retire the old value once old sessions have expired:" />
+        <P text="Each key has a version. To rotate one, move it to its next version, restart, and retire the old version once old sessions have expired:" />
         <CodeBlock
           label="Rotate a secret"
           code={`docker compose run --rm setup rotate MISTY_AUTH_SIGNING_KEY
@@ -173,7 +179,19 @@ docker compose up -d --force-recreate
 docker compose run --rm setup retire MISTY_AUTH_SIGNING_KEY`}
         />
         <DocTable columns={["Rotates", "With"]} rows={ROTATIONS} />
-        <P text="Secrets that protect stored data can't be rotated. These are the database superuser password, the space link key, the device pairing pepper, the collaboration room salt, the document key and the backup key." />
+        <P text="Keys that protect stored data can't be rotated. These are the Space link key (`SPACE_LINK_ENCRYPTION_KEY`), the collaboration room salt (`JOURNAL_COLLAB_ROOM_SALT`) and the backup key (`MISTY_BACKUP_AGE_IDENTITY`)." />
+        <P text="To give a service you run beside the server its operator token, run `docker compose run --rm setup operator-token`, or mount the `secrets` volume and read `operator/token`. To keep a copy of the backup key, run `docker compose run --rm setup backup-key`." />
+      </DocSection>
+
+      <DocSection id="older-servers" title="Servers set up before the root secret">
+        <P text="A server set up before the root secret keeps each key on its own. It keeps working after an upgrade, and nobody is signed out. To move its keys onto the root secret:" />
+        <CodeBlock
+          label="Move keys onto the root secret"
+          code={`docker compose run --rm setup adopt-root
+docker compose up -d --force-recreate`}
+        />
+        <P text="Each moved key keeps its old value valid in its `*_PREVIOUS` slot. Retire each one once old sessions have expired. The three keys that protect stored data stay as they are. To move them too, add `--discard-data`, which makes shared links and older backups unreadable. Only use it on a server with no data you need." />
+        <P text="`CLOUDFLARE_ZONE_ID` and `CLOUDFLARE_ACCOUNT_ID` can stay in `cloudflare.env`. `MISTY_SERVER_VERSION` in `misty.env` is no longer read, because published images report their own commit. When you build on the server, run `MISTY_SERVER_VERSION=$(git rev-parse HEAD) docker compose up -d --build`." />
       </DocSection>
 
       <DocSection id="accounts" title="Accounts on your server">

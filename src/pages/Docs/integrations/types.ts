@@ -3,7 +3,8 @@
  * `code` and [text](href) markup (see RichText). Variable names follow
  * the server's setup; when the server renames one, change it here
  * and nowhere else. Generated secrets never go in these files: the setup
- * container keeps them in the stack's `secrets` volume.
+ * container keeps one root secret in the stack's `secrets` volume and
+ * derives every key from it.
  */
 export interface EnvVariable {
   name: string;
