@@ -8,7 +8,7 @@ export const cloudflareEnv: IntegrationDoc = {
     "Publishes the server over HTTPS, stores files and backups in R2 and runs Misty's Worker.",
   purpose: [
     "Every Misty server runs on your own Cloudflare account. A Cloudflare Tunnel publishes the API at `https://MISTY_HOSTNAME` with no open ports. R2 holds Library files and the nightly backups. A Worker saves notes and drawings as people edit them together.",
-    "You give the setup container a token, an account and a zone. On every start it creates whatever is missing and finds what it made before by name, so it never makes a second copy. You never run Wrangler or the `misty` CLI.",
+    "You give the setup container one API token. It finds the zone that holds `MISTY_HOSTNAME` among the zones the token can see, and the account from the zone. On every start it creates whatever is missing and finds what it made before by name, so it never makes a second copy. You never run Wrangler or the `misty` CLI.",
   ],
   account: [
     "A Cloudflare account with your domain added as a zone, and a workers.dev subdomain turned on (Workers & Pages → Settings). Setup stops and says so if the subdomain is off. R2 must be turned on for the account, which asks for a payment method even within the free allowance.",
@@ -21,14 +21,18 @@ export const cloudflareEnv: IntegrationDoc = {
       howTo: "My Profile → API Tokens, or Manage Account → API Tokens.",
     },
     {
-      name: "CLOUDFLARE_ACCOUNT_ID",
-      about: "Your Cloudflare account ID, 32 hexadecimal characters.",
+      name: "CLOUDFLARE_ZONE_ID",
+      about:
+        "The zone `MISTY_HOSTNAME` belongs to, when you'd rather name it than let setup find it. Older servers set it; setup checks it holds the hostname.",
       howTo: "Your domain's Overview page, in the API section on the right.",
+      optional: true,
     },
     {
-      name: "CLOUDFLARE_ZONE_ID",
-      about: "The ID of the zone `MISTY_HOSTNAME` belongs to.",
-      howTo: "The same API section, above the account ID.",
+      name: "CLOUDFLARE_ACCOUNT_ID",
+      about:
+        "The account the zone must belong to. Set it only when the token can see the same domain in more than one account.",
+      howTo: "The same API section, below the zone ID.",
+      optional: true,
     },
   ],
   sections: [
@@ -64,7 +68,7 @@ export const cloudflareEnv: IntegrationDoc = {
           [
             "Zone (your zone)",
             "Zone: Read",
-            "Checks that the zone belongs to the account and holds your hostname.",
+            "Finds the zone that holds your hostname, and its account.",
           ],
           [
             "Zone (your zone)",
@@ -117,11 +121,8 @@ export const cloudflareEnv: IntegrationDoc = {
     "Sign in at [dash.cloudflare.com](https://dash.cloudflare.com), add your domain and change its nameservers to the ones Cloudflare shows. Wait until the domain says Active.",
     "Open Workers & Pages → Settings and turn on a workers.dev subdomain.",
     "Open R2 Object Storage and turn it on.",
-    "On your domain's Overview page, copy the Zone ID and Account ID from the API section.",
     "Create an account API token with the permissions above, limited to your account and zone. Copy it; Cloudflare shows it once.",
-    "Write the three values into `~/.misty/.env/server/cloudflare.env`.",
+    "Write the token into `~/.misty/.env/server/cloudflare.env`.",
   ],
-  example: `CLOUDFLARE_API_TOKEN=<your API token>
-CLOUDFLARE_ACCOUNT_ID=<your account ID>
-CLOUDFLARE_ZONE_ID=<your zone ID>`,
+  example: `CLOUDFLARE_API_TOKEN=<your API token>`,
 };
