@@ -50,7 +50,7 @@ export default function Spaces() {
             "**Lab**: notebooks for learning and research.",
             "**Planner**: tasks in **To do**, **In progress** and **Done**. You can assign a task to a person or an agent.",
             "**Calendar**: events for the space.",
-            "**Library**: the space's files.",
+            "**Media**: the space's photos, videos and files, with a photo and video editor you and your agents work in.",
           ]}
         />
         <P text="To add something, select **New** on the space's home page and choose **Doc**, **Drawing** or **Upload file**." />

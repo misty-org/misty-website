@@ -1,5 +1,5 @@
 import {
-  Bot, ChefHat, Cloud, Code, Compass, CreditCard, Cpu, FlaskConical, FolderOpen, Gamepad2, GraduationCap, HardDrive,
+  Bot, Clapperboard, ChefHat, Cloud, Code, Compass, CreditCard, Cpu, FlaskConical, Gamepad2, GraduationCap, HardDrive,
   KeyRound, Laptop, ListTodo, MessagesSquare, Music, NotebookPen, Percent, Server, Unlock,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -31,7 +31,7 @@ function LearnPanel() {
       <Bar icon={<Person name="Learning AI" />} title="Learning AI" note="214 members" />
       <div className="mist-mock-thread">
         <Message from="Maya">How do I get an agent to sum up a long PDF?</Message>
-        <Message from="Jordan">Drop it in the Library, then ask in chat. Here's the prompt I use.</Message>
+        <Message from="Jordan">Drop it in Media, then ask in chat. Here's the prompt I use.</Message>
         <Message from="Jordan's agent" agent>Summed up all 38 pages. The five key points are in the Journal.</Message>
         <Message from="Maya">Oh, that's easy. Trying it on my notes now.</Message>
       </div>
@@ -73,7 +73,7 @@ function TeamPanel() {
         <div className="mist-mock-row"><MessagesSquare size={16} /><b>Chat</b><small>3 new messages</small></div>
         <div className="mist-mock-row"><NotebookPen size={16} /><b>Journal</b><small>Launch plan, edited by Sam</small></div>
         <div className="mist-mock-row"><ListTodo size={16} /><b>Planner</b><small>4 tasks due this week</small></div>
-        <div className="mist-mock-row"><FolderOpen size={16} /><b>Library</b><small>12 shared files</small></div>
+        <div className="mist-mock-row"><Clapperboard size={16} /><b>Media</b><small>12 shared files</small></div>
         <div className="mist-mock-row"><FlaskConical size={16} /><b>Lab</b><small>Signup chart updated</small></div>
       </div>
     </div>

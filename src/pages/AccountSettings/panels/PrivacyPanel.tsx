@@ -11,7 +11,7 @@ export function PrivacyPanel() {
           </p>
           <p className="text-sm leading-relaxed text-muted-foreground">
             Private Files operations stay local unless you connect a provider or
-            explicitly add content to a space. Shared Library content is stored
+            explicitly add content to a space. Shared Media content is stored
             for that space, and agents may use context you are permitted to
             access.
           </p>

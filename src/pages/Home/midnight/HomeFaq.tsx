@@ -25,6 +25,10 @@ const START: Faq[] = [
     a: "Sign in with ChatGPT to use your ChatGPT plan, or use OpenRouter, Ollama, or an API key from any major provider, such as OpenAI, Anthropic or Google. You pick a model for each job.",
   },
   {
+    q: "Can my agent edit photos and videos?",
+    a: "Yes. Open a photo or a video in a space's Media and ask in its Agent tab: cut the pauses, add captions, cut to the beat of a song, add an animated title, or brighten and crop a batch of photos. Each change shows as it lands and can be undone. Your own agent does the work, so there's no separate AI editing plan to pay for.",
+  },
+  {
     q: "Which computers does Misty run on?",
     a: "Mac and Windows. Misty uses the web engine your computer already has, so the app stays small and gets security fixes from Apple and Microsoft.",
   },
@@ -40,7 +44,7 @@ const TRUST: Faq[] = [
   },
   {
     q: "Do my files go through your servers?",
-    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a space or your Library are stored on your server, which on Misty Cloud is ours.",
+    a: "It depends on where the file is. Moving a file between your own computers doesn't: they connect directly, on the same network or through a public tunnel. Files you add to a space's Media are stored on your server, which on Misty Cloud is ours.",
   },
 ];
 

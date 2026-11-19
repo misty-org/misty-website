@@ -1,5 +1,5 @@
 import {
-  Armchair, Bot, CalendarDays, ChartLine, FileImage, FileSpreadsheet, FileText, FileVideo, FlaskConical, FolderOpen,
+  Armchair, Bot, Clapperboard, CalendarDays, ChartLine, FileImage, FileSpreadsheet, FileText, FileVideo, FlaskConical,
   Hand, History, Inbox, Languages, Layers, ListTodo, Package, Palette, Plug, Plus, Puzzle, ScrollText, SendHorizontal,
   Users,
 } from "lucide-react";
@@ -176,11 +176,11 @@ const FILES: readonly { icon: ReactNode; name: string; note: string; who: string
   { icon: <FileVideo size={16} />, name: "Launch demo.mp4", note: "24 MB", who: "Sam" },
 ];
 
-/** The Library: the space's shared files and who added them. */
+/** Media: the space's photos, videos and files, and who added them. */
 export function SpaceLibrary() {
   return (
     <div className="mist-mock">
-      <Bar icon={<FolderOpen size={16} />} title="Library" note="Shared with 5 people" />
+      <Bar icon={<Clapperboard size={16} />} title="Media" note="Shared with 5 people" />
       <div className="mist-mock-groups">
         {FILES.map(file => (
           <div key={file.name} className="mist-mock-row">{file.icon}<b>{file.name}</b><small>{file.note} · {file.who}</small></div>
