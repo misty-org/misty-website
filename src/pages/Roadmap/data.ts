@@ -25,12 +25,12 @@ export const phases: RoadmapPhase[] = [
         description: "Shared, group, and direct messages.",
       },
       {
-        title: "Tasks",
-        description: "List and board views with assignees and priorities.",
+        title: "Lab and Code",
+        description: "Notebooks from your sources, and your projects.",
       },
       {
-        title: "Library",
-        description: "Shared project files and references.",
+        title: "Files",
+        description: "The space's drive, on your computer too.",
       },
       {
         title: "Private files",
@@ -51,8 +51,8 @@ export const phases: RoadmapPhase[] = [
         description: "Limited beta; availability varies.",
       },
       {
-        title: "Google Calendar",
-        description: "Limited task-publishing pilot.",
+        title: "Open-source apps",
+        description: "Added to a space from their GitHub link.",
       },
       {
         title: "Slack and Notion connections",

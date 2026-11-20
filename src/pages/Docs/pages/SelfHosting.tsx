@@ -35,7 +35,7 @@ const SERVICES = [
   [
     "`api`",
     "Always",
-    "Accounts, spaces, chat, docs, drawings, tasks, the planner and files.",
+    "Accounts, spaces, chat, files and the apps each space adds.",
   ],
   [
     "`cloudflared`",

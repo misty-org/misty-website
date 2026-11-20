@@ -1,4 +1,4 @@
-import { Armchair, Bot, Clapperboard, FlaskConical, Hand, History, Layers, ListTodo, MessagesSquare, NotebookPen, Package, Plug, Puzzle, Users } from "lucide-react";
+import { AppWindow, Armchair, Bot, Code, FlaskConical, Folder, Hand, History, Layers, MessagesSquare, Package, Plug, Presentation, Puzzle, Users } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import gmail from "@/assets/brand-icons/gmail.svg";
 import googleDocs from "@/assets/brand-icons/google-docs.svg";
@@ -6,8 +6,8 @@ import slack from "@/assets/brand-icons/slack.svg";
 import { Chapter } from "./Chapter";
 import { EngineMark } from "./EngineMark";
 import {
-  AgentsApps, AgentsPlugins, AgentsSkills, ChatsHistory, ChatsNeedsYou, ChatsRunning, SpaceChat, SpaceJournal,
-  SpaceLab, SpaceLibrary, SpacePlanner, Studio, StudioRoom, StudioTeam, StudioYours,
+  AgentsApps, AgentsPlugins, AgentsSkills, ChatsHistory, ChatsNeedsYou, ChatsRunning, SpaceAppSession, SpaceApps,
+  SpaceChat, SpaceFiles, SpaceLab, Studio, StudioRoom, StudioTeam, StudioYours,
 } from "./ShotSketches";
 import { BentoTiles, type Feature } from "./Tiles";
 
@@ -43,15 +43,15 @@ function Chats() {
   );
 }
 
-/** What a space holds, each part with its own icon; the Lab's notebooks live here now. */
+/** What a space holds, each part with its own icon: Misty's own parts, then the open-source apps its mods add. */
 function Space() {
   return (
     <div className="mist-tile-sheet" aria-hidden="true">
       <Row index={0} icon={<MessagesSquare size={16} />} name="Chat" note="Group and direct" />
-      <Row index={1} icon={<NotebookPen size={16} />} name="Journal" note="Docs and drawings" />
-      <Row index={2} icon={<ListTodo size={16} />} name="Planner" note="Tasks and dates" />
-      <Row index={3} icon={<Clapperboard size={16} />} name="Media" note="Photos, videos, files" />
-      <Row index={4} icon={<FlaskConical size={16} />} name="Lab" note="Notebooks" />
+      <Row index={1} icon={<Folder size={16} />} name="Files" note="On your computer too" />
+      <Row index={2} icon={<FlaskConical size={16} />} name="Lab" note="Notebooks" />
+      <Row index={3} icon={<Code size={16} />} name="Code" note="Projects" />
+      <Row index={4} icon={<AppWindow size={16} />} name="Apps" note="Open source, from GitHub" />
     </div>
   );
 }
@@ -79,7 +79,7 @@ const shot = (file: string, alt: string, name: string, icon: ReactNode, sketch: 
 const FEATURES: readonly Feature[] = [
   {
     span: 7, sketch: <Chats />,
-    title: "Agent chats. Run several at once with any agent, see which need you, and pick up past chats anytime.",
+    title: "Agent chats. Run several at once on any engine, see which need you, and pick up past chats anytime.",
     shots: [
       shot("chats-running.webp", "Several agent chats working at once", "Several at once", <Layers size={14} />, <ChatsRunning />),
       shot("chats-needs-you.webp", "An agent chat waiting on your answer", "Needs you", <Hand size={14} />, <ChatsNeedsYou />),
@@ -88,12 +88,12 @@ const FEATURES: readonly Feature[] = [
   },
   {
     span: 5, sketch: <Space />,
-    title: "Spaces. A group chat, docs and drawings, tasks, photos and videos you and your agents edit, and notebooks, shared with everyone you invite.",
+    title: "Spaces. A group chat, shared files, notebooks and code, plus any open-source app you add, for everyone you invite and their agents.",
     shots: [
       shot("space-chat.webp", "A Space's group chat", "Chat", <MessagesSquare size={14} />, <SpaceChat />),
-      shot("space-journal.webp", "A Space's Journal with docs and drawings", "Journal", <NotebookPen size={14} />, <SpaceJournal />),
-      shot("space-planner.webp", "A Space's Planner with tasks and dates", "Planner", <ListTodo size={14} />, <SpacePlanner />),
-      shot("space-media.webp", "A Space's Media with its photos and videos", "Media", <Clapperboard size={14} />, <SpaceLibrary />),
+      shot("space-files.webp", "A Space's shared files", "Files", <Folder size={14} />, <SpaceFiles />),
+      shot("space-apps.webp", "Open-source apps added to a Space from GitHub", "Apps", <AppWindow size={14} />, <SpaceApps />),
+      shot("space-app-session.webp", "An agent working in DeckCraft beside its person", "In an app", <Presentation size={14} />, <SpaceAppSession />),
       shot("space-lab.webp", "A notebook in a space's Lab", "Lab", <FlaskConical size={14} />, <SpaceLab />),
     ],
   },

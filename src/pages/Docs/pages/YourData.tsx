@@ -11,8 +11,8 @@ export default function YourData() {
       <DocSection id="where" title="What's stored where">
         <BulletList
           items={[
-            "**On your computer**: agent chats, prompts, and your agent sign-ins. Sign-ins are sealed with a key in your system keychain.",
-            "**On the server**: your account, spaces, group chat, docs, drawings and files. Other Misty users can't read them unless they're in the space.",
+            "**On your computer**: agent chats, prompts, and your engine sign-ins. Sign-ins are sealed with a key in your system keychain.",
+            "**On the server**: your account, spaces, group chat, notes and files, and what the space's apps save there. Other Misty users can't read them unless they're in the space.",
             "Server data isn't end-to-end encrypted. On Misty Cloud, we can technically access it. On your own server, whoever runs it can.",
             "Your desktop sends prompts straight to the AI you chose. They don't pass through Misty.",
             "Misty has no ads, no trackers and no analytics.",

@@ -92,7 +92,7 @@ export default function App() {
     const title = handle?.title ?? "Misty | Build together with AI";
     const description =
       handle?.description ??
-      "A collaborative environment where people and their agents learn, work and create together. Bring any agent, build in spaces you share, and explore what others have made.";
+      "A collaborative environment where people and their agents learn, work and create together. Bring any engine, build in spaces you share, and explore what others have made.";
     const canonicalUrl = new URL(
       location.pathname,
       isDocsHost() ? DOCS_URL : SITE_URL,

@@ -10,12 +10,12 @@ const PARTS = [
   [
     "The Misty server",
     "Misty Cloud, or your own server",
-    "Accounts, spaces, group chat, docs, drawings, tasks and files.",
+    "Accounts, spaces, group chat, notes, files and the apps each space added.",
   ],
   [
     "Cloudflare",
     "Misty Cloud's account, or yours",
-    "HTTPS, file storage, and live editing of docs and drawings.",
+    "HTTPS, file storage, and live editing of notes and apps.",
   ],
   ["Google", "Your Google Cloud project", "Sign in with Google, on your own server."],
 ];
@@ -45,7 +45,7 @@ export default function WhereThingsRun() {
           items={[
             "Each computer you sign in on becomes one of your devices.",
             "Your spaces live on the server, so every computer sees the same ones.",
-            "Agent sign-ins and settings stay on each computer. Set up your agents on each one.",
+            "Engine sign-ins and settings stay on each computer. Set up your engines on each one.",
           ]}
         />
       </DocSection>

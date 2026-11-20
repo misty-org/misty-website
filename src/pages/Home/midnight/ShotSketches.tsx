@@ -1,7 +1,7 @@
 import {
-  Armchair, Bot, Clapperboard, CalendarDays, ChartLine, FileImage, FileSpreadsheet, FileText, FileVideo, FlaskConical,
-  Hand, History, Inbox, Languages, Layers, ListTodo, Package, Palette, Plug, Plus, Puzzle, ScrollText, SendHorizontal,
-  Users,
+  AppWindow, Armchair, AudioLines, Bot, ChartLine, FileImage, FileSpreadsheet, FileText, FileVideo, FlaskConical, Folder,
+  Hand, History, Image, Inbox, Languages, Layers, Package, Palette, Plug, Plus, Presentation, Puzzle, ScrollText,
+  SendHorizontal, Users,
 } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import gmail from "@/assets/brand-icons/gmail.svg";
@@ -36,7 +36,7 @@ const RUNNING: readonly { engine: string; title: string; state: State; last: str
   { engine: "claude", title: "Launch catch-up", state: "working", last: "Reading 42 messages in #launch to sum up what changed since Friday." },
   { engine: "codex", title: "Fix the signup form", state: "waiting", last: "Found the bug. Want me to push the fix to staging?" },
   { engine: "opencode", title: "Weekly metrics", state: "working", last: "Pulling signups and retention from the dashboard." },
-  { engine: "agy", title: "Plan the offsite", state: "done", last: "Three venues shortlisted and the agenda drafted in the Journal." },
+  { engine: "agy", title: "Plan the offsite", state: "done", last: "Three venues shortlisted and the agenda saved to Files." },
 ];
 
 /** Several chats side by side, each with its agent, its state and its latest line. */
@@ -112,28 +112,28 @@ export function SpaceChat() {
       <div className="mist-mock-thread">
         <div className="mist-mock-message"><Person name="Priya" /><p><b>Priya</b>Can someone pull last week's signups for the review?</p></div>
         <div className="mist-mock-message"><EngineMark engine="claude" size={16} /><p><b>Alex's agent</b>Here they are: 1,284 signups, up 12% on the week before. The chart is in the Lab.</p></div>
-        <div className="mist-mock-message"><Person name="Sam" /><p><b>Sam</b>Nice, I'll add it to the Journal.</p></div>
+        <div className="mist-mock-message"><Person name="Sam" /><p><b>Sam</b>Nice, I'll add it to the launch deck.</p></div>
       </div>
       <div className="mist-mock-composer">Message Launch<SendHorizontal size={16} /></div>
     </div>
   );
 }
 
-/** A Journal page: a doc beside a drawing. */
-export function SpaceJournal() {
+/** An open-source app open in a space: a slide in DeckCraft, with Sam's agent working in it beside him. */
+export function SpaceAppSession() {
   return (
     <div className="mist-mock">
-      <Bar icon={<FileText size={16} />} title="Offsite plan" note="Edited by Sam" />
+      <Bar icon={<Presentation size={16} />} title="Launch deck" note="Sam and his agent" />
       <div className="mist-mock-split">
         <div className="mist-mock-doc">
-          <h4>Two days in Lisbon</h4>
-          <p>Day one is for the roadmap: each team brings its top three bets and we pick five together.</p>
-          <p>Day two is hands-on. Pairs take one bet each and leave with a plan for the first week.</p>
+          <h4>Why now</h4>
+          <p>Signups are up 12% on last week, and most new teams bring an agent on day one.</p>
+          <p>Sam's agent is laying out the chart from the Lab on the next slide.</p>
         </div>
         <svg className="mist-mock-drawing" viewBox="0 0 260 180" role="presentation">
-          <rect x="10" y="20" width="90" height="44" rx="10" /><text x="55" y="47">Arrive</text>
-          <rect x="160" y="20" width="90" height="44" rx="10" /><text x="205" y="47">Roadmap</text>
-          <rect x="85" y="116" width="90" height="44" rx="10" /><text x="130" y="143">Hands-on</text>
+          <rect x="10" y="20" width="90" height="44" rx="10" /><text x="55" y="47">Problem</text>
+          <rect x="160" y="20" width="90" height="44" rx="10" /><text x="205" y="47">Why now</text>
+          <rect x="85" y="116" width="90" height="44" rx="10" /><text x="130" y="143">Launch</text>
           <path d="M100 42 H160 M205 64 Q205 138 175 138" />
         </svg>
       </div>
@@ -141,29 +141,28 @@ export function SpaceJournal() {
   );
 }
 
-const COLUMNS: readonly { name: string; tasks: readonly { title: string; due: string; who: ReactNode }[] }[] = [
-  { name: "To do", tasks: [{ title: "Book the venue", due: "Fri", who: <Person name="Priya" /> }, { title: "Draft the agenda", due: "Mon", who: <EngineMark engine="agy" size={16} /> }] },
-  { name: "In progress", tasks: [{ title: "Weekly metrics review", due: "Today", who: <EngineMark engine="opencode" size={16} /> }, { title: "Launch email", due: "Wed", who: <Person name="Sam" /> }] },
-  { name: "Done", tasks: [{ title: "Fix the signup form", due: "Yesterday", who: <EngineMark engine="codex" size={16} /> }] },
+const APPS: readonly { icon: ReactNode; name: string; note: string }[] = [
+  { icon: <Presentation size={16} />, name: "DeckCraft", note: "Sam and his agent are in the launch deck." },
+  { icon: <Image size={16} />, name: "PhotoCraft", note: "Priya is editing the venue photos." },
+  { icon: <AudioLines size={16} />, name: "SoundCraft", note: "Alex's agent is cutting the demo voiceover." },
 ];
 
-/** The Planner: tasks by stage, each with its date and who has it, person or agent. */
-export function SpacePlanner() {
+/** The open-source apps a space's mods added from GitHub, each busy with someone's work. */
+export function SpaceApps() {
   return (
     <div className="mist-mock">
-      <Bar icon={<ListTodo size={16} />} title="Planner" note="5 tasks" />
-      <div className="mist-mock-cards" data-columns="3">
-        {COLUMNS.map(column => (
-          <section key={column.name} className="mist-mock-column">
-            <h4>{column.name}</h4>
-            {column.tasks.map(task => (
-              <article key={task.title} className="mist-mock-card">
-                <b>{task.title}</b>
-                <div className="mist-mock-line"><small><CalendarDays size={13} />{task.due}</small>{task.who}</div>
-              </article>
-            ))}
-          </section>
+      <Bar icon={<AppWindow size={16} />} title="Apps" note="3 in this space" />
+      <div className="mist-mock-cards" data-columns="2">
+        {APPS.map(app => (
+          <article key={app.name} className="mist-mock-card">
+            <div className="mist-mock-line">{app.icon}<b>{app.name}</b><small><Dot state="working" />Live</small></div>
+            <p>{app.note}</p>
+          </article>
         ))}
+        <article className="mist-mock-card" data-add>
+          <div className="mist-mock-line"><Plus size={16} /><b>Add from GitHub</b></div>
+          <p>Paste an open-source app's link.</p>
+        </article>
       </div>
     </div>
   );
@@ -176,11 +175,11 @@ const FILES: readonly { icon: ReactNode; name: string; note: string; who: string
   { icon: <FileVideo size={16} />, name: "Launch demo.mp4", note: "24 MB", who: "Sam" },
 ];
 
-/** Media: the space's photos, videos and files, and who added them. */
-export function SpaceLibrary() {
+/** Files: the space's drive, also on each member's computer, and who added what. */
+export function SpaceFiles() {
   return (
     <div className="mist-mock">
-      <Bar icon={<Clapperboard size={16} />} title="Media" note="Shared with 5 people" />
+      <Bar icon={<Folder size={16} />} title="Files" note="Shared with 5 people" />
       <div className="mist-mock-groups">
         {FILES.map(file => (
           <div key={file.name} className="mist-mock-row">{file.icon}<b>{file.name}</b><small>{file.note} · {file.who}</small></div>
