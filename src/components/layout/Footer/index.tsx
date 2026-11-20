@@ -7,7 +7,7 @@ import { SiteLink } from "@/components/SiteLink";
 import { isHomePath } from "@/pages/Home/useSectionRoute";
 
 const linkClass =
-  "w-fit text-sm leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "w-fit text-control leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 function FooterColumns() {
   return (
@@ -18,7 +18,7 @@ function FooterColumns() {
           aria-label={`${column.label} footer links`}
           className="flex flex-col gap-1.5"
         >
-          <h2 className="mb-1 text-sm font-medium text-muted-foreground">
+          <h2 className="mb-1 text-control font-medium text-muted-foreground">
             {column.label}
           </h2>
           {column.links.map((link) =>
@@ -54,8 +54,7 @@ function FooterSocials() {
           target={placeholder ? undefined : "_blank"}
           rel={placeholder ? undefined : "noopener noreferrer"}
           aria-label={placeholder ? `${label} link placeholder` : label}
-          title={placeholder ? `Add Misty's ${label} URL` : `Misty on ${label}`}
-          className="group grid h-6 w-fit grid-cols-[1.25rem_auto] items-center gap-2 text-sm leading-none text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group grid h-6 w-fit grid-cols-[1.25rem_auto] items-center gap-2 text-control leading-none text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Icon aria-hidden="true" className="size-4 justify-self-center" />
           <span className="leading-none">{label}</span>
@@ -83,7 +82,7 @@ export default function Footer({ className }: { className?: string } = {}) {
               <SiteLink
                 to="/"
                 aria-label="Misty footer"
-                className="flex w-fit items-center gap-2 text-lg font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex w-fit items-center gap-2 text-title font-semibold tracking-[-0.035em] text-foreground focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <BrandLogo />
                 <span>Misty</span>
@@ -96,7 +95,7 @@ export default function Footer({ className }: { className?: string } = {}) {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col items-center gap-2 pt-3 text-center text-sm text-muted-foreground sm:flex-row sm:justify-center sm:gap-x-8">
+          <div className="mt-6 flex flex-col items-center gap-2 pt-3 text-center text-control text-muted-foreground sm:flex-row sm:justify-center sm:gap-x-8">
             <span>
               &copy; {new Date().getFullYear()} Misty. All rights reserved.
             </span>

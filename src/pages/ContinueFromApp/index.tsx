@@ -2,8 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 import { useAuth } from "@/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button, Skeleton } from "@misty/ui";
 import { redeemWebHandoff } from "../Auth/api";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
@@ -60,9 +59,9 @@ export default function ContinueFromApp() {
     <AuthShell title="Continue from Misty">
       <AuthCard>
         {failed ? (
-          <div className="grid gap-5 text-center text-base leading-7 text-foreground">
+          <div className="grid gap-5 text-center text-page leading-7 text-foreground">
             <p role="status">This link has expired or was already used. Open it again from Misty, or sign in here.</p>
-            <Button size="lg" className="h-11 w-full" onClick={() => navigate("/signin", { state: { from: next } })}>
+            <Button variant="primary" size="lg" className="w-full" onClick={() => navigate("/signin", { state: { from: next } })}>
               Sign in
             </Button>
           </div>

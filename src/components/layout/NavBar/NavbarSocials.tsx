@@ -1,5 +1,8 @@
+import { IconButton } from "@misty/ui";
+
 import { socialLinks } from "@/components/layout/Footer/footerLinks";
 
+/** GitHub, X, Discord, YouTube and Instagram beside the logo, at every desktop width. */
 export default function NavbarSocials() {
   return (
     <div
@@ -7,17 +10,19 @@ export default function NavbarSocials() {
       className="hidden items-center gap-0.5 md:flex"
     >
       {socialLinks.map(({ label, href, icon: Icon, placeholder }) => (
-        <a
+        <IconButton
           key={label}
-          href={href}
-          target={placeholder ? undefined : "_blank"}
-          rel={placeholder ? undefined : "noopener noreferrer"}
-          aria-label={placeholder ? `${label} link placeholder` : label}
-          title={placeholder ? `Add Misty's ${label} URL` : `Misty on ${label}`}
-          className={`inline-flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none`}
+          asChild
+          label={placeholder ? `Add Misty's ${label} URL` : `Misty on ${label}`}
         >
-          <Icon aria-hidden="true" className="size-3.5" />
-        </a>
+          <a
+            href={href}
+            target={placeholder ? undefined : "_blank"}
+            rel={placeholder ? undefined : "noopener noreferrer"}
+          >
+            <Icon aria-hidden="true" />
+          </a>
+        </IconButton>
       ))}
     </div>
   );

@@ -32,7 +32,7 @@ export default function LegalPage({
       <PageHeader title={title} />
 
       <div className="max-w-3xl">
-        <p className="text-base text-muted-foreground">
+        <p className="text-page text-muted-foreground">
           Last updated {legalInfo.lastUpdated}
         </p>
 
@@ -45,11 +45,11 @@ export default function LegalPage({
           >
             <h2
               id="legal-short-version"
-              className="text-base font-medium text-foreground"
+              className="text-page font-medium text-foreground"
             >
               The short version
             </h2>
-            <ul className="mt-3 grid list-disc gap-2 pl-5 text-base leading-7 text-muted-foreground marker:text-muted-foreground/60">
+            <ul className="mt-3 grid list-disc gap-2 pl-5 text-page leading-7 text-muted-foreground marker:text-muted-foreground/60">
               {highlights.map((highlight, index) => (
                 <li key={index}>{highlight}</li>
               ))}
@@ -60,11 +60,11 @@ export default function LegalPage({
         <nav aria-labelledby="legal-contents" className="mt-10">
           <h2
             id="legal-contents"
-            className="text-base font-medium text-foreground"
+            className="text-page font-medium text-foreground"
           >
             Contents
           </h2>
-          <ol className="mt-3 grid gap-1.5 text-base text-muted-foreground sm:grid-cols-2 sm:gap-x-8">
+          <ol className="mt-3 grid gap-1.5 text-page text-muted-foreground sm:grid-cols-2 sm:gap-x-8">
             {sections.map((section, index) => (
               <li key={section.id}>
                 <a
@@ -93,12 +93,12 @@ export default function LegalPage({
                 {index + 1}. {section.title}
               </h2>
               {section.inShort ? (
-                <p className="mt-3 text-base leading-7 text-foreground/80">
+                <p className="mt-3 text-page leading-7 text-foreground/80">
                   <span className="font-medium text-foreground">In short:</span>{" "}
                   {section.inShort}
                 </p>
               ) : null}
-              <div className="mt-4 grid gap-4 text-base leading-7 text-muted-foreground">
+              <div className="mt-4 grid gap-4 text-page leading-7 text-muted-foreground">
                 {section.body}
               </div>
             </section>
@@ -121,7 +121,7 @@ export function LegalList({ items }: { items: ReactNode[] }) {
 
 export function LegalSubheading({ children }: { children: ReactNode }) {
   return (
-    <h3 className="pt-2 text-base font-medium text-foreground">{children}</h3>
+    <h3 className="pt-2 text-page font-medium text-foreground">{children}</h3>
   );
 }
 
@@ -167,7 +167,7 @@ export function LegalTable({
 }) {
   return (
     <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-      <table className="w-full min-w-[32rem] border-collapse text-left text-sm leading-6">
+      <table className="w-full min-w-[32rem] border-collapse text-left text-control leading-6">
         <thead>
           <tr className="border-b border-border">
             {columns.map((column) => (

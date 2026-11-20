@@ -1,29 +1,27 @@
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Button } from "@misty/ui";
 
 interface AuthSubmitButtonProps {
   idleLabel: string;
-  loadingLabel: string;
   loading: boolean;
   disabled?: boolean;
 }
 
+/** The form's one call to action. While it works it is just disabled; it never shows loading. */
 export default function AuthSubmitButton({
   idleLabel,
-  loadingLabel,
   loading,
   disabled,
 }: AuthSubmitButtonProps) {
   return (
     <Button
       type="submit"
-      disabled={disabled || loading}
+      variant="primary"
       size="lg"
+      disabled={disabled || loading}
       aria-busy={loading}
-      className="h-11 w-full"
+      className="w-full"
     >
-      {loading ? <Spinner aria-hidden="true" /> : null}
-      {loading ? loadingLabel : idleLabel}
+      {idleLabel}
     </Button>
   );
 }

@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 
-import { Button } from "@/components/ui/button";
+import { Button, InlineLink, Text } from "@misty/ui";
+
 import { SiteLink } from "@/components/SiteLink";
 import { BILLING_URL } from "@/lib/site";
 import AuthCard from "../Auth/AuthCard";
 import AuthField from "../Auth/AuthField";
 import AuthShell from "../Auth/AuthShell";
-
-const linkClass = "text-foreground underline underline-offset-4 hover:text-foreground/80";
 
 /**
  * "Email me a sign-in link" for a Misty account. The form posts straight to misty-cloud, which
@@ -25,21 +24,21 @@ export default function SignInLink() {
     <AuthShell title="Get a sign-in link">
       <AuthCard
         footer={
-          <p className="text-center text-base leading-7 text-muted-foreground">
+          <Text wrap size="page" tone="muted" className="text-center">
             This is for accounts on Misty's server. On a server someone else runs, ask them for a
             link. On your own, make one in its console. See{" "}
-            <SiteLink to="/docs/self-hosting" className={linkClass}>
-              Run a server
-            </SiteLink>
+            <InlineLink asChild>
+              <SiteLink to="/docs/self-hosting">Run a server</SiteLink>
+            </InlineLink>
             .
-          </p>
+          </Text>
         }
       >
         {sent ? (
-          <p role="status" className="text-base leading-7 text-foreground">
+          <Text wrap size="page" role="status">
             If that email has a Misty account with a password, a sign-in link is on its way. It
             works once, lasts seven days and lets you choose a new password in the app.
-          </p>
+          </Text>
         ) : (
           <form method="post" action={`${BILLING_URL}/sign-in-link`} className="grid gap-5">
             <AuthField
@@ -53,7 +52,7 @@ export default function SignInLink() {
               value={email}
               onChange={setEmail}
             />
-            <Button type="submit" size="lg" className="h-11 w-full">
+            <Button type="submit" variant="primary" size="lg" className="w-full">
               Email me a link
             </Button>
           </form>

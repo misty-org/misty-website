@@ -1,11 +1,5 @@
 import type { ReactNode } from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, Text } from "@misty/ui";
 
 interface AuthCardProps {
   title?: string;
@@ -19,27 +13,19 @@ export default function AuthCard({
   footer,
 }: AuthCardProps) {
   return (
-    <Card className="w-full flex-col gap-0 rounded-xl bg-card p-6 text-card-foreground ring-1 ring-foreground/10 sm:p-8">
+    <Card className="w-full gap-0 p-6 sm:p-8">
       {title ? (
-        <CardHeader className="p-0">
-          <CardTitle
-            role="heading"
-            aria-level={2}
-            className="text-2xl font-semibold"
-          >
-            {title}
-          </CardTitle>
-        </CardHeader>
+        <Text as="h2" wrap size="display" weight="semibold" tone="bright">
+          {title}
+        </Text>
       ) : null}
 
-      <CardContent className={title ? "mt-7 p-0" : "p-0"}>
-        {children}
-      </CardContent>
+      <div className={title ? "mt-7" : undefined}>{children}</div>
 
       {footer ? (
-        <CardFooter className="mt-6 justify-center border-t border-border p-0 pt-6">
+        <div className="mt-6 flex items-center justify-center border-t border-border pt-6">
           {footer}
-        </CardFooter>
+        </div>
       ) : null}
     </Card>
   );

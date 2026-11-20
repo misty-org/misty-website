@@ -515,7 +515,7 @@ export default function Privacy() {
     <LegalPage
       title="Privacy policy"
       intro={
-        <p className="text-base leading-7 text-muted-foreground">
+        <p className="text-page leading-7 text-muted-foreground">
           This policy explains what information Misty collects, why, who we
           share it with, and the choices you have. It applies to the Misty app,
           this website, and Misty Cloud. A self-hosted Misty server is run by

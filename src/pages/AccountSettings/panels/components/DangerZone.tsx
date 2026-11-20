@@ -1,18 +1,7 @@
 import { useState } from "react";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
+import { Button, ConfirmDeleteDialog, Field, FieldError, Input, Text } from "@misty/ui";
+
 import {
   AccountDeletionBlockedError,
   beginAccountDeletion,
@@ -65,33 +54,27 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
   if (result) {
     return (
       <div className={`${customRowClass} flex flex-col gap-2`}>
-        <p className="text-sm text-foreground" role="status">
+        <Text wrap size="control" role="status">
           Deletion requested.
-        </p>
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        </Text>
+        <Text wrap size="control" tone="muted">
           Your account is scheduled for deletion. It stays recoverable for 30
           days if you sign in again and cancel.
-        </p>
+        </Text>
       </div>
     );
   }
 
   return (
     <div className={`${customRowClass} flex flex-col gap-3`}>
-      <p className="text-sm leading-relaxed text-muted-foreground">
+      <Text wrap size="control" tone="muted">
         Deleting your account removes your profile, private files, and space
         memberships after a 30-day recovery window. This cannot be undone once
         the window closes.
-      </p>
+      </Text>
 
       <div className="grid gap-3">
-        <div>
-          <label
-            htmlFor="account-delete-password"
-            className="mb-1.5 block text-sm font-medium text-foreground"
-          >
-            Password
-          </label>
+        <Field label="Password">
           <Input
             id="account-delete-password"
             type="password"
@@ -99,14 +82,8 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
-        </div>
-        <div>
-          <label
-            htmlFor="account-delete-confirmation"
-            className="mb-1.5 block text-sm font-medium text-foreground"
-          >
-            Type {CONFIRMATION} to confirm
-          </label>
+        </Field>
+        <Field label={`Type ${CONFIRMATION} to confirm`}>
           <Input
             id="account-delete-confirmation"
             type="text"
@@ -114,53 +91,38 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
             value={confirmation}
             onChange={(event) => setConfirmation(event.target.value)}
           />
-        </div>
+        </Field>
       </div>
 
       <div className="flex items-center gap-3">
         <Button
-          type="button"
-          variant="destructive"
+          variant="danger"
           disabled={!ready || working}
           aria-busy={working}
           onClick={() => setConfirmOpen(true)}
         >
-          {working ? <Spinner aria-hidden="true" /> : null}
           Delete my account
         </Button>
       </div>
 
       {blockedSpaces.length > 0 ? (
-        <ul className="list-disc pl-5 text-sm text-[var(--settings-warning)]">
+        <ul className="list-disc pl-5 text-control text-cream">
           {blockedSpaces.map((name) => (
             <li key={name}>{name}</li>
           ))}
         </ul>
       ) : null}
 
-      {error ? (
-        <p className="text-sm text-destructive" role="status">
-          {error}
-        </p>
-      ) : null}
+      <FieldError message={error} />
 
-      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete your Misty account?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Your account is scheduled for deletion and stays recoverable for 30
-              days. After that it is permanently removed.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Keep my account</AlertDialogCancel>
-            <AlertDialogAction onClick={() => void confirmDelete()}>
-              Delete account
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmDeleteDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Delete your Misty account?"
+        what="Your account is scheduled for deletion and stays recoverable for 30 days. After that it is permanently removed."
+        confirmLabel="Delete account"
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }

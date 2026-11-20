@@ -1,8 +1,7 @@
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
+import { Button, Field, InlineLink, Input, Text } from "@misty/ui";
+
 import { updateUsername, type MeResponse } from "../api";
 import { AvatarUpload } from "./components/AvatarUpload";
 import { DangerZone } from "./components/DangerZone";
@@ -46,13 +45,7 @@ export function AccountPanel({
           <AvatarUpload me={me} onUploaded={onAvatarUploaded} />
 
           <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-            <div>
-              <label
-                htmlFor="account-username"
-                className="mb-1.5 block text-sm font-medium text-foreground"
-              >
-                Username
-              </label>
+            <Field label="Username">
               <Input
                 id="account-username"
                 type="text"
@@ -60,51 +53,43 @@ export function AccountPanel({
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
-            </div>
+            </Field>
             <div className="flex items-center gap-3 max-[572px]:flex-col max-[572px]:items-stretch">
               <Button
-                type="button"
+                variant="primary"
                 onClick={save}
                 disabled={
                   saving || username.trim() === "" || username.trim() === me.username
                 }
                 aria-busy={saving}
               >
-                {saving ? <Spinner aria-hidden="true" /> : null}
-                {saving ? "Saving…" : "Save changes"}
+                Save changes
               </Button>
               <SaveFeedback ok={ok} error={error} />
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="account-email"
-              className="mb-1.5 block text-sm font-medium text-foreground"
-            >
-              Email
-            </label>
-            <Input
-              id="account-email"
-              type="email"
-              value={me.email}
-              disabled
-              aria-describedby="account-email-description"
-            />
-            <p
-              id="account-email-description"
-              className="mt-1 text-sm text-muted-foreground"
-            >
+          <div className="grid gap-1">
+            <Field label="Email">
+              <Input
+                id="account-email"
+                type="email"
+                value={me.email}
+                disabled
+                aria-describedby="account-email-description"
+              />
+            </Field>
+            <Text wrap size="meta" tone="muted" id="account-email-description">
               Email cannot be changed.
-            </p>
+            </Text>
           </div>
         </div>
 
         <Row label="Member since">{joined}</Row>
         <Row label="User id">
-          <span className="font-mono text-sm text-muted-foreground">
+          <Text bare size="control" tone="muted">
             {me.id}
-          </span>
+          </Text>
         </Row>
       </Section>
 
@@ -115,9 +100,9 @@ export function AccountPanel({
       <Section title="Security">
         {me.provider === "misty" ? (
           <Row label="Password">
-            <Button asChild variant="link" className="h-auto p-0">
+            <InlineLink asChild>
               <a href="/sign-in">Forgot your password?</a>
-            </Button>
+            </InlineLink>
           </Row>
         ) : null}
         <GhostRow label="Two-factor authentication" value="Coming soon" />

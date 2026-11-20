@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { Button, InlineLink, Text } from "@misty/ui";
+
 import { postProofForm } from "@/lib/accountProof";
 import { ACCOUNT_PORTAL_URL } from "@/lib/site";
 import AuthCard from "../Auth/AuthCard";
@@ -19,20 +20,20 @@ export default function PaymentFailedCard({
     <AuthShell title="Update your card">
       <AuthCard
         footer={
-          <Button type="button" variant="link" className="h-auto p-0 text-foreground" onClick={onBack}>
+          <InlineLink className="text-control" onClick={onBack}>
             Back to sign in
-          </Button>
+          </InlineLink>
         }
       >
         <div className="grid gap-6">
-          <p role="status" className="text-base leading-7 text-pretty text-foreground">
+          <Text wrap size="page" role="status" className="text-pretty">
             A payment for your plan failed, so your account is suspended. Your data is safe,
             and the account comes back once the payment goes through.
-          </p>
+          </Text>
           <Button
-            type="button"
+            variant="primary"
             size="lg"
-            className="h-11 w-full"
+            className="w-full"
             onClick={() => postProofForm(ACCOUNT_PORTAL_URL, proof)}
           >
             Update card

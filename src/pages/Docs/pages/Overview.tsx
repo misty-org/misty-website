@@ -39,7 +39,7 @@ export default function Overview() {
             <li key={page.to} className="bg-background">
               <NavLink
                 to={page.to}
-                className="block px-4 py-3 text-sm text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                className="block px-4 py-3 text-control text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
               >
                 {page.label}
               </NavLink>

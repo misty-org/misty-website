@@ -34,10 +34,10 @@ function PagerLink({
         className="mb-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground"
       />
       <span className="grid min-w-0 gap-2">
-        <span className="text-xs text-muted-foreground">
+        <span className="text-caption text-muted-foreground">
           {next ? "Next" : "Previous"}
         </span>
-        <span className="truncate text-base leading-6 text-foreground">
+        <span className="truncate text-page leading-6 text-foreground">
           {group !== fromGroup ? (
             <span className="hidden text-muted-foreground sm:inline">
               {group} /{" "}
@@ -85,7 +85,7 @@ export function DocPage({
         </h1>
         <DocContentsDisclosure headings={headings} />
 
-        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-12 text-base leading-[1.6875rem] text-foreground/90">
+        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-12 text-page leading-[1.6875rem] text-foreground/90">
           {children}
         </div>
 

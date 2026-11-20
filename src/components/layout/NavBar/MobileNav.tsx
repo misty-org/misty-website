@@ -1,44 +1,36 @@
 
-import { Button } from "@/components/ui/button";
-import { CollapsibleContent } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
+import { Button, CollapsibleContent, Text } from "@misty/ui";
+
 import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
 import { SiteLink } from "@/components/SiteLink";
 
-const mobileLinkClass =
-  "-mx-3 rounded-md px-3 py-3 text-sm text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none";
-
+/** A quiet, full-width button for each page, pressed on the page you're on. */
 function MobileNavLink({
   link,
+  currentPath,
   onNavigate,
 }: {
   link: NavLinkEntry;
+  currentPath: string;
   onNavigate: () => void;
 }) {
-  if (link.external) {
-    return (
-      <a
-        href={link.to}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onNavigate}
-        className={mobileLinkClass}
-      >
-        {link.label}
-      </a>
-    );
-  }
-
   return (
-    <SiteLink
-      to={link.to}
-      onClick={onNavigate}
-      className={({ isActive }) =>
-        cn(mobileLinkClass, isActive && "bg-control-active text-cream-bright")
-      }
+    <Button
+      asChild
+      variant="quiet"
+      justify="start"
+      data-active={!link.external && currentPath.startsWith(link.to)}
     >
-      {link.label}
-    </SiteLink>
+      {link.external ? (
+        <a href={link.to} target="_blank" rel="noopener noreferrer" onClick={onNavigate}>
+          {link.label}
+        </a>
+      ) : (
+        <SiteLink to={link.to} onClick={onNavigate}>
+          {link.label}
+        </SiteLink>
+      )}
+    </Button>
   );
 }
 
@@ -66,15 +58,19 @@ export default function MobileNav({
             <MobileNavLink
               key={link.to}
               link={link}
+              currentPath={currentPath}
               onNavigate={onClose}
             />
           ))}
 
-          <span className="pt-5 text-sm text-foreground">Resources</span>
+          <Text size="control" className="px-3 pt-5">
+            Resources
+          </Text>
           {resourceLinks.map((link) => (
             <MobileNavLink
               key={link.to}
               link={link}
+              currentPath={currentPath}
               onNavigate={onClose}
             />
           ))}
@@ -82,30 +78,30 @@ export default function MobileNav({
           {signedIn ? (
             <>
               <Button
-                type="button"
-                variant="ghost"
+                variant="quiet"
+                justify="start"
                 onClick={() => {
                   onClose();
                   onOpenSettings();
                 }}
-                className="mt-4 justify-start px-0 text-muted-foreground"
+                className="mt-4"
               >
                 Settings
               </Button>
               <Button
-                variant="ghost"
+                variant="quiet"
+                justify="start"
                 onClick={() => {
                   onClose();
                   onSignOut();
                 }}
-                className="justify-start px-0 text-muted-foreground"
               >
                 Sign out
               </Button>
             </>
           ) : (
             <div className="mt-5">
-              <Button asChild className="w-full">
+              <Button asChild variant="primary" className="w-full">
                 <SiteLink to="/signin" state={{ from: currentPath }} onClick={onClose}>
                   Sign in
                 </SiteLink>

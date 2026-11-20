@@ -66,7 +66,7 @@ function ContentsList({
           <a
             href={`#${id}`}
             aria-current={id === current ? "location" : undefined}
-            className="-ml-px block border-l border-transparent py-1.5 pl-4 pr-3 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current]:border-foreground aria-[current]:text-foreground"
+            className="-ml-px block border-l border-transparent py-1.5 pl-4 pr-3 text-control text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current]:border-foreground aria-[current]:text-foreground"
           >
             {title}
           </a>
@@ -86,7 +86,7 @@ export function DocContents({ headings }: { headings: DocHeading[] }) {
       aria-label="On this page"
       className="hidden pt-2.5 min-[1100px]:sticky min-[1100px]:top-[var(--site-nav-height)] min-[1100px]:block min-[1100px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1100px]:self-start min-[1100px]:overflow-y-auto min-[1100px]:[scrollbar-width:thin]"
     >
-      <p className="pb-2 text-sm text-muted-foreground">On this page</p>
+      <p className="pb-2 text-control text-muted-foreground">On this page</p>
       <ContentsList headings={headings} current={current} />
     </nav>
   );
@@ -105,7 +105,7 @@ export function DocContentsDisclosure({ headings }: { headings: DocHeading[] }) 
         }
       }}
     >
-      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm text-foreground [&::-webkit-details-marker]:hidden">
+      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-control text-foreground [&::-webkit-details-marker]:hidden">
         On this page
         <ChevronDown
           aria-hidden="true"

@@ -61,7 +61,15 @@ export default defineConfig(({ command, mode }) => {
     define: {
       "import.meta.env.MISTY_PUBLIC_API_URL": JSON.stringify(apiBase ?? ""),
     },
+    // @misty/ui is linked from ../misty-ui as source: its React and icons are the site's own.
+    optimizeDeps: {
+      exclude: ["@misty/ui"],
+    },
     server: {
+      fs: {
+        // ../misty-ui, where @misty/ui is linked from during development.
+        allow: [process.cwd(), fileURLToPath(new URL("../misty-ui", import.meta.url))],
+      },
       host: "127.0.0.1",
       port: 5176,
       strictPort: false,
@@ -79,6 +87,7 @@ export default defineConfig(({ command, mode }) => {
         : undefined,
     },
     resolve: {
+      dedupe: ["react", "react-dom", "lucide-react"],
       alias: [
         { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
       ],

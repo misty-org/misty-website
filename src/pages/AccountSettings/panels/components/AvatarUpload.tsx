@@ -1,9 +1,16 @@
 import { useRef, useState } from "react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Spinner } from "@/components/ui/spinner";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  FieldError,
+  FileInput,
+  Spinner,
+  Text,
+} from "@misty/ui";
+
 import { toInitials } from "@/lib/format";
 import { avatarUrl, uploadAvatar, type MeResponse } from "../../api";
 
@@ -88,44 +95,36 @@ export function AvatarUpload({
 
   return (
     <div className="flex items-center gap-4">
-      <Avatar className="size-14">
+      <Avatar size="xl">
         <AvatarImage src={avatarUrl(me.avatar_version)} alt="" />
-        <AvatarFallback className="text-base font-semibold">
-          {initials}
-        </AvatarFallback>
+        <AvatarFallback>{initials}</AvatarFallback>
       </Avatar>
       <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">{me.username}</p>
-        <p className="mt-0.5 truncate text-sm text-muted-foreground">
+        <Text size="control" tone="bright" weight="medium">
+          {me.username}
+        </Text>
+        <Text size="control" tone="muted" className="mt-0.5">
           {me.email}
-        </p>
+        </Text>
         <div className="mt-2 flex items-center gap-2">
-          <Input
+          <FileInput
             ref={inputRef}
             id="account-avatar"
-            type="file"
             accept="image/*"
-            className="sr-only"
             aria-label="Profile picture"
             onChange={(event) => void handleFile(event.target.files?.[0])}
           />
           <Button
-            type="button"
-            variant="outline"
             size="sm"
             disabled={working}
             aria-busy={working}
             onClick={() => inputRef.current?.click()}
           >
-            {working ? <Spinner aria-hidden="true" /> : null}
-            {working ? "Uploading…" : "Change picture"}
+            Change picture
           </Button>
+          {working ? <Spinner label="Uploading your picture" /> : null}
         </div>
-        {error ? (
-          <p className="mt-1 text-sm text-destructive" role="status">
-            {error}
-          </p>
-        ) : null}
+        <FieldError message={error} className="mt-1" />
       </div>
     </div>
   );

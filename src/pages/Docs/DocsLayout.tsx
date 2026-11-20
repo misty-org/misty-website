@@ -1,64 +1,54 @@
-import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Outlet, useLocation } from "react-router";
+import { Button, Disclosure } from "@misty/ui";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
 import { docsPagePath } from "@/lib/site";
 import { docsGroupFor, docsNav, docsPages } from "./docsNav";
 import { SiteLink } from "@/components/SiteLink";
 
 function DocsNavList({
+  path,
   open,
   onOpenChange,
 }: {
+  path: string;
   open: string[];
   onOpenChange: (groups: string[]) => void;
 }) {
   return (
-    <Accordion type="multiple" value={open} onValueChange={onOpenChange}>
+    <div className="flex flex-col">
       {docsNav.map((group) => (
-        <AccordionItem
+        <Disclosure
           key={group.label}
-          value={group.label}
-          className="not-last:border-b-0"
+          kind="row"
+          title={group.label}
+          open={open.includes(group.label)}
+          onOpenChange={(next) =>
+            onOpenChange(
+              next ? [...open, group.label] : open.filter((label) => label !== group.label),
+            )
+          }
         >
-          <AccordionTrigger className="h-9 items-center px-2.5 py-0 font-normal text-muted-foreground transition-colors hover:text-foreground hover:no-underline aria-expanded:text-foreground [&>[data-slot=accordion-trigger-icon]]:hidden">
-            {group.label}
-            <ChevronRight
-              aria-hidden="true"
-              className="ml-auto size-4 shrink-0 transition-transform group-aria-expanded/accordion-trigger:rotate-90"
-            />
-          </AccordionTrigger>
-          {/* The list may first measure inside a closed disclosure, so its height stays automatic. */}
-          <AccordionContent className="h-auto pb-2 [&_a]:no-underline">
-            <ul className="ml-3">
-              {group.items.map((item) => (
-                <li key={item.to}>
-                  <SiteLink
-                    to={item.to}
-                    end
-                    className={({ isActive }) =>
-                      cn(
-                        "flex h-8 items-center truncate rounded-md px-2.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                        isActive && "text-foreground",
-                      )
-                    }
-                  >
+          <ul className="ml-3 grid gap-0.5">
+            {group.items.map((item) => (
+              <li key={item.to}>
+                <Button
+                  asChild
+                  variant="quiet"
+                  justify="start"
+                  data-active={item.to === path}
+                  className="w-full"
+                >
+                  <SiteLink to={item.to} end>
                     {item.label}
                   </SiteLink>
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </Disclosure>
       ))}
-    </Accordion>
+    </div>
   );
 }
 
@@ -87,26 +77,19 @@ export default function DocsLayout() {
         aria-label="Docs"
         className="pt-2.5 min-[1100px]:sticky min-[1100px]:top-[var(--site-nav-height)] min-[1100px]:max-h-[calc(100svh-var(--site-nav-height))] min-[1100px]:self-start min-[1100px]:overflow-y-auto min-[1100px]:pb-6 min-[1100px]:[scrollbar-width:thin]"
       >
-        <details
-          key={pathname}
-          className="group rounded-lg border border-border min-[1100px]:hidden"
-        >
-          <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm text-foreground [&::-webkit-details-marker]:hidden">
-            <span>
-              <span className="text-muted-foreground">Docs</span>
-              {current ? <span> / {current.label}</span> : null}
-            </span>
-            <ChevronDown
-              aria-hidden="true"
-              className="size-4 text-muted-foreground transition-transform group-open:rotate-180"
-            />
-          </summary>
-          <div className="border-t border-border px-2 py-3">
-            <DocsNavList open={open} onOpenChange={setOpen} />
-          </div>
-        </details>
+        <div className="rounded-lg border border-border px-2 py-1 min-[1100px]:hidden">
+          <Disclosure
+            key={pathname}
+            kind="row"
+            title={current ? `Docs / ${current.label}` : "Docs"}
+          >
+            <div className="border-t border-border pt-2">
+              <DocsNavList path={path} open={open} onOpenChange={setOpen} />
+            </div>
+          </Disclosure>
+        </div>
         <div className="hidden min-[1100px]:block">
-          <DocsNavList open={open} onOpenChange={setOpen} />
+          <DocsNavList path={path} open={open} onOpenChange={setOpen} />
         </div>
       </nav>
       <div key={pathname} className="page-transition min-w-0">

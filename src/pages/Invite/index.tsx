@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import { SiteLink } from "@/components/SiteLink";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button, Skeleton } from "@misty/ui";
 import { apiBase } from "@/lib/apiBase";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
@@ -13,7 +12,7 @@ const STEPS: AuthStep[] = [
   {
     text: "Create your free Misty account.",
     action: (
-      <Button asChild>
+      <Button variant="primary" asChild>
         <SiteLink to="/register">Create account</SiteLink>
       </Button>
     ),
@@ -21,7 +20,7 @@ const STEPS: AuthStep[] = [
   {
     text: "Download Misty and install it on your computer.",
     action: (
-      <Button asChild variant="outline">
+      <Button asChild>
         <SiteLink to="/download">Download</SiteLink>
       </Button>
     ),
@@ -68,7 +67,7 @@ export default function Invite() {
     <AuthShell title={title} wide>
       <AuthCard
         footer={
-          <p className="text-center text-base leading-7 text-pretty text-muted-foreground">
+          <p className="text-center text-page leading-7 text-pretty text-muted-foreground">
             Misty is one shared workspace where people and agents collaborate. It's free and open
             source.
           </p>

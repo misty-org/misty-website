@@ -2,8 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 import { useAuth } from "@/AuthContext";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button, Input, Skeleton } from "@misty/ui";
 import { CLOUD_HOST } from "@/lib/site";
 import { AuthRequestError, confirmEmailSignIn } from "../Auth/api";
 import AuthCard from "../Auth/AuthCard";
@@ -88,7 +87,7 @@ export default function ConfirmEmail() {
   return (
     <AuthShell title="Confirm your email">
       <AuthCard>
-        <div className="text-center text-base leading-7 text-foreground">
+        <div className="text-center text-page leading-7 text-foreground">
           {result ? (
             <p role="status">{result}</p>
           ) : link ? (
@@ -101,9 +100,9 @@ export default function ConfirmEmail() {
                 confirm();
               }}
             >
-              <input type="hidden" name="token" value={link.token} />
+              <Input type="hidden" name="token" value={link.token} />
               {automated ? (
-                <Button type="submit" size="lg" className="h-11 w-full">
+                <Button variant="primary" size="lg" type="submit" className="w-full">
                   Confirm email
                 </Button>
               ) : (

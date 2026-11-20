@@ -27,14 +27,14 @@ export function DesktopSettingsRow({
       <div className="grid min-w-0 gap-1">
         <strong
           className={cn(
-            "text-[0.9375rem] font-medium leading-6",
+            "text-body font-medium leading-6",
             muted ? "text-muted-foreground" : "text-foreground",
           )}
         >
           {label}
         </strong>
         {description ? (
-          <span className="text-sm leading-[1.375rem] text-muted-foreground">
+          <span className="text-control leading-[1.375rem] text-muted-foreground">
             {description}
           </span>
         ) : null}

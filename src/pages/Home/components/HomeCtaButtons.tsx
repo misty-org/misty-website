@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { AppleMark, LinuxMark, WindowsMark, type MarkIcon } from "@/components/ui/SocialMarks";
+import { AppleMark, LinuxMark, WindowsMark, type MarkIcon } from "@/components/brand/SocialMarks";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@misty/ui";
 import { SiteLink } from "@/components/SiteLink";
 import { cn } from "@/lib/utils";
 import { detectDownloadPlatform } from "@/pages/Download/detectPlatform";
@@ -26,7 +26,7 @@ export function DownloadCtaButton() {
   const Mark = named ? MARKS[named] : null;
 
   return (
-    <Button asChild size="lg" data-cta="download">
+    <Button variant="primary" size="lg" asChild data-cta="download">
       {build ? (
         <a href={build.href} aria-label={`Download Misty for ${build.platform}`}>
           {Mark ? <Mark className="-translate-y-px" aria-hidden="true" /> : null}

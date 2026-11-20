@@ -6,10 +6,10 @@ export function PrivacyPanel() {
     <div>
       <Section title="Data">
         <div className={`${customRowClass} flex flex-col gap-2`}>
-          <p className="text-sm font-medium text-foreground">
+          <p className="text-control font-medium text-foreground">
             Private Files and shared space content are handled differently.
           </p>
-          <p className="text-sm leading-relaxed text-muted-foreground">
+          <p className="text-control leading-relaxed text-muted-foreground">
             Private Files operations stay local unless you connect a provider or
             explicitly add content to a space. Shared Media content is stored
             for that space, and agents may use context you are permitted to

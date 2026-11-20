@@ -631,7 +631,7 @@ export default function Terms() {
     <LegalPage
       title="Terms of service"
       intro={
-        <p className="text-base leading-7 text-muted-foreground">
+        <p className="text-page leading-7 text-muted-foreground">
           These Terms of Service ("Terms") are a contract between you and{" "}
           {operatorDescription}. By creating an account, subscribing to Misty+
           or Boosts, installing the app, or using Misty, you agree to them. If you

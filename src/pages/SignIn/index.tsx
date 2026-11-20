@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router";
 import { useAuth } from "../../AuthContext";
-import { Button } from "@/components/ui/button";
+import { InlineLink } from "@misty/ui";
 import { safeInternalPath } from "@/lib/navigation";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
@@ -108,9 +108,9 @@ export default function SignIn({ onSignedIn }: SignInProps = {}) {
     <AuthShell title="Welcome back">
       <AuthCard
         footer={
-          <Button asChild variant="link" className="h-auto p-0 text-foreground">
+          <InlineLink asChild className="text-control">
             <NavLink to="/register" state={location.state}>Don’t have an account? Create one</NavLink>
-          </Button>
+          </InlineLink>
         }
       >
         <div className="flex flex-col gap-5">

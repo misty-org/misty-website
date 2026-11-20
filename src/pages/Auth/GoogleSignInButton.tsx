@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import { Button, Text } from "@misty/ui";
+
 import googleLogo from "@/assets/google-logo.svg";
 import { beginGoogleSignIn } from "./api";
 
@@ -30,25 +30,19 @@ export default function GoogleSignInButton({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-3 text-sm text-muted-foreground" aria-hidden="true">
+      <Text bare size="control" tone="muted" as="div" className="flex items-center gap-3" aria-hidden="true">
         <span className="h-px flex-1 bg-border" />
         or
         <span className="h-px flex-1 bg-border" />
-      </div>
+      </Text>
       <Button
-        type="button"
-        variant="outline"
         size="lg"
         disabled={disabled || starting}
         aria-busy={starting}
-        className="h-11 w-full gap-2.5"
+        className="w-full"
+        icon={<img src={googleLogo} alt="" aria-hidden="true" />}
         onClick={() => void start()}
       >
-        {starting ? (
-          <Spinner aria-hidden="true" />
-        ) : (
-          <img src={googleLogo} alt="" aria-hidden="true" className="size-[1.125rem]" />
-        )}
         Continue with Google
       </Button>
     </div>

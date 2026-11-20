@@ -1,46 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { Button, DropdownMenu, DropdownMenuContent, MenuItem, MenuTrigger } from "@misty/ui";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { siteLink } from "@/lib/site";
 import AccountMenu from "./AccountMenu";
 import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
 import { SiteLink } from "@/components/SiteLink";
 
-/**
- * The app's row states: a light wash on hover, a stronger one on the page you're on or a menu that's
- * open. Links and the Resources button share one fixed height so their washes match.
- */
-const desktopItemSize = "inline-flex h-7 items-center rounded-md px-2 text-sm leading-none";
-const desktopLinkClass =
-  `${desktopItemSize} text-muted-foreground transition-colors hover:bg-control-hover hover:text-foreground focus-visible:bg-control-hover focus-visible:text-foreground focus-visible:outline-none`;
-const desktopLinkActiveClass = "bg-control-active text-cream-bright hover:bg-control-active hover:text-cream-bright";
-
-function DesktopNavLink({ to, label, external }: NavLinkEntry) {
-  if (external) {
-    return (
-      <a href={to} target="_blank" rel="noopener noreferrer" className={desktopLinkClass}>
-        {label}
-      </a>
-    );
-  }
+/** A quiet button for each page: it washes on hover and stays pressed on the page you're on. */
+function DesktopNavLink({ to, label, currentPath }: NavLinkEntry & { currentPath: string }) {
   return (
-    <SiteLink
-      to={to}
-      className={({ isActive }) =>
-        cn(
-          desktopLinkClass,
-          isActive && desktopLinkActiveClass,
-        )
-      }
-    >
-      {label}
-    </SiteLink>
+    <Button asChild variant="quiet" data-active={currentPath.startsWith(to)}>
+      <SiteLink to={to}>{label}</SiteLink>
+    </Button>
   );
 }
 
@@ -63,6 +35,7 @@ export default function DesktopNav({
   onOpenSettings: () => void;
   onSignOut: () => void;
 }) {
+  const navigate = useNavigate();
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -95,49 +68,42 @@ export default function DesktopNav({
   return (
     <div className="hidden items-center gap-1 md:flex">
       {navItems.filter(({ external }) => !external).map((item) => (
-        <DesktopNavLink key={item.to} {...item} />
+        <DesktopNavLink key={item.to} {...item} currentPath={currentPath} />
       ))}
 
       <DropdownMenu open={resourcesOpen} modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            onPointerEnter={openResources}
-            onPointerLeave={scheduleClose}
-            onPointerDown={(event) => event.preventDefault()}
-            onClick={(event) => event.preventDefault()}
-            className={cn(
-              desktopItemSize,
-              "border-0 bg-transparent font-normal text-muted-foreground hover:bg-control-hover hover:text-foreground aria-expanded:bg-control-active aria-expanded:text-cream-bright",
-              resourcesActive && desktopLinkActiveClass,
-            )}
-          >
-            Resources
-          </Button>
-        </DropdownMenuTrigger>
+        <MenuTrigger
+          label="Resources"
+          chevron={false}
+          data-active={resourcesActive}
+          onPointerEnter={openResources}
+          onPointerLeave={scheduleClose}
+          onPointerDown={(event) => event.preventDefault()}
+          onClick={(event) => event.preventDefault()}
+        />
         <DropdownMenuContent
           align="center"
           sideOffset={8}
+          width="sm"
           onPointerEnter={openResources}
           onPointerLeave={scheduleClose}
           onCloseAutoFocus={(event) => event.preventDefault()}
-          className="w-40"
         >
           {resourceLinks.map(({ to, label, external }) => (
-            <DropdownMenuItem
+            <MenuItem
               key={to}
-              asChild
-              onSelect={() => setResourcesOpen(false)}
-              className="py-1"
-            >
-              {external ? (
-                <a href={to} target="_blank" rel="noopener noreferrer">
-                  {label}
-                </a>
-              ) : (
-                <SiteLink to={to}>{label}</SiteLink>
-              )}
-            </DropdownMenuItem>
+              label={label}
+              onSelect={() => {
+                setResourcesOpen(false);
+                if (external) {
+                  window.open(to, "_blank", "noopener,noreferrer");
+                  return;
+                }
+                const target = siteLink(to);
+                if ("path" in target) navigate(target.path);
+                else window.location.assign(target.href);
+              }}
+            />
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
@@ -152,7 +118,7 @@ export default function DesktopNav({
             onSignOut={onSignOut}
           />
         ) : (
-          <Button asChild size="sm">
+          <Button asChild variant="primary">
             <SiteLink to="/signin" state={{ from: currentPath }}>Sign in</SiteLink>
           </Button>
         )}

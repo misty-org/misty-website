@@ -5,7 +5,7 @@ import {
   XMark,
   YoutubeMark,
   type MarkIcon,
-} from "@/components/ui/SocialMarks";
+} from "@/components/brand/SocialMarks";
 
 import { DISCORD_URL, RELEASES_URL, REPO_URL, SUPPORT_EMAIL } from "@/lib/site";
 

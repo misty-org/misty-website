@@ -16,7 +16,7 @@ export default function AuthShell({ title, children, wide }: AuthShellProps) {
       <div className={`mx-auto flex w-full flex-col gap-8 ${wide ? "max-w-xl" : "max-w-md"}`}>
         <h1
           id="auth-page-title"
-          className="text-balance text-center text-2xl font-medium tracking-[-0.04em] text-foreground outline-none sm:text-3xl"
+          className="text-balance text-center text-display font-medium tracking-[-0.04em] text-foreground outline-none"
         >
           {title}
         </h1>
