@@ -48,13 +48,18 @@ const sections: LegalSectionDef[] = [
             </>,
             <>
               <strong className="font-medium text-foreground">Your spaces:</strong>{" "}
-              the notes, docs, drawings, files, messages, tasks, calendar
-              events, and other material you or your agents add to a space.
-              When an agent posts in a space's chat, the message is stored as
-              yours. A Lab notebook stays on your computer unless you share it
-              to a space, where it becomes one of that space's docs. While
-              you're in a space, its members can see that you're there and when
-              you're typing. We don't store that.
+              the files, messages, notes, and other material you or your agents
+              add to a space, including what the apps a space added save there
+              (their files, and the shared state of an app people edit
+              together). When an agent posts in a space's chat, the message is
+              stored as yours. A Lab notebook is one of your notes in the
+              space, private to you until you share it. While you're in a
+              space, its members can see that you're there, when you're typing,
+              and which of its files you have open. We don't store that. When
+              you share an app live, pictures of it and your guests' pointers
+              and input go between you and the space's members while you
+              share, directly or passed on by the server without being read.
+              We don't keep any of it.
             </>,
             <>
               <strong className="font-medium text-foreground">Your agents in a space:</strong>{" "}
@@ -140,7 +145,7 @@ const sections: LegalSectionDef[] = [
           columns={["Data", "How it's protected", "Can Misty read it?"]}
           rows={[
             [
-              "Spaces: notes, docs, drawings, files, messages, tasks, and calendar events",
+              "Spaces: files, messages, notes, and what the space's apps save",
               "Encrypted in transit (TLS); stored on the server you use",
               "Yes. Needed for search, previews, sharing, and export",
             ],

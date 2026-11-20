@@ -7,7 +7,7 @@ export const cloudflareEnv: IntegrationDoc = {
   summary:
     "Publishes the server over HTTPS, stores files and backups in R2 and runs Misty's Worker.",
   purpose: [
-    "Every Misty server runs on your own Cloudflare account. A Cloudflare Tunnel publishes the API at `https://MISTY_HOSTNAME` with no open ports. R2 holds Library files and the nightly backups. A Worker saves notes and drawings as people edit them together.",
+    "Every Misty server runs on your own Cloudflare account. A Cloudflare Tunnel publishes the API at `https://MISTY_HOSTNAME` with no open ports. R2 holds Library files and the nightly backups. A Worker saves notes and apps' shared state as people edit them together.",
     "You give the setup container one API token. It finds the zone that holds `MISTY_HOSTNAME` among the zones the token can see, and the account from the zone. On every start it creates whatever is missing and finds what it made before by name, so it never makes a second copy. You never run Wrangler or the `misty` CLI.",
   ],
   account: [
@@ -96,7 +96,7 @@ export const cloudflareEnv: IntegrationDoc = {
           [
             "Library bucket",
             "`misty-<host>-library`",
-            "Uploads, attachments, avatars, and images in notes and drawings.",
+            "Uploads, attachments, avatars, and images in notes.",
           ],
           [
             "Backup bucket",
@@ -111,7 +111,7 @@ export const cloudflareEnv: IntegrationDoc = {
           [
             "Collaboration Worker",
             "`misty-<host>-collab`",
-            "Saves and co-edits notes and drawings.",
+            "Saves and co-edits notes and apps people edit together.",
           ],
         ],
       },

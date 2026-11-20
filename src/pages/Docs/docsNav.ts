@@ -25,7 +25,7 @@ export const docsNav: DocsNavGroup[] = [
     items: [
       { to: "/docs/quickstart", label: "Quickstart" },
       { to: "/docs/connect", label: "Connect to a server" },
-      { to: "/docs/choose-agent", label: "Choose your agent" },
+      { to: "/docs/choose-agent", label: "Choose your engine" },
     ],
   },
   {

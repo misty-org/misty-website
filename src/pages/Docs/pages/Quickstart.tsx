@@ -8,7 +8,7 @@ export default function Quickstart() {
       <P text="This guide takes you from installing Misty to working with your first agent and teammate. It takes about ten minutes." />
 
       <DocSection id="before" title="Before you start">
-        <P text="You'll need an AI agent you can sign in to. Claude Code works with a Claude plan, and Codex works with a ChatGPT account. Antigravity is free with a Google account, and OpenCode needs no account at all." />
+        <P text="You'll need an engine you can sign in to. Claude Code works with a Claude plan, and Codex works with a ChatGPT account. Antigravity is free with a Google account, and OpenCode needs no account at all." />
       </DocSection>
 
       <DocSection id="install" title="1. Install Misty">
@@ -30,18 +30,18 @@ export default function Quickstart() {
         />
       </DocSection>
 
-      <DocSection id="agent" title="3. Set up your agent">
+      <DocSection id="agent" title="3. Set up your engine">
         <P text="After you sign in, Misty walks you through setup." />
         <Steps
           items={[
             "Read **How Misty works** and select **Continue**.",
-            "Under **Pick your default engine**, choose an agent. Select **Install** or **Sign in** next to it until it shows **Ready**.",
+            "Under **Pick your default engine**, choose one. Select **Install** or **Sign in** next to it until it shows **Ready**.",
             "Select **Continue**.",
             "Under **Which apps should agents use?**, sign in to any apps you want your agents to use, such as Gmail or Slack. You can skip this for now.",
             "Select **Start using Misty**.",
           ]}
         />
-        <P text="[Choose your agent](/docs/choose-agent) explains each agent and what it costs." />
+        <P text="[Choose your engine](/docs/choose-agent) explains each engine and what it costs." />
       </DocSection>
 
       <DocSection id="chat" title="4. Give your agent a task">

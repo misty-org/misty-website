@@ -154,7 +154,7 @@ const sections: LegalSectionDef[] = [
     body: (
       <>
         <p>
-          You keep ownership of the notes, drawings, files, messages, and other
+          You keep ownership of the files, messages, notes, and other
           material you create in or upload to Misty ("Your Content"). You give
           us a limited, worldwide, royalty-free license to host, store, copy,
           process, transmit, and display Your Content only as needed to

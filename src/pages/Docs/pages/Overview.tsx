@@ -14,9 +14,9 @@ export default function Overview() {
       <DocSection id="key-ideas" title="Key ideas">
         <BulletList
           items={[
-            "**Agents** are AI tools that do work for you, such as Claude Code and Codex. They run on your computer, under your own sign-in. See [Choose your agent](/docs/choose-agent).",
+            "**Agents** do work for you. Each runs on an engine you already use, such as Claude Code or Codex, on your computer and under your own sign-in. See [Choose your engine](/docs/choose-agent).",
             "**Chats** are where you give an agent a task and follow its work. See [Agent chats](/docs/chats).",
-            "**Spaces** are shared places for your team. Each space has its own group chat, docs, drawings and files. See [Spaces](/docs/spaces).",
+            "**Spaces** are shared places for your team. Each space has its own group chat and files, plus the open-source apps it adds. See [Spaces](/docs/spaces).",
             "The **Studio** is a 3D room where you watch your agents work and hire new ones. See [Studio](/docs/studio).",
           ]}
         />

@@ -1,4 +1,4 @@
-import { CalendarDays, FileText, FlaskConical, GitPullRequest, Newspaper } from "lucide-react";
+import { FileText, FlaskConical, GitPullRequest, Newspaper } from "lucide-react";
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { Chapter } from "./Chapter";
 import { EngineMark } from "./EngineMark";
@@ -31,7 +31,7 @@ const USE_CASES: readonly UseCase[] = [
     thread: [
       { from: "Priya", text: "Where are we on the launch? I was out Friday." },
       { from: "Alex's agent", engine: "claude", text: "From #launch and Gmail: the landing copy is approved, the press embargo moved to Oct 27, and Sam owns the support FAQ." },
-      { from: "Sam", text: "The FAQ draft is in the Journal if anyone wants to check it." },
+      { from: "Sam", text: "The FAQ draft is in Files if anyone wants to check it." },
     ],
     result: { icon: <FileText size={16} />, name: "Launch plan", note: "Updated with this week's changes" },
   },
@@ -74,10 +74,10 @@ const USE_CASES: readonly UseCase[] = [
     space: "Lisbon trip", members: "Alex, Sam, Priya and 1 agent",
     thread: [
       { from: "Alex", text: "May, six of us, somewhere near the beach?" },
-      { from: "Sam's agent", engine: "claude", text: "Found three houses in Cascais that sleep six for May 14 to 18. Prices and links are in the Planner." },
+      { from: "Sam's agent", engine: "claude", text: "Found three houses in Cascais that sleep six for May 14 to 18. Prices and links are in Files." },
       { from: "Priya", text: "The second one, for the pool." },
     ],
-    result: { icon: <CalendarDays size={16} />, name: "Cascais, May 14 to 18", note: "Added to the Planner" },
+    result: { icon: <FileText size={16} />, name: "Cascais, May 14 to 18", note: "Saved to Files" },
   },
 ];
 

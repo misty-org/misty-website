@@ -1,6 +1,6 @@
 import {
-  Bot, Clapperboard, ChefHat, Cloud, Code, Compass, CreditCard, Cpu, FlaskConical, Gamepad2, GraduationCap, HardDrive,
-  KeyRound, Laptop, ListTodo, MessagesSquare, Music, NotebookPen, Percent, Server, Unlock,
+  Bot, ChefHat, Cloud, Code, Compass, CreditCard, Cpu, FlaskConical, Folder, Gamepad2, GraduationCap, HardDrive,
+  KeyRound, Laptop, MessagesSquare, Music, Percent, Presentation, Server, Unlock,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Bar, Person } from "./ShotSketches";
@@ -31,8 +31,8 @@ function LearnPanel() {
       <Bar icon={<Person name="Learning AI" />} title="Learning AI" note="214 members" />
       <div className="mist-mock-thread">
         <Message from="Maya">How do I get an agent to sum up a long PDF?</Message>
-        <Message from="Jordan">Drop it in Media, then ask in chat. Here's the prompt I use.</Message>
-        <Message from="Jordan's agent" agent>Summed up all 38 pages. The five key points are in the Journal.</Message>
+        <Message from="Jordan">Drop it in Files, then ask in chat. Here's the prompt I use.</Message>
+        <Message from="Jordan's agent" agent>Summed up all 38 pages. The five key points are in the Lab.</Message>
         <Message from="Maya">Oh, that's easy. Trying it on my notes now.</Message>
       </div>
     </div>
@@ -64,17 +64,17 @@ function ExplorePanel() {
   );
 }
 
-/** A team's space and the light tools built into it, each busy with the team's work. */
+/** A team's space: Misty's own parts and an open-source app the team added, each busy with the team's work. */
 function TeamPanel() {
   return (
     <div className="mist-mock">
       <Bar icon={<Person name="Product" />} title="Product" note="6 people and 3 agents" />
       <div className="mist-mock-groups">
         <div className="mist-mock-row"><MessagesSquare size={16} /><b>Chat</b><small>3 new messages</small></div>
-        <div className="mist-mock-row"><NotebookPen size={16} /><b>Journal</b><small>Launch plan, edited by Sam</small></div>
-        <div className="mist-mock-row"><ListTodo size={16} /><b>Planner</b><small>4 tasks due this week</small></div>
-        <div className="mist-mock-row"><Clapperboard size={16} /><b>Media</b><small>12 shared files</small></div>
+        <div className="mist-mock-row"><Folder size={16} /><b>Files</b><small>12 shared files</small></div>
         <div className="mist-mock-row"><FlaskConical size={16} /><b>Lab</b><small>Signup chart updated</small></div>
+        <div className="mist-mock-row"><Code size={16} /><b>Code</b><small>2 projects</small></div>
+        <div className="mist-mock-row"><Presentation size={16} /><b>DeckCraft</b><small>Launch deck, Sam and his agent</small></div>
       </div>
     </div>
   );
@@ -84,7 +84,7 @@ function TeamPanel() {
 function ModelsPanel() {
   return (
     <div className="mist-mock">
-      <Bar icon={<Cpu size={16} />} title="Models" note="3 agents" />
+      <Bar icon={<Cpu size={16} />} title="Models" note="3 engines" />
       <div className="mist-mock-groups">
         <div className="mist-mock-row"><CreditCard size={16} /><b>Your plan</b><small>Signed in</small></div>
         <div className="mist-mock-row"><KeyRound size={16} /><b>API key</b><small>Connected</small></div>
@@ -114,7 +114,7 @@ type Goal = { title: string; body: string; panel: ReactNode };
 const GOALS: readonly Goal[] = [
   {
     title: "Anyone can use AI",
-    body: "Misty takes care of the technical parts, from installing an agent to signing in to it, with no terminal to type into. And you don't learn alone: spaces are where people new to AI ask questions, share what works and learn from each other.",
+    body: "Misty takes care of the technical parts, from installing an engine to signing in to it, with no terminal to type into. And you don't learn alone: spaces are where people new to AI ask questions, share what works and learn from each other.",
     panel: <LearnPanel />,
   },
   {
@@ -124,12 +124,12 @@ const GOALS: readonly Goal[] = [
   },
   {
     title: "Teamwork without the setup",
-    body: "Every space comes with the basics a team needs: a group chat, docs and drawings, tasks, files and notebooks. They're light and built in, so your team starts working together in minutes instead of wiring tools together.",
+    body: "Every space comes with a group chat, shared files, notebooks and code. Any other tool is an open-source app you add from its GitHub link, and your agents work in it beside you, so your team starts working together in minutes instead of wiring tools together.",
     panel: <TeamPanel />,
   },
   {
-    title: "Any agent, on your own models",
-    body: "Use the agents you already like, side by side, with nothing tying you to one. They run on the plans, API keys or local models you already have, and we never resell AI or add a markup.",
+    title: "Any engine, on your own models",
+    body: "Use the engines you already like, such as Claude Code or Codex, side by side, with nothing tying you to one. They run on the plans, API keys or local models you already have, and we never resell AI or add a markup.",
     panel: <ModelsPanel />,
   },
   {

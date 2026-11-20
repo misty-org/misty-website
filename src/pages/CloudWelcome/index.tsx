@@ -18,10 +18,10 @@ const STEPS: AuthStep[] = [
   },
   { text: "In Misty, choose Misty Cloud and sign in with your Misty account." },
   {
-    text: "Choose your agent, such as Claude Code or Codex. It runs on your own plan with that AI, and Misty never charges for AI.",
+    text: "Choose your engine, such as Claude Code or Codex. It runs on your own plan with that AI, and Misty never charges for AI.",
     action: (
       <Button asChild>
-        <SiteLink to="/docs/choose-agent">Choose your agent</SiteLink>
+        <SiteLink to="/docs/choose-agent">Choose your engine</SiteLink>
       </Button>
     ),
   },

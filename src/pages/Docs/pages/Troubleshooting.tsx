@@ -8,19 +8,19 @@ export default function Troubleshooting() {
     <DocPage title="Troubleshooting">
       <P text={`Can't find your problem here? Ask on [Discord](${DISCORD_URL}) or email ${SUPPORT_EMAIL}.`} />
 
-      <DocSection id="agent-not-ready" title="My agent doesn't show Ready">
+      <DocSection id="agent-not-ready" title="My engine doesn't show Ready">
         <Steps
           items={[
             "Open **Agents** from the sidebar and go to **CLIs**.",
-            "Make sure the agent is installed. If not, select **Install**.",
-            "Sign in to the agent with its maker's account.",
+            "Make sure the engine is installed. If not, select **Install**.",
+            "Sign in to the engine with its maker's account.",
             "Select **Check again**.",
           ]}
         />
       </DocSection>
 
       <DocSection id="connect-an-ai" title="A chat says Connect an AI to start">
-        <P text="Misty doesn't have an agent it can use yet. Select **Set up an AI** and finish setting up an agent. See [Choose your agent](/docs/choose-agent)." />
+        <P text="Misty doesn't have an engine it can use yet. Select **Set up an AI** and finish setting up an engine. See [Choose your engine](/docs/choose-agent)." />
       </DocSection>
 
       <DocSection id="waiting" title="A task in a space is waiting">

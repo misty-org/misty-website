@@ -47,7 +47,7 @@ export default function Studio() {
         <Steps
           items={[
             "Select **Hire** in the toolbar (key 2).",
-            "Choose an agent, such as Claude Code or Codex. Agents you haven't installed are locked. See [Choose your agent](/docs/choose-agent).",
+            "Choose its engine, such as Claude Code or Codex. Engines you haven't installed are locked. See [Choose your engine](/docs/choose-agent).",
             "Enter a **Name**, a **Role** and the **Folder** it works in.",
             "Select **Hire**.",
           ]}

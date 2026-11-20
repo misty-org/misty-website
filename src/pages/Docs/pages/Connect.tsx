@@ -50,7 +50,7 @@ export default function Connect() {
           items={[
             "Install Misty and sign in with the same account.",
             "Your spaces live on the server, so you'll see the same ones on every computer.",
-            "Agent sign-ins stay on each computer. Set up your agent again on the new one.",
+            "Engine sign-ins stay on each computer. Set up your engines again on the new one.",
           ]}
         />
       </DocSection>

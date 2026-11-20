@@ -51,7 +51,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Quickstart"),
         description:
-          "Install Misty, sign in, connect an agent and start working with your team.",
+          "Install Misty, sign in, set up an engine and start working with your team.",
       },
     },
     {
@@ -67,9 +67,9 @@ export const docsRoutes: RouteObject = {
       path: "choose-agent",
       element: <ChooseAgent />,
       handle: {
-        title: docsTitle("Choose your agent"),
+        title: docsTitle("Choose your engine"),
         description:
-          "The agents Misty works with, such as Claude Code and Codex, and how to set one up.",
+          "The engines your agents run on, such as Claude Code and Codex, and how to set one up.",
       },
     },
     {
@@ -87,7 +87,7 @@ export const docsRoutes: RouteObject = {
       handle: {
         title: docsTitle("Spaces"),
         description:
-          "Create a space, invite people, and share chat, docs, drawings and files with them and their agents.",
+          "Create a space, invite people, and share chat, files and apps with them and their agents.",
       },
     },
     {

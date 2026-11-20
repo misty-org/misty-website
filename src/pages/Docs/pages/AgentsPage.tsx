@@ -9,7 +9,7 @@ export default function AgentsPage() {
       <P text="It has three groups of pages:" />
       <BulletList
         items={[
-          "**Agents**: your agents and personas.",
+          "**Agents**: your agents and templates to start new ones from.",
           "**Engines**: the AI tools your agents run on, such as Claude Code and Codex. Go to **CLIs** to install them.",
           "**Tools**: plugins, skills, prompts, MCP servers and apps your agents can use.",
         ]}

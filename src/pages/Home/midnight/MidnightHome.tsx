@@ -47,7 +47,7 @@ export function MidnightHome() {
         <div className="mist-container mist-hero-copy">
           <h1 id="mist-hero-title">Build together with AI</h1>
           <p className="mist-hero-lede">
-            A collaborative environment where people and their agents learn, work and create together. Bring any agent,
+            A collaborative environment where people and their agents learn, work and create together. Bring any engine,
             build in spaces you share, and explore what others have made.
           </p>
           <HomeCtaButtons className="mist-hero-actions justify-center" />
