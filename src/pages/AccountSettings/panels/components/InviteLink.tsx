@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton, Text } from "@misty/ui";
+
 import { CopyField } from "../../../Setup/CopyField";
 import { fetchInviteCode } from "../../api";
 import { customRowClass } from "../../components/SettingsRows";
@@ -27,11 +28,13 @@ export function InviteLink() {
   return (
     <div className={customRowClass}>
       {failed ? (
-        <p className="text-sm text-muted-foreground">Your invite link isn't available right now.</p>
+        <Text wrap size="control" tone="muted">
+          Your invite link isn't available right now.
+        </Text>
       ) : code ? (
         <CopyField label="Your invite link" value={`${window.location.origin}/r/${code}`} />
       ) : (
-        <Skeleton aria-hidden="true" className="h-[4.25rem] w-full" />
+        <Skeleton className="h-17 w-full" />
       )}
     </div>
   );

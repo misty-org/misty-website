@@ -2,14 +2,7 @@ import { Check } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import { PublicPage } from "@/components/marketing";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button, Disclosure, DisclosureList, InlineLink, SkeletonControl, Text } from "@misty/ui";
 import { marketingCopy } from "@/content/marketingCopy";
 import { BOOSTS_SETTINGS_PATH, DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH, SUPPORT_EMAIL } from "@/lib/site";
 import { usePlanCheckout } from "./usePlanCheckout";
@@ -28,7 +21,6 @@ import { SiteLink } from "@/components/SiteLink";
 import { BillingToggle } from "@/components/BillingToggle";
 
 /** A plan's button is as wide as its label, like the app's; the skeleton holds that place. */
-const buttonSkeletonClass = "h-9 w-40 rounded-lg";
 
 /**
  * One plan. Side by side, each card spans the same four rows of the plans grid (heading, price,
@@ -63,21 +55,21 @@ function PlanCard({
             {name}
           </h2>
           {recommended ? (
-            <span className="rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground">
+            <span className="rounded-md border border-border px-2 py-0.5 text-caption text-muted-foreground">
               Recommended
             </span>
           ) : null}
         </div>
-        <p className="mt-1 text-sm text-muted-foreground">{tagline}</p>
+        <p className="mt-1 text-control text-muted-foreground">{tagline}</p>
       </div>
       <p className="mt-5 flex items-baseline gap-2">
         <span className="text-4xl font-medium tracking-[-0.03em] text-foreground">
           {price}
         </span>
-        <span className="text-sm text-muted-foreground">{period}</span>
+        <span className="text-control text-muted-foreground">{period}</span>
       </p>
       <div className="mt-5 flex">{action}</div>
-      <ul className="mt-6 grid content-start gap-2 border-t border-border pt-5 text-sm leading-6 text-foreground/85">
+      <ul className="mt-6 grid content-start gap-2 border-t border-border pt-5 text-control leading-6 text-foreground/85">
         {items.map((item, index) => (
           <li key={index} className="grid grid-cols-[1rem_1fr] gap-2.5">
             <Check aria-hidden="true" className="mt-1 size-4 text-foreground" />
@@ -97,14 +89,7 @@ function Question({
   children: ReactNode;
 }) {
   return (
-    <AccordionItem value={question}>
-      <AccordionTrigger className="items-center gap-4 text-base hover:no-underline">
-        {question}
-      </AccordionTrigger>
-      <AccordionContent className="h-auto text-base leading-7 text-muted-foreground">
-        {children}
-      </AccordionContent>
-    </AccordionItem>
+    <Disclosure title={question}>{children}</Disclosure>
   );
 }
 
@@ -117,33 +102,31 @@ function PricingQuestions() {
       className="mt-24 grid items-start gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.7fr)] md:gap-16"
     >
       <div className="grid gap-2">
-        <h2
+        <Text
+          as="h2"
+          wrap
+          size="display"
+          weight="medium"
           id="pricing-questions"
-          className="text-xl font-medium tracking-[-0.02em] text-foreground sm:text-2xl"
+          className="tracking-[-0.02em] text-foreground"
         >
           Questions
-        </h2>
-        <p className="text-base text-muted-foreground">
+        </Text>
+        <Text wrap size="page" tone="muted">
           Something else? Ask on{" "}
-          <a
-            href={DISCORD_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-foreground underline underline-offset-4"
-          >
-            Discord
-          </a>{" "}
+          <InlineLink asChild className="text-foreground">
+            <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
+              Discord
+            </a>
+          </InlineLink>{" "}
           or email{" "}
-          <a
-            href={`mailto:${SUPPORT_EMAIL}`}
-            className="text-foreground underline underline-offset-4"
-          >
-            {SUPPORT_EMAIL}
-          </a>
+          <InlineLink asChild className="text-foreground">
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
+          </InlineLink>
           .
-        </p>
+        </Text>
       </div>
-      <Accordion type="multiple" className="border-t border-border">
+      <DisclosureList className="border-t border-border">
         {pricingQuestions.map(({ question, answer }) => (
           <Question key={question} question={question}>
             {answer}
@@ -151,11 +134,16 @@ function PricingQuestions() {
         ))}
         <Question question="How does billing work?">
           Prices are in US dollars, plus tax where it applies. The{" "}
-          <SiteLink to="/terms#cloud">Terms</SiteLink> cover billing and
-          cancellation. To update your card or cancel, go to{" "}
-          <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>your account settings</SiteLink>.
+          <InlineLink asChild>
+            <SiteLink to="/terms#cloud">Terms</SiteLink>
+          </InlineLink>{" "}
+          cover billing and cancellation. To update your card or cancel, go to{" "}
+          <InlineLink asChild>
+            <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>your account settings</SiteLink>
+          </InlineLink>
+          .
         </Question>
-      </Accordion>
+      </DisclosureList>
     </section>
   );
 }
@@ -163,26 +151,25 @@ function PricingQuestions() {
 /** Misty+'s button: checkout for the billing period chosen, or for someone who has it, their subscription. */
 function PlusAction({ checkout, yearly }: { checkout: ReturnType<typeof usePlanCheckout>; yearly: boolean }) {
   if (checkout.checking) {
-    return <Skeleton aria-hidden="true" className={buttonSkeletonClass} />;
+    return <SkeletonControl kind="button" className="h-9 w-40" />;
   }
   if (checkout.plan === "plus") {
     return (
-      <Button asChild variant="outline" size="lg">
+      <Button size="lg" asChild>
         <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>Manage subscription</SiteLink>
       </Button>
     );
   }
   return (
     <div className="flex flex-col items-start gap-2">
-      <Button
-        size="lg"
+      <Button variant="primary" size="lg"
         disabled={checkout.starting !== null}
         onClick={() => void checkout.start(yearly ? "plus_yearly" : "plus")}
       >
         Get {plans.plus.name}
       </Button>
       {checkout.error ? (
-        <p role="alert" className="text-base text-muted-foreground">
+        <p role="alert" className="text-page text-muted-foreground">
           {checkout.error}
         </p>
       ) : null}
@@ -204,13 +191,13 @@ function SpaceLevels() {
         >
           Space levels
         </h2>
-        <p className="text-base text-muted-foreground">
+        <p className="text-page text-muted-foreground">
           Boosts from everyone in a space add up. Each Boost past a level adds {storagePerBoost} more
           shared storage.
         </p>
       </div>
       <div className="overflow-x-auto rounded-xl border border-border">
-        <table className="w-full min-w-[32rem] text-left text-sm">
+        <table className="w-full min-w-[32rem] text-left text-control">
           <thead>
             <tr className="border-b border-border">
               <th scope="col" className="px-4 py-3 font-normal text-muted-foreground">
@@ -219,7 +206,7 @@ function SpaceLevels() {
               {spaceLevels.map((level) => (
                 <th key={level.name} scope="col" className="px-4 py-3 font-medium text-foreground">
                   {level.name}
-                  <span className="block text-xs font-normal text-muted-foreground">
+                  <span className="block text-caption font-normal text-muted-foreground">
                     {level.boosts ? `${level.boosts} Boosts` : "No Boosts"}
                   </span>
                 </th>
@@ -284,7 +271,7 @@ export default function Pricing() {
               </>,
             ]}
             action={
-              <Button asChild variant="outline" size="lg">
+              <Button size="lg" asChild>
                 <SiteLink to="/download">Download Misty</SiteLink>
               </Button>
             }
@@ -296,7 +283,7 @@ export default function Pricing() {
             period={yearly ? "/year per Boost" : "/month per Boost"}
             items={[...includes.boost]}
             action={
-              <Button asChild variant="outline" size="lg">
+              <Button size="lg" asChild>
                 <SiteLink to={yearly ? `${BOOSTS_SETTINGS_PATH}?billing=yearly` : BOOSTS_SETTINGS_PATH}>
                   Boost a space
                 </SiteLink>

@@ -1,7 +1,8 @@
 import { type ReactNode } from "react";
 import { X, type LucideIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { IconButton, NavGroupHeading, NavList, NavRow, OverflowFadeText, Text } from "@misty/ui";
+
 import { cn } from "@/lib/utils";
 
 interface DesktopSettingsNavEntry<Id extends string = string> {
@@ -66,41 +67,24 @@ export function DesktopSettingsFrame<Id extends string>({
               aria-label={group.label}
               className="pb-3 max-[704px]:contents"
             >
-              <p className="px-2.5 pb-1.5 pt-2 text-[0.8125rem] leading-5 text-muted-foreground max-[704px]:hidden">
-                {group.label}
-              </p>
-              <div className="grid gap-0.5 max-[704px]:contents">
+              <NavGroupHeading name={group.label} tone="page" className="max-[704px]:hidden" />
+              <NavList className="max-[704px]:contents">
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const active = item.id === activeId;
                   return (
-                    <button
+                    <NavRow
                       key={item.id}
-                      type="button"
-                      aria-current={active ? "page" : undefined}
+                      tone="page"
+                      current={item.id === activeId}
                       onClick={() => onSelect(item.id)}
-                      className={cn(
-                        "flex h-9 w-full min-w-0 items-center gap-3 rounded-lg px-2.5 text-left text-[0.9375rem] leading-5 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring max-[704px]:w-auto max-[704px]:shrink-0",
-                        active
-                          ? "bg-[var(--settings-nav-selected)] text-sidebar-accent-foreground"
-                          : "hover:bg-[var(--settings-nav-hover)]",
-                      )}
+                      className="max-[704px]:w-auto max-[704px]:shrink-0"
                     >
-                      <Icon
-                        aria-hidden="true"
-                        strokeWidth={1.75}
-                        className={cn(
-                          "size-[1.125rem] shrink-0",
-                          !active && "text-muted-foreground",
-                        )}
-                      />
-                      <span className="min-w-0 flex-1 truncate">
-                        {item.label}
-                      </span>
-                    </button>
+                      <Icon aria-hidden="true" />
+                      <OverflowFadeText>{item.label}</OverflowFadeText>
+                    </NavRow>
                   );
                 })}
-              </div>
+              </NavList>
             </div>
           ))}
         </nav>
@@ -111,18 +95,12 @@ export function DesktopSettingsFrame<Id extends string>({
       <main className="flex min-h-0 min-w-0 flex-col bg-background">
         {/* The page we're on, over a divider; the page scrolls under it, never behind it. */}
         <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border pl-10 pr-4 max-[792px]:pl-6">
-          <h1 className="min-w-0 truncate text-[0.9375rem] font-semibold leading-6 text-foreground">
+          <Text as="h1" size="body" weight="semibold" tone="bright" className="min-w-0">
             {title}
-          </h1>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            aria-label={`Close ${ariaLabel.toLowerCase()}`}
-            onClick={onClose}
-          >
-            <X aria-hidden="true" className="size-4" strokeWidth={1.8} />
-          </Button>
+          </Text>
+          <IconButton label={`Close ${ariaLabel.toLowerCase()}`} onClick={onClose}>
+            <X aria-hidden="true" />
+          </IconButton>
         </header>
         <div className="mb-3 min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain">
           <div className="w-full px-10 pb-12 pt-6 max-[792px]:px-6">{children}</div>

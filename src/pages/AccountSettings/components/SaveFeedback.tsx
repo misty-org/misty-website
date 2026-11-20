@@ -1,22 +1,16 @@
+import { FieldError, Text } from "@misty/ui";
+
 export function SaveFeedback({ ok, error }: { ok: boolean; error: string }) {
   if (ok) {
     return (
-      <p
-        role="status"
-        aria-live="polite"
-        className="mt-2 text-sm text-[var(--settings-success)]"
-      >
+      <Text wrap size="meta" tone="muted" role="status" aria-live="polite" className="mt-2">
         Saved.
-      </p>
+      </Text>
     );
   }
 
   if (error) {
-    return (
-      <p role="alert" className="mt-2 text-sm text-destructive">
-        {error}
-      </p>
-    );
+    return <FieldError message={<span role="alert">{error}</span>} className="mt-2" />;
   }
 
   return null;

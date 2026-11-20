@@ -5,6 +5,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   resolve: {
+    dedupe: ["react", "react-dom", "lucide-react"],
     alias: [
       { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
     ],

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { holdWheelToSteps, settleStep, STEP } from "./steppedScroll";
 import "./tiles.css";
+import { Pressable } from "@misty/ui";
 
 /**
  * Bento tiles for Misty's main features: a sketch fills the top of each tile and one short sentence
@@ -125,7 +126,7 @@ function Viewport({ feature, viewRef, onPick }: {
         <p className="mist-zoom-title" aria-hidden="true">{feature.title}</p>
         <div className="mist-zoom-tabs" role="group" aria-label="Screenshots">
           {feature.shots.map((shot, index) => (
-            <button key={shot.src} type="button" onClick={() => onPick(index)}>{shot.icon}{shot.name}</button>
+            <Pressable key={shot.src} onClick={() => onPick(index)}>{shot.icon}{shot.name}</Pressable>
           ))}
         </div>
       </div>

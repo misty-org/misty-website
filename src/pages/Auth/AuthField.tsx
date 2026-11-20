@@ -1,5 +1,4 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field, Input } from "@misty/ui";
 
 interface AuthFieldProps {
   id: string;
@@ -27,8 +26,7 @@ export default function AuthField({
   onChange,
 }: AuthFieldProps) {
   return (
-    <div className="grid gap-2">
-      <Label htmlFor={id}>{label}</Label>
+    <Field label={label}>
       <Input
         id={id}
         name={name}
@@ -39,8 +37,7 @@ export default function AuthField({
         required={required}
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11"
       />
-    </div>
+    </Field>
   );
 }

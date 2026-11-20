@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router";
 
-import { Button } from "@/components/ui/button";
+import { Checkbox, InlineLink, Text } from "@misty/ui";
+
 import { marketingCopy } from "@/content/marketingCopy";
 import AuthCard from "../Auth/AuthCard";
 import AuthField from "../Auth/AuthField";
@@ -57,9 +58,9 @@ export default function Register() {
     return (
       <AuthShell title="Check your email">
         <AuthCard>
-          <p role="status" className="text-base leading-7 text-foreground">
+          <Text wrap size="page" role="status">
             We sent a link to {email}. Open it to finish creating your account.
-          </p>
+          </Text>
         </AuthCard>
       </AuthShell>
     );
@@ -69,13 +70,9 @@ export default function Register() {
     <AuthShell title={marketingCopy.auth.registerTitle}>
       <AuthCard
         footer={
-          <Button
-            asChild
-            variant="link"
-            className="h-auto p-0 text-foreground"
-          >
+          <InlineLink asChild>
             <NavLink to="/signin" state={location.state}>Already have an account? Sign in</NavLink>
-          </Button>
+          </InlineLink>
         }
       >
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -111,44 +108,37 @@ export default function Register() {
             onChange={setPassword}
           />
 
-          <label
-            htmlFor="register-terms"
-            className="flex items-start gap-3 text-sm leading-6 text-muted-foreground"
-          >
-            <input
+          <div className="flex items-start gap-3">
+            <Checkbox
               id="register-terms"
-              type="checkbox"
               checked={agreed}
               required
-              onChange={(event) => setAgreed(event.target.checked)}
-              className="mt-1 size-4 shrink-0 accent-primary"
+              onCheckedChange={(checked) => setAgreed(checked === true)}
+              className="mt-0.5"
             />
-            <span>
+            <label htmlFor="register-terms" className="min-w-0">
+              <Text wrap size="control" tone="muted" as="span">
               I agree to the{" "}
-              <NavLink
-                to="/terms"
-                target="_blank"
-                className="text-foreground underline underline-offset-4"
-              >
-                Terms of service
-              </NavLink>{" "}
+              <InlineLink asChild>
+                <NavLink to="/terms" target="_blank">
+                  Terms of service
+                </NavLink>
+              </InlineLink>{" "}
               and{" "}
-              <NavLink
-                to="/privacy"
-                target="_blank"
-                className="text-foreground underline underline-offset-4"
-              >
-                Privacy policy
-              </NavLink>
+              <InlineLink asChild>
+                <NavLink to="/privacy" target="_blank">
+                  Privacy policy
+                </NavLink>
+              </InlineLink>
               .
-            </span>
-          </label>
+              </Text>
+            </label>
+          </div>
 
           {error ? <AuthMessage tone="error" message={error} /> : null}
 
           <AuthSubmitButton
             idleLabel="Create account"
-            loadingLabel="Creating account..."
             loading={loading}
             disabled={!agreed}
           />

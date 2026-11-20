@@ -1,5 +1,5 @@
 /* Homepage-only styles. Shared navigation, footer, and drawer keep their styles. */
-/* Theme tokens, all from the app's palette (src/styles/misty-theme.css). The site is dark only. */
+/* Theme tokens, all from the app's palette (@misty/ui/styles.css). The site is dark only. */
 .mist-home {
   --mist-background: var(--misty-theme-bg); --mist-paper: var(--misty-theme-bg);
   --mist-ink: var(--misty-theme-text-bright); --mist-ink-max: var(--misty-theme-text-bright); --mist-strong: var(--misty-theme-text);

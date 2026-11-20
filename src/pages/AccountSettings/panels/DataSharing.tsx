@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 
-import { Spinner } from "@/components/ui/spinner";
-import { Switch } from "@/components/ui/switch";
+import { FieldError, SkeletonList, Switch } from "@misty/ui";
+
 import { DesktopSettingsRow } from "@/components/settings";
 import {
   fetchAccountSettings,
   updateAccountSettings,
   type AccountSettingsResponse,
 } from "../api";
-import {
-  customRowClass,
-  ErrorRow,
-} from "../components/SettingsRows";
+import { ErrorRow } from "../components/SettingsRows";
 
 const PREFERENCES: {
   key: keyof AccountSettingsResponse;
@@ -92,12 +89,14 @@ export function DataSharing() {
 
   if (!settings) {
     return (
-      <div
-        className={`${customRowClass} flex items-center gap-2 text-muted-foreground`}
-      >
-        <Spinner aria-hidden="true" className="size-4" />
-        <span className="text-sm">Loading preferences</span>
-      </div>
+      <SkeletonList
+        label="Preferences"
+        variant="settings"
+        rows={PREFERENCES.length}
+        lines={2}
+        trailing="switch"
+        rowClassName="px-5"
+      />
     );
   }
 
@@ -118,9 +117,7 @@ export function DataSharing() {
         </DesktopSettingsRow>
       ))}
       {saveError ? (
-        <p className="px-5 pb-3 text-sm text-destructive" role="status">
-          {saveError}
-        </p>
+        <FieldError message={<span role="status">{saveError}</span>} className="px-5 pb-3" />
       ) : null}
     </>
   );

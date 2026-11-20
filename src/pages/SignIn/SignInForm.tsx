@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { Button } from "@/components/ui/button";
+import { InlineLink } from "@misty/ui";
 import AuthField from "../Auth/AuthField";
 import AuthMessage from "../Auth/AuthMessage";
 import AuthSubmitButton from "../Auth/AuthSubmitButton";
@@ -48,20 +48,15 @@ export default function SignInForm({
             required
             onChange={onPasswordChange}
           />
-          <Button
-            asChild
-            variant="link"
-            className="h-auto self-start p-0 text-foreground"
-          >
+          <InlineLink asChild className="self-start text-control">
             <NavLink to="/sign-in">Forgot your password?</NavLink>
-          </Button>
+          </InlineLink>
         </div>
 
         {error ? <AuthMessage tone="error" message={error} /> : null}
 
         <AuthSubmitButton
           idleLabel="Sign in"
-          loadingLabel="Signing in..."
           loading={loading}
         />
       </form>

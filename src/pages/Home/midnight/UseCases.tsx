@@ -5,6 +5,7 @@ import { EngineMark } from "./EngineMark";
 import { usePinnedSteps } from "./usePinnedSteps";
 import "./shots.css";
 import "./steps.css";
+import { Pressable } from "@misty/ui";
 
 /**
  * What people do together with Misty, as a pinned scene: the examples on the left, and on the right the space
@@ -140,9 +141,9 @@ export function UseCasesChapter() {
             <ol ref={list} className="mist-steps-list" aria-label="Examples">
               {USE_CASES.map((item, index) => (
                 <li key={item.title}>
-                  <button type="button" aria-current={index === active ? "step" : undefined} onClick={() => choose(index)}>
+                  <Pressable aria-current={index === active ? "step" : undefined} onClick={() => choose(index)}>
                     {item.title}
-                  </button>
+                  </Pressable>
                   <div className="mist-step-note" aria-hidden={index !== active}><p>{item.note}</p></div>
                 </li>
               ))}

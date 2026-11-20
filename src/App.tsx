@@ -199,7 +199,7 @@ export default function App() {
       <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
         <a
           href="#main-content"
-          className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-background px-4 py-2 text-sm font-medium text-foreground focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-ring"
+          className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-background px-4 py-2 text-control font-medium text-foreground focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-ring"
           onClick={() => mainRef.current?.focus()}
         >
           Skip to content

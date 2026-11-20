@@ -6,8 +6,7 @@ import { Menu, X } from "lucide-react";
 import { useAuth } from "@/AuthContext";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import NavbarSocials from "./NavbarSocials";
-import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleTrigger, IconButton } from "@misty/ui";
 import { toInitials } from "@/lib/format";
 import { useUserStore } from "@/store/userStore";
 import DesktopNav from "./DesktopNav";
@@ -83,7 +82,7 @@ export default function Navbar({
                     to="/"
                     onClick={() => setMobileOpen(false)}
                     aria-label="Misty home"
-                    className="flex items-center gap-3 rounded-md text-base font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--marketing-border-strong)]"
+                    className="flex items-center gap-3 rounded-md text-page font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] outline-none"
                   >
                     <BrandLogo />
                     <span>Misty</span>
@@ -106,10 +105,8 @@ export default function Navbar({
 
                 <div className="flex items-center gap-1 md:hidden">
                   <CollapsibleTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label={
+                    <IconButton
+                      label={
                         mobileOpen
                           ? "Close navigation menu"
                           : "Open navigation menu"
@@ -121,7 +118,7 @@ export default function Navbar({
                       ) : (
                         <Menu aria-hidden="true" />
                       )}
-                    </Button>
+                    </IconButton>
                   </CollapsibleTrigger>
                 </div>
               </div>

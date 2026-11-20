@@ -1,5 +1,5 @@
-import { Check, Copy } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { CodeBlock as SharedCodeBlock } from "@misty/ui";
+import type { ReactNode } from "react";
 
 import { RichText } from "./RichText";
 
@@ -21,7 +21,7 @@ export function DocSection({
       >
         {title}
       </h2>
-      <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-5 text-base leading-[1.6875rem] text-foreground/90">
+      <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-5 text-page leading-[1.6875rem] text-foreground/90">
         {children}
       </div>
     </section>
@@ -53,7 +53,7 @@ export function Steps({ items }: { items: string[] }) {
     <ol className="grid gap-3">
       {items.map((text, index) => (
         <li key={text} className="grid grid-cols-[2rem_1fr] gap-2">
-          <span className="font-mono text-sm leading-[1.6875rem] text-muted-foreground">
+          <span className="font-mono text-control leading-[1.6875rem] text-muted-foreground">
             {String(index + 1).padStart(2, "0")}
           </span>
           <span>
@@ -79,36 +79,7 @@ export function BulletList({ items }: { items: string[] }) {
 
 /** A command or file to copy. */
 export function CodeBlock({ code, label }: { code: string; label?: string }) {
-  const [copied, setCopied] = useState(false);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
-    } catch {
-      // Without clipboard access the text can still be selected by hand.
-    }
-  }
-
-  return (
-    <div className="relative rounded-lg border border-border bg-muted/40">
-      <pre
-        aria-label={label}
-        className="overflow-x-auto px-4 py-3.5 pr-12 font-mono text-[0.8125rem] leading-6 text-foreground"
-      >
-        <code>{code}</code>
-      </pre>
-      <button
-        type="button"
-        onClick={copy}
-        aria-label={copied ? "Copied" : "Copy to clipboard"}
-        className="absolute right-2 top-2 inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-      </button>
-    </div>
-  );
+  return <SharedCodeBlock code={code} aria-label={label} copyLabel="Copy to clipboard" />;
 }
 
 /** A plain-text table from docs data. The first column is the row's label. */
@@ -123,7 +94,7 @@ export function DocTable({
 }) {
   return (
     <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-      <table className="w-full min-w-[36rem] border-collapse text-left text-sm leading-6">
+      <table className="w-full min-w-[36rem] border-collapse text-left text-control leading-6">
         <thead>
           <tr className="border-b border-border">
             {columns.map((column) => (
@@ -150,7 +121,7 @@ export function DocTable({
                     scope="row"
                     className={
                       monoFirstColumn
-                        ? "whitespace-nowrap py-2.5 pr-4 font-mono text-[0.8125rem] font-normal text-foreground"
+                        ? "whitespace-nowrap py-2.5 pr-4 font-mono text-meta font-normal text-foreground"
                         : "py-2.5 pr-4 font-normal text-foreground"
                     }
                   >
@@ -175,7 +146,7 @@ export function Note({ children }: { children: ReactNode }) {
   return (
     <div
       role="note"
-      className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-base leading-7 text-foreground/85"
+      className="rounded-lg border border-border bg-muted/40 px-4 py-3 text-page leading-7 text-foreground/85"
     >
       {children}
     </div>

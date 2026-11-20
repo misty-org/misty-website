@@ -71,7 +71,7 @@ it("gives Misty+'s included Boosts to a space", async () => {
   expect(await screen.findByText("0 of 3 given")).toBeInTheDocument();
   expect(await screen.findByText("Level 1 · 3 Boosts · 4 more for Level 2")).toBeInTheDocument();
   fireEvent.click(screen.getAllByRole("button", { name: "Boost" })[0]!);
-  const dialog = await screen.findByRole("alertdialog");
+  const dialog = await screen.findByRole("dialog");
   const more = within(dialog).getByRole("button", { name: "More included boosts" });
   fireEvent.click(more);
   fireEvent.click(more);
@@ -87,7 +87,7 @@ it("sends someone buying a space's first Boosts to checkout with the space and h
   stub(json({ subscribed: false, plan: "free", cancel_at_period_end: false, boosts: { included: 0, assigned: [], bought: [] } }));
   const submit = vi.spyOn(HTMLFormElement.prototype, "submit").mockImplementation(() => {});
   renderPanel("/settings/boosts?space=space_home");
-  const dialog = await screen.findByRole("alertdialog");
+  const dialog = await screen.findByRole("dialog");
   expect(within(dialog).getByText("Boost Home")).toBeInTheDocument();
   expect(within(dialog).queryByText("Included Boosts")).toBeNull();
   const more = within(dialog).getByRole("button", { name: "More bought boosts" });
@@ -108,7 +108,7 @@ it("changes Boosts already bought for a space, and says when the card declines",
   const bought = { space_id: "space_team", quantity: 2, status: "active", cancel_at_period_end: false, current_period_end: "2026-12-15T00:00:00Z" };
   const calls = stub(json(plus({ included: 3, assigned: [], bought: [bought] })), json({ code: "payment_needed" }, 402));
   renderPanel("/settings/boosts?space=space_team");
-  const dialog = await screen.findByRole("alertdialog");
+  const dialog = await screen.findByRole("dialog");
   fireEvent.click(within(dialog).getByRole("button", { name: "More bought boosts" }));
   expect(within(dialog).getByText("Your card is charged for the rest of this month today.")).toBeInTheDocument();
   fireEvent.click(within(dialog).getByRole("button", { name: "Save" }));

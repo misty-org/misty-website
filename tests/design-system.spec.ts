@@ -27,7 +27,7 @@ test("the site uses the app's design system: its font, palette, corners and 110%
     };
   });
 
-  // Dark only, like the app's default theme (src/styles/misty-theme.css).
+  // Dark only, like the app's default theme (@misty/ui/styles.css).
   expect(system.dark).toBe(true);
   // One face everywhere, the system font, as in the app.
   expect(system.bodyFont).toContain("-apple-system");

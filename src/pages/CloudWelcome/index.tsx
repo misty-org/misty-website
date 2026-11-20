@@ -1,17 +1,17 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@misty/ui";
 import { SUBSCRIPTION_SETTINGS_PATH, SUPPORT_EMAIL } from "@/lib/site";
 import { SiteLink } from "@/components/SiteLink";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
 import AuthSteps, { type AuthStep } from "../Auth/AuthSteps";
 
-const footerLinkClass = "text-sm text-foreground underline-offset-4 hover:underline";
+const footerLinkClass = "text-control text-foreground underline-offset-4 hover:underline";
 
 const STEPS: AuthStep[] = [
   {
     text: "Download Misty and install it on your computer.",
     action: (
-      <Button asChild>
+      <Button variant="primary" asChild>
         <SiteLink to="/download">Download</SiteLink>
       </Button>
     ),
@@ -20,7 +20,7 @@ const STEPS: AuthStep[] = [
   {
     text: "Choose your agent, such as Claude Code or Codex. It runs on your own plan with that AI, and Misty never charges for AI.",
     action: (
-      <Button asChild variant="outline">
+      <Button asChild>
         <SiteLink to="/docs/choose-agent">Choose your agent</SiteLink>
       </Button>
     ),

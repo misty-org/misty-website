@@ -4,8 +4,7 @@ import {
   DesktopSettingsRow,
   DesktopSettingsSection,
 } from "@/components/settings";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { ErrorState, Text } from "@misty/ui";
 
 /** Padding for rows that hold custom content instead of a label/value pair. */
 export const customRowClass =
@@ -32,9 +31,9 @@ export function Row({
 }) {
   return (
     <DesktopSettingsRow label={label} description={description}>
-      <span className="text-right text-sm text-foreground max-[836px]:text-left">
+      <Text bare size="control" tone="default" className="text-right max-[836px]:text-left">
         {children}
-      </span>
+      </Text>
     </DesktopSettingsRow>
   );
 }
@@ -42,7 +41,9 @@ export function Row({
 export function GhostRow({ label, value }: { label: string; value: string }) {
   return (
     <DesktopSettingsRow label={label}>
-      <span className="text-sm italic text-muted-foreground">{value}</span>
+      <Text bare size="control" tone="muted">
+        {value}
+      </Text>
     </DesktopSettingsRow>
   );
 }
@@ -58,19 +59,12 @@ export function ErrorRow({
 }) {
   return (
     <div className={customRowClass}>
-      <Alert variant="destructive">
-        <AlertTitle>{title}</AlertTitle>
-        {onRetry ? (
-          <AlertDescription className="flex flex-wrap items-center justify-between gap-3">
-            <span>{message}</span>
-            <Button type="button" variant="outline" size="sm" onClick={onRetry}>
-              Try again
-            </Button>
-          </AlertDescription>
-        ) : (
-          <AlertDescription>{message}</AlertDescription>
-        )}
-      </Alert>
+      <ErrorState
+        inline
+        title={title}
+        line={message}
+        action={onRetry ? { label: "Try again", onClick: onRetry, variant: "secondary" } : undefined}
+      />
     </div>
   );
 }

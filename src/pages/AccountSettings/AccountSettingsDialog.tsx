@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 
 import { DesktopSettingsFrame } from "@/components/settings";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Spinner } from "@/components/ui/spinner";
+  ErrorState,
+  SkeletonList,
+} from "@misty/ui";
 import { AccountPanel } from "./panels/AccountPanel";
 import { BoostsPanel } from "./panels/BoostsPanel";
 import { PrivacyPanel } from "./panels/PrivacyPanel";
@@ -54,12 +54,13 @@ export function AccountSettingsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         ref={dialogRef}
-        showCloseButton={false}
+        size="xl"
+        hideClose
         onOpenAutoFocus={(event) => {
           event.preventDefault();
           dialogRef.current?.focus({ preventScroll: true });
         }}
-        className="h-[min(47.5rem,calc(100dvh-4rem))] w-[min(61.25rem,calc(100vw-4rem))] max-w-none gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 ring-0 dark:border-[#262626] dark:bg-[#191919] max-[704px]:h-[calc(100dvh-1.5rem)] max-[704px]:w-[calc(100vw-1.5rem)] sm:max-w-none"
+        className="h-[min(47.5rem,calc(100dvh-4rem))] w-[min(61.25rem,calc(100vw-4rem))] max-w-none gap-0 overflow-hidden p-0 max-[704px]:h-[calc(100dvh-1.5rem)] max-[704px]:w-[calc(100vw-1.5rem)]"
       >
         <DialogTitle className="sr-only">Account settings</DialogTitle>
         <DialogDescription className="sr-only">
@@ -84,17 +85,13 @@ export function AccountSettingsDialog({
                 onDeleted={finishDeletion}
               />
             ) : loading ? (
-              <div className="flex min-h-40 items-center justify-center gap-2 text-muted-foreground">
-                <Spinner aria-hidden="true" className="size-4" />
-                <span className="text-sm">Loading account details</span>
-              </div>
+              <SkeletonList label="Account details" variant="settings" rows={3} trailing="field" />
             ) : (
-              <Alert variant="destructive">
-                <AlertTitle>Account details are unavailable</AlertTitle>
-                <AlertDescription>
-                  {loadError || "Close settings and try again in a moment."}
-                </AlertDescription>
-              </Alert>
+              <ErrorState
+                inline
+                title="Account details are unavailable"
+                line={loadError || "Close settings and try again in a moment."}
+              />
             )
           ) : null}
 

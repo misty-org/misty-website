@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@misty/ui";
 import { SUPPORT_EMAIL } from "@/lib/site";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
@@ -21,7 +21,7 @@ const linkClass = "text-foreground underline underline-offset-4 hover:text-foreg
 /** A new tab keeps this one, and the key it holds, open. */
 function DownloadButton() {
   return (
-    <Button asChild variant="outline" size="lg" className="h-11 w-full">
+    <Button size="lg" asChild className="w-full">
       <a href="/download" target="_blank" rel="noopener">
         Download Misty
       </a>
@@ -33,7 +33,7 @@ function LinkReady({ link }: { link: SetupLink }) {
   return (
     <AuthCard
       footer={
-        <p role="note" className="text-center text-base leading-7 text-muted-foreground">
+        <p role="note" className="text-center text-page leading-7 text-muted-foreground">
           The key works once and lasts seven days, so treat it like a password. If you close this
           tab, open the link in your email again.
         </p>
@@ -41,13 +41,13 @@ function LinkReady({ link }: { link: SetupLink }) {
     >
       <div className="grid gap-6">
         <div className="grid gap-3 sm:grid-cols-2">
-          <Button asChild size="lg" className="h-11 w-full">
+          <Button variant="primary" size="lg" asChild className="w-full">
             <a href={mistySetupUrl(link)}>Open in Misty</a>
           </Button>
           <DownloadButton />
         </div>
         <div className="grid gap-4">
-          <p className="text-base leading-7 text-foreground">
+          <p className="text-page leading-7 text-foreground">
             If Misty doesn't open, choose your server in its setup wizard and paste these.
           </p>
           <CopyField label="Server address" value={link.server} />
@@ -62,7 +62,7 @@ function LinkMissing({ invalid }: { invalid: boolean }) {
   return (
     <AuthCard>
       <div className="grid gap-6">
-        <div className="grid gap-3 text-base leading-7 text-muted-foreground">
+        <div className="grid gap-3 text-page leading-7 text-muted-foreground">
           <p className="text-foreground">
             {invalid
               ? "This setup link isn't complete. It may have been cut off when it was copied."

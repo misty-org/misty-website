@@ -1,28 +1,24 @@
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Text } from "@misty/ui";
 
 interface AuthMessageProps {
   tone: "error" | "success" | "muted";
   message: string;
 }
 
-const toneClasses: Record<AuthMessageProps["tone"], string> = {
-  error: "border-destructive/30 bg-destructive/10 text-destructive",
-  success: "border-success/30 bg-success/10 text-success",
-  muted: "border-border bg-muted/40 text-muted-foreground",
-};
-
+/** What the form has to say: an error in the danger color, anything else in quiet text. */
 export default function AuthMessage({ tone, message }: AuthMessageProps) {
   const isError = tone === "error";
 
   return (
-    <Alert
-      variant={isError ? "destructive" : "default"}
+    <Text
+      wrap
+      size="control"
+      tone={isError ? "danger" : tone === "success" ? "default" : "muted"}
       role={isError ? "alert" : "status"}
       aria-live={isError ? "assertive" : "polite"}
       aria-atomic="true"
-      className={toneClasses[tone]}
     >
-      <AlertDescription className="text-current">{message}</AlertDescription>
-    </Alert>
+      {message}
+    </Text>
   );
 }

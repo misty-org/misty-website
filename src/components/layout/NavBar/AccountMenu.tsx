@@ -1,13 +1,14 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
+  Avatar,
+  AvatarFallback,
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  MenuItem,
+  MenuLabel,
+  MenuSeparator,
+  MenuTrigger,
+  Text,
+} from "@misty/ui";
 
 /** Avatar dropdown shown in the desktop bar once a visitor is signed in. */
 export default function AccountMenu({
@@ -25,34 +26,28 @@ export default function AccountMenu({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Open account menu"
-        >
-          <Avatar className="size-8">
-            <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
-              {initials}
-            </AvatarFallback>
+      <MenuTrigger
+        iconOnly
+        label="Open account menu"
+        icon={
+          <Avatar size="sm">
+            <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuLabel className="font-normal">
-          <span className="block truncate text-sm font-medium text-foreground">
+        }
+      />
+      <DropdownMenuContent align="end" width="md">
+        <MenuLabel>
+          <Text size="control" tone="bright" weight="medium">
             {displayName}
-          </span>
-          <span className="block truncate text-sm text-muted-foreground">
+          </Text>
+          <Text size="control" tone="muted">
             {email}
-          </span>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={onOpenSettings}>Settings</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onSelect={onSignOut}>
-          Sign out
-        </DropdownMenuItem>
+          </Text>
+        </MenuLabel>
+        <MenuSeparator />
+        <MenuItem label="Settings" onSelect={onOpenSettings} />
+        <MenuSeparator />
+        <MenuItem label="Sign out" danger onSelect={onSignOut} />
       </DropdownMenuContent>
     </DropdownMenu>
   );

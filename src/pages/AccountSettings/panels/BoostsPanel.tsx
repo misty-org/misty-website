@@ -6,17 +6,19 @@ import { DesktopSettingsRow } from "@/components/settings";
 import { BillingToggle } from "@/components/BillingToggle";
 import { SiteLink } from "@/components/SiteLink";
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
+  Button,
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  FieldError,
+  IconButton,
+  SkeletonList,
+  Text,
+} from "@misty/ui";
 import { fetchAccountProof, postProofForm } from "@/lib/accountProof";
 import { CLOUD_CHECKOUT_URL } from "@/lib/site";
 import { boost, plans, yearlySaving } from "@/pages/Pricing/plans";
@@ -33,7 +35,7 @@ import {
 } from "../api";
 import { failed, longDate, refusalMessages } from "../billingMessages";
 import { levelLine } from "../boostText";
-import { customRowClass, ErrorRow, Row, Section } from "../components/SettingsRows";
+import { ErrorRow, Row, Section } from "../components/SettingsRows";
 
 function Stepper({
   label,
@@ -50,29 +52,25 @@ function Stepper({
 }) {
   return (
     <div className="flex items-center gap-2" role="group" aria-label={label}>
-      <Button
-        type="button"
-        variant="outline"
-        size="icon-sm"
-        aria-label={`Fewer ${label.toLowerCase()}`}
+      <IconButton
+        variant="secondary"
+        label={`Fewer ${label.toLowerCase()}`}
         disabled={value <= min}
         onClick={() => onChange(value - 1)}
       >
         <Minus aria-hidden="true" />
-      </Button>
-      <span className="w-6 text-center text-sm tabular-nums text-foreground" aria-live="polite">
+      </IconButton>
+      <Text bare size="control" className="w-6 text-center tabular-nums" aria-live="polite">
         {value}
-      </span>
-      <Button
-        type="button"
-        variant="outline"
-        size="icon-sm"
-        aria-label={`More ${label.toLowerCase()}`}
+      </Text>
+      <IconButton
+        variant="secondary"
+        label={`More ${label.toLowerCase()}`}
         disabled={value >= max}
         onClick={() => onChange(value + 1)}
       >
         <Plus aria-hidden="true" />
-      </Button>
+      </IconButton>
     </div>
   );
 }
@@ -180,16 +178,13 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
   if (!subscription || !spaces) {
     return (
       <Section title="Boosts">
-        {[0, 1, 2].map((row) => (
-          <div
-            key={row}
-            aria-hidden="true"
-            className={`${customRowClass} flex min-h-14 items-center justify-between gap-8`}
-          >
-            <Skeleton className="h-4 w-40" />
-            <Skeleton className="h-8 w-20" />
-          </div>
-        ))}
+        <SkeletonList
+          label="Your Boosts"
+          variant="settings"
+          rows={3}
+          trailing="button"
+          rowClassName="px-5"
+        />
       </Section>
     );
   }
@@ -215,7 +210,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
           </Row>
         ) : (
           <DesktopSettingsRow label={`${plans.plus.name} comes with ${plans.plus.boosts} Boosts`}>
-            <Button asChild variant="outline">
+            <Button asChild>
               <SiteLink to="/pricing" onClick={onClose}>
                 See plans
               </SiteLink>
@@ -233,7 +228,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
               label={space.name}
               description={[levelLine(levels[space.id]), mine ? `${mine} from you` : ""].filter(Boolean).join(" · ")}
             >
-              <Button type="button" variant="outline" disabled={busy} onClick={() => openSpace(space.id)}>
+              <Button disabled={busy} onClick={() => openSpace(space.id)}>
                 Boost
               </Button>
             </DesktopSettingsRow>
@@ -241,27 +236,27 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
         })}
       </Section>
 
-      <AlertDialog open={editingSpace !== null} onOpenChange={(open) => (open ? null : setEditing(null))}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Boost {editingSpace?.name}</AlertDialogTitle>
-            <AlertDialogDescription>{levelLine(editingSpace ? levels[editingSpace.id] : undefined)}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="grid gap-3 py-1">
+      <Dialog open={editingSpace !== null} onOpenChange={(open) => (open ? null : setEditing(null))}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>Boost {editingSpace?.name}</DialogTitle>
+            <DialogDescription>{levelLine(editingSpace ? levels[editingSpace.id] : undefined)}</DialogDescription>
+          </DialogHeader>
+          <DialogBody className="grid gap-3 py-1">
             {includedTotal > 0 ? (
               <div className="flex items-center justify-between gap-4">
-                <span className="text-sm text-foreground">
-                  Included Boosts
-                  <span className="block text-xs text-muted-foreground">{`${includedMax} available`}</span>
-                </span>
+                <div className="min-w-0">
+                  <Text size="control">Included Boosts</Text>
+                  <Text size="meta" tone="muted">{`${includedMax} available`}</Text>
+                </div>
                 <Stepper label="Included Boosts" value={included} min={0} max={includedMax} onChange={setIncluded} />
               </div>
             ) : null}
             <div className="flex items-center justify-between gap-4">
-              <span className="text-sm text-foreground">
-                Bought Boosts
-                <span className="block text-xs text-muted-foreground">{`$${each} a ${per} each · $${bought * each} a ${per}`}</span>
-              </span>
+              <div className="min-w-0">
+                <Text size="control">Bought Boosts</Text>
+                <Text size="meta" tone="muted">{`$${each} a ${per} each · $${bought * each} a ${per}`}</Text>
+              </div>
               <Stepper label="Bought Boosts" value={bought} min={0} max={50} onChange={setBought} />
             </div>
             {checkoutNext ? (
@@ -273,29 +268,32 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
               />
             ) : null}
             {existing && bought !== existing.quantity ? (
-              <p className="text-xs text-muted-foreground">
+              <Text wrap size="meta" tone="muted">
                 {bought === 0
                   ? `These Boosts end on ${longDate(existing.current_period_end)}.`
                   : bought > existing.quantity
                     ? `Your card is charged for the rest of this ${per} today.`
                     : `What's left of this ${per} is credited toward your next bills.`}
-              </p>
+              </Text>
             ) : null}
-            {error ? (
-              <p role="alert" className="text-sm text-destructive">
-                {error}
-              </p>
-            ) : null}
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={busy}>Cancel</AlertDialogCancel>
-            <Button type="button" disabled={busy} aria-busy={busy} onClick={() => editingSpace && void save(editingSpace.id)}>
-              {busy ? <Spinner aria-hidden="true" /> : null}
+            {error ? <FieldError message={<span role="alert">{error}</span>} /> : null}
+          </DialogBody>
+          <DialogFooter>
+            <Button variant="quiet" size="lg" disabled={busy} onClick={() => setEditing(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              disabled={busy}
+              aria-busy={busy}
+              onClick={() => editingSpace && void save(editingSpace.id)}
+            >
               {checkoutNext ? "Continue to payment" : "Save"}
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
