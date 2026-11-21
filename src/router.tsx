@@ -16,7 +16,7 @@ import Download from "./pages/Download";
 import Setup from "./pages/Setup";
 import CloudWelcome from "./pages/CloudWelcome";
 import Connected from "./pages/Connected";
-import { docsRoutes } from "./pages/Docs/routes";
+import Docs from "./pages/Docs";
 import Privacy from "./pages/Legal/Privacy";
 import Terms from "./pages/Legal/Terms";
 import License from "./pages/Legal/License";
@@ -39,19 +39,26 @@ const notFound: RouteObject = {
   },
 };
 
+const docsHandle = {
+  title: "Docs | Misty",
+  description: marketingCopy.metadata.docs,
+};
+
 /** docs.mistysys.com: the docs at the root, under the site's own header and footer. */
 const docsSite: RouteObject[] = [
   {
     path: "/",
     element: <App />,
     children: [
-      { ...docsRoutes, path: undefined },
       {
         // Older links that still name the docs folder.
         path: "docs/*",
         loader: ({ request }) => toDocs(new URL(request.url).pathname),
       },
-      notFound,
+      // Every other address on the docs host, the front page included, is a docs page, which
+      // misty-docs routes itself.
+      { index: true, element: <Docs />, handle: docsHandle },
+      { path: "*", element: <Docs />, handle: docsHandle },
     ],
   },
 ];

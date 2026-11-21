@@ -14,8 +14,8 @@ test("the homepage ends with a call to download", async ({ page }, info) => {
 
 test("/download opens the homepage at its section and /self-hosting goes to the docs", async ({ page }) => {
   await page.goto("/self-hosting");
-  await expect(page).toHaveURL(/\/docs\/self-hosting$/);
-  await expect(page).toHaveTitle(/^Run a server/);
+  await expect(page).toHaveURL(/\/self-hosting\/set-up-a-server$/);
+  await expect(page).toHaveTitle(/^Docs/);
   await expect(page.locator(".mist-hero")).toHaveCount(0);
 
   await page.goto("/download");

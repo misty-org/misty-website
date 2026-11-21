@@ -2,6 +2,12 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
+// misty-docs is mounted into the site (src/pages/Docs), so its sources resolve here too: the sibling
+// checkouts it reads (misty-sdk, misty-ui), or the pinned clones in misty-docs's .sources.
+// @ts-expect-error a plain script with no types
+import { resolveSources } from '../misty-docs/scripts/sync-sources.mjs'
+
+const docsSources = resolveSources() as Record<string, string>
 
 function isLocalApiBase(value?: string) {
   const apiBase = value?.trim();
@@ -68,7 +74,11 @@ export default defineConfig(({ command, mode }) => {
     server: {
       fs: {
         // ../misty-ui, where @misty/ui is linked from during development.
-        allow: [process.cwd(), fileURLToPath(new URL("../misty-ui", import.meta.url))],
+        allow: [
+          process.cwd(),
+          fileURLToPath(new URL("../misty-docs", import.meta.url)),
+          ...Object.values(docsSources),
+        ],
       },
       host: "127.0.0.1",
       port: 5176,
@@ -90,6 +100,12 @@ export default defineConfig(({ command, mode }) => {
       dedupe: ["react", "react-dom", "lucide-react"],
       alias: [
         { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
+        // One copy of @misty/ui for the site and the docs, whichever folder imports it.
+        { find: /^@misty\/ui\/styles\.css$/, replacement: `${docsSources.ui}/styles/index.css` },
+        { find: /^@misty\/ui$/, replacement: `${docsSources.ui}/src/index.ts` },
+        { find: "@misty/docs", replacement: fileURLToPath(new URL("../misty-docs/src/DocsSite.tsx", import.meta.url)) },
+        { find: "@docs-sdk", replacement: `${docsSources.sdk}/docs` },
+        { find: "@docs-ui", replacement: docsSources.ui },
       ],
       preserveSymlinks: true,
     },

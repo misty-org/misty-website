@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation } from "react-router";
 import { Menu, X } from "lucide-react";
@@ -13,26 +13,8 @@ import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 import { resourceLinks } from "./navLinks";
 import { SiteLink } from "@/components/SiteLink";
-
-const COMPACT_WIDTH_EASING = "cubic-bezier(0.4, 0, 0.2, 1)";
-const EXPAND_WIDTH_EASING = "cubic-bezier(0.8, 0, 0.6, 1)";
-
-function useScrolledNav(threshold = 60) {
-  const [scrolled, setScrolled] = useState(
-    () => typeof window !== "undefined" && window.scrollY > threshold,
-  );
-
-  useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > threshold);
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [threshold]);
-
-  return scrolled;
-}
+import { DocsNavbarControls } from "@/pages/Docs";
+import { isDocsHost } from "@/lib/site";
 
 export default function Navbar({
   onOpenSettings,
@@ -43,7 +25,6 @@ export default function Navbar({
   const location = useLocation();
   const { user, sessionReady, logout } = useAuth();
   const me = useUserStore((state) => state.me);
-  const scrolled = useScrolledNav(60);
 
   const displayName = me?.username ?? user?.name ?? "";
   const initials = displayName
@@ -61,14 +42,9 @@ export default function Navbar({
       >
         {sessionReady ? (
           <div
-            className="pointer-events-auto w-full will-change-[max-width]"
-            style={{
-              // Start at full container width and compact the bar after scrolling.
-              maxWidth: scrolled ? "51.25rem" : "var(--site-content-max)",
-              transition: `max-width 0.45s ${
-                scrolled ? COMPACT_WIDTH_EASING : EXPAND_WIDTH_EASING
-              }`,
-            }}
+            // One width, always: the site's content width, so its padding lines up with the page below.
+            className="pointer-events-auto w-full"
+            style={{ maxWidth: "var(--site-content-max)" }}
           >
             <div
               // Solid, so links stay readable over any content.
@@ -82,11 +58,27 @@ export default function Navbar({
                     to="/"
                     onClick={() => setMobileOpen(false)}
                     aria-label="Misty home"
-                    className="flex items-center gap-3 rounded-md text-page font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] outline-none"
+                    className={`flex items-center gap-3 rounded-md font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] outline-none ${isDocsHost() ? "text-control" : "text-page"}`}
                   >
                     <BrandLogo />
                     <span>Misty</span>
                   </SiteLink>
+                  {/* On the docs host the name goes on: "Misty / Docs / App", the last the docs' own switcher (App, SDK, Design), all before the socials. */}
+                  {isDocsHost() ? (
+                    <>
+                      <span aria-hidden="true" className="text-control text-muted-foreground">
+                        /
+                      </span>
+                      <SiteLink
+                        to="/docs"
+                        onClick={() => setMobileOpen(false)}
+                        className="rounded-md text-control font-semibold tracking-[-0.01em] text-[var(--marketing-foreground)] outline-none"
+                      >
+                        Docs
+                      </SiteLink>
+                      <DocsNavbarControls />
+                    </>
+                  ) : null}
                   {/* The socials sit beside the logo, split from it by a hairline; NavbarSocials hides them on phones. */}
                   <span aria-hidden="true" className="ml-1 hidden h-5 w-px bg-border md:block" />
                   <NavbarSocials />

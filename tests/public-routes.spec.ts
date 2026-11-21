@@ -15,28 +15,6 @@ const publicRoutes = [
     title: "Download Misty | macOS and Windows beta",
   },
   { name: "pricing", path: "/pricing", title: "Pricing | Misty" },
-  { name: "docs", path: "/docs", title: "Docs | Misty" },
-  {
-    name: "docs self-hosting",
-    path: "/docs/self-hosting",
-    title: "Run a server | Misty docs",
-  },
-  {
-    name: "docs cloudflare.env",
-    path: "/docs/self-hosting/cloudflare",
-    title: "cloudflare.env | Misty docs",
-  },
-  {
-    name: "docs connect",
-    path: "/docs/connect",
-    title: "Connect the app | Misty docs",
-  },
-  { name: "docs models", path: "/docs/models", title: "Models | Misty docs" },
-  {
-    name: "docs maintenance",
-    path: "/docs/maintenance",
-    title: "Updates and backups | Misty docs",
-  },
   { name: "terms", path: "/terms", title: "Terms of service | Misty" },
   { name: "privacy", path: "/privacy", title: "Privacy policy | Misty" },
   {

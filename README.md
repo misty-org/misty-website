@@ -28,19 +28,19 @@ sets the API address for a build. It is bundled into the site, so the git-ignore
 
 ## Docs
 
-The docs (`src/pages/Docs/`) are served at https://docs.mistysys.com from the
-same build and Worker:
+The docs are their own repository, [misty-docs](https://github.com/misty-org/misty-docs), mounted into this
+site: on a host starting with `docs.` (https://docs.mistysys.com; in development `docs.localhost:5176`) the
+router renders its `DocsSite` under the site's own navbar and footer (`src/pages/Docs`), and its code is
+only loaded there.
 
-- On a host starting with `docs.` the router serves the docs at the root. In
-  development, open `docs.localhost:5176`.
-- Links name docs pages `/docs/...`. `siteLink` in `src/lib/site.ts` turns them
-  into the right address on either host.
-- The Worker (`worker/index.ts`) only sees `/docs` requests (`run_worker_first`
-  in `wrangler.jsonc`) and answers them with a 301 to the docs host.
-
-Each env file under `~/.misty/.env/server/` has a data file in
-`src/pages/Docs/integrations/`, so a renamed or added variable is a one-line
-change there.
+- misty-docs must sit beside this repository, and so must misty-sdk and misty-ui, whose own docs it reads
+  (`misty-docs/sources.json` says where each comes from). Edit a page in any of them and it updates here at
+  once; there is no separate docs server to start.
+- `vite.config.ts` aliases `@misty/docs`, `@docs-sdk` and `@docs-ui` to those checkouts and points
+  `@misty/ui` at one copy for the site and the docs, and `src/index.css` has Tailwind read their classes.
+- A docs address is a path (`/sdk/react`); misty-docs routes it. Links elsewhere name docs pages `/docs/...`,
+  and `siteLink` in `src/lib/site.ts` turns them into the right address on either host.
+- misty-docs also runs by itself with `npm run dev` there.
 
 ## Setup links and checkout
 
