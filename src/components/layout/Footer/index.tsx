@@ -70,7 +70,7 @@ export default function Footer({ className }: { className?: string } = {}) {
   return (
     <footer
       className={cn(
-        "relative z-10",
+        "relative z-10 border-t border-border",
         isHomePath(location.pathname) && "home-content-rail",
         className,
       )}

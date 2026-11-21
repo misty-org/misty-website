@@ -18,7 +18,7 @@
   "dependencies": {
     "@misty/ui": "file:../misty-ui",
     "class-variance-authority": "^0.7.1",
-    "lucide-react": "^1.25.0",
+    "lucide-react": "^1.77.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-router": "^7.13.0",

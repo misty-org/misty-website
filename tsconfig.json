@@ -6,7 +6,9 @@
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@misty/docs": ["../misty-docs/src/DocsSite.tsx"],
+      "@docs-ui/*": ["../misty-ui/*"]
     },
     "skipLibCheck": true,
     "moduleResolution": "bundler",

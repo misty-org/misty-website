@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "@misty/ui/styles.css";
 
+/* The docs (misty-docs) are mounted in the site, so Tailwind reads their classes, and the component examples they draw. */
+@source "../../misty-docs/src";
+@source "../../misty-ui/site/examples";
+
 /* The site is dark only, the app's default theme: <html> always carries .dark, so components' dark: styles always apply. */
 @custom-variant dark (&:is(.dark *));
 
@@ -75,10 +79,9 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
 }
 
-/* The app's 110% root (misty/src/styles/App.css): every size is in rem, so the site's type,
-   controls and spacing come out the same size as the desktop app's. */
+/* The root font size stays at 100%, as in the desktop app and the design system: a size in rem
+   is the size it says. */
 html {
-  font-size: 110%;
   scroll-behavior: auto;
   /* Never set overscroll-behavior on the root: in Misty's WKWebView it blocks
      wheel scrolling entirely. Misty disables rubber-banding natively instead. */

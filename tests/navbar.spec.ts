@@ -125,7 +125,7 @@ test("the mobile menu opens, navigates, and closes", async ({ page }, testInfo) 
 
   await page.locator("#mobile-navigation").getByRole("link", { name: "Docs" }).click();
 
-  await expect(page).toHaveURL(/\/docs$/);
+  await expect(page).toHaveURL(/\/\/docs\.[^/]+\/?$/);
   await expect(page.locator("#mobile-navigation")).toBeHidden();
   await expect(page.getByRole("button", { name: "Open navigation menu" })).toBeVisible();
 });

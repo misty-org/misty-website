@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("the site uses the app's design system: its font, palette, corners and 110% root", async ({ page }) => {
+test("the site uses the app's design system: its font, palette, corners and 100% root", async ({ page }) => {
   await page.route("**/api/**", (route) =>
     route.fulfill({
       status: 401,
@@ -32,8 +32,8 @@ test("the site uses the app's design system: its font, palette, corners and 110%
   // One face everywhere, the system font, as in the app.
   expect(system.bodyFont).toContain("-apple-system");
   expect(system.headingFont).toContain("-apple-system");
-  // The app's 110% root, so every rem size matches the desktop app's.
-  expect(system.rootFontSize).toBe("17.6px");
+  // The root is never scaled, as in the desktop app: every rem size is the size it says.
+  expect(system.rootFontSize).toBe("16px");
   expect(system.background).toBe("#131313");
   expect(system.radius).toBe("0.5625rem");
   expect(system.overscrollBehaviorY).toBe("auto");
