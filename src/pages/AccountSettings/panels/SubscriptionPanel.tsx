@@ -28,7 +28,7 @@ import {
 import { failed, longDate, refusalMessages } from "../billingMessages";
 import { ErrorRow, Row, Section } from "../components/SettingsRows";
 
-const plusAllowance = `${plans.plus.storage} of storage · ${plans.plus.upload} files · ${plans.plus.boosts} Boosts`;
+const plusAllowance = `${plans.plus.storage} of storage, ${plans.plus.upload} files and ${plans.plus.boosts} Boosts`;
 
 /** This account's plan: Free, or Misty+ with when it renews or ends, its billing period and cancelling. */
 export function SubscriptionPanel({ onClose }: { onClose: () => void }) {

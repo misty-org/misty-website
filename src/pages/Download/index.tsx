@@ -55,7 +55,7 @@ function PlatformCard({
               >
                 <span className="min-w-0 flex-1 truncate">{build.architecture || name}</span>
                 <span className="text-muted-foreground">
-                  {build.packageType} · {build.size}
+                  {build.size} {build.packageType}
                 </span>
                 <DownloadIcon aria-hidden="true" className="shrink-0 text-muted-foreground" />
               </a>

@@ -14,7 +14,7 @@ interface ChangelogEntry {
 export const changelog: ChangelogEntry[] = [
   {
     version: "v0.1.0",
-    date: "Private beta · July 2026",
+    date: "Private beta in July 2026",
     summary: "Spaces for shared project work",
     status: "beta",
     groups: [

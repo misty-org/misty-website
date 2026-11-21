@@ -57,11 +57,11 @@ afterEach(() => {
 });
 
 it("says where a space stands and what the next level needs", () => {
-  expect(levelLine(levels.space_team as never)).toBe("Level 1 · 3 Boosts · 4 more for Level 2");
-  expect(levelLine(levels.space_home as never)).toBe("Base level · 0 Boosts · 2 more for Level 1");
+  expect(levelLine(levels.space_team as never)).toBe("Level 1 with 3 Boosts, 4 more for Level 2");
+  expect(levelLine(levels.space_home as never)).toBe("Base level with 0 Boosts, 2 more for Level 1");
   expect(
     levelLine({ space_id: "x", enabled: true, boosters: [], level: { level: 3, boosts: 15, next_level_boosts: 0, thresholds: [2, 7, 14] } }),
-  ).toBe("Level 3 · 15 Boosts");
+  ).toBe("Level 3 with 15 Boosts");
 });
 
 it("gives Misty+'s included Boosts to a space", async () => {
@@ -69,7 +69,7 @@ it("gives Misty+'s included Boosts to a space", async () => {
   const calls = stub(json(state), json(plus({ included: 3, assigned: [{ space_id: "space_team", boosts: 2 }], bought: [] })));
   renderPanel();
   expect(await screen.findByText("0 of 3 given")).toBeInTheDocument();
-  expect(await screen.findByText("Level 1 · 3 Boosts · 4 more for Level 2")).toBeInTheDocument();
+  expect(await screen.findByText("Level 1 with 3 Boosts, 4 more for Level 2")).toBeInTheDocument();
   fireEvent.click(screen.getAllByRole("button", { name: "Boost" })[0]!);
   const dialog = await screen.findByRole("dialog");
   const more = within(dialog).getByRole("button", { name: "More included boosts" });
@@ -93,7 +93,7 @@ it("sends someone buying a space's first Boosts to checkout with the space and h
   const more = within(dialog).getByRole("button", { name: "More bought boosts" });
   fireEvent.click(more);
   fireEvent.click(more);
-  expect(within(dialog).getByText("$2 a month each · $4 a month")).toBeInTheDocument();
+  expect(within(dialog).getByText("$2 a month each, $4 a month in all")).toBeInTheDocument();
   fireEvent.click(within(dialog).getByRole("button", { name: "Continue to payment" }));
   await vi.waitFor(() => expect(submit).toHaveBeenCalled());
   const form = document.querySelector("form")!;

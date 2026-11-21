@@ -182,7 +182,7 @@ export function SpaceFiles() {
       <Bar icon={<Folder size={16} />} title="Files" note="Shared with 5 people" />
       <div className="mist-mock-groups">
         {FILES.map(file => (
-          <div key={file.name} className="mist-mock-row">{file.icon}<b>{file.name}</b><small>{file.note} · {file.who}</small></div>
+          <div key={file.name} className="mist-mock-row">{file.icon}<b>{file.name}</b><small>{file.note} from {file.who}</small></div>
         ))}
       </div>
     </div>

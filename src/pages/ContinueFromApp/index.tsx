@@ -28,7 +28,9 @@ export default function ContinueFromApp() {
     new URLSearchParams(location.hash.replace(/^#/, "")).get("code")?.trim() ?? "",
   );
   const [next] = useState(() => sitePath(params.get("next")));
-  const [failed, setFailed] = useState(false);
+  const [redeemFailed, setFailed] = useState(false);
+  // With no code there is nothing to trade, so the link has failed from the start.
+  const failed = !code || redeemFailed;
   const started = useRef(false);
 
   useLayoutEffect(() => {
@@ -40,12 +42,8 @@ export default function ContinueFromApp() {
   }, [location.hash, location.pathname, location.search, navigate]);
 
   useEffect(() => {
-    if (started.current) return;
+    if (started.current || !code) return;
     started.current = true;
-    if (!code) {
-      setFailed(true);
-      return;
-    }
     redeemWebHandoff(code).then(
       async () => {
         await refreshSession().catch(() => undefined);

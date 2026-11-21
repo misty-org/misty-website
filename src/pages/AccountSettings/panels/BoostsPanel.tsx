@@ -226,7 +226,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
             <DesktopSettingsRow
               key={space.id}
               label={space.name}
-              description={[levelLine(levels[space.id]), mine ? `${mine} from you` : ""].filter(Boolean).join(" · ")}
+              description={[levelLine(levels[space.id]), mine ? `${mine} from you` : ""].filter(Boolean).join(", ")}
             >
               <Button disabled={busy} onClick={() => openSpace(space.id)}>
                 Boost
@@ -255,7 +255,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <Text size="control">Bought Boosts</Text>
-                <Text size="meta" tone="muted">{`$${each} a ${per} each · $${bought * each} a ${per}`}</Text>
+                <Text size="meta" tone="muted">{`$${each} a ${per} each, $${bought * each} a ${per} in all`}</Text>
               </div>
               <Stepper label="Bought Boosts" value={bought} min={0} max={50} onChange={setBought} />
             </div>
