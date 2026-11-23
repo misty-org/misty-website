@@ -6,7 +6,6 @@ import { CopyField } from "../../../Setup/CopyField";
 import { fetchInviteCode } from "../../api";
 import { customRowClass } from "../../components/SettingsRows";
 
-/** The person's invite link. Whoever opens it sees their username. */
 export function InviteLink() {
   const [code, setCode] = useState("");
   const [failed, setFailed] = useState(false);

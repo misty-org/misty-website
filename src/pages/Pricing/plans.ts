@@ -1,11 +1,4 @@
-/**
- * Misty Cloud's plans and space levels, in one place. The numbers match what the Cloud server
- * and billing enforce (misty-cloud's plan.go, and the server's MISTY_SIGNUP_LIMITS and
- * MISTY_SPACE_LEVELS); change them together. Self-hosted Misty has none of this: every space
- * there is unlimited.
- */
 export type PlanId = "free" | "plus";
-/** What checkout sells: Misty+ monthly or yearly, or Boosts for a space. */
 export type CheckoutPlan = "plus" | "plus_yearly" | "boost" | "boost_yearly";
 
 export const plans = {
@@ -20,10 +13,8 @@ export const plans = {
   },
 } as const;
 
-/** One Boost, billed monthly or yearly. */
 export const boost = { name: "Boosts", price: 2, yearly: 18 } as const;
 
-/** What paying yearly saves against twelve months, in whole percent. */
 export function yearlySaving(monthly: number, yearly: number): number {
   return Math.round((1 - yearly / (monthly * 12)) * 100);
 }
@@ -32,18 +23,12 @@ export function planName(plan: string | undefined): string {
   return plan === "plus" ? plans.plus.name : plans.free.name;
 }
 
-/** One line under each card's name, saying who it's for. */
 export const taglines = {
   free: "Misty Cloud or your own server.",
   plus: "More storage, and Boosts to give.",
   boost: "Level up a space for everyone.",
 } as const;
 
-/**
- * What each card includes, in a few words each so the cards stay short. Setup details (a VPS, a
- * domain on Cloudflare, https) stay in the "What do I need to host my own server?" question;
- * Free's last line, which links to the self-hosting guide, is in index.tsx.
- */
 export const includes = {
   free: [
     "Every feature",
@@ -64,10 +49,6 @@ export const includes = {
   ],
 } as const;
 
-/**
- * A Space's levels: the Boosts each needs, and what it allows. Each Boost past a level's
- * threshold adds `storagePerBoost` of shared storage.
- */
 export const storagePerBoost = "5 GB";
 
 export const spaceLevels = [
@@ -77,7 +58,6 @@ export const spaceLevels = [
   { name: "Level 3", boosts: 14, members: "500", storage: "500 GB", upload: "100 MB", agents: "Unlimited" },
 ] as const;
 
-/** The rows of the levels table, in order. */
 export const levelRows: { label: string; key: "members" | "storage" | "upload" | "agents" }[] = [
   { label: "People", key: "members" },
   { label: "Shared storage", key: "storage" },
@@ -85,7 +65,6 @@ export const levelRows: { label: string; key: "members" | "storage" | "upload" |
   { label: "Agents", key: "agents" },
 ];
 
-/** Billing is the page's own last question, since its answer has links. */
 export const pricingQuestions: { question: string; answer: string }[] = [
   {
     question: "What does a Boost do?",

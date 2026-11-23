@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 
-/** A plain header over one panel of rows, the same as the app's settings sections. */
 export function DesktopSettingsSection({
   title,
   children,

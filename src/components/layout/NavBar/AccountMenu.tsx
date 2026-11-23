@@ -10,7 +10,6 @@ import {
   Text,
 } from "@misty/ui";
 
-/** Avatar dropdown shown in the desktop bar once a visitor is signed in. */
 export default function AccountMenu({
   displayName,
   email,

@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router";
 
 import { Checkbox, InlineLink, Text } from "@misty/ui";
 
-import { marketingCopy } from "@/content/marketingCopy";
+import { marketingCopy } from "@/content/marketing_copy";
 import AuthCard from "../Auth/AuthCard";
 import AuthField from "../Auth/AuthField";
 import AuthMessage from "../Auth/AuthMessage";
@@ -12,7 +12,7 @@ import AuthSubmitButton from "../Auth/AuthSubmitButton";
 import GoogleSignInButton from "../Auth/GoogleSignInButton";
 import { registerRequest } from "../Auth/api";
 import { useAuth } from "../../AuthContext";
-import { passwordProblem } from "@/lib/accountPassword";
+import { passwordProblem } from "@/lib/account_password";
 import { safeInternalPath } from "@/lib/navigation";
 
 export default function Register() {

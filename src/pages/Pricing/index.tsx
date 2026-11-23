@@ -3,9 +3,9 @@ import { useState, type ReactNode } from "react";
 
 import { PublicPage } from "@/components/marketing";
 import { Button, Disclosure, DisclosureList, InlineLink, SkeletonControl, Text } from "@misty/ui";
-import { marketingCopy } from "@/content/marketingCopy";
+import { marketingCopy } from "@/content/marketing_copy";
 import { BOOSTS_SETTINGS_PATH, DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH, SUPPORT_EMAIL } from "@/lib/site";
-import { usePlanCheckout } from "./usePlanCheckout";
+import { usePlanCheckout } from "./use_plan_checkout";
 import {
   boost,
   includes,
@@ -20,12 +20,6 @@ import {
 import { SiteLink } from "@/components/SiteLink";
 import { BillingToggle } from "@/components/BillingToggle";
 
-/** A plan's button is as wide as its label, like the app's; the skeleton holds that place. */
-
-/**
- * One plan. Side by side, each card spans the same four rows of the plans grid (heading, price,
- * button, list), so those line up across the cards whatever their text wraps to.
- */
 function PlanCard({
   name,
   tagline,
@@ -95,8 +89,6 @@ function Question({
 
 function PricingQuestions() {
   return (
-    // Two columns, like the homepage's: the heading and where to ask the rest on the left, the
-    // questions on the right, so the list never stretches across the whole page alone.
     <section
       aria-labelledby="pricing-questions"
       className="mt-24 grid items-start gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.7fr)] md:gap-16"
@@ -148,7 +140,6 @@ function PricingQuestions() {
   );
 }
 
-/** Misty+'s button: checkout for the billing period chosen, or for someone who has it, their subscription. */
 function PlusAction({ checkout, yearly }: { checkout: ReturnType<typeof usePlanCheckout>; yearly: boolean }) {
   if (checkout.checking) {
     return <SkeletonControl kind="button" className="h-9 w-40" />;
@@ -177,7 +168,6 @@ function PlusAction({ checkout, yearly }: { checkout: ReturnType<typeof usePlanC
   );
 }
 
-/** What each space level allows, beside a short heading, like the questions below it. */
 function SpaceLevels() {
   return (
     <section
@@ -233,10 +223,8 @@ function SpaceLevels() {
   );
 }
 
-/** Free, Boosts and Misty+ side by side, cheapest first, then space levels and the questions people ask. */
 export default function Pricing() {
   const checkout = usePlanCheckout();
-  // One monthly/yearly choice for every paid plan, above the cards.
   const [yearly, setYearly] = useState(false);
   const saving = Math.min(
     yearlySaving(boost.price, boost.yearly),

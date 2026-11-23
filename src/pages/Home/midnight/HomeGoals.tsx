@@ -7,14 +7,6 @@ import { Bar, Person } from "./ShotSketches";
 import "./shots.css";
 import "./goals.css";
 
-/**
- * Why Misty exists, after what you can do together: a short statement, then each goal as its own wide row, alternating
- * sides, with a large panel that shows the goal happening. The panels are drawn like the bento's screenshots
- * (ShotSketches), and every row in them wears its own subject's icon. No brand names here. Claims follow the
- * app's README; the spaces people explore are where Misty is headed.
- */
-
-/** Someone in a space's thread: a person, or a person's agent. */
 function Message({ from, agent = false, children }: { from: string; agent?: boolean; children: ReactNode }) {
   return (
     <div className="mist-mock-message">
@@ -24,7 +16,6 @@ function Message({ from, agent = false, children }: { from: string; agent?: bool
   );
 }
 
-/** A Space where people learning AI help each other, with an agent showing how. */
 function LearnPanel() {
   return (
     <div className="mist-mock">
@@ -46,7 +37,6 @@ const MADE: readonly { icon: ReactNode; name: string; about: string; members: st
   { icon: <GraduationCap size={16} />, name: "Study Circle", about: "Flashcards and quizzes for any class.", members: "2.4k members" },
 ];
 
-/** Spaces full of things people made with AI, to look through. */
 function ExplorePanel() {
   return (
     <div className="mist-mock">
@@ -64,7 +54,6 @@ function ExplorePanel() {
   );
 }
 
-/** A team's space: Misty's own parts and an open-source app the team added, each busy with the team's work. */
 function TeamPanel() {
   return (
     <div className="mist-mock">
@@ -80,7 +69,6 @@ function TeamPanel() {
   );
 }
 
-/** Where your agents' models come from: what you already pay for, and nothing on top. */
 function ModelsPanel() {
   return (
     <div className="mist-mock">
@@ -95,7 +83,6 @@ function ModelsPanel() {
   );
 }
 
-/** Every way to run Misty, and what it costs to have it all. */
 function RunPanel() {
   return (
     <div className="mist-mock">

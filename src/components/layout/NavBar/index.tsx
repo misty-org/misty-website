@@ -8,10 +8,10 @@ import { BrandLogo } from "@/components/brand/BrandLogo";
 import NavbarSocials from "./NavbarSocials";
 import { Collapsible, CollapsibleTrigger, IconButton } from "@misty/ui";
 import { toInitials } from "@/lib/format";
-import { useUserStore } from "@/store/userStore";
+import { useUserStore } from "@/store/user_store";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
-import { resourceLinks } from "./navLinks";
+import { resourceLinks } from "./nav_links";
 import { SiteLink } from "@/components/SiteLink";
 import { DocsNavbarControls } from "@/pages/Docs";
 import { isDocsHost } from "@/lib/site";
@@ -42,12 +42,10 @@ export default function Navbar({
       >
         {sessionReady ? (
           <div
-            // One width, always: the site's content width, so its padding lines up with the page below.
             className="pointer-events-auto w-full"
             style={{ maxWidth: "var(--site-content-max)" }}
           >
             <div
-              // Solid, so links stay readable over any content.
               className="rounded-xl border border-[var(--marketing-border)] bg-[var(--marketing-surface)]"
             >
               <div
@@ -63,7 +61,6 @@ export default function Navbar({
                     <BrandLogo />
                     <span>Misty</span>
                   </SiteLink>
-                  {/* On the docs host the name goes on: "Misty / Docs / App", the last the docs' own switcher (App, SDK, Design), all before the socials. */}
                   {isDocsHost() ? (
                     <>
                       <span aria-hidden="true" className="text-control text-muted-foreground">
@@ -79,7 +76,6 @@ export default function Navbar({
                       <DocsNavbarControls />
                     </>
                   ) : null}
-                  {/* The socials sit beside the logo, split from it by a hairline; NavbarSocials hides them on phones. */}
                   <span aria-hidden="true" className="ml-1 hidden h-5 w-px bg-border md:block" />
                   <NavbarSocials />
                 </div>

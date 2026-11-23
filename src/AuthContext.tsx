@@ -12,7 +12,7 @@ import {
   type MeResponse,
 } from "./pages/AccountSettings/api";
 import { safeInternalPath } from "./lib/navigation";
-import { useUserStore } from "./store/userStore";
+import { useUserStore } from "./store/user_store";
 
 interface User {
   id: string;
@@ -82,7 +82,6 @@ export function AuthProvider({ children, onLogout }: AuthProviderProps) {
 
   useEffect(() => {
     void refreshSession().catch(() => {
-      // A missing or expired HttpOnly session cookie means signed out.
     });
   }, [refreshSession]);
 
@@ -91,17 +90,10 @@ export function AuthProvider({ children, onLogout }: AuthProviderProps) {
       useUserStore.getState().clear();
       setUser(null);
       void (async () => {
-        try {
-          await logoutRequest();
-        } catch {
-          // The local session is still cleared if the server is unavailable.
-        }
+        await logoutRequest().catch(() => undefined);
         try {
           await onLogout?.();
         } finally {
-          // This hard navigation always wins over any router navigate() the
-          // caller may also have issued, so the destination has to be passed in
-          // here rather than raced against.
           window.location.replace(safeInternalPath(destination) ?? "/");
         }
       })();

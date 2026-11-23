@@ -2,7 +2,6 @@ import { ChoiceGroup } from "@misty/ui";
 
 type Billing = "monthly" | "yearly";
 
-/** Monthly or yearly billing, as one segmented choice. Yearly says what it saves. */
 export function BillingToggle({
   label,
   saving,

@@ -1,14 +1,11 @@
 @import "tailwindcss";
 @import "@misty/ui/styles.css";
 
-/* The docs (misty-docs) are mounted in the site, so Tailwind reads their classes, and the component examples they draw. */
 @source "../../misty-docs/src";
 @source "../../misty-ui/site/examples";
 
-/* The site is dark only, the app's default theme: <html> always carries .dark, so components' dark: styles always apply. */
 @custom-variant dark (&:is(.dark *));
 
-/* The names the site's pages read, pointed at @misty/ui's theme (its styles.css). */
 :root {
   color-scheme: dark;
   --site-container-max: 80rem;
@@ -50,7 +47,6 @@
   --sidebar-accent-foreground: var(--misty-theme-text-bright);
 }
 
-/* The page names as Tailwind colors. Fonts, type roles, corners and breakpoints are @misty/ui's. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -79,12 +75,8 @@
   --color-sidebar-foreground: var(--sidebar-foreground);
 }
 
-/* The root font size stays at 100%, as in the desktop app and the design system: a size in rem
-   is the size it says. */
 html {
   scroll-behavior: auto;
-  /* Never set overscroll-behavior on the root: in Misty's WKWebView it blocks
-     wheel scrolling entirely. Misty disables rubber-banding natively instead. */
   overflow-x: clip;
 }
 
@@ -107,8 +99,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* One outer alignment rail for every public page and shared site surface, matching the homepage's
-   .mist-container and the navbar: --site-content-max wide, --site-gutter from the window's edges. */
 .site-container {
   width: 100%;
   max-width: var(--site-container-max);
@@ -116,8 +106,6 @@ body {
   padding-inline: var(--site-gutter);
 }
 
-/* The homepage's post-hero sequence shares a roomier responsive content rail
-   without widening gutters across the rest of the marketing site. */
 .home-content-rail {
   --site-gutter: clamp(1.5rem, 4vw, 4rem);
 }
@@ -130,10 +118,7 @@ body {
   margin-top: 2rem;
 }
 
-/* The content scrolls normally through a fixed, direction-independent fade.
-   These overlays never intercept input or change the layout. */
 .home-page {
-  /* Shorten scroll travel uniformly; keep viewport sizes and phase ratios intact. */
   --home-scroll-travel-scale: 0.91;
   --scroll-edge-depth: clamp(7.5rem, 21svh, 15rem);
   --scroll-fade-ratio: 0.75;
@@ -507,7 +492,6 @@ body {
 
 
 
-/* Shared public heading scale stays below the hero at every viewport width. */
 .marketing-heading {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 500;
@@ -525,7 +509,6 @@ body {
   line-height: 1.625;
 }
 
-/* A compact reading stage keeps the intro, explanation, and goal connected. */
 .foundation-section {
   position: relative;
   z-index: 11;
@@ -559,7 +542,6 @@ body {
 }
 
 .foundation-title-light {
-  /* A local beam stays attached to the headline during sticky entry/exit. */
   --foundation-dim: color-mix(in srgb, var(--marketing-foreground) 22%, var(--background));
   display: inline-block;
   background-image: linear-gradient(90deg,
@@ -582,7 +564,6 @@ body {
   }
   .foundation-section {
     --foundation-stage-height: clamp(15rem, 30svh, 20rem);
-    /* Reserve the viewport during the hold, then close that space on exit. */
     padding-bottom: calc(max(0px, (100svh - var(--site-nav-height, 4.5rem) - var(--foundation-stage-height)) / 2) * (1 - var(--foundation-release, 0)));
     overflow-anchor: none;
   }
@@ -794,7 +775,6 @@ body {
     border-color: var(--border);
     @apply border-border outline-ring/50;
   }
-  /* Buttons and fields draw no outline or ring when focused, the same as the app. */
   :is(button, input, textarea, select, [data-slot="button"], [role="button"], [role="switch"], [role="tab"]):is(:focus, :focus-visible) {
     outline: none !important;
     --tw-ring-offset-shadow: 0 0 #0000 !important;
@@ -830,7 +810,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Hide scrollbar but keep scrollable */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -854,12 +833,6 @@ button:disabled {
   background: var(--muted-foreground);
 }
 
-/*
- * The navbar and route changes share a subtle entrance fade. Their content
- * stays fully opaque so text retains its intended contrast; a
- * background-colored layer supplies the visual fade as it clears away. The
- * layer starts part-way, so a new page never blanks out first.
- */
 .navbar-transition,
 .page-transition {
   position: relative;
@@ -902,24 +875,12 @@ button:disabled {
   }
 }
 
-/* ── Full-bleed dark band ────────────────────────────────────────────────
- *
- * Re-points the marketing tokens instead of hardcoding colors, so every
- * child component keeps working unchanged inside the band — in either theme.
- */
 .marketing-dark {
   --marketing-surface: var(--misty-theme-sidebar);
   background-color: var(--background);
   color: var(--marketing-foreground);
 }
 
-/* ── Scroll-pinned sections ──────────────────────────────────────────────
- *
- * A tall parent scrolls past a viewport-height sticky child; scroll progress
- * inside the parent selects which beat is active. Under reduced motion the
- * whole thing is unpinned into a plain stacked list (see below), so no
- * content is reachable only by animating.
- */
 .pin-stage {
   position: sticky;
   top: var(--site-nav-height, 4.5rem);
@@ -937,10 +898,6 @@ button:disabled {
   will-change: opacity, transform, filter;
 }
 
-/*
- * Under reduced motion the small-screen stacked list replaces the pinned track
- * at every width. Unpinned in place, the beats would pile up in one grid cell.
- */
 @media (prefers-reduced-motion: reduce) {
   .pin-track {
     display: none !important;
@@ -958,13 +915,10 @@ button:disabled {
   .pin-stacked { display: block !important; }
 }
 
-/* Keep the path camera in a stable viewport. */
 .feature-bento-stage-inner { padding-block: 0; }
 @media (min-width: 1126.4px) and (prefers-reduced-motion: no-preference) {
   .feature-logo-scene {
-    /* Fit a complete row, its rail bends, and Misty in the clear viewport. */
     height: var(--feature-scene-height);
-    /* The camera and rail share the same damped scroll clock. */
     will-change: transform;
   }
 }
@@ -981,7 +935,6 @@ button:disabled {
 }
 
 
-/* Center the walkthrough panels within the available viewport. */
 #how-it-works .pin-stacked { padding-top: 2rem; }
 @media (min-width: 844.8px) and (min-height: 770px) and (prefers-reduced-motion: no-preference) {
   #how-it-works .pin-stage {
@@ -991,15 +944,11 @@ button:disabled {
   }
 }
 
-/* Consistent reading sizes across the explanatory and resource panels. */
 .feature-bento-card-copy p { font-size: 1rem; line-height: 1.6; }
 @media (min-width: 1126.4px) and (prefers-reduced-motion: no-preference) {
   .feature-bento-story {
-    /* The shared page overlays own the only top and bottom fades. */
     --feature-stage-height: calc(100svh - var(--site-nav-height, 4.5rem));
-    /* Larger rows use the available space instead of a small centered island. */
     --feature-scene-height: min(max(125rem, 260svh), calc((var(--feature-stage-height) - 2 * var(--scroll-fade-depth) - 2rem) / 0.22));
-    /* Trim the camera's empty framing before the first and after the last row. */
     margin-top: -3rem;
     margin-bottom: calc(2rem - var(--feature-stage-height) / 2 + var(--feature-scene-height) * 0.0875);
   }
@@ -1035,7 +984,6 @@ button:disabled {
 
 
 
-/* Keep one example in focus while retaining the surrounding context. */
 @media (min-width: 1126.4px) and (prefers-reduced-motion: no-preference) {
   .feature-bento-card[data-active="false"] > div { opacity: .42; }
   .feature-bento-card[data-active="true"] > div { opacity: 1; }
@@ -1048,8 +996,6 @@ button:disabled {
   .feature-bento-card[data-mobile-active="false"] { border-color: var(--marketing-border); }
 }
 
-/* The floating bar owns its viewport offset at every responsive width.
-   Keeping the gap outside a sticky box avoids Firefox scrolling its padding. */
 .site-pinned-navbar {
   --navbar-edge-gap: 0.75rem;
   position: fixed;
@@ -1066,7 +1012,6 @@ button:disabled {
 }
 
 
-/* Keep the phone story compact, with screenshots falling behind readable type. */
 @media (max-width: 1125.3px) and (min-height: 528px) and (prefers-reduced-motion: no-preference) {
   .foundation-section { --foundation-stage-height: clamp(11.25rem, 30svh, 15rem); }
   .foundation-story { --foundation-travel: 150svh; }

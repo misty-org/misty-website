@@ -4,18 +4,12 @@ import { AppleMark, LinuxMark, WindowsMark, type MarkIcon } from "@/components/b
 import { Button } from "@misty/ui";
 import { SiteLink } from "@/components/SiteLink";
 import { cn } from "@/lib/utils";
-import { detectDownloadPlatform } from "@/pages/Download/detectPlatform";
+import { detectDownloadPlatform } from "@/pages/Download/detect_platform";
 import { useReleases, type PlatformName } from "@/pages/Download/releases";
 
 const MARKS: Record<PlatformName, MarkIcon> = { macOS: AppleMark, Windows: WindowsMark, Linux: LinuxMark };
-/** The desktops Misty ships for; the button names one of these even before its release has loaded. */
 const SUPPORTED: readonly PlatformName[] = ["macOS"];
 
-/**
- * The hero's primary button. On a desktop Misty ships for (or one the latest release has an installer for), it
- * names that desktop with its mark and downloads the installer, or opens the download page until there is one.
- * Everywhere else it is a plain link to the download page.
- */
 export function DownloadCtaButton() {
   const [platform] = useState(detectDownloadPlatform);
   const releases = useReleases();

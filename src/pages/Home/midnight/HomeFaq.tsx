@@ -6,10 +6,6 @@ import { SiteLink } from "@/components/SiteLink";
 import { DISCORD_URL } from "@/lib/site";
 import "./faq.css";
 
-/**
- * Questions and answers as a plain accordion on the right, under a heading at the top of the left column with where to ask the rest. Only what the
- * page above doesn't already show: cost, accounts, models, platforms, privacy, agent approval and files.
- */
 type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
   {

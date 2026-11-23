@@ -4,10 +4,9 @@ import { Button, DropdownMenu, DropdownMenuContent, MenuItem, MenuTrigger } from
 
 import { siteLink } from "@/lib/site";
 import AccountMenu from "./AccountMenu";
-import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
+import { navItems, resourceLinks, type NavLinkEntry } from "./nav_links";
 import { SiteLink } from "@/components/SiteLink";
 
-/** A quiet button for each page: it washes on hover and stays pressed on the page you're on. */
 function DesktopNavLink({ to, label, currentPath }: NavLinkEntry & { currentPath: string }) {
   return (
     <Button asChild variant="quiet" data-active={currentPath.startsWith(to)}>

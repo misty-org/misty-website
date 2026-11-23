@@ -14,7 +14,7 @@ import { BoostsPanel } from "./panels/BoostsPanel";
 import { PrivacyPanel } from "./panels/PrivacyPanel";
 import { SubscriptionPanel } from "./panels/SubscriptionPanel";
 import { TAB_GROUPS, TABS, type Tab } from "./tabs";
-import { useAccountSettings } from "./useAccountSettings";
+import { useAccountSettings } from "./use_account_settings";
 
 export function AccountSettingsDialog({
   open,
@@ -24,10 +24,6 @@ export function AccountSettingsDialog({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /**
-   * Supplied only when the dialog was opened from a settings URL. Left
-   * undefined for the nav-menu overlay, which must not touch the address bar.
-   */
   tab?: Tab;
   onTabChange?: (tab: Tab) => void;
 }) {

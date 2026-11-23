@@ -1,6 +1,5 @@
 import { CopyButton, Surface, Text } from "@misty/ui";
 
-/** A labeled value to copy, such as a server address or a setup key. */
 export function CopyField({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid gap-1.5">

@@ -1,7 +1,3 @@
-// The website's Worker. Every request is a static file or the single-page app, except
-// `/docs` addresses (see `run_worker_first` in wrangler.jsonc): the docs live at
-// docs.mistysys.com, so those move there for good.
-
 interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> };
 }

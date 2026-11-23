@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from 'node:url'
 // misty-docs is mounted into the site (src/pages/Docs), so its sources resolve here too: the sibling
 // checkouts it reads (misty-sdk, misty-ui), or the pinned clones in misty-docs's .sources.
 // @ts-expect-error a plain script with no types
-import { resolveSources } from '../misty-docs/scripts/sync-sources.mjs'
+import { resolveSources } from '../misty-docs/scripts/sync_sources.mjs'
 
 const docsSources = resolveSources() as Record<string, string>
 
@@ -45,7 +45,6 @@ function apiProxyTarget(value?: string) {
   return target.origin;
 }
 
-// https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const proxyTarget = apiProxyTarget(
@@ -67,13 +66,11 @@ export default defineConfig(({ command, mode }) => {
     define: {
       "import.meta.env.MISTY_PUBLIC_API_URL": JSON.stringify(apiBase ?? ""),
     },
-    // @misty/ui is linked from ../misty-ui as source: its React and icons are the site's own.
     optimizeDeps: {
       exclude: ["@misty/ui"],
     },
     server: {
       fs: {
-        // ../misty-ui, where @misty/ui is linked from during development.
         allow: [
           process.cwd(),
           fileURLToPath(new URL("../misty-docs", import.meta.url)),
@@ -100,7 +97,6 @@ export default defineConfig(({ command, mode }) => {
       dedupe: ["react", "react-dom", "lucide-react"],
       alias: [
         { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
-        // One copy of @misty/ui for the site and the docs, whichever folder imports it.
         { find: /^@misty\/ui\/styles\.css$/, replacement: `${docsSources.ui}/styles/index.css` },
         { find: /^@misty\/ui$/, replacement: `${docsSources.ui}/src/index.ts` },
         { find: "@misty/docs", replacement: fileURLToPath(new URL("../misty-docs/src/DocsSite.tsx", import.meta.url)) },

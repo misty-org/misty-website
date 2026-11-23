@@ -6,7 +6,6 @@ interface AuthSubmitButtonProps {
   disabled?: boolean;
 }
 
-/** The form's one call to action. While it works it is just disabled; it never shows loading. */
 export default function AuthSubmitButton({
   idleLabel,
   loading,

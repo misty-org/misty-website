@@ -12,7 +12,6 @@ interface DesktopSettingsNavEntry<Id extends string = string> {
 }
 
 interface DesktopSettingsNavGroup<Id extends string = string> {
-  /** A plain muted label naming the feature the pages belong to. */
   label: string;
   items: readonly DesktopSettingsNavEntry<Id>[];
 }
@@ -25,15 +24,9 @@ interface DesktopSettingsFrameProps<Id extends string> {
   navigationLabel: string;
   onClose: () => void;
   onSelect: (id: Id) => void;
-  /** The page we're on, in the header over the content. */
   title: ReactNode;
 }
 
-/**
- * The website counterpart to Misty's desktop settings frame: pages under plain group labels, one
- * row per page, and one scrolling page of panels under a header naming the page. Keep it in step with
- * `src/features/settings/components/` in the app. On phones the rail becomes a horizontal picker.
- */
 export function DesktopSettingsFrame<Id extends string>({
   activeId,
   ariaLabel,
@@ -93,7 +86,6 @@ export function DesktopSettingsFrame<Id extends string>({
       <div aria-hidden="true" className="bg-border max-[704px]:hidden" />
 
       <main className="flex min-h-0 min-w-0 flex-col bg-background">
-        {/* The page we're on, over a divider; the page scrolls under it, never behind it. */}
         <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border pl-10 pr-4 max-[792px]:pl-6">
           <Text as="h1" size="body" weight="semibold" tone="bright" className="min-w-0">
             {title}

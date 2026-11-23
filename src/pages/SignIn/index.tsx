@@ -23,7 +23,6 @@ interface SignInContext {
   me: MeResponse | null;
 }
 
-/** A suspended sign-in's proof, if what suspended the account is a payment they can make. */
 async function unpaidProof(err: unknown): Promise<string | null> {
   if (!(err instanceof AuthRequestError) || !err.proof) return null;
   try {
@@ -41,12 +40,10 @@ interface SignInProps {
 export default function SignIn({ onSignedIn }: SignInProps = {}) {
   const { refreshSession } = useAuth();
   const location = useLocation();
-  // The nav links set this state to the page the visitor came from.
   const returnTo = safeInternalPath(
     (location.state as { from?: string } | null)?.from,
   );
 
-  // Google sends the person back here with a code in the fragment, which no server sees.
   const [google] = useState(() => {
     const fragment = new URLSearchParams(window.location.hash.slice(1));
     return { refused: fragment.get("google_error"), code: fragment.get("google_code") };
@@ -61,7 +58,6 @@ export default function SignIn({ onSignedIn }: SignInProps = {}) {
   const googleHandled = useRef(false);
 
   useEffect(() => {
-    // A code works once, and development runs every effect twice.
     if (googleHandled.current || (!google.refused && !google.code)) return;
     googleHandled.current = true;
     window.history.replaceState(null, "", window.location.pathname);
@@ -88,8 +84,6 @@ export default function SignIn({ onSignedIn }: SignInProps = {}) {
       const user = await signInRequest(email, password);
       const me = await refreshSession();
       await onSignedIn?.(user, { email, password, me });
-      // Return to wherever the visitor was headed — a settings deep link from
-      // the desktop app, say — instead of always dropping them on home.
       window.location.replace(returnTo ?? "/");
     } catch (err) {
       const proof = await unpaidProof(err);

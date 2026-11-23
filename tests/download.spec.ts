@@ -4,7 +4,6 @@ test("the homepage ends with a call to download", async ({ page }, info) => {
   await page.goto("/download");
   const section = page.locator("#download");
   await expect(section.getByRole("heading", { level: 2, name: "Ready to build together with AI?" })).toBeInViewport();
-  // The hero's button again: the visitor's own build on desktop, every release on a phone.
   const button = info.project.name === "mobile-chromium"
     ? section.getByRole("link", { name: "Download Misty" })
     : section.getByRole("link", { name: /^Download Misty( for (macOS|Windows))?$/ });
@@ -36,6 +35,5 @@ test("navbar links scroll the homepage to its sections without reloading it", as
   await nav.getByRole("link", { name: "Misty home" }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
-  // The same page the whole time: moving between sections never remounts the homepage.
   expect(await page.locator(".mist-hero").evaluate(el => (window as unknown as { hero: Element }).hero === el)).toBe(true);
 });

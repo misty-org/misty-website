@@ -1,10 +1,9 @@
 import { useState } from "react";
 
-import { BrandIcon, Button, Text } from "@misty/ui";
+import { Button, Mark, Text } from "@misty/ui";
 
 import { beginGoogleSignIn } from "./api";
 
-/** Leaves for Google in this tab; the sign-in page finishes when Google sends the person back. */
 export default function GoogleSignInButton({
   returnTo,
   disabled,
@@ -39,7 +38,7 @@ export default function GoogleSignInButton({
         disabled={disabled || starting}
         aria-busy={starting}
         className="w-full"
-        icon={<BrandIcon brand="google-logo" size={16} aria-hidden />}
+        icon={<Mark of="google-logo" size={16} aria-hidden />}
         onClick={() => void start()}
       >
         Continue with Google

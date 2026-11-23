@@ -15,25 +15,19 @@ import {
   isSettingsPathname,
   settingsPathForTab,
   settingsTabFromPathname,
-} from "./pages/AccountSettings/settingsRoute";
+} from "./pages/AccountSettings/settings_route";
 import { TABS } from "./pages/AccountSettings/tabs";
 import { DOCS_URL, isDocsHost, isDocsPath, SITE_URL } from "./lib/site";
-import { isHomePath } from "./pages/Home/useSectionRoute";
+import { isHomePath } from "./pages/Home/use_section_route";
 
 type Handle = { title?: string; description?: string };
 
-/**
- * Must stay stable: a new function each render makes the router restore scroll again.
- * The first entry in a tab is always keyed "default", so key it by path instead, or every
- * hard load of any page would restore the position the last hard-loaded page saved.
- */
 const scrollKey = (location: Location) => {
   if (isHomePath(location.pathname)) return "home";
   return location.key === "default" ? location.pathname : location.key;
 };
 const SCROLL_STORAGE_KEY = "misty-scroll-positions";
 
-/** What remounts between pages. The homepage's sections are one page; the docs keep their sidebar. */
 const pageKey = (pathname: string) => {
   if (isHomePath(pathname)) return "/";
   return isDocsHost() || isDocsPath(pathname) ? "/docs" : pathname;
@@ -45,13 +39,10 @@ function forgetScrollPosition(key: string) {
     delete saved[key];
     sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(saved));
   } catch {
-    // Without storage there is nothing to restore.
+    return;
   }
 }
 
-// The router restores a saved position a few frames after the first render, which would
-// pull a direct visit away from where its URL points, so forget that position before the
-// router reads it. A homepage section path opens at its section; a #hash opens at its element.
 if (typeof window !== "undefined") {
   const { pathname, hash } = window.location;
   if (pathname !== "/" && isHomePath(pathname)) forgetScrollPosition("home");
@@ -127,12 +118,7 @@ export default function App() {
     canonical.href = canonicalUrl;
   }, [location.pathname, matches]);
 
-  // Cross-page anchors (e.g. "/#features" from another page). Router
-  // navigation does not scroll to the hash on its own, so do it once the target
-  // route has rendered.
   useEffect(() => {
-    // Only a plain element id. Other fragments, such as a setup link's
-    // #server=…&key=…, aren't selectors and must never reach querySelector.
     if (!/^#[A-Za-z][\w-]*$/.test(location.hash)) return;
 
     const frame = window.requestAnimationFrame(() => {
@@ -147,8 +133,6 @@ export default function App() {
     const previousPath = previousPathRef.current;
     previousPathRef.current = location.pathname;
 
-    // The dialog owns its own focus trap, so never steal focus to the page h1
-    // underneath it. Moving between the homepage's own sections keeps the page.
     if (previousPath === location.pathname || onSettingsRoute) return;
     if (isHomePath(previousPath) && isHomePath(location.pathname)) return;
 
@@ -171,9 +155,6 @@ export default function App() {
     navigate(hash.slice(1), { replace: true });
   }, [navigate]);
 
-  // A settings URL drives the dialog directly: the path stays put so the page is
-  // shareable, reloadable, and a valid desktop hand-off target. An unknown tab
-  // falls back to the default rather than rendering an empty page.
   useEffect(() => {
     if (!onSettingsRoute || routeTab !== null) return;
 
@@ -186,14 +167,11 @@ export default function App() {
       return;
     }
     setSettingsOpen(false);
-    // Closing a settings URL has to leave the URL too, or the dialog reopens on
-    // the next render.
     if (onSettingsRoute) navigate("/", { replace: true });
   }
 
   return (
     <AuthProvider>
-      {/* The homepage and its section paths are one page; it scrolls between its sections. */}
       <ScrollRestoration getKey={scrollKey} storageKey={SCROLL_STORAGE_KEY} />
 
       <div className="relative flex min-h-screen flex-col overflow-x-clip bg-background text-foreground">
@@ -221,7 +199,6 @@ export default function App() {
           </div>
         </main>
 
-        {/* The homepage renders its own footer inside the mist. */}
         {!isHomePath(location.pathname) && <Footer />}
         <AccountSettingsDialog
           open={settingsOpen || routeTab !== null}

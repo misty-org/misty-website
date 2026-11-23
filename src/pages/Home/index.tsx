@@ -1,7 +1,6 @@
 import { MidnightHome } from "./midnight/MidnightHome";
-import { useSectionRoute } from "./useSectionRoute";
+import { useSectionRoute } from "./use_section_route";
 
-/** Serves /. */
 export default function Home() {
   useSectionRoute();
 

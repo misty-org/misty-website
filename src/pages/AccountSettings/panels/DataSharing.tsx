@@ -34,7 +34,6 @@ const PREFERENCES: {
   },
 ];
 
-/** The three server-backed account preferences. */
 export function DataSharing() {
   const [settings, setSettings] = useState<AccountSettingsResponse | null>(null);
   const [loadError, setLoadError] = useState("");
@@ -63,8 +62,6 @@ export function DataSharing() {
   async function toggle(key: keyof AccountSettingsResponse, value: boolean) {
     if (!settings) return;
     const previous = settings;
-    // The endpoint decodes into plain booleans, so anything omitted is written
-    // as false. Always send the whole object, never just the changed key.
     const next = { ...settings, [key]: value };
     setSettings(next);
     setSaving(true);

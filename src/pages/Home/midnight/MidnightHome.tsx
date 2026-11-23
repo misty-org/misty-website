@@ -6,11 +6,10 @@ import { EngineCarousel } from "./EngineCarousel";
 import { FeaturesChapter } from "./FeatureTiles";
 import { HomeFaq } from "./HomeFaq";
 import { HomeGoals } from "./HomeGoals";
-import { useReveal } from "./useReveal";
-import { useMistMotion } from "./useMistMotion";
+import { useReveal } from "./use_reveal";
+import { useMistMotion } from "./use_mist_motion";
 import "./midnight.css";
 
-/** The drifting clouds behind the page. Switched off for now, to see the page without them. */
 const SHOW_MIST = false;
 
 function Mist() {
@@ -21,7 +20,6 @@ function Mist() {
   );
 }
 
-/** The hero screenshot: web pages side by side, with an agent chat and a space's group chat. */
 function HeroDemo() {
   return (
     <div className="mist-container mist-hero-demo">
@@ -55,18 +53,13 @@ export function MidnightHome() {
         <HeroDemo />
         <EngineCarousel />
       </section>
-      {/* The main features as one bento grid. */}
       <div id="features">
         <FeaturesChapter />
       </div>
-      {/* What people do together with Misty, as a pinned scroll scene. */}
       <UseCasesChapter />
-      {/* Why Misty exists: each goal as its own row, sides alternating. */}
       <HomeGoals />
       <HomeFaq />
-      {/* The call to download always closes the page. */}
       <DownloadSection />
-      {/* Transparent, so the mist keeps drifting behind the footer instead of ending at a white band. */}
       <Footer className="bg-transparent" />
     </div>
   );

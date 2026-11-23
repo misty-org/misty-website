@@ -4,33 +4,18 @@ import {
   SendHorizontal, Users,
 } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import gmail from "@/assets/brand-icons/gmail.svg";
-import googleDocs from "@/assets/brand-icons/google-docs.svg";
-import slack from "@/assets/brand-icons/slack.svg";
-import { EngineMark } from "./EngineMark";
+import { Mark } from "@misty/ui";
 import "./shots.css";
 
-/**
- * Drawn stand-ins for the screenshots a tile steps through once it zooms open (see BentoTiles): each one a
- * different view of the app, drawn in the same neutral surfaces as the tile sketches, so every step shows
- * something new. A real capture dropped into public/screenshots/home/ under the shot's file name replaces its
- * stand-in. Each row, card and file wears its own subject's icon.
- */
-
-/** The app's run states, each in its tone. */
 type State = "working" | "waiting" | "done";
 const STATE_NOTE: Record<State, string> = { working: "Working", waiting: "Needs you", done: "Done" };
 const Dot = ({ state }: { state: State }) => <i className="mist-tile-dot" data-state={state} />;
-const Brand = ({ src }: { src: string }) => <img src={src} alt="" width={18} height={18} />;
-/** A person in a space: their initial on a rounded square. */
+const Brand = ({ of }: { of: string }) => <Mark of={of} size={18} />;
 export const Person = ({ name }: { name: string }) => <span className="mist-mock-person">{name[0]}</span>;
 
-/** The bar across the top of each view: what it is, and a note on the right. */
 export function Bar({ icon, title, note }: { icon: ReactNode; title: string; note?: ReactNode }) {
   return <header className="mist-mock-bar">{icon}<b>{title}</b>{note && <small>{note}</small>}</header>;
 }
-
-/* ───────────── Agent chats ───────────── */
 
 const RUNNING: readonly { engine: string; title: string; state: State; last: string }[] = [
   { engine: "claude", title: "Launch catch-up", state: "working", last: "Reading 42 messages in #launch to sum up what changed since Friday." },
@@ -39,7 +24,6 @@ const RUNNING: readonly { engine: string; title: string; state: State; last: str
   { engine: "agy", title: "Plan the offsite", state: "done", last: "Three venues shortlisted and the agenda saved to Files." },
 ];
 
-/** Several chats side by side, each with its agent, its state and its latest line. */
 export function ChatsRunning() {
   return (
     <div className="mist-mock">
@@ -47,7 +31,7 @@ export function ChatsRunning() {
       <div className="mist-mock-cards" data-columns="2">
         {RUNNING.map(chat => (
           <article key={chat.title} className="mist-mock-card">
-            <div className="mist-mock-line"><EngineMark engine={chat.engine} size={16} /><b>{chat.title}</b>
+            <div className="mist-mock-line"><Mark of={`engine:${chat.engine}`} size={16} /><b>{chat.title}</b>
               <small><Dot state={chat.state} />{STATE_NOTE[chat.state]}</small></div>
             <p>{chat.last}</p>
           </article>
@@ -57,15 +41,14 @@ export function ChatsRunning() {
   );
 }
 
-/** One chat stopped on a question for you, with the answers to pick from. */
 export function ChatsNeedsYou() {
   return (
     <div className="mist-mock">
-      <Bar icon={<EngineMark engine="codex" size={16} />} title="Fix the signup form" note={<><Dot state="waiting" />Needs you</>} />
+      <Bar icon={<Mark of="engine:codex" size={16} />} title="Fix the signup form" note={<><Dot state="waiting" />Needs you</>} />
       <div className="mist-mock-thread">
         <div className="mist-mock-message" data-from="you">The signup form rejects emails with a plus sign. Can you fix it?</div>
         <div className="mist-mock-message">
-          <EngineMark engine="codex" size={16} />
+          <Mark of="engine:codex" size={16} />
           <p>Found it: the email check drops “+”. I patched the pattern and added three tests, and all of them pass.</p>
         </div>
         <div className="mist-mock-ask">
@@ -83,7 +66,6 @@ const HISTORY: readonly { when: string; chats: readonly { engine: string; title:
   { when: "Last week", chats: [{ engine: "agy", title: "Plan the offsite", at: "Thu" }, { engine: "claude", title: "Research venues", at: "Tue" }] },
 ];
 
-/** Past chats by day, each ready to pick up where it stopped. */
 export function ChatsHistory() {
   return (
     <div className="mist-mock">
@@ -93,7 +75,7 @@ export function ChatsHistory() {
           <section key={group.when}>
             <h4>{group.when}</h4>
             {group.chats.map(chat => (
-              <div key={chat.title} className="mist-mock-row"><EngineMark engine={chat.engine} size={16} /><b>{chat.title}</b><small>{chat.at}</small></div>
+              <div key={chat.title} className="mist-mock-row"><Mark of={`engine:${chat.engine}`} size={16} /><b>{chat.title}</b><small>{chat.at}</small></div>
             ))}
           </section>
         ))}
@@ -102,16 +84,13 @@ export function ChatsHistory() {
   );
 }
 
-/* ───────────── Spaces ───────────── */
-
-/** A Space's group chat: teammates and an agent in one thread. */
 export function SpaceChat() {
   return (
     <div className="mist-mock">
       <Bar icon={<Person name="Launch" />} title="Launch" note="Priya, Sam, Alex and 2 agents" />
       <div className="mist-mock-thread">
         <div className="mist-mock-message"><Person name="Priya" /><p><b>Priya</b>Can someone pull last week's signups for the review?</p></div>
-        <div className="mist-mock-message"><EngineMark engine="claude" size={16} /><p><b>Alex's agent</b>Here they are: 1,284 signups, up 12% on the week before. The chart is in the Lab.</p></div>
+        <div className="mist-mock-message"><Mark of="engine:claude" size={16} /><p><b>Alex's agent</b>Here they are: 1,284 signups, up 12% on the week before. The chart is in the Lab.</p></div>
         <div className="mist-mock-message"><Person name="Sam" /><p><b>Sam</b>Nice, I'll add it to the launch deck.</p></div>
       </div>
       <div className="mist-mock-composer">Message Launch<SendHorizontal size={16} /></div>
@@ -119,7 +98,6 @@ export function SpaceChat() {
   );
 }
 
-/** An open-source app open in a space: a slide in DeckCraft, with Sam's agent working in it beside him. */
 export function SpaceAppSession() {
   return (
     <div className="mist-mock">
@@ -147,7 +125,6 @@ const APPS: readonly { icon: ReactNode; name: string; note: string }[] = [
   { icon: <AudioLines size={16} />, name: "SoundCraft", note: "Alex's agent is cutting the demo voiceover." },
 ];
 
-/** The open-source apps a space's mods added from GitHub, each busy with someone's work. */
 export function SpaceApps() {
   return (
     <div className="mist-mock">
@@ -175,7 +152,6 @@ const FILES: readonly { icon: ReactNode; name: string; note: string; who: string
   { icon: <FileVideo size={16} />, name: "Launch demo.mp4", note: "24 MB", who: "Sam" },
 ];
 
-/** Files: the space's drive, also on each member's computer, and who added what. */
 export function SpaceFiles() {
   return (
     <div className="mist-mock">
@@ -191,7 +167,6 @@ export function SpaceFiles() {
 
 const WEEKS = [42, 55, 48, 63, 70, 66, 81, 92];
 
-/** A Lab notebook: two cells of code and the chart they draw. */
 export function SpaceLab() {
   return (
     <div className="mist-mock">
@@ -208,9 +183,6 @@ export function SpaceLab() {
   );
 }
 
-/* ───────────── The Studio ───────────── */
-
-/** A desk in the Studio: an agent at work, and whose it is; null for an empty desk. */
 export type Desk = { engine: string; who: string } | null;
 const DESKS: readonly Desk[] = [
   { engine: "claude", who: "Alex" }, null, { engine: "agy", who: "You" },
@@ -218,14 +190,13 @@ const DESKS: readonly Desk[] = [
   { engine: "opencode", who: "Priya" }, null, { engine: "hermes", who: "You" },
 ];
 
-/** The Studio's room seen from above at an angle: desks, some with an agent at work. */
 export function Studio({ desks = DESKS }: { desks?: readonly Desk[] }) {
   return (
     <div className="mist-studio" aria-hidden="true">
       <div className="mist-studio-floor">
         {desks.map((desk, index) => (
           <div key={index} className="mist-studio-desk" style={{ "--row": index } as CSSProperties}>
-            {desk && <span className="mist-studio-agent"><EngineMark engine={desk.engine} size={14} />{desk.who}</span>}
+            {desk && <span className="mist-studio-agent"><Mark of={`engine:${desk.engine}`} size={14} />{desk.who}</span>}
           </div>
         ))}
       </div>
@@ -233,7 +204,6 @@ export function Studio({ desks = DESKS }: { desks?: readonly Desk[] }) {
   );
 }
 
-/** A view of the room with a bar on top, the room drawn large below. */
 function Room({ icon, title, note, desks }: { icon: ReactNode; title: string; note: string; desks: readonly Desk[] }) {
   return (
     <div className="mist-mock">
@@ -259,17 +229,14 @@ export const StudioTeam = () => (
   ]} />
 );
 
-/* ───────────── The Agents page ───────────── */
-
-/** The apps agents are signed in to, each through its maker's own sign-in. */
 export function AgentsApps() {
   return (
     <div className="mist-mock">
       <Bar icon={<Plug size={16} />} title="Apps" note="3 signed in" />
       <div className="mist-mock-cards" data-columns="2">
-        {[{ src: gmail, name: "Gmail" }, { src: googleDocs, name: "Google Docs" }, { src: slack, name: "Slack" }].map(app => (
+        {[{ mark: "gmail", name: "Gmail" }, { mark: "google-docs", name: "Google Docs" }, { mark: "slack", name: "Slack" }].map(app => (
           <article key={app.name} className="mist-mock-card">
-            <div className="mist-mock-line"><Brand src={app.src} /><b>{app.name}</b><small><Dot state="done" />Signed in</small></div>
+            <div className="mist-mock-line"><Brand of={app.mark} /><b>{app.name}</b><small><Dot state="done" />Signed in</small></div>
             <p>Your agents use it as you, with your sign-in.</p>
           </article>
         ))}
@@ -289,7 +256,6 @@ const SKILLS: readonly { icon: ReactNode; name: string; does: string; used: stri
   { icon: <Languages size={16} />, name: "Translate docs", does: "Keeps the Spanish and German docs in step", used: "Used 3 times" },
 ];
 
-/** Skills your agents have learned, what each does and how often it's used. */
 export function AgentsSkills() {
   return (
     <div className="mist-mock">
@@ -304,12 +270,11 @@ export function AgentsSkills() {
 }
 
 const PLUGINS: readonly { icon: ReactNode; name: string; adds: string }[] = [
-  { icon: <Brand src={googleDocs} />, name: "Google Workspace", adds: "Adds Gmail, Docs and Calendar, and 2 skills" },
-  { icon: <Brand src={slack} />, name: "Slack", adds: "Adds Slack, and a skill for catch-ups" },
+  { icon: <Brand of="google-docs" />, name: "Google Workspace", adds: "Adds Gmail, Docs and Calendar, and 2 skills" },
+  { icon: <Brand of="slack" />, name: "Slack", adds: "Adds Slack, and a skill for catch-ups" },
   { icon: <Palette size={18} />, name: "Design kit", adds: "Adds 3 skills for reviews and handoff" },
 ];
 
-/** Plugins: bundles that add apps and skills in one go. */
 export function AgentsPlugins() {
   return (
     <div className="mist-mock">

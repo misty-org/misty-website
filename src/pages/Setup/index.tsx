@@ -6,7 +6,7 @@ import { SUPPORT_EMAIL } from "@/lib/site";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
 import { CopyField } from "./CopyField";
-import { mistySetupUrl, parseSetupFragment, type SetupLink } from "./setupLink";
+import { mistySetupUrl, parseSetupFragment, type SetupLink } from "./setup_link";
 
 type Reading = { kind: "link"; link: SetupLink } | { kind: "empty" } | { kind: "invalid" };
 
@@ -18,7 +18,6 @@ function readFragment(hash: string): Reading {
 
 const linkClass = "text-foreground underline underline-offset-4 hover:text-foreground/80";
 
-/** A new tab keeps this one, and the key it holds, open. */
 function DownloadButton() {
   return (
     <Button size="lg" asChild className="w-full">
@@ -84,18 +83,12 @@ function LinkMissing({ invalid }: { invalid: boolean }) {
   );
 }
 
-/**
- * Where setup emails point: `/setup#server=<host>&key=<key>`. The fragment never leaves the
- * browser. This page reads it once, keeps it only in memory, and clears it from the address
- * bar and the router's history entry.
- */
 export default function Setup() {
   const location = useLocation();
   const navigate = useNavigate();
   const [reading, setReading] = useState(() => readFragment(location.hash));
   const [readHash, setReadHash] = useState(location.hash);
 
-  // A fragment-only change, such as a second setup link opened in this tab, is read too.
   if (location.hash && location.hash !== readHash) {
     setReadHash(location.hash);
     setReading(readFragment(location.hash));

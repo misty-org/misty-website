@@ -2,20 +2,15 @@ import type { ReactNode } from "react";
 import { NavLink } from "react-router";
 
 import { PageHeader, PublicPage } from "@/components/marketing";
-import { legalInfo } from "./legalInfo";
+import { legalInfo } from "./legal_info";
 
 export type LegalSectionDef = {
   id: string;
   title: string;
-  /** One-sentence plain-language summary shown above the section body. */
   inShort?: string;
   body: ReactNode;
 };
 
-/**
- * Shared shell for the legal documents: header, last-updated date, a short
- * plain-language summary, a table of contents, and numbered sections.
- */
 export default function LegalPage({
   title,
   highlights,
@@ -125,7 +120,6 @@ export function LegalSubheading({ children }: { children: ReactNode }) {
   );
 }
 
-/** Internal routes use the router; mailto and external URLs stay plain links. */
 export function LegalLink({
   to,
   children,

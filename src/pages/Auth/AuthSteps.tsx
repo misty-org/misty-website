@@ -5,7 +5,6 @@ export interface AuthStep {
   action?: ReactNode;
 }
 
-/** Numbered steps for an AuthCard, each with its own action beside it. */
 export default function AuthSteps({ steps }: { steps: AuthStep[] }) {
   return (
     <ol className="divide-y divide-border">

@@ -156,8 +156,6 @@ for (const theme of ["light", "dark"] as const) {
       return {
         width: rect.width,
         height: rect.height,
-        // Clamped: `scrollbar-gutter: stable` reserves a gutter, so the
-        // difference rests negative. Only a positive value is real overflow.
         overflow: Math.max(
           0,
           document.documentElement.scrollWidth -
@@ -247,8 +245,6 @@ test("saving a preference sends all three booleans", async ({ page }) => {
   const dialog = page.getByRole("dialog", { name: "Account settings" });
   await dialog.getByLabel("Anonymous usage analytics").click();
 
-  // The handler decodes into plain booleans, so an omitted key is written as
-  // false. A partial patch here would silently disable the other two.
   await expect.poll(() => body).not.toBeNull();
   expect(body).toEqual({
     email_updates_enabled: true,
@@ -277,8 +273,6 @@ test("the account tab owns deletion", async ({ page }) => {
   await expect(dialog.getByLabel("Licensed device")).toHaveCount(0);
   await expect(dialog.getByLabel("Profile picture")).toBeAttached();
 
-  // Deletion stays disabled until both the password and the typed confirmation
-  // are present.
   const deleteButton = dialog.getByRole("button", {
     name: "Delete my account",
   });
@@ -310,16 +304,12 @@ test("deletion is blocked while the account still owns Spaces", async ({
   await dialog.getByRole("button", { name: "Delete my account" }).click();
   await page.getByRole("button", { name: "Delete account" }).click();
 
-  // The blocker list is the only way the visitor can act on the refusal.
   await expect(dialog.getByText("Design Team")).toBeVisible();
 });
 
 test("a settings URL is addressable and keeps its path", async ({ page }) => {
   await prepareAccount(page, "dark");
 
-  // The desktop app hands off to this URL, so it has to survive as a real
-  // destination rather than redirecting to home. Bare /settings is canonical
-  // for the default tab and is left alone rather than bounced.
   await page.goto("/settings");
 
   await expect(page).toHaveURL(/\/settings$/);
@@ -362,7 +352,6 @@ test("an unknown settings tab falls back to the default tab", async ({
 }) => {
   await prepareAccount(page, "dark");
 
-  // Includes the removed billing tab, which old desktop builds still link to.
   await page.goto("/settings/billing");
 
   await expect(page).toHaveURL(/\/settings\/account$/);
@@ -374,8 +363,6 @@ test("an unknown settings tab falls back to the default tab", async ({
 test("a signed-out settings deep link returns after sign-in", async ({
   page,
 }) => {
-  // No prepareAccount: /me 401s, which is the state a fresh browser is in when
-  // the desktop app hands off without a session.
   await page.route("**/api/**", async (route) => {
     const url = new URL(route.request().url());
     if (url.pathname.endsWith("/me")) {
@@ -392,7 +379,6 @@ test("a signed-out settings deep link returns after sign-in", async ({
   await page.goto("/settings/privacy");
 
   await expect(page).toHaveURL(/\/signin$/);
-  // The destination is carried in router state so sign-in can return to it.
   const carried = await page.evaluate(() => window.history.state?.usr?.from);
   expect(carried).toBe("/settings/privacy");
 });

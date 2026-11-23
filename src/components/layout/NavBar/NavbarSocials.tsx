@@ -1,8 +1,7 @@
 import { IconButton } from "@misty/ui";
 
-import { socialLinks } from "@/components/layout/Footer/footerLinks";
+import { socialLinks } from "@/components/layout/Footer/footer_links";
 
-/** GitHub, X, Discord, YouTube and Instagram beside the logo, at every desktop width. */
 export default function NavbarSocials() {
   return (
     <div

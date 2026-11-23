@@ -4,7 +4,6 @@ import paths from "./socialMarks.json";
 
 export type MarkIcon = ComponentType<SVGProps<SVGSVGElement>>;
 
-/** Monochrome brand marks, from Simple Icons (CC0). Lucide has no brands. */
 function mark(d: string): MarkIcon {
   return function Mark(props) {
     return (

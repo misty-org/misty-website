@@ -1,28 +1,17 @@
 import { AppWindow, Armchair, Bot, Code, FlaskConical, Folder, Hand, History, Layers, MessagesSquare, Package, Plug, Presentation, Puzzle, Users } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import gmail from "@/assets/brand-icons/gmail.svg";
-import googleDocs from "@/assets/brand-icons/google-docs.svg";
-import slack from "@/assets/brand-icons/slack.svg";
+import { Mark } from "@misty/ui";
 import { Chapter } from "./Chapter";
-import { EngineMark } from "./EngineMark";
 import {
   AgentsApps, AgentsPlugins, AgentsSkills, ChatsHistory, ChatsNeedsYou, ChatsRunning, SpaceAppSession, SpaceApps,
   SpaceChat, SpaceFiles, SpaceLab, Studio, StudioRoom, StudioTeam, StudioYours,
 } from "./ShotSketches";
 import { BentoTiles, type Feature } from "./Tiles";
 
-/**
- * Misty's four places as one bento grid: agent chats, Spaces (with the Lab inside them), the Studio,
- * and the Agents page (with the apps agents sign in to). Fewer tiles, so it's clear what Misty is.
- * The engines are their own row under the hero (EngineCarousel). Claims follow the app's README.
- */
-
-/** One row of a sheet: its own icon, a name, and a note on the right. `index` staggers its entrance (tiles.css). */
 function Row({ icon, name, note, index }: { icon: ReactNode; name: string; note: ReactNode; index: number }) {
   return <div style={{ "--row": index } as CSSProperties}>{icon}<b>{name}</b><small>{note}</small></div>;
 }
 
-/** The app's run states, each in its tone: working, waiting on you, done. */
 type ChatState = "working" | "waiting" | "done";
 const CHATS: readonly { title: string; engine: string; state: ChatState }[] = [
   { title: "Launch catch-up", engine: "claude", state: "working" },
@@ -36,14 +25,13 @@ function Chats() {
   return (
     <div className="mist-tile-sheet" aria-hidden="true">
       {CHATS.map((chat, index) => (
-        <Row key={chat.title} index={index} icon={<EngineMark engine={chat.engine} size={16} />} name={chat.title}
+        <Row key={chat.title} index={index} icon={<Mark of={`engine:${chat.engine}`} size={16} />} name={chat.title}
           note={<><i className="mist-tile-dot" data-state={chat.state} />{STATE_NOTE[chat.state]}</>} />
       ))}
     </div>
   );
 }
 
-/** What a space holds, each part with its own icon: Misty's own parts, then the open-source apps its mods add. */
 function Space() {
   return (
     <div className="mist-tile-sheet" aria-hidden="true">
@@ -56,23 +44,17 @@ function Space() {
   );
 }
 
-/** The Agents page: the apps agents sign in to, and the skills they've learned. */
 function AgentsPage() {
   return (
     <div className="mist-tile-sheet" aria-hidden="true">
-      <Row index={0} icon={<img src={gmail} alt="" width={16} height={16} />} name="Gmail" note="Signed in" />
-      <Row index={1} icon={<img src={googleDocs} alt="" width={16} height={16} />} name="Google Docs" note="Signed in" />
-      <Row index={2} icon={<img src={slack} alt="" width={16} height={16} />} name="Slack" note="Signed in" />
+      <Row index={0} icon={<Mark of="gmail" size={16} />} name="Gmail" note="Signed in" />
+      <Row index={1} icon={<Mark of="google-docs" size={16} />} name="Google Docs" note="Signed in" />
+      <Row index={2} icon={<Mark of="slack" size={16} />} name="Slack" note="Signed in" />
       <Row index={3} icon={<Puzzle size={16} />} name="Release notes" note="Skill" />
     </div>
   );
 }
 
-/**
- * Each tile's screenshots, in the order the scroll moves through them once the tile has zoomed open (see
- * BentoTiles). Drop the captures into public/screenshots/home/ under these names; until a file exists, its place
- * shows its drawn stand-in (ShotSketches).
- */
 const shot = (file: string, alt: string, name: string, icon: ReactNode, sketch: ReactNode) =>
   ({ src: `/screenshots/home/${file}`, alt, name, icon, sketch });
 

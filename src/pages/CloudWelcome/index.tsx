@@ -27,7 +27,6 @@ const STEPS: AuthStep[] = [
   },
 ];
 
-/** Where Stripe Checkout returns after a successful Misty+ or Boost payment. */
 export default function CloudWelcome() {
   return (
     <AuthShell title="Thanks for subscribing" wide>

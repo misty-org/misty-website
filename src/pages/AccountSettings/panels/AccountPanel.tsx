@@ -13,7 +13,7 @@ import {
   Row,
   Section,
 } from "../components/SettingsRows";
-import { useSave } from "../useSave";
+import { useSave } from "../use_save";
 
 export function AccountPanel({
   me,

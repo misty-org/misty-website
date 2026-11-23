@@ -1,5 +1,3 @@
-/* Homepage-only styles. Shared navigation, footer, and drawer keep their styles. */
-/* Theme tokens, all from the app's palette (@misty/ui/styles.css). The site is dark only. */
 .mist-home {
   --mist-background: var(--misty-theme-bg); --mist-paper: var(--misty-theme-bg);
   --mist-ink: var(--misty-theme-text-bright); --mist-ink-max: var(--misty-theme-text-bright); --mist-strong: var(--misty-theme-text);
@@ -14,18 +12,12 @@
   --mist-cloud-filter: none;
   --marketing-foreground: var(--mist-ink);
   --marketing-surface: var(--mist-paper);
-  /* No background of its own: the site's background, the desktop app's #131313, shows through, so the
-     homepage and every other page are one color. */
   position: relative;
   isolation: isolate;
   color: var(--mist-ink);
   overflow: clip;
   font-size: 0.9375rem;
-  /* Half the space between two homepage sections; every section pads by it above and below,
-     so every break between sections is exactly twice this. */
   --mist-gap: clamp(3rem, 5vw, 4.5rem);
-  /* Slide up under the floating navbar so the mist fills the top of the window
-     instead of the plain app background; the hero adds the space back. */
   --mist-nav-offset: calc(var(--site-nav-height, 4.5rem) + env(safe-area-inset-top, 0px));
   margin-top: calc(-1 * var(--mist-nav-offset));
 }
@@ -34,14 +26,10 @@
 .mist-home button { cursor: pointer; }
 .mist-home :focus-visible { outline: 0.125rem solid var(--mist-text-3); outline-offset: 0.3125rem; }
 .mist-home h1, .mist-home h2:not(footer *), .mist-home p { margin: 0; }
-/* The same rail as the navbar (index.css --site-gutter / --site-content-max), so every edge lines up. */
 .mist-container { width: min(var(--site-content-max), calc(100% - 2 * var(--site-gutter))); margin-inline: auto; position: relative; z-index: 1; }
-/* Every section pads by the same --mist-gap above and below, so all section breaks match. */
 .mist-section { position: relative; padding: var(--mist-gap) 0; scroll-margin-top: 6.875rem; }
 .mist-section-anchor { scroll-margin-top: 6.875rem; }
 .mist-home h2:not(footer *) { font-size: clamp(1.625rem, 2.6vw, 2.25rem); line-height: 1.12; letter-spacing: -.045em; font-weight: 580; }
-/* One viewport-sized wallpaper shared by every section. Its negative margin
-   keeps it behind the content without allocating another viewport of space. */
 .mist-atmosphere {
   position: sticky;
   top: 0;
@@ -66,15 +54,12 @@
   bottom: -12%;
   left: 0;
   width: calc(var(--mist-tile-width) * 2);
-  /* Baked density texture keeps the billowing detail off the runtime paint path. Its left and
-     right edges are crossfaded, so two identical tiles loop continuously with no empty seam. */
   background: url('../../../assets/mist-clouds.webp') left center / 50% auto repeat-x;
   animation: mist-current 100s linear infinite;
   animation-delay: -20s;
   animation-play-state: paused;
 }
 .mist-cloud::after {
-  /* A quieter, offset bank creates depth without adding a background tint. */
   top: -28%;
   bottom: -28%;
   opacity: .32;
@@ -90,8 +75,6 @@
 .mist-home[data-mist-visible=false] .mist-atmosphere { visibility: hidden; }
 .mist-home[data-tab-hidden=true] .mist-cloud::before,
 .mist-home[data-tab-hidden=true] .mist-cloud::after { animation-play-state: paused; will-change: auto; }
-/* Infinite loops (dash currents, glows, carets, spinners) repaint every frame on the main
-   thread, so they stop while their scene is off-screen or the tab is in the background. */
 .mist-home [data-mist-scene][data-mist-visible=false] *,
 .mist-home [data-mist-scene][data-mist-visible=false] *::before,
 .mist-home [data-mist-scene][data-mist-visible=false] *::after,
@@ -102,25 +85,20 @@
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
 }
-/* Hero: a centered two-tone headline, then the product itself, live and full size. */
 .mist-mono { font-family: var(--font-mono); letter-spacing: 0; }
 .mist-hero { position: relative; padding-top: var(--mist-nav-offset); scroll-margin-top: 6.875rem; }
 .mist-hero-copy { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 6rem 0 4rem; text-align: center; }
 .mist-home h1 { max-width: 75rem; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 500; line-height: 1.22; letter-spacing: -.055em; text-wrap: balance; }
 .mist-home .mist-hero h1 { max-width: 65rem; font-size: clamp(1.875rem, 3.6vw, 3rem); white-space: nowrap; }
-/* The second line of a heading is dimmed, so each heading reads as a statement and its turn. */
-/* The hero is one bright tone; section titles dim their second line. */
 .mist-home :is(.mist-chapter-head, .mist-resources-head) h2 > span { display: block; color: var(--mist-dim); }
 .mist-home h1 .mist-accent { color: var(--mist-ink); }
 .mist-hero-actions { margin-top: 2.125rem; }
-/* One short paragraph under the headline that says what Misty is. */
 .mist-home .mist-hero-lede { max-width: 38.75rem; margin-top: 1.375rem; color: var(--mist-muted); font-size: 1.0625rem; line-height: 1.55; text-wrap: pretty; }
 .mist-hero-demo { position: relative; z-index: 1; width: min(72.5rem, calc(100% - 3rem)); padding-bottom: 0; }
 .mist-hero-screenshot { display: block; width: 100%; height: auto; border: 1px solid var(--mist-card-border); border-radius: 1rem; }
 .mist-image-frame { border: 1px solid var(--mist-card-border); border-radius: 0.75rem; overflow: hidden; background: #151516; }
 .mist-product-image { width: 100%; aspect-ratio: 16 / 10; position: relative; background: var(--mist-chip); }
 .mist-product-image > img { display: block; width: 100%; height: 100%; object-fit: contain; }
-/* Interface sketches: neutral app surfaces drawn in CSS, cropped by the card like screenshots. */
 .mist-sketch {
   position: absolute; inset: 0 0 0 0; padding: 1.375rem;
   border: 1px solid var(--mist-border); border-bottom: 0; border-radius: 0.75rem 0.75rem 0 0;
@@ -161,16 +139,12 @@
 .mist-sketch-tools span { color: var(--mist-subtle); font-size: 0.8125rem; line-height: 1.4; }
 .mist-fine-print { color: var(--mist-subtle); font-size: 0.875rem; margin-top: 1.125rem !important; line-height: 1.6; }
 .mist-card-note { margin-top: 0.875rem !important; color: var(--mist-muted); font-size: 0.9375rem; line-height: 1.6; max-width: 26.25rem; }
-/* Chapters: each part of the story opens with a large heading, alone on its hairline. The heads
-   alternate sides down the page: agents right, Spaces left, and the resources head right. */
 .mist-chapter { scroll-margin-top: 2.5rem; }
 .mist-chapter-head, .mist-resources-head { display: grid; margin-bottom: 2rem; padding-top: 0; }
 .mist-home :is(.mist-chapter-head, .mist-resources-head) h2 { max-width: 14em; font-size: clamp(1.875rem, 2.9vw, 2.625rem); line-height: 1.08; letter-spacing: -.04em; font-weight: 560; text-wrap: balance; }
 .mist-chapter[data-side=end] .mist-chapter-head, .mist-resources-head { justify-items: end; text-align: right; }
 
-/* Credits under the hero: a quiet label over a slow logo marquee. */
 .mist-home .brand-marquee-link { color: var(--mist-text-2); }
-/* Agents: a proposed plan waiting for approval. */
 .mist-sketch-plan { display: grid; gap: 0.875rem; }
 .mist-sketch-plan > span { color: var(--mist-subtle); font-size: 0.8125rem; }
 .mist-sketch-plan > strong { font-size: 1.125rem; line-height: 1.35; letter-spacing: -.02em; }
@@ -181,7 +155,6 @@
 .mist-sketch-actions b, .mist-sketch-actions em { padding: 0.5625rem 1rem; border-radius: 0.5625rem; font-size: 0.875rem; font-style: normal; font-weight: 550; }
 .mist-sketch-actions b { background: var(--mist-ink); color: var(--mist-paper); }
 .mist-sketch-actions em { border: 1px solid var(--mist-card-border); color: var(--mist-strong); }
-/* Together: one agent asking another, under the owner's rule. */
 .mist-sketch-request { display: grid; gap: 0.875rem; color: var(--mist-text-2); line-height: 1.5; }
 .mist-sketch-request p { margin: 0; }
 .mist-sketch-request b { color: var(--mist-ink); font-weight: 560; }
@@ -189,8 +162,6 @@
 .mist-sketch-policy { display: grid; grid-template-columns: repeat(3, 1fr); padding: 0.1875rem; border: 1px solid var(--mist-border); border-radius: 0.625rem; background: var(--mist-raised-2); }
 .mist-sketch-policy em { padding: 0.5rem 0; border-radius: 0.4375rem; color: var(--mist-subtle); font-size: 0.8125rem; font-style: normal; text-align: center; }
 .mist-sketch-policy em[data-on=true] { background: var(--mist-raised-3); color: var(--mist-ink); }
-/* The workspace: connected apps, then what agents can do across them. */
-/* Tools: a bento grid. The file manager spans two rows; the other tiles size to their content. */
 .mist-bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.25rem; }
 .mist-bento-tile {
   position: relative; display: flex; flex-direction: column; gap: 1.375rem; grid-column: span 4; min-width: 0;
@@ -200,18 +171,14 @@
 .mist-bento-tile .mist-fine-print { margin-top: auto !important; }
 
 
-/* The closing call to download: its own room above, the page's end below. */
 .mist-closing { position: relative; padding: var(--mist-gap) 0 calc(var(--mist-gap) * 2); text-align: center; scroll-margin-top: 6.875rem; overflow: clip; }
 .mist-home .mist-closing h2 { max-width: none; margin-inline: auto; text-wrap: balance; font-size: clamp(1.625rem, 2.8vw, 2.25rem); line-height: 1.25; letter-spacing: -.035em; font-weight: 500; }
 .mist-closing-actions { margin-top: 1.75rem; }
 
-/* Shared components (the plan cards, the questions) draw from the app's theme tokens;
-   keep them neutral grey on the homepage instead of the app's faintly blue greys. */
 .mist-home {
   --background: var(--mist-background); --card: var(--mist-paper); --border: var(--mist-border); --input: var(--mist-border);
   --muted: var(--mist-raised); --secondary: var(--mist-raised); --accent: var(--mist-raised); --muted-foreground: var(--mist-subtle); --foreground: var(--mist-ink);
 }
-/* Section motion follows scroll. */
 @media (prefers-reduced-motion: no-preference) {
   .mist-close-content { transform: translateY(calc((1 - var(--mist-entry, 1)) * 2.8125rem)) scale(calc(.95 + var(--mist-entry, 1) * .05)); }
 }
@@ -243,20 +210,14 @@
   .mist-cloud::before, .mist-cloud::after { will-change: auto; }
 }
 
-/* ───────────── Motion ─────────────
-   On load the hero rises in. As you scroll, each block fades and
-   rises once into place, groups one item after another. Cards lift and light up under the
-   cursor, and the sketches inside them come alive. Reduced motion shows everything at rest. */
 :root { --mist-ease: cubic-bezier(.2, .7, .2, 1); }
 
 @keyframes mist-blink { 50% { opacity: 0; } }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Hero entrance: the headline fades and rises in, then its lede and buttons just after. */
   .mist-hero-copy > * { animation: mist-rise .8s var(--mist-ease) .1s both; }
   .mist-hero-copy > :not(h1) { animation-delay: .25s; }
 
-  /* Reveal once on scroll. Individual `translate` keeps hover transforms free. */
   .mist-home[data-motion=ready] [data-reveal]:not([data-revealed]),
   .mist-home[data-motion=ready] [data-reveal-stagger]:not([data-revealed]) > * { opacity: 0; translate: 0 1.375rem; }
   [data-reveal], [data-reveal-stagger] > * {
@@ -264,7 +225,6 @@
     transition: opacity .8s var(--mist-ease) var(--mist-reveal), translate .9s var(--mist-ease) var(--mist-reveal);
   }
 
-  /* Cards lift, and a soft light follows the cursor across them. */
   .mist-bento-tile {
     transition: opacity .8s var(--mist-ease) var(--mist-reveal, 0s), translate .9s var(--mist-ease) var(--mist-reveal, 0s),
       border-color .3s;
@@ -276,7 +236,6 @@
   }
   .mist-bento-tile[data-spotlight]:hover::after { opacity: 1; }
 
-  /* Inside the sketches: transfers fill and keep moving, collaborators type, locks settle. */
   .mist-sketch-caret { animation: mist-blink 1.1s step-end infinite; }
   .mist-sketch-caret[data-name=Sam] { animation-delay: .45s; }
   .mist-sketch-policy em[data-on=true] { animation: mist-glow 3.2s ease-in-out infinite; }
@@ -286,9 +245,7 @@
 @keyframes mist-window-in { from { opacity: 0; transform: perspective(150rem) rotateX(16deg) translateY(4.375rem) scale(.94); } }
 @keyframes mist-glow { 50% { border-color: var(--mist-border-strong); } }
 
-/* The live window tilts back slightly and flattens as it scrolls up to meet you. */
 @supports (animation-timeline: view()) {
-  /* Wide screens only: a scaled-down window stays sharper without a 3D transform. */
   @media (prefers-reduced-motion: no-preference) and (min-width: 880px) {
     .mist-hero-demo { transform-origin: 50% 0; animation: mist-tilt linear both; animation-timeline: view(); animation-range: entry 0% cover 42%; }
   }
@@ -297,8 +254,6 @@
 
 
 
-/* Interludes: one headline line in the page's normal flow (the engines row under the hero uses it),
-   with the same gap above and below. */
 .mist-interlude { position: relative; padding: var(--mist-gap) 0; text-align: center; scroll-margin-top: 5rem; }
 .mist-interlude-copy { display: grid; justify-items: center; gap: 0.875rem; }
 .mist-interlude h2 { width: fit-content; }
@@ -313,10 +268,6 @@
   .mist-home .mist-hero h1 { white-space: normal; }
 }
 
-/* ── Compact story: headings only, smaller diagrams, more use of width ─────────────────────── */
-
-/* Chapter headings run on one line; the second sentence stays dimmed inline. */
-/* Chapter headings stay well below the interludes (40–84px), so each act's big line leads. */
 .mist-home :is(.mist-chapter-head, .mist-resources-head) h2 { max-width: none; font-size: clamp(1.25rem, 1.75vw, 1.625rem); letter-spacing: -.03em; }
 .mist-home :is(.mist-chapter-head, .mist-resources-head) h2 > span { display: inline; }
 .mist-chapter-head { margin-bottom: 1.5rem; }

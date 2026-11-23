@@ -1,5 +1,5 @@
-import { sessionFetch } from "../../lib/sessionFetch";
-import { apiBase } from "../../lib/apiBase";
+import { sessionFetch } from "../../lib/session_fetch";
+import { apiBase } from "../../lib/api_base";
 
 export interface AuthUser {
   id: string;
@@ -7,7 +7,6 @@ export interface AuthUser {
   email: string;
 }
 
-/** A refused request, with the server's code and, for a suspended sign-in, a proof of the account. */
 export class AuthRequestError extends Error {
   readonly code?: string;
   readonly proof?: string;
@@ -66,7 +65,6 @@ export async function signInRequest(
   };
 }
 
-// Kept for this tab only: the token and the code from Google's return together make the session.
 const googleFlowKey = "misty.google-sign-in";
 
 export async function beginGoogleSignIn(returnTo: string | null): Promise<void> {
@@ -80,7 +78,6 @@ export async function beginGoogleSignIn(returnTo: string | null): Promise<void> 
   window.location.assign(flow.url);
 }
 
-/** Finishes the sign-in this tab began, and says where the person was headed. */
 export async function completeGoogleSignIn(code: string): Promise<string | null> {
   const saved = sessionStorage.getItem(googleFlowKey);
   sessionStorage.removeItem(googleFlowKey);
@@ -98,12 +95,10 @@ const googleSignInErrors: Record<string, string> = {
   access_denied: "Google sign-in was cancelled.",
 };
 
-/** What the server's code in the fragment means: never its own text, which anyone could link. */
 export function googleSignInErrorMessage(code: string): string {
   return googleSignInErrors[code] ?? "Could not sign in with Google.";
 }
 
-/** Says whether the account is waiting for its email to be confirmed, with no session yet. */
 export async function registerRequest(
   username: string,
   email: string,
@@ -117,12 +112,10 @@ export async function registerRequest(
   return { confirmEmail: answer.status === "confirm_email" };
 }
 
-/** Makes the account a confirmation link stands for, and signs in to it. */
 export async function confirmEmailSignIn(token: string): Promise<void> {
   await request("/auth/confirm-email/sign-in", { token });
 }
 
-/** Signs in to the account a hand-off code from the app stands for. */
 export async function redeemWebHandoff(code: string): Promise<void> {
   await request("/auth/web-handoff", { code });
 }

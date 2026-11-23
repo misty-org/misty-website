@@ -7,18 +7,11 @@ import { redeemWebHandoff } from "../Auth/api";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
 
-/** A page on this site to go on to; anything else, such as another site, goes home. */
 function sitePath(next: string | null): string {
   if (!next || !next.startsWith("/") || next.startsWith("//") || next.startsWith("/\\")) return "/";
   return next;
 }
 
-/**
- * Where the app opens the website signed in as its own account:
- * `/continue?next=<path>#code=<code>`. The code is single-use and lasts two minutes, and the
- * fragment never leaves the browser. Trading it for a session signs this browser in to the
- * app's account, then the page goes on to `next`, such as checkout for Misty+.
- */
 export default function ContinueFromApp() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,7 +22,6 @@ export default function ContinueFromApp() {
   );
   const [next] = useState(() => sitePath(params.get("next")));
   const [redeemFailed, setFailed] = useState(false);
-  // With no code there is nothing to trade, so the link has failed from the start.
   const failed = !code || redeemFailed;
   const started = useRef(false);
 

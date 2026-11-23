@@ -15,7 +15,7 @@ import {
   FieldError,
   SkeletonList,
 } from "@misty/ui";
-import { fetchAccountProof, postProofForm } from "@/lib/accountProof";
+import { fetchAccountProof, postProofForm } from "@/lib/account_proof";
 import { ACCOUNT_PORTAL_URL, BOOSTS_SETTINGS_PATH } from "@/lib/site";
 import { plans } from "@/pages/Pricing/plans";
 import {
@@ -25,12 +25,11 @@ import {
   PlanChangeRefused,
   type SubscriptionState,
 } from "../api";
-import { failed, longDate, refusalMessages } from "../billingMessages";
+import { failed, longDate, refusalMessages } from "../billing_messages";
 import { ErrorRow, Row, Section } from "../components/SettingsRows";
 
 const plusAllowance = `${plans.plus.storage} of storage, ${plans.plus.upload} files and ${plans.plus.boosts} Boosts`;
 
-/** This account's plan: Free, or Misty+ with when it renews or ends, its billing period and cancelling. */
 export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
   const [state, setState] = useState<SubscriptionState | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);

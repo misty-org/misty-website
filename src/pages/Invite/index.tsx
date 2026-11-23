@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 
 import { SiteLink } from "@/components/SiteLink";
 import { Button, Skeleton } from "@misty/ui";
-import { apiBase } from "@/lib/apiBase";
+import { apiBase } from "@/lib/api_base";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
 import AuthSteps, { type AuthStep } from "../Auth/AuthSteps";
@@ -27,7 +27,6 @@ const STEPS: AuthStep[] = [
   },
 ];
 
-/** Who a code's link is from, or null when it names nobody any more. */
 async function fetchInviter(code: string): Promise<string | null> {
   try {
     const response = await fetch(`${apiBase}/invites/${encodeURIComponent(code)}`);
@@ -38,10 +37,8 @@ async function fetchInviter(code: string): Promise<string | null> {
   }
 }
 
-/** The landing page an invite link opens. */
 export default function Invite() {
   const { code = "" } = useParams();
-  // Undefined while asking the server.
   const [inviter, setInviter] = useState<string | null | undefined>(undefined);
 
   useEffect(() => {

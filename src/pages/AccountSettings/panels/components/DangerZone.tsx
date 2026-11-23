@@ -35,8 +35,6 @@ export function DangerZone({ onDeleted }: { onDeleted: () => void }) {
     } catch (deleteError) {
       setConfirmOpen(false);
       if (deleteError instanceof AccountDeletionBlockedError) {
-        // The server refuses while the account still owns Spaces; naming them
-        // is the only way the visitor can act on it.
         setBlockedSpaces(deleteError.spaces.map((space) => space.name));
         setError(deleteError.message);
       } else {

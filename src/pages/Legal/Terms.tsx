@@ -5,8 +5,8 @@ import LegalPage, {
   LegalSubheading,
   type LegalSectionDef,
 } from "./LegalPage";
-import { cloudTermsSection } from "./cloudTerms";
-import { legalInfo } from "./legalInfo";
+import { cloudTermsSection } from "./CloudTerms";
+import { legalInfo } from "./legal_info";
 
 const { supportEmail, operatorName, operatorDescription, governingState } =
   legalInfo;

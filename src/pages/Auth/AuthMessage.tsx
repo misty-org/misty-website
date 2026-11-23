@@ -5,7 +5,6 @@ interface AuthMessageProps {
   message: string;
 }
 
-/** What the form has to say: an error in the danger color, anything else in quiet text. */
 export default function AuthMessage({ tone, message }: AuthMessageProps) {
   const isError = tone === "error";
 

@@ -1,11 +1,5 @@
-import { EngineMark } from "./EngineMark";
+import { Mark } from "@misty/ui";
 
-/**
- * Every engine Misty runs, as an endless row under the hero screenshot. Names and order follow the
- * app's Settings (misty/src/features/engine-config/channels/engines.ts); Qoder's China build is the
- * same CLI, so it is left out. The row is drawn twice and slides by half its width, so it loops with
- * no seam; reduced motion leaves it still and scrollable (index.css .brand-marquee).
- */
 const ENGINES: readonly { id: string; name: string }[] = [
   { id: "claude", name: "Claude Code" },
   { id: "codex", name: "Codex" },
@@ -27,7 +21,6 @@ const ENGINES: readonly { id: string; name: string }[] = [
 export function EngineCarousel() {
   return (
     <section className="mist-interlude mist-engines" aria-labelledby="engines-title">
-      {/* Set like the spaces interlude, and written out the same way as it arrives. */}
       <div className="mist-container mist-interlude-copy">
         <h2 id="engines-title" data-reveal>Works with your favorite engines</h2>
       </div>
@@ -38,7 +31,7 @@ export function EngineCarousel() {
               <ul key={copy} className="brand-marquee-list" aria-hidden={copy === 1 || undefined}>
                 {ENGINES.map(engine => (
                   <li key={engine.id} className="brand-marquee-item">
-                    <span className="brand-marquee-link"><EngineMark engine={engine.id} size={20} />{engine.name}</span>
+                    <span className="brand-marquee-link"><Mark of={`engine:${engine.id}`} size={20} />{engine.name}</span>
                   </li>
                 ))}
               </ul>

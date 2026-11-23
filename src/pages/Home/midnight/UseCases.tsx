@@ -1,20 +1,11 @@
 import { FileText, FlaskConical, GitPullRequest, Newspaper } from "lucide-react";
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { Chapter } from "./Chapter";
-import { EngineMark } from "./EngineMark";
-import { usePinnedSteps } from "./usePinnedSteps";
+import { usePinnedSteps } from "./use_pinned_steps";
 import "./shots.css";
 import "./steps.css";
-import { Pressable } from "@misty/ui";
+import { Mark, Pressable } from "@misty/ui";
 
-/**
- * What people do together with Misty, as a pinned scene: the examples on the left, and on the right the space
- * where each one happens, with its people and their agents in one thread and what came out of it. Scrolling moves
- * through the examples while the scene holds still; elsewhere they are buttons. Every example is shared work,
- * never one person alone with an agent.
- */
-
-/** Someone in the thread: a person by name, or a person's agent. */
 type Message = { from: string; engine?: string; text: string };
 type UseCase = {
   title: string; note: string;
@@ -81,10 +72,8 @@ const USE_CASES: readonly UseCase[] = [
   },
 ];
 
-/** A person in a space: their initial on a rounded square. */
 const Person = ({ name }: { name: string }) => <span className="mist-mock-person">{name[0]}</span>;
 
-/** One example's space: its bar, the thread, and what the thread made. */
 function CaseSpace({ useCase, active }: { useCase: UseCase; active: boolean }) {
   return (
     <div className="mist-case" data-active={active || undefined} aria-hidden={!active}>
@@ -93,7 +82,7 @@ function CaseSpace({ useCase, active }: { useCase: UseCase; active: boolean }) {
         <div className="mist-mock-thread">
           {useCase.thread.map((message, index) => (
             <div key={message.from} className="mist-mock-message" style={{ "--n": index } as CSSProperties}>
-              {message.engine ? <EngineMark engine={message.engine} size={16} /> : <Person name={message.from} />}
+              {message.engine ? <Mark of={`engine:${message.engine}`} size={16} /> : <Person name={message.from} />}
               <p><b>{message.from}</b>{message.text}</p>
             </div>
           ))}
@@ -110,8 +99,6 @@ export function UseCasesChapter() {
   const section = useRef<HTMLDivElement>(null);
   const [active, choose] = usePinnedSteps(section, USE_CASES.length);
   const list = useRef<HTMLOListElement>(null);
-  // The row wash is placed from the items' closed heights plus the current note, not from the layout
-  // mid-transition, so it can start moving at once and the note opens after it.
   useEffect(() => {
     const element = list.current;
     if (!element) return;
@@ -119,7 +106,6 @@ export function UseCasesChapter() {
       const items = [...element.children] as HTMLElement[];
       const gap = parseFloat(getComputedStyle(element).rowGap) || 0;
       const closed = items.map(item => (item.firstElementChild as HTMLElement).offsetHeight);
-      // scrollHeight still counts the text while the note is clipped shut; drop the padding that is mid-transition.
       const text = items[active].querySelector<HTMLElement>(".mist-step-note p");
       const note = text ? text.scrollHeight - (parseFloat(getComputedStyle(text).paddingBottom) || 0) : 0;
       element.style.setProperty("--ind-y", `${closed.slice(0, active).reduce((sum, h) => sum + h + gap, 0)}px`);
@@ -134,7 +120,6 @@ export function UseCasesChapter() {
   return (
     <Chapter id="together" title="What you can do together" ownHead>
       <div ref={section} className="mist-steps" style={{ "--steps-count": USE_CASES.length } as CSSProperties}>
-        {/* Pinned, the heading holds with the examples, and the whole scene centers in the viewport. */}
         <div className="mist-steps-pin">
           <h2 id="together-title" className="mist-steps-head" data-reveal>What you can do together</h2>
           <div className="mist-steps-stage" data-reveal-stagger>

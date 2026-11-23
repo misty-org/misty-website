@@ -9,12 +9,6 @@ import AuthCard from "../Auth/AuthCard";
 import AuthField from "../Auth/AuthField";
 import AuthShell from "../Auth/AuthShell";
 
-/**
- * "Email me a sign-in link" for a Misty account. The form posts straight to misty-cloud, which
- * has the server email a new setup link and sends every visitor back to `?sent=1` either
- * way, so the page never shows who has an account. The link also lets the person set a new
- * password.
- */
 export default function SignInLink() {
   const [params] = useSearchParams();
   const [email, setEmail] = useState("");

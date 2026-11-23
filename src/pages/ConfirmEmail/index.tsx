@@ -7,7 +7,7 @@ import { CLOUD_HOST } from "@/lib/site";
 import { AuthRequestError, confirmEmailSignIn } from "../Auth/api";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
-import { parseServerHost } from "../Setup/setupLink";
+import { parseServerHost } from "../Setup/setup_link";
 
 const results: Record<string, string> = {
   confirmed: "Your email is confirmed. You can go back to Misty.",
@@ -16,10 +16,6 @@ const results: Record<string, string> = {
   failed: "Misty couldn't confirm your email. Open the link in your email and try again.",
 };
 
-/**
- * The form's target on the server named in the link, or null when the link is incomplete.
- * `ownServer` says it is the server this site signs in on.
- */
 function readLink(hash: string): { action: string; token: string; ownServer: boolean } | null {
   const params = new URLSearchParams(hash.replace(/^#/, ""));
   const server = parseServerHost(params.get("server") ?? "");
@@ -33,14 +29,6 @@ function readLink(hash: string): { action: string; token: string; ownServer: boo
   };
 }
 
-/**
- * Where confirmation emails point: `/confirm-email#server=<host>&token=<token>`. The fragment
- * never leaves the browser, so only something that runs this page can confirm. Opening the link
- * on this site's own server confirms and signs in. On any other, this site has no session to
- * give, so the form posts straight to that server, which sends the person back here with
- * `?result=`, and the app they signed up in signs itself in. A browser that says it is
- * automated, as mail scanners' often do, gets a button instead.
- */
 export default function ConfirmEmail() {
   const location = useLocation();
   const navigate = useNavigate();

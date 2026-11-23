@@ -17,11 +17,6 @@ import { avatarUrl, uploadAvatar, type MeResponse } from "../../api";
 const MAX_DIMENSION = 512;
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 
-/**
- * The avatar endpoint accepts a raw PNG body (not multipart), capped at 5 MB and
- * 4096px. Re-encoding through a canvas normalises whatever the visitor picked —
- * HEIC, JPEG, an enormous screenshot — into something that always fits.
- */
 async function toSquarePng(file: File): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   try {
@@ -33,7 +28,6 @@ async function toSquarePng(file: File): Promise<Blob> {
 
     const context = canvas.getContext("2d");
     if (!context) throw new Error("Could not read that image.");
-    // Centre-crop to a square so the rendered circle never distorts.
     context.drawImage(
       bitmap,
       (bitmap.width - side) / 2,
@@ -88,7 +82,6 @@ export function AvatarUpload({
       );
     } finally {
       setWorking(false);
-      // Allow re-selecting the same file after a failure.
       if (inputRef.current) inputRef.current.value = "";
     }
   }

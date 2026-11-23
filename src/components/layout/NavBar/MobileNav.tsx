@@ -1,10 +1,9 @@
 
 import { Button, CollapsibleContent, Text } from "@misty/ui";
 
-import { navItems, resourceLinks, type NavLinkEntry } from "./navLinks";
+import { navItems, resourceLinks, type NavLinkEntry } from "./nav_links";
 import { SiteLink } from "@/components/SiteLink";
 
-/** A quiet, full-width button for each page, pressed on the page you're on. */
 function MobileNavLink({
   link,
   currentPath,

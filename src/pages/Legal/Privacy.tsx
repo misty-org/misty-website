@@ -6,7 +6,7 @@ import LegalPage, {
   LegalTable,
   type LegalSectionDef,
 } from "./LegalPage";
-import { legalInfo } from "./legalInfo";
+import { legalInfo } from "./legal_info";
 
 const { supportEmail, operatorDescription } = legalInfo;
 

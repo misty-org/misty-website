@@ -27,13 +27,11 @@ const PLATFORMS: { name: PlatformName; icon: MarkIcon; supported: boolean }[] = 
 
 const releaseDate = new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" });
 
-/** One platform's installers in a release, each a row that downloads it. */
 function PlatformCard({
   platform,
   release,
 }: {
   platform: (typeof PLATFORMS)[number];
-  /** None before the first release: every card is still to come. */
   release?: Release;
 }) {
   const { name, icon: Icon, supported } = platform;
@@ -71,11 +69,9 @@ function PlatformCard({
   );
 }
 
-/** GitHub's rendered notes, set in the site's type. */
 const notesClass =
   "text-page leading-7 text-muted-foreground [&>:first-child]:mt-0 [&_p]:mt-3 [&_h1]:mt-6 [&_h1]:text-title [&_h1]:font-medium [&_h1]:text-foreground [&_h2]:mt-6 [&_h2]:text-title [&_h2]:font-medium [&_h2]:text-foreground [&_h3]:mt-5 [&_h3]:font-medium [&_h3]:text-foreground [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1 [&_a]:text-foreground [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:text-control [&_img]:rounded-lg [&_img]:border [&_img]:border-border";
 
-/** A release's notes, folded under its downloads; without notes, its page on GitHub. */
 function ReleaseNotes({ release }: { release: Release }) {
   const [open, setOpen] = useState(false);
   if (!release.notesHtml) {
@@ -93,14 +89,12 @@ function ReleaseNotes({ release }: { release: Release }) {
         <DisclosureButton open={open}>Release notes</DisclosureButton>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        {/* GitHub renders and sanitizes the notes; they come from the app's own releases. */}
         <div className={`mt-4 max-w-3xl ${notesClass}`} dangerouslySetInnerHTML={{ __html: release.notesHtml }} />
       </CollapsibleContent>
     </Collapsible>
   );
 }
 
-/** Every release from GitHub, newest first and the latest open, each with its installers by platform. */
 export default function Download() {
   const releases = useReleases();
 
@@ -118,7 +112,6 @@ export default function Download() {
           </div>
         </div>
       ) : releases.status === "none" ? (
-        // The same accordion, with one open row and every platform still to come.
         <DisclosureList>
           <Disclosure title="No releases yet" defaultOpen>
             <div className="grid gap-4 md:grid-cols-3">

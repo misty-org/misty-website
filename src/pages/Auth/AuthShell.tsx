@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 interface AuthShellProps {
   title: ReactNode;
   children: ReactNode;
-  /** For a card that holds steps or long values rather than a short form. */
   wide?: boolean;
 }
 

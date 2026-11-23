@@ -28,7 +28,6 @@ test("the navbar theme toggle persists across navigation and reload", async ({ p
   await expect(page.locator("html")).toHaveClass(/(^|\s)light(\s|$)/);
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => localStorage.getItem("misty-ui-theme"))).toBe("light");
-  // The homepage swaps to its light tokens: pale paper and the mist inverted to black.
   await expect(page.locator(".mist-home")).toHaveCSS("background-color", "rgb(243, 243, 241)");
   await expect(page.locator(".mist-cloud")).toHaveCSS("filter", "invert(1)");
 
@@ -50,7 +49,6 @@ test("the desktop theme toggle sits after the social links and a divider", async
   await expect(navigation.getByRole("link", { name: "Sign in" })).toBeVisible();
   const [socialBox, toggleBox] = await Promise.all([lastSocial.boundingBox(), toggle.boundingBox()]);
   expect(toggleBox!.x).toBeGreaterThan(socialBox!.x + socialBox!.width);
-  // A thin divider separates the socials from the toggle.
   const divider = await toggle.evaluate(el => {
     const line = el.previousElementSibling as HTMLElement | null;
     return line ? { width: line.getBoundingClientRect().width, height: line.getBoundingClientRect().height } : null;
@@ -80,7 +78,6 @@ test("the primary links include Download, Pricing and GitHub, with Docs under Re
     .allTextContents();
 
   expect(labels).toEqual(["Download", "Pricing", "GitHub"]);
-  // Docs sits in the Resources menu (a section of the mobile menu), first of its links.
   if (mobile) {
     await expect(linkContainer.getByRole("link", { name: "Docs", exact: true })).toBeVisible();
   } else {

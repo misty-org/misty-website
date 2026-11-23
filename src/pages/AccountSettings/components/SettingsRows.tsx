@@ -6,7 +6,6 @@ import {
 } from "@/components/settings";
 import { ErrorState, Text } from "@misty/ui";
 
-/** Padding for rows that hold custom content instead of a label/value pair. */
 export const customRowClass =
   "border-b border-border px-5 py-4 last:border-b-0";
 

@@ -1,14 +1,10 @@
 import { Button, InlineLink, Text } from "@misty/ui";
 
-import { postProofForm } from "@/lib/accountProof";
+import { postProofForm } from "@/lib/account_proof";
 import { ACCOUNT_PORTAL_URL } from "@/lib/site";
 import AuthCard from "../Auth/AuthCard";
 import AuthShell from "../Auth/AuthShell";
 
-/**
- * What someone sees after signing in to an account suspended by a failed payment. They have no
- * session, so they can't reach account settings; the proof from their sign-in opens the card page.
- */
 export default function PaymentFailedCard({
   proof,
   onBack,

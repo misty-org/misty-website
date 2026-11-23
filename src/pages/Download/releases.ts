@@ -4,24 +4,19 @@ import { REPO_URL } from "@/lib/site";
 
 export type PlatformName = "macOS" | "Windows" | "Linux";
 
-/** One installer from a release: what it is for, and where to get it. */
 export type ReleaseBuild = {
   platform: PlatformName;
-  /** The chip it runs on, such as Apple Silicon or x64; empty when the name doesn't say. */
   architecture: string;
-  /** The file's kind, such as DMG, EXE or AppImage. */
   packageType: string;
   size: string;
   href: string;
 };
 
 export type Release = {
-  /** The version people see, such as v0.2.0, without the tag's `misty-` prefix. */
   version: string;
   publishedAt: Date | null;
   prerelease: boolean;
   notesUrl: string;
-  /** The release notes, as GitHub renders (and sanitizes) them; empty when there are none. */
   notesHtml: string;
   builds: ReleaseBuild[];
 };
@@ -38,10 +33,8 @@ type GithubRelease = {
   assets: GithubAsset[];
 };
 
-/** The newest releases first; `html+json` has GitHub send each one's notes already rendered. */
 const RELEASES_API = `${REPO_URL.replace("https://github.com/", "https://api.github.com/repos/")}/releases?per_page=30`;
 
-/** Installers people download; updater archives, signatures and manifests are left out. */
 const INSTALLER = /\.(dmg|pkg|exe|msi|zip|appimage|deb|rpm)$/i;
 const UPDATER_ONLY = /\.(app\.tar\.gz|nsis\.zip|msi\.zip)$/i;
 
@@ -94,7 +87,6 @@ export function toRelease(release: GithubRelease): Release {
   };
 }
 
-/** Every release, newest first, read once per visit and shared by every place that asks. */
 let all: Promise<Release[] | null> | undefined;
 
 function fetchReleases(): Promise<Release[] | null> {
@@ -109,14 +101,10 @@ function fetchReleases(): Promise<Release[] | null> {
 
 export type Releases =
   | { status: "loading" }
-  /** `latest` is GitHub's: the newest that isn't a pre-release, else the newest. */
   | { status: "ready"; releases: Release[]; latest: Release }
-  /** GitHub answered, and nothing is released yet. */
   | { status: "none" }
-  /** GitHub didn't answer. */
   | { status: "failed" };
 
-/** The app's GitHub releases, newest first, with their installers and notes. */
 export function useReleases(): Releases {
   const [state, setState] = useState<Releases>({ status: "loading" });
   useEffect(() => {

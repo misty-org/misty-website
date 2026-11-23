@@ -2,9 +2,9 @@ import { useLocation } from "react-router";
 
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
-import { columns, legalLinks, socialLinks } from "./footerLinks";
+import { columns, legalLinks, socialLinks } from "./footer_links";
 import { SiteLink } from "@/components/SiteLink";
-import { isHomePath } from "@/pages/Home/useSectionRoute";
+import { isHomePath } from "@/pages/Home/use_section_route";
 
 const linkClass =
   "w-fit text-control leading-6 text-foreground transition-opacity hover:opacity-75 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";

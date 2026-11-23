@@ -19,7 +19,7 @@ import {
   SkeletonList,
   Text,
 } from "@misty/ui";
-import { fetchAccountProof, postProofForm } from "@/lib/accountProof";
+import { fetchAccountProof, postProofForm } from "@/lib/account_proof";
 import { CLOUD_CHECKOUT_URL } from "@/lib/site";
 import { boost, plans, yearlySaving } from "@/pages/Pricing/plans";
 import {
@@ -33,8 +33,8 @@ import {
   type SpaceSummary,
   type SubscriptionState,
 } from "../api";
-import { failed, longDate, refusalMessages } from "../billingMessages";
-import { levelLine } from "../boostText";
+import { failed, longDate, refusalMessages } from "../billing_messages";
+import { levelLine } from "../boost_text";
 import { ErrorRow, Row, Section } from "../components/SettingsRows";
 
 function Stepper({
@@ -75,11 +75,6 @@ function Stepper({
   );
 }
 
-/**
- * The account's Boosts: Misty+'s included ones to give, and Boosts bought for each space it's
- * in, with each space's level. `?space=` (from the app's Boost button) opens that space, and
- * `?billing=yearly` (from the pricing page) starts new Boosts on yearly billing.
- */
 export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const [searchParams] = useSearchParams();
   const [subscription, setSubscription] = useState<SubscriptionState | null>(null);
@@ -99,7 +94,6 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
         .then(async ([state, list]) => {
           setSubscription(state);
           setSpaces(list);
-          // The space the app asked for opens with what it has now.
           const asked = searchParams.get("space");
           if (asked) {
             setIncluded(state.boosts?.assigned.find((a) => a.space_id === asked)?.boosts ?? 0);
@@ -126,7 +120,6 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const boughtHere = (spaceId: string) => boosts?.bought.find((b) => b.space_id === spaceId);
   const assignedTotal = boosts?.assigned.reduce((sum, a) => sum + a.boosts, 0) ?? 0;
 
-  // Opening a space's dialog starts from what it has now.
   function openSpace(spaceId: string) {
     setIncluded(assignedHere(spaceId));
     setBought(boughtHere(spaceId)?.quantity ?? 0);
@@ -147,7 +140,7 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
           space_id: spaceId,
           quantity: String(bought),
         });
-        return; // Leaving for Stripe Checkout.
+        return;
       }
       if (existing && bought !== existing.quantity) state = await setBoughtBoosts(spaceId, bought);
       setSubscription(state);
@@ -193,7 +186,6 @@ export function BoostsPanel({ onClose }: { onClose: () => void }) {
   const existing = editingSpace ? boughtHere(editingSpace.id) : undefined;
   const includedMax = editingSpace ? includedTotal - assignedTotal + assignedHere(editingSpace.id) : 0;
   const checkoutNext = editingSpace && !existing && bought > 0;
-  // Boosts already bought keep the billing they were bought with; new ones take the choice.
   const billedYearly = existing ? existing.interval === "year" : yearly;
   const each = billedYearly ? boost.yearly : boost.price;
   const per = billedYearly ? "year" : "month";
