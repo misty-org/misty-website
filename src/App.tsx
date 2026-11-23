@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   type Location,
   Outlet,
@@ -10,7 +10,6 @@ import {
 import { AuthProvider } from "./AuthContext";
 import Navbar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
-import { AccountSettingsDialog } from "./pages/AccountSettings";
 import {
   isSettingsPathname,
   settingsPathForTab,
@@ -19,6 +18,12 @@ import {
 import { TABS } from "./pages/AccountSettings/tabs";
 import { DOCS_URL, isDocsHost, isDocsPath, SITE_URL } from "./lib/site";
 import { isHomePath } from "./pages/Home/use_section_route";
+
+const AccountSettingsDialog = lazy(() =>
+  import("./pages/AccountSettings/AccountSettingsDialog").then((module) => ({
+    default: module.AccountSettingsDialog,
+  })),
+);
 
 type Handle = { title?: string; description?: string };
 
@@ -74,6 +79,9 @@ export default function App() {
 
   const onSettingsRoute = isSettingsPathname(location.pathname);
   const routeTab = settingsTabFromPathname(location.pathname);
+  const settingsShown = settingsOpen || routeTab !== null;
+  const [settingsMounted, setSettingsMounted] = useState(settingsShown);
+  if (settingsShown && !settingsMounted) setSettingsMounted(true);
 
   useEffect(() => {
     const match = [...matches]
@@ -200,16 +208,20 @@ export default function App() {
         </main>
 
         {!isHomePath(location.pathname) && <Footer />}
-        <AccountSettingsDialog
-          open={settingsOpen || routeTab !== null}
-          onOpenChange={handleSettingsOpenChange}
-          tab={routeTab ?? undefined}
-          onTabChange={
-            routeTab !== null
-              ? (tab) => navigate(settingsPathForTab(tab), { replace: true })
-              : undefined
-          }
-        />
+        {settingsMounted ? (
+          <Suspense fallback={null}>
+            <AccountSettingsDialog
+              open={settingsShown}
+              onOpenChange={handleSettingsOpenChange}
+              tab={routeTab ?? undefined}
+              onTabChange={
+                routeTab !== null
+                  ? (tab) => navigate(settingsPathForTab(tab), { replace: true })
+                  : undefined
+              }
+            />
+          </Suspense>
+        ) : null}
       </div>
     </AuthProvider>
   );

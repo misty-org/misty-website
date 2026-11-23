@@ -2,7 +2,6 @@
 @import "@misty/ui/styles.css";
 
 @source "../../misty-docs/src";
-@source "../../misty-ui/site/examples";
 
 @custom-variant dark (&:is(.dark *));
 

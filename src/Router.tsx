@@ -1,28 +1,19 @@
+import type { ComponentType } from "react";
 import { createBrowserRouter, redirect, type RouteObject } from "react-router";
 import App from "./App";
 import Home from "./pages/Home";
-import SignIn from "./pages/SignIn";
-import Register from "./pages/Register";
-import ConfirmEmail from "./pages/ConfirmEmail";
-import ContinueFromApp from "./pages/ContinueFromApp";
-import SignInLink from "./pages/SignInLink";
 import NotFound from "./pages/NotFound";
-import Settings from "./pages/AccountSettings";
-import Changelog from "./pages/Changelog";
-import Blog from "./pages/Blog";
-import Roadmap from "./pages/Roadmap";
 import Pricing from "./pages/Pricing";
-import Download from "./pages/Download";
-import Setup from "./pages/Setup";
-import CloudWelcome from "./pages/CloudWelcome";
-import Connected from "./pages/Connected";
 import Docs from "./pages/Docs";
-import Privacy from "./pages/Legal/Privacy";
-import Terms from "./pages/Legal/Terms";
-import License from "./pages/Legal/License";
-import Invite from "./pages/Invite";
 import { marketingCopy } from "./content/marketing_copy";
 import { isDocsHost, siteLink } from "./lib/site";
+
+function page(load: () => Promise<{ default: ComponentType }>): Pick<RouteObject, "lazy" | "hydrateFallbackElement"> {
+  return {
+    lazy: () => load().then((module) => ({ Component: module.default })),
+    hydrateFallbackElement: <></>,
+  };
+}
 
 function toDocs(path: string) {
   const target = siteLink(path);
@@ -73,7 +64,7 @@ const site: RouteObject[] = [
       },
       {
         path: "settings",
-        element: <Settings />,
+        ...page(() => import("./pages/AccountSettings")),
         handle: {
           title: "Account settings | Misty",
           description: "Manage your Misty account and privacy settings.",
@@ -81,7 +72,7 @@ const site: RouteObject[] = [
       },
       {
         path: "settings/:tab",
-        element: <Settings />,
+        ...page(() => import("./pages/AccountSettings")),
         handle: {
           title: "Account settings | Misty",
           description: "Manage your Misty account and privacy settings.",
@@ -89,7 +80,7 @@ const site: RouteObject[] = [
       },
       {
         path: "download",
-        element: <Download />,
+        ...page(() => import("./pages/Download")),
         handle: {
           title: "Download Misty | macOS and Windows beta",
           description: marketingCopy.metadata.download,
@@ -124,7 +115,7 @@ const site: RouteObject[] = [
       },
       {
         path: "connected",
-        element: <Connected />,
+        ...page(() => import("./pages/Connected")),
         handle: {
           title: "You're connected | Misty",
           description: "The app is connected. Go back to Misty to use it.",
@@ -132,7 +123,7 @@ const site: RouteObject[] = [
       },
       {
         path: "cloud/welcome",
-        element: <CloudWelcome />,
+        ...page(() => import("./pages/CloudWelcome")),
         handle: {
           title: "Thanks for subscribing | Misty",
           description:
@@ -141,7 +132,7 @@ const site: RouteObject[] = [
       },
       {
         path: "setup",
-        element: <Setup />,
+        ...page(() => import("./pages/Setup")),
         handle: {
           title: "Set up Misty | Misty",
           description:
@@ -150,7 +141,7 @@ const site: RouteObject[] = [
       },
       {
         path: "changelog",
-        element: <Changelog />,
+        ...page(() => import("./pages/Changelog")),
         handle: {
           title: "Changelog | Misty beta updates",
           description: marketingCopy.metadata.changelog,
@@ -158,7 +149,7 @@ const site: RouteObject[] = [
       },
       {
         path: "blog",
-        element: <Blog />,
+        ...page(() => import("./pages/Blog")),
         handle: {
           title: "Blog | Notes from Misty",
           description: marketingCopy.metadata.blog,
@@ -166,7 +157,7 @@ const site: RouteObject[] = [
       },
       {
         path: "roadmap",
-        element: <Roadmap />,
+        ...page(() => import("./pages/Roadmap")),
         handle: {
           title: "Roadmap | What Misty is building",
           description: marketingCopy.metadata.roadmap,
@@ -174,7 +165,7 @@ const site: RouteObject[] = [
       },
       {
         path: "privacy",
-        element: <Privacy />,
+        ...page(() => import("./pages/Legal/Privacy")),
         handle: {
           title: "Privacy policy | Misty",
           description:
@@ -183,7 +174,7 @@ const site: RouteObject[] = [
       },
       {
         path: "terms",
-        element: <Terms />,
+        ...page(() => import("./pages/Legal/Terms")),
         handle: {
           title: "Terms of service | Misty",
           description:
@@ -192,7 +183,7 @@ const site: RouteObject[] = [
       },
       {
         path: "license",
-        element: <License />,
+        ...page(() => import("./pages/Legal/License")),
         handle: {
           title: "License | Misty",
           description: "Misty is free software under the GNU AGPL-3.0.",
@@ -204,7 +195,7 @@ const site: RouteObject[] = [
       },
       {
         path: "signin",
-        element: <SignIn />,
+        ...page(() => import("./pages/SignIn")),
         handle: {
           title: "Sign in | Misty",
           description: "Sign in to your Misty account.",
@@ -212,7 +203,7 @@ const site: RouteObject[] = [
       },
       {
         path: "register",
-        element: <Register />,
+        ...page(() => import("./pages/Register")),
         handle: {
           title: "Create an account | Misty",
           description: "Sign up to get started with Misty.",
@@ -220,7 +211,7 @@ const site: RouteObject[] = [
       },
       {
         path: "r/:code",
-        element: <Invite />,
+        ...page(() => import("./pages/Invite")),
         handle: {
           title: "You're invited | Misty",
           description: "A friend invited you to Misty, a shared workspace for people and their AI agents.",
@@ -228,7 +219,7 @@ const site: RouteObject[] = [
       },
       {
         path: "confirm-email",
-        element: <ConfirmEmail />,
+        ...page(() => import("./pages/ConfirmEmail")),
         handle: {
           title: "Confirm your email | Misty",
           description: "Confirm your email to finish creating your Misty account.",
@@ -236,7 +227,7 @@ const site: RouteObject[] = [
       },
       {
         path: "continue",
-        element: <ContinueFromApp />,
+        ...page(() => import("./pages/ContinueFromApp")),
         handle: {
           title: "Continue from Misty | Misty",
           description: "Continue from the Misty app, signed in to the same account.",
@@ -244,7 +235,7 @@ const site: RouteObject[] = [
       },
       {
         path: "sign-in",
-        element: <SignInLink />,
+        ...page(() => import("./pages/SignInLink")),
         handle: {
           title: "Get a sign-in link | Misty",
           description:

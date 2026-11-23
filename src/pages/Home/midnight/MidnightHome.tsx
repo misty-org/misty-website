@@ -25,7 +25,7 @@ function HeroDemo() {
     <div className="mist-container mist-hero-demo">
       <img
         className="mist-hero-screenshot"
-        src="/screenshots/home/hero-layout.png"
+        src="/screenshots/home/hero-layout.webp"
         alt="Misty with web pages side by side, an agent chat and a space's group chat."
         width={1919}
         height={1029}

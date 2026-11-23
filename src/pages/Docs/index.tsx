@@ -7,6 +7,8 @@ const DocsNavControls = lazy(() =>
   import("@misty/docs").then((module) => ({ default: module.DocsNavControls })),
 );
 
+const componentStyles = () => import("./components.css");
+
 const docsRoute = (pathname: string) => pathname.replace(/^\/+|\/+$/g, "");
 
 export default function Docs() {
@@ -22,6 +24,7 @@ export default function Docs() {
           bar={false}
           gutter="var(--site-gutter)"
           maxWidth="var(--site-container-max)"
+          componentStyles={componentStyles}
         />
       </Suspense>
     </div>

@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router";
 import { NoticeViewport, TooltipProvider } from "@misty/ui";
 
 import { router } from "./Router";
-import "./index.css";
+import "./site.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

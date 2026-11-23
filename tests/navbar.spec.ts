@@ -35,7 +35,7 @@ test("the navbar theme toggle persists across navigation and reload", async ({ p
   await page.reload();
 
   await expect(page.locator("html")).toHaveClass(/(^|\s)light(\s|$)/);
-  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/misty-black.png");
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/misty-white.png");
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
 });
 

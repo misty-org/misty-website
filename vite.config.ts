@@ -2,10 +2,10 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
-// misty-docs is mounted into the site (src/pages/Docs), so its sources resolve here too: the sibling
-// checkouts it reads (misty-sdk, misty-ui), or the pinned clones in misty-docs's .sources.
 // @ts-expect-error a plain script with no types
 import { resolveSources } from '../misty-docs/scripts/sync_sources.mjs'
+// @ts-expect-error a plain script with no types
+import { sharedDependencies } from '../misty-docs/scripts/shared_dependencies.mjs'
 
 const docsSources = resolveSources() as Record<string, string>
 
@@ -94,7 +94,7 @@ export default defineConfig(({ command, mode }) => {
         : undefined,
     },
     resolve: {
-      dedupe: ["react", "react-dom", "lucide-react"],
+      dedupe: sharedDependencies(docsSources.ui, fileURLToPath(new URL(".", import.meta.url))),
       alias: [
         { find: "@", replacement: fileURLToPath(new URL("./src", import.meta.url)) },
         { find: /^@misty\/ui\/styles\.css$/, replacement: `${docsSources.ui}/styles/index.css` },
