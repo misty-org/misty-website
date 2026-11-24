@@ -14,7 +14,7 @@ export const marketingCopy: MarketingCopy = {
     registerTitle: "Create an account",
   },
   metadata: {
-    home: "A collaborative environment where people and their agents learn, work and create together. Bring any engine, build in spaces you share, and explore what others have made.",
+    home: "Chat, files and apps, all shared between you, your friends and your agents.",
     pricing:
       "Misty is free with every feature, on Misty Cloud or a server you run yourself. Misty+ adds storage for $8 a month, Boosts raise a space's level for $2 each, and AI is never charged for.",
     docs:

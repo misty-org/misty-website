@@ -16,7 +16,7 @@ type ChatState = "working" | "waiting" | "done";
 const CHATS: readonly { title: string; engine: string; state: ChatState }[] = [
   { title: "Launch catch-up", engine: "claude", state: "working" },
   { title: "Fix the signup form", engine: "codex", state: "waiting" },
-  { title: "Weekly metrics", engine: "opencode", state: "working" },
+  { title: "Weekly metrics", engine: "claude", state: "working" },
   { title: "Plan the offsite", engine: "agy", state: "done" },
 ];
 const STATE_NOTE: Record<ChatState, string> = { working: "Working", waiting: "Needs you", done: "Done" };
@@ -61,7 +61,7 @@ const shot = (file: string, alt: string, name: string, icon: ReactNode, sketch: 
 const FEATURES: readonly Feature[] = [
   {
     span: 7, sketch: <Chats />,
-    title: "Agent chats. Run several at once on any engine, see which need you, and pick up past chats anytime.",
+    title: "Agent chats. Run several at once on Claude Code, Codex or Antigravity, see which need you, and pick up past chats anytime.",
     shots: [
       shot("chats-running.webp", "Several agent chats working at once", "Several at once", <Layers size={14} />, <ChatsRunning />),
       shot("chats-needs-you.webp", "An agent chat waiting on your answer", "Needs you", <Hand size={14} />, <ChatsNeedsYou />),

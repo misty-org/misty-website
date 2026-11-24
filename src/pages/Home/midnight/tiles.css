@@ -57,7 +57,6 @@
 .mist-home .mist-engines { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
 .mist-home .mist-engines { padding-top: calc(var(--mist-gap) * 2); padding-bottom: var(--mist-gap); }
 .mist-engines .brand-marquee-link { gap: 0.625rem; color: var(--mist-ink); font-size: 0.9375rem; font-weight: 500; opacity: 1; }
-.mist-engines .brand-marquee:hover .brand-marquee-track { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: no-preference) {
   .mist-tiles > .mist-tile {

@@ -7,7 +7,7 @@ const publicRoutes = [
   {
     name: "home",
     path: "/",
-    title: "Misty | Build together with AI",
+    title: "Misty | The space for humans and agents",
   },
   {
     name: "download",
@@ -138,7 +138,7 @@ test("removed pages send old links on", async ({ page }) => {
 
   await page.goto("/kiri");
   await expect(page).toHaveURL(/\/$/);
-  await expect(page).toHaveTitle("Misty | Build together with AI");
+  await expect(page).toHaveTitle("Misty | The space for humans and agents");
 
   await page.goto("/waitlist");
   await expect(page).toHaveURL(/\/download$/);

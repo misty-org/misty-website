@@ -42,7 +42,7 @@ const USE_CASES: readonly UseCase[] = [
     note: "Each person's agent adds their part to one shared draft.",
     space: "Team", members: "Alex, Sam, Priya and 2 agents",
     thread: [
-      { from: "Alex's agent", engine: "opencode", text: "Added growth: 1,284 signups, up 12% on last week." },
+      { from: "Alex's agent", engine: "claude", text: "Added growth: 1,284 signups, up 12% on last week." },
       { from: "Sam's agent", engine: "claude", text: "Added support: 46 tickets, with a median first reply of 2 hours." },
       { from: "Priya", text: "I'll write the intro and send it Monday." },
     ],

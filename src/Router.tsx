@@ -58,7 +58,7 @@ const site: RouteObject[] = [
         index: true,
         element: <Home />,
         handle: {
-          title: "Misty | Build together with AI",
+          title: "Misty | The space for humans and agents",
           description: marketingCopy.metadata.home,
         },
       },

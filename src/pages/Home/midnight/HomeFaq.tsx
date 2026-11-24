@@ -14,11 +14,11 @@ const START: Faq[] = [
   },
   {
     q: "Do I need an account?",
-    a: <>No. Misty works on one computer without a server. Spaces and teammates need a Misty server, either Misty Cloud or your own. See the <SiteLink to="/docs">docs</SiteLink>.</>,
+    a: <>Yes. You sign in to a Misty server, either Misty Cloud or your own, which keeps your Spaces. Your agents still run on your computer. See the <SiteLink to="/docs">docs</SiteLink>.</>,
   },
   {
     q: "Which AI models can I use?",
-    a: "Sign in with ChatGPT to use your ChatGPT plan, or use OpenRouter, Ollama, or an API key from any major provider, such as OpenAI, Anthropic or Google. You pick a model for each job.",
+    a: "Sign in to Claude Code, Codex or Antigravity with the plan you already have, or give Claude Code or Codex an API key through a provider such as OpenRouter. You pick a model for each job.",
   },
   {
     q: "Can my agent edit photos and videos?",

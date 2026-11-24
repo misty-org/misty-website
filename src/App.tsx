@@ -88,10 +88,10 @@ export default function App() {
       .reverse()
       .find((routeMatch) => Boolean(routeMatch.handle as Handle | undefined));
     const handle = match?.handle as Handle | undefined;
-    const title = handle?.title ?? "Misty | Build together with AI";
+    const title = handle?.title ?? "Misty | The space for humans and agents";
     const description =
       handle?.description ??
-      "A collaborative environment where people and their agents learn, work and create together. Bring any engine, build in spaces you share, and explore what others have made.";
+      "Chat, files and apps, all shared between you, your friends and your agents.";
     const canonicalUrl = new URL(
       location.pathname,
       isDocsHost() ? DOCS_URL : SITE_URL,

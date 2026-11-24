@@ -20,7 +20,7 @@ export function Bar({ icon, title, note }: { icon: ReactNode; title: string; not
 const RUNNING: readonly { engine: string; title: string; state: State; last: string }[] = [
   { engine: "claude", title: "Launch catch-up", state: "working", last: "Reading 42 messages in #launch to sum up what changed since Friday." },
   { engine: "codex", title: "Fix the signup form", state: "waiting", last: "Found the bug. Want me to push the fix to staging?" },
-  { engine: "opencode", title: "Weekly metrics", state: "working", last: "Pulling signups and retention from the dashboard." },
+  { engine: "claude", title: "Weekly metrics", state: "working", last: "Pulling signups and retention from the dashboard." },
   { engine: "agy", title: "Plan the offsite", state: "done", last: "Three venues shortlisted and the agenda saved to Files." },
 ];
 
@@ -61,8 +61,8 @@ export function ChatsNeedsYou() {
 }
 
 const HISTORY: readonly { when: string; chats: readonly { engine: string; title: string; at: string }[] }[] = [
-  { when: "Today", chats: [{ engine: "claude", title: "Launch catch-up", at: "9:40" }, { engine: "opencode", title: "Weekly metrics", at: "8:15" }] },
-  { when: "Yesterday", chats: [{ engine: "codex", title: "Fix the signup form", at: "17:02" }, { engine: "hermes", title: "Draft the changelog", at: "11:30" }] },
+  { when: "Today", chats: [{ engine: "claude", title: "Launch catch-up", at: "9:40" }, { engine: "claude", title: "Weekly metrics", at: "8:15" }] },
+  { when: "Yesterday", chats: [{ engine: "codex", title: "Fix the signup form", at: "17:02" }, { engine: "codex", title: "Draft the changelog", at: "11:30" }] },
   { when: "Last week", chats: [{ engine: "agy", title: "Plan the offsite", at: "Thu" }, { engine: "claude", title: "Research venues", at: "Tue" }] },
 ];
 
@@ -187,7 +187,7 @@ export type Desk = { engine: string; who: string } | null;
 const DESKS: readonly Desk[] = [
   { engine: "claude", who: "Alex" }, null, { engine: "agy", who: "You" },
   null, { engine: "codex", who: "Sam" }, null,
-  { engine: "opencode", who: "Priya" }, null, { engine: "hermes", who: "You" },
+  { engine: "claude", who: "Priya" }, null, { engine: "codex", who: "You" },
 ];
 
 export function Studio({ desks = DESKS }: { desks?: readonly Desk[] }) {
@@ -217,14 +217,14 @@ export const StudioRoom = () => <Room icon={<Armchair size={16} />} title="The S
 export const StudioYours = () => (
   <Room icon={<Bot size={16} />} title="Your agents" note="3 at their desks" desks={[
     null, { engine: "agy", who: "Offsite" }, null,
-    { engine: "hermes", who: "Changelog" }, null, { engine: "claude", who: "Research" },
+    { engine: "codex", who: "Changelog" }, null, { engine: "claude", who: "Research" },
     null, null, null,
   ]} />
 );
 export const StudioTeam = () => (
   <Room icon={<Users size={16} />} title="Teammates" note="Alex, Sam and Priya" desks={[
     { engine: "claude", who: "Alex" }, null, { engine: "codex", who: "Sam" },
-    null, { engine: "opencode", who: "Priya" }, null,
+    null, { engine: "claude", who: "Priya" }, null,
     { engine: "codex", who: "Alex" }, null, { engine: "claude", who: "Priya" },
   ]} />
 );

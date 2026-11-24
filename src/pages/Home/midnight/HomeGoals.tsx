@@ -1,5 +1,5 @@
 import {
-  Bot, ChefHat, Cloud, Code, Compass, CreditCard, Cpu, FlaskConical, Folder, Gamepad2, GraduationCap, HardDrive,
+  Bot, ChefHat, Cloud, Code, Compass, CreditCard, Cpu, FlaskConical, Folder, Gamepad2, GraduationCap,
   KeyRound, Laptop, MessagesSquare, Music, Percent, Presentation, Server, Unlock,
 } from "lucide-react";
 import type { ReactNode } from "react";
@@ -76,7 +76,6 @@ function ModelsPanel() {
       <div className="mist-mock-groups">
         <div className="mist-mock-row"><CreditCard size={16} /><b>Your plan</b><small>Signed in</small></div>
         <div className="mist-mock-row"><KeyRound size={16} /><b>API key</b><small>Connected</small></div>
-        <div className="mist-mock-row"><HardDrive size={16} /><b>Local model</b><small>On this computer</small></div>
         <div className="mist-mock-row"><Percent size={16} /><b>Markup</b><small>None</small></div>
       </div>
     </div>
@@ -115,8 +114,8 @@ const GOALS: readonly Goal[] = [
     panel: <TeamPanel />,
   },
   {
-    title: "Any engine, on your own models",
-    body: "Use the engines you already like, such as Claude Code or Codex, side by side, with nothing tying you to one. They run on the plans, API keys or local models you already have, and we never resell AI or add a markup.",
+    title: "Your engine, on your own models",
+    body: "Use Claude Code, Codex or Antigravity, side by side, with nothing tying you to one. They run on the plans or API keys you already have, and we never resell AI or add a markup.",
     panel: <ModelsPanel />,
   },
   {

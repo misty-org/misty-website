@@ -231,9 +231,8 @@ const sections: LegalSectionDef[] = [
         <p>
           Misty hosts no model, and it doesn't supply model access, on any
           plan. The AI is your own: an AI tool such as Claude Code, Codex, or
-          OpenCode signed in with your own account, a provider whose API key
-          you add, such as Anthropic, OpenAI, Google, or OpenRouter, or a model
-          that runs on your computer, such as Ollama. Agents and AI features
+          Antigravity signed in with your own account, a provider whose API key
+          you add, such as Anthropic, OpenAI, Google, or OpenRouter. Agents and AI features
           run on your computer, which sends the content needed for each request
           straight to that provider. Depending on what you ask, this can
           include your prompt, the chat so far, files on your computer or in a

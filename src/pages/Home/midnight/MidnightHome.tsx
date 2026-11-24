@@ -43,11 +43,7 @@ export function MidnightHome() {
       {SHOW_MIST && <Mist />}
       <section id="overview" className="mist-hero" aria-labelledby="mist-hero-title" data-mist-scene>
         <div className="mist-container mist-hero-copy">
-          <h1 id="mist-hero-title">Build together with AI</h1>
-          <p className="mist-hero-lede">
-            A collaborative environment where people and their agents learn, work and create together. Bring any engine,
-            build in spaces you share, and explore what others have made.
-          </p>
+          <h1 id="mist-hero-title">The space for humans and agents</h1>
           <HomeCtaButtons className="mist-hero-actions justify-center" />
         </div>
         <HeroDemo />
