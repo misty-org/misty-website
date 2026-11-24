@@ -61,7 +61,7 @@ const shot = (file: string, alt: string, name: string, icon: ReactNode, sketch: 
 const FEATURES: readonly Feature[] = [
   {
     span: 7, sketch: <Chats />,
-    title: "Agent chats. Run several at once on Claude Code, Codex or Antigravity, see which need you, and pick up past chats anytime.",
+    title: "Agent chats. Run several at once on Claude Code, Codex, Antigravity or another engine, see which need you, and pick up past chats anytime.",
     shots: [
       shot("chats-running.webp", "Several agent chats working at once", "Several at once", <Layers size={14} />, <ChatsRunning />),
       shot("chats-needs-you.webp", "An agent chat waiting on your answer", "Needs you", <Hand size={14} />, <ChatsNeedsYou />),

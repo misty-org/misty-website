@@ -32,7 +32,7 @@ export const taglines = {
 export const includes = {
   free: [
     "Every feature",
-    "Works with Claude Code, Codex and Antigravity",
+    "Works with Claude Code, Codex, Antigravity and more",
     `${plans.free.storage} on Misty Cloud`,
     "Unlimited spaces",
   ],

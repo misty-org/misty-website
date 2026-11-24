@@ -18,7 +18,7 @@ const START: Faq[] = [
   },
   {
     q: "Which AI models can I use?",
-    a: "Sign in to Claude Code, Codex or Antigravity with the plan you already have, or give Claude Code or Codex an API key through a provider such as OpenRouter. You pick a model for each job.",
+    a: "Sign in to your engine, such as Claude Code, Codex, Antigravity or Gemini CLI, with the plan you already have, or give Claude Code or Codex an API key through a provider such as OpenRouter. You pick a model for each job.",
   },
   {
     q: "Can my agent edit photos and videos?",

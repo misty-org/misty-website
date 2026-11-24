@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 
 test("the homepage tells its story, then answers questions", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("The space for humans and agents");
-  await expect(page.locator(".mist-interlude h2")).toHaveText(["Works with your favorite agents"]);
+  await expect(page.locator(".mist-interlude h2")).toHaveText(["Works with your favorite engines"]);
   await expect(page.locator(".mist-chapter-title")).toHaveText(["One app for your agents and the people you work with."]);
   await expect(page.locator(".mist-chapter-title").first()).toHaveClass(/sr-only/);
   await expect(page.locator(".mist-tile")).toHaveCount(4);

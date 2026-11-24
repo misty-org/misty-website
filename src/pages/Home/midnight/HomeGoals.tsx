@@ -115,7 +115,7 @@ const GOALS: readonly Goal[] = [
   },
   {
     title: "Your engine, on your own models",
-    body: "Use Claude Code, Codex or Antigravity, side by side, with nothing tying you to one. They run on the plans or API keys you already have, and we never resell AI or add a markup.",
+    body: "Use Claude Code, Codex, Antigravity, Gemini CLI and more, side by side, with nothing tying you to one. They run on the plans or API keys you already have, and we never resell AI or add a markup.",
     panel: <ModelsPanel />,
   },
   {
