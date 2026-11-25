@@ -10,6 +10,7 @@ interface AuthFieldProps {
   autoComplete?: string;
   required?: boolean;
   disabled?: boolean;
+  error?: string;
   onChange: (value: string) => void;
 }
 
@@ -23,10 +24,11 @@ export default function AuthField({
   autoComplete,
   required,
   disabled,
+  error,
   onChange,
 }: AuthFieldProps) {
   return (
-    <Field label={label}>
+    <Field label={label} error={error || undefined}>
       <Input
         id={id}
         name={name}

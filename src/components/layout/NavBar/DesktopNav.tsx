@@ -87,7 +87,6 @@ export default function DesktopNav({
         <DropdownMenuContent
           align="center"
           sideOffset={8}
-          width="sm"
           onPointerEnter={openResources}
           onPointerLeave={scheduleClose}
           onCloseAutoFocus={(event) => event.preventDefault()}

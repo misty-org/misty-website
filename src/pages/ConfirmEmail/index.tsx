@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 import { useAuth } from "@/AuthContext";
-import { Button, Input, Skeleton } from "@misty/ui";
+import { Input } from "@misty/ui";
 import { CLOUD_HOST } from "@/lib/site";
 import { AuthRequestError, confirmEmailSignIn } from "../Auth/api";
 import AuthCard from "../Auth/AuthCard";
+import AuthField from "../Auth/AuthField";
 import AuthShell from "../Auth/AuthShell";
+import AuthSubmitButton from "../Auth/AuthSubmitButton";
 import { parseServerHost } from "../Setup/setup_link";
 
 const results: Record<string, string> = {
@@ -14,7 +16,11 @@ const results: Record<string, string> = {
   exists: "This email already has a Misty account. Sign in with it.",
   expired: "This link has expired or was already used. Create your account again for a new one.",
   failed: "Misty couldn't confirm your email. Open the link in your email and try again.",
+  wrong_password:
+    "That isn't the password chosen when this account was created. Open the link in your email and try again.",
 };
+
+const wrongPassword = "That isn't the password you chose when you signed up.";
 
 function readLink(hash: string): { action: string; token: string; ownServer: boolean } | null {
   const params = new URLSearchParams(hash.replace(/^#/, ""));
@@ -35,34 +41,12 @@ export default function ConfirmEmail() {
   const { refreshSession } = useAuth();
   const [params] = useSearchParams();
   const [link] = useState(() => readLink(location.hash));
-  const [automated] = useState(() => navigator.webdriver);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [outcome, setOutcome] = useState<string | null>(null);
   const form = useRef<HTMLFormElement>(null);
-  const submitted = useRef(false);
   const result = results[outcome ?? params.get("result") ?? ""];
-
-  const confirm = useCallback(() => {
-    if (!link || submitted.current) return;
-    submitted.current = true;
-    if (!link.ownServer) {
-      form.current?.submit();
-      return;
-    }
-    confirmEmailSignIn(link.token).then(
-      async () => {
-        await refreshSession().catch(() => undefined);
-        navigate("/", { replace: true });
-      },
-      (error: unknown) => {
-        const code = error instanceof AuthRequestError ? error.code : undefined;
-        setOutcome(code && results[code] ? code : "failed");
-      },
-    );
-  }, [link, navigate, refreshSession]);
-
-  useEffect(() => {
-    if (!automated && form.current) confirm();
-  }, [automated, confirm]);
 
   useLayoutEffect(() => {
     if (!location.hash) return;
@@ -72,35 +56,67 @@ export default function ConfirmEmail() {
     );
   }, [location.hash, location.pathname, location.search, navigate]);
 
+  function confirm(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!link || loading || !password) return;
+    setError("");
+    if (!link.ownServer) {
+      form.current?.submit();
+      return;
+    }
+    setLoading(true);
+    confirmEmailSignIn(link.token, password).then(
+      async () => {
+        await refreshSession().catch(() => undefined);
+        navigate("/", { replace: true });
+      },
+      (failure: unknown) => {
+        setLoading(false);
+        const code = failure instanceof AuthRequestError ? failure.code : undefined;
+        if (code === "wrong_password") {
+          setError(wrongPassword);
+          return;
+        }
+        setOutcome(code && results[code] ? code : "failed");
+      },
+    );
+  }
+
   return (
     <AuthShell title="Confirm your email">
       <AuthCard>
-        <div className="text-center text-page leading-7 text-foreground">
-          {result ? (
-            <p role="status">{result}</p>
-          ) : link ? (
-            <form
-              ref={form}
-              method="post"
-              action={link.action}
-              onSubmit={(event) => {
-                event.preventDefault();
-                confirm();
-              }}
-            >
-              <Input type="hidden" name="token" value={link.token} />
-              {automated ? (
-                <Button variant="primary" size="lg" type="submit" className="w-full">
-                  Confirm email
-                </Button>
-              ) : (
-                <Skeleton aria-hidden="true" className="mx-auto h-7 w-3/4" />
-              )}
-            </form>
-          ) : (
-            <p>This link isn't complete. Open the link in your email again.</p>
-          )}
-        </div>
+        {result ? (
+          <p role="status" className="text-center text-page leading-7 text-foreground">
+            {result}
+          </p>
+        ) : link ? (
+          <form
+            ref={form}
+            method="post"
+            action={link.action}
+            onSubmit={confirm}
+            className="flex flex-col gap-5"
+          >
+            <Input type="hidden" name="token" value={link.token} />
+            <AuthField
+              id="confirm-password"
+              label="Password"
+              name="password"
+              type="password"
+              value={password}
+              autoComplete="current-password"
+              required
+              disabled={loading}
+              error={error}
+              onChange={setPassword}
+            />
+            <AuthSubmitButton idleLabel="Confirm email" loading={loading} disabled={!password} />
+          </form>
+        ) : (
+          <p className="text-center text-page leading-7 text-foreground">
+            This link isn't complete. Open the link in your email again.
+          </p>
+        )}
       </AuthCard>
     </AuthShell>
   );

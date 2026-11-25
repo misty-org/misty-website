@@ -59,7 +59,7 @@ export default function Navbar({
                   <div className="flex min-w-0 items-center gap-0.5">
                     <DocsCrumb asChild flush>
                       <SiteLink to="/" trail onClick={() => setMobileOpen(false)} aria-label="Misty home">
-                        <BrandLogo />
+                        <BrandLogo className="size-5" />
                         <span>Misty</span>
                       </SiteLink>
                     </DocsCrumb>

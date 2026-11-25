@@ -112,8 +112,8 @@ export async function registerRequest(
   return { confirmEmail: answer.status === "confirm_email" };
 }
 
-export async function confirmEmailSignIn(token: string): Promise<void> {
-  await request("/auth/confirm-email/sign-in", { token });
+export async function confirmEmailSignIn(token: string, password: string): Promise<void> {
+  await request("/auth/confirm-email/sign-in", { token, password });
 }
 
 export async function redeemWebHandoff(code: string): Promise<void> {
