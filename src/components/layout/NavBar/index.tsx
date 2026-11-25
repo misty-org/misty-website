@@ -15,6 +15,8 @@ import { resourceLinks } from "./nav_links";
 import { SiteLink } from "@/components/SiteLink";
 import { DocsNavbarControls } from "@/pages/Docs";
 import { isDocsHost } from "@/lib/site";
+import { avatarOutline } from "@/lib/avatar_decoration";
+import { avatarUrl } from "@/pages/AccountSettings/api";
 
 export default function Navbar({
   onOpenSettings,
@@ -30,6 +32,8 @@ export default function Navbar({
   const initials = displayName
     ? toInitials(displayName)
     : (user?.email?.[0]?.toUpperCase() ?? "?");
+  const picture = me?.avatar_version ? avatarUrl(me.avatar_version) : undefined;
+  const outline = avatarOutline(me?.avatar_decoration);
   const resourcesActive = resourceLinks.some(({ to }) =>
     location.pathname.startsWith(to),
   );
@@ -85,6 +89,8 @@ export default function Navbar({
                   displayName={displayName}
                   email={user?.email ?? ""}
                   initials={initials}
+                  picture={picture}
+                  outline={outline}
                   resourcesActive={resourcesActive}
                   signedIn={Boolean(user)}
                   onOpenSettings={onOpenSettings}

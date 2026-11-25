@@ -11,6 +11,7 @@ export interface MeResponse {
   provider: "misty" | "google";
   created_at: string;
   avatar_version?: number;
+  avatar_decoration?: unknown;
 }
 
 async function apiFetch(path: string, init?: RequestInit) {

@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarFallback,
+  AvatarImage,
   DropdownMenu,
   DropdownMenuContent,
   MenuItem,
@@ -14,12 +15,16 @@ export default function AccountMenu({
   displayName,
   email,
   initials,
+  picture,
+  outline,
   onOpenSettings,
   onSignOut,
 }: {
   displayName: string;
   email: string;
   initials: string;
+  picture?: string;
+  outline?: string;
   onOpenSettings: () => void;
   onSignOut: () => void;
 }) {
@@ -29,7 +34,8 @@ export default function AccountMenu({
         iconOnly
         label="Open account menu"
         icon={
-          <Avatar size="sm">
+          <Avatar size="sm" outline={outline}>
+            {picture ? <AvatarImage src={picture} alt="" /> : null}
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>
         }

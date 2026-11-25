@@ -20,6 +20,8 @@ export default function DesktopNav({
   displayName,
   email,
   initials,
+  picture,
+  outline,
   resourcesActive,
   signedIn,
   onOpenSettings,
@@ -29,6 +31,8 @@ export default function DesktopNav({
   displayName: string;
   email: string;
   initials: string;
+  picture?: string;
+  outline?: string;
   resourcesActive: boolean;
   signedIn: boolean;
   onOpenSettings: () => void;
@@ -113,6 +117,8 @@ export default function DesktopNav({
             displayName={displayName}
             email={email}
             initials={initials}
+            picture={picture}
+            outline={outline}
             onOpenSettings={onOpenSettings}
             onSignOut={onSignOut}
           />
