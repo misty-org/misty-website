@@ -57,13 +57,8 @@ only loaded there.
 
 ## Checks
 
-There is no GitHub CI. Git hooks run the checks locally: each commit scans the
-staged changes for secrets and, when site code changes, runs the type-check,
-lint and unit tests; each push needs a clean tree, scans the new commits and
-builds the production bundle. The checks live in
-[misty-cli](https://github.com/misty-org/misty-cli): turn the hooks on once with
-`misty hook install`, run them by hand with `misty hook run web|build|secrets|all`,
-and skip once with `--no-verify`.
+There is no GitHub CI. Run the checks before you push: `npm run typecheck`,
+`npm run lint`, `npm test` and `npm run build`.
 
 ## Deploying
 

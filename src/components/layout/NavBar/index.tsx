@@ -6,7 +6,7 @@ import { Menu, X } from "lucide-react";
 import { useAuth } from "@/AuthContext";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import NavbarSocials from "./NavbarSocials";
-import { Collapsible, CollapsibleTrigger, IconButton } from "@misty/ui";
+import { Collapsible, CollapsibleTrigger, DocsCrumb, IconButton } from "@misty/ui";
 import { toInitials } from "@/lib/format";
 import { useUserStore } from "@/store/user_store";
 import DesktopNav from "./DesktopNav";
@@ -52,30 +52,30 @@ export default function Navbar({
                 className="flex h-12 items-center justify-between px-5"
               >
                 <div className="flex items-center gap-2.5">
-                  <SiteLink
-                    to="/"
-                    onClick={() => setMobileOpen(false)}
-                    aria-label="Misty home"
-                    className={`flex items-center gap-3 rounded-md font-semibold tracking-[-0.02em] text-[var(--marketing-foreground)] outline-none ${isDocsHost() ? "text-control" : "text-page"}`}
-                  >
-                    <BrandLogo />
-                    <span>Misty</span>
-                  </SiteLink>
-                  {isDocsHost() ? (
-                    <>
-                      <span aria-hidden="true" className="text-control text-muted-foreground">
-                        /
-                      </span>
-                      <SiteLink
-                        to="/docs"
-                        onClick={() => setMobileOpen(false)}
-                        className="rounded-md text-control font-semibold tracking-[-0.01em] text-[var(--marketing-foreground)] outline-none"
-                      >
-                        Docs
+                  <div className="flex min-w-0 items-center gap-0.5">
+                    <DocsCrumb asChild flush>
+                      <SiteLink to="/" trail onClick={() => setMobileOpen(false)} aria-label="Misty home">
+                        <BrandLogo />
+                        <span>Misty</span>
                       </SiteLink>
-                      <DocsNavbarControls />
-                    </>
-                  ) : null}
+                    </DocsCrumb>
+                    {isDocsHost() ? (
+                      <>
+                        <span aria-hidden="true" className="text-page text-muted-foreground">
+                          /
+                        </span>
+                        <DocsCrumb asChild>
+                          <SiteLink to="/docs" trail onClick={() => setMobileOpen(false)}>
+                            Docs
+                          </SiteLink>
+                        </DocsCrumb>
+                        <span aria-hidden="true" className="text-page text-muted-foreground">
+                          /
+                        </span>
+                        <DocsNavbarControls />
+                      </>
+                    ) : null}
+                  </div>
                   <span aria-hidden="true" className="ml-1 hidden h-5 w-px bg-border md:block" />
                   <NavbarSocials />
                 </div>
