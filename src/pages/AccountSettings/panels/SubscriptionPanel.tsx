@@ -13,11 +13,19 @@ import {
   AlertDialogTitle,
   Button,
   FieldError,
+  OptionSelect,
   SkeletonList,
 } from "@misty/ui";
 import { fetchAccountProof, postProofForm } from "@/lib/account_proof";
-import { ACCOUNT_PORTAL_URL, BOOSTS_SETTINGS_PATH } from "@/lib/site";
-import { plans } from "@/pages/Pricing/plans";
+import { ACCOUNT_PORTAL_URL } from "@/lib/site";
+import {
+  checkoutPlan,
+  checkoutPlans,
+  isCheckoutPlan,
+  plans,
+  type CheckoutPlan,
+  type PaidPlanId,
+} from "@/pages/Pricing/plans";
 import {
   changePlan,
   changeSubscription,
@@ -28,7 +36,40 @@ import {
 import { failed, longDate, refusalMessages } from "../billing_messages";
 import { ErrorRow, Row, Section } from "../components/SettingsRows";
 
-const plusAllowance = `${plans.plus.storage} of storage, ${plans.plus.upload} files and ${plans.plus.boosts} Boosts`;
+function choiceOf(choice: CheckoutPlan): { plan: PaidPlanId; yearly: boolean } {
+  return { plan: choice.startsWith("max") ? "max" : "pro", yearly: choice.endsWith("_yearly") };
+}
+
+function priceLine(plan: PaidPlanId, yearly: boolean): string {
+  return yearly ? `$${plans[plan].yearly} a year` : `$${plans[plan].monthly} a month`;
+}
+
+function choiceLabel(choice: CheckoutPlan): string {
+  const { plan, yearly } = choiceOf(choice);
+  return `${plans[plan].name}, ${priceLine(plan, yearly)}`;
+}
+
+const planOptions = checkoutPlans.map((choice) => ({ value: choice, label: choiceLabel(choice) }));
+
+function switchDescription(from: CheckoutPlan, to: CheckoutPlan): string {
+  const now = choiceOf(from);
+  const next = choiceOf(to);
+  const { name, storage } = plans[next.plan];
+  if (now.plan === next.plan) {
+    return next.yearly
+      ? `You'll pay $${plans[next.plan].yearly} for the year today, less what's left of this month, then $${plans[next.plan].yearly} each year.`
+      : `You'll pay $${plans[next.plan].monthly} a month from now on. What's left of your year is credited toward those bills.`;
+  }
+  const smaller = next.plan === "pro";
+  return [
+    `You move to ${name}, with ${storage} of storage, right away, and pay ${priceLine(next.plan, next.yearly)} from now on. What's left of the period you've paid for counts toward it.`,
+    smaller
+      ? `Nothing is deleted: if you're over ${storage}, you can still open, download and delete everything, but you can't add more until you're under.`
+      : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
 
 export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
   const [state, setState] = useState<SubscriptionState | null>(null);
@@ -37,6 +78,7 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
   const [error, setError] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [switchOpen, setSwitchOpen] = useState(false);
+  const [switchTo, setSwitchTo] = useState<CheckoutPlan | null>(null);
 
   const load = useCallback(
     () => fetchSubscription().then(setState, () => setLoadFailed(true)),
@@ -104,7 +146,9 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
       <Section title="Plan">
         <Row label="Plan">{plans.free.name}</Row>
         <Row label="Includes">{`${plans.free.storage} of storage`}</Row>
-        <DesktopSettingsRow label={`${plans.plus.name}: ${plusAllowance}`}>
+        <DesktopSettingsRow
+          label={`More storage: ${plans.pro.storage} with ${plans.pro.name}, ${plans.max.storage} with ${plans.max.name}`}
+        >
           <Button asChild>
             <SiteLink to="/pricing" onClick={onClose}>
               See plans
@@ -115,30 +159,33 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
     );
   }
 
+  const plan: PaidPlanId = state.plan === "max" ? "max" : "pro";
   const yearly = state.interval === "year";
+  const current = checkoutPlan(plan, yearly);
+  const { name, storage } = plans[plan];
   const ends = longDate(state.current_period_end);
   const pastDue = state.status === "past_due" || state.status === "unpaid";
 
   return (
     <div className="grid gap-4">
       <Section title="Plan">
-        <Row label="Plan">{plans.plus.name}</Row>
-        <Row label="Includes">{plusAllowance}</Row>
-        <Row label="Billing">{yearly ? `$${plans.plus.yearly} a year` : `$${plans.plus.monthly} a month`}</Row>
+        <Row label="Plan">{`${name}, ${yearly ? "yearly" : "monthly"}`}</Row>
+        <Row label="Includes">{`${storage} of storage`}</Row>
+        <Row label="Billing">{priceLine(plan, yearly)}</Row>
         <Row label={state.cancel_at_period_end ? "Ends on" : "Renews on"}>{ends}</Row>
-        <DesktopSettingsRow label={yearly ? `Monthly: $${plans.plus.monthly} a month` : `Yearly: $${plans.plus.yearly} a year, 3 months free`}>
-          <Button
+        <DesktopSettingsRow label="Change plan">
+          <OptionSelect
+            aria-label="Change plan"
+            className="w-56"
+            value={current}
+            options={planOptions}
             disabled={busy !== null || pastDue}
-            aria-busy={busy === "plan"}
-            onClick={() => setSwitchOpen(true)}
-          >
-            {yearly ? "Switch to monthly" : "Switch to yearly"}
-          </Button>
-        </DesktopSettingsRow>
-        <DesktopSettingsRow label="Included Boosts">
-          <Button asChild>
-            <SiteLink to={BOOSTS_SETTINGS_PATH}>Give Boosts</SiteLink>
-          </Button>
+            onValueChange={(value) => {
+              if (!isCheckoutPlan(value) || value === current) return;
+              setSwitchTo(value);
+              setSwitchOpen(true);
+            }}
+          />
         </DesktopSettingsRow>
         <DesktopSettingsRow label={pastDue ? "Your last payment failed" : "Card and invoices"}>
           <Button
@@ -150,7 +197,7 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
           </Button>
         </DesktopSettingsRow>
         {state.cancel_at_period_end ? (
-          <DesktopSettingsRow label={`Keep ${plans.plus.name} after this period`}>
+          <DesktopSettingsRow label={`Keep ${name} after this period`}>
             <Button
               disabled={busy !== null}
               aria-busy={busy === "resume"}
@@ -179,17 +226,21 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
       <AlertDialog open={switchOpen} onOpenChange={setSwitchOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{yearly ? "Switch to monthly?" : "Switch to yearly?"}</AlertDialogTitle>
+            <AlertDialogTitle>
+              {switchTo ? `Switch to ${choiceLabel(switchTo)}?` : null}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              {yearly
-                ? `You'll pay $${plans.plus.monthly} a month from now on. What's left of your year is credited toward those bills.`
-                : `You'll pay $${plans.plus.yearly} for the year today, less what's left of this month, then $${plans.plus.yearly} each year.`}
+              {switchTo ? switchDescription(current, switchTo) : null}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep {yearly ? "yearly" : "monthly"}</AlertDialogCancel>
-            <AlertDialogAction onClick={() => void run("plan", () => changePlan(yearly ? "plus" : "plus_yearly"))}>
-              {yearly ? "Switch to monthly" : "Switch to yearly"}
+            <AlertDialogCancel>Keep current plan</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (switchTo) void run("plan", () => changePlan(switchTo));
+              }}
+            >
+              Switch plan
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -198,16 +249,15 @@ export function SubscriptionPanel({ onClose }: { onClose: () => void }) {
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel {plans.plus.name}?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel {name}?</AlertDialogTitle>
             <AlertDialogDescription>
-              You keep {plans.plus.name} until {ends}. Then your account moves to Free, with{" "}
-              {plans.free.storage} of storage, and your included Boosts leave their spaces. Nothing is
-              deleted: if you're over, you can still open, download and delete everything, but you
-              can't add more until you're under.
+              You keep {name} until {ends}. Then your account moves to Free, with{" "}
+              {plans.free.storage} of storage. Nothing is deleted: if you're over, you can still
+              open, download and delete everything, but you can't add more until you're under.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep {plans.plus.name}</AlertDialogCancel>
+            <AlertDialogCancel>Keep {name}</AlertDialogCancel>
             <AlertDialogAction onClick={() => void run("cancel", () => changeSubscription("cancel"))}>
               Cancel subscription
             </AlertDialogAction>

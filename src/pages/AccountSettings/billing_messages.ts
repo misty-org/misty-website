@@ -7,10 +7,6 @@ export const refusalMessages: Record<BillingRefusalCode, string> = {
     "Your card didn't go through, so nothing changed. Update your card under Manage, then try again.",
   payment_past_due: "Your last payment failed. Update your card under Manage, then try again.",
   not_subscribed: "That subscription has ended. Start a new one instead.",
-  plus_required: "Included Boosts come with Misty+.",
-  too_many_boosts: "That's more Boosts than Misty+ includes.",
-  move_wait: "You moved Boosts this week. You can move them again after a week.",
-  not_a_member: "You can only boost spaces you're in.",
   other: failed,
 };
 

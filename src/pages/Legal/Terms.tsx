@@ -127,7 +127,7 @@ const sections: LegalSectionDef[] = [
           computer, as described in our{" "}
           <LegalLink to="/privacy#ai">Privacy Policy</LegalLink>. Your account
           or plan with an AI provider is between you and that provider, and it
-          isn't part of what Misty+ or Boosts sell.
+          isn't part of what Pro or Max sell.
         </p>
         <LegalList
           items={[
@@ -292,7 +292,7 @@ const sections: LegalSectionDef[] = [
           Account Settings. Deleted accounts can be restored for 30 days, after
           which the data is removed as described in our{" "}
           <LegalLink to="/privacy#retention">Privacy Policy</LegalLink>. When
-          Misty+ or a Boost ends, section 3 says what happens to the
+          Pro or Max ends, section 3 says what happens to the
           account.
         </p>
         <p>
@@ -633,8 +633,8 @@ export default function Terms() {
       intro={
         <p className="text-page leading-7 text-muted-foreground">
           These Terms of Service ("Terms") are a contract between you and{" "}
-          {operatorDescription}. By creating an account, subscribing to Misty+
-          or Boosts, installing the app, or using Misty, you agree to them. If you
+          {operatorDescription}. By creating an account, subscribing to Pro
+          or Max, installing the app, or using Misty, you agree to them. If you
           don't agree, don't use Misty. Sections 14 to 16 place the risk of using
           Misty on you and limit our liability and your right to bring claims.
           Section 17 requires U.S. users to resolve disputes through individual
@@ -644,7 +644,7 @@ export default function Terms() {
       highlights={[
         "You own your content. We only use it to run Misty for you, and we never sell it or train AI models on it.",
         "The Misty app is open source under the GNU AGPL-3.0. If you run your own server, you're responsible for it.",
-        "Misty+ and Boosts are billed in advance, plus tax where it applies. Cancelling takes effect at the end of the period you've paid for, and we never charge for AI.",
+        "Pro and Max are billed in advance, plus tax where it applies. Cancelling takes effect at the end of the period you've paid for, and we never charge for AI.",
         "AI can be wrong, and you're responsible for what you ask agents to do.",
         "Misty isn't a backup service. Keep copies of anything important.",
         "We work to keep Misty safe, but we don't guarantee it. You use it at your own risk, including the risk of data loss, stolen data, malware, and software defects.",

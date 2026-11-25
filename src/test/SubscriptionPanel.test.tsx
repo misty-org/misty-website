@@ -4,9 +4,42 @@ import { afterEach, expect, it, vi } from "vitest";
 
 import { SubscriptionPanel } from "@/pages/AccountSettings/panels/SubscriptionPanel";
 
+vi.mock("@misty/ui", async (original) => {
+  const ui = await original<typeof import("@misty/ui")>();
+  return {
+    ...ui,
+    OptionSelect: ({
+      options,
+      value,
+      onValueChange,
+      disabled,
+      "aria-label": label,
+    }: {
+      options: readonly { value: string; label: string }[];
+      value: string;
+      onValueChange: (value: string) => void;
+      disabled?: boolean;
+      "aria-label"?: string;
+    }) => (
+      <div role="group" aria-label={label}>
+        {options.map((option) => (
+          <ui.Button
+            key={option.value}
+            aria-pressed={option.value === value}
+            disabled={disabled}
+            onClick={() => onValueChange(option.value)}
+          >
+            {option.label}
+          </ui.Button>
+        ))}
+      </div>
+    ),
+  };
+});
+
 const active = {
   subscribed: true,
-  plan: "plus",
+  plan: "pro",
   interval: "month",
   status: "active",
   current_period_end: "2026-12-03T12:00:00Z",
@@ -89,10 +122,10 @@ it("offers a retry when billing can't be reached", async () => {
   expect(await screen.findByText("Renews on")).toBeInTheDocument();
 });
 
-it("switches Misty+ to yearly after confirming, posting the plan", async () => {
+it("moves Pro to Max yearly after confirming, posting the plan", async () => {
   const bodies: string[] = [];
   const calls: string[] = [];
-  const answers = [json(active), json({ ...active, interval: "year" })];
+  const answers = [json(active), json({ ...active, plan: "max", interval: "year" })];
   vi.stubGlobal(
     "fetch",
     vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
@@ -108,31 +141,43 @@ it("switches Misty+ to yearly after confirming, posting the plan", async () => {
       <SubscriptionPanel onClose={onClose} />
     </MemoryRouter>,
   );
-  expect(await screen.findByText("Misty+")).toBeInTheDocument();
-  expect(screen.getByText("$8 a month")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Switch to yearly" }));
+  expect(await screen.findByText("Pro, monthly")).toBeInTheDocument();
+  expect(screen.getByText("$10 a month")).toBeInTheDocument();
+  expect(screen.getByText("250 GB of storage")).toBeInTheDocument();
+  const choices = screen.getByRole("group", { name: "Change plan" });
+  fireEvent.click(within(choices).getByRole("button", { name: "Max, $200 a year" }));
   const dialog = await screen.findByRole("alertdialog");
   expect(calls).toHaveLength(1);
-  fireEvent.click(within(dialog).getByRole("button", { name: "Switch to yearly" }));
-  expect(await screen.findByText("$72 a year")).toBeInTheDocument();
+  expect(dialog).toHaveTextContent("1 TB of storage");
+  fireEvent.click(within(dialog).getByRole("button", { name: "Switch plan" }));
+  expect(await screen.findByText("Max, yearly")).toBeInTheDocument();
+  expect(screen.getByText("$200 a year")).toBeInTheDocument();
   expect(calls[1]).toMatch(/\/account\/subscription\/plan$/);
-  expect(new URLSearchParams(bodies[1]).get("plan")).toBe("plus_yearly");
-  expect(screen.getByRole("button", { name: "Switch to monthly" })).toBeInTheDocument();
+  expect(new URLSearchParams(bodies[1]).get("plan")).toBe("max_yearly");
+});
+
+it("does nothing when the current plan is picked again", async () => {
+  const calls = stubBilling(json(active));
+  const choices = await screen.findByRole("group", { name: "Change plan" });
+  fireEvent.click(within(choices).getByRole("button", { name: "Pro, $10 a month" }));
+  expect(screen.queryByRole("alertdialog")).toBeNull();
+  expect(calls).toHaveLength(1);
 });
 
 it("keeps the plan and says why when the card declines a switch", async () => {
   stubBilling(json(active), json({ code: "payment_needed" }, 402));
-  fireEvent.click(await screen.findByRole("button", { name: "Switch to yearly" }));
-  fireEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "Switch to yearly" }));
+  const choices = await screen.findByRole("group", { name: "Change plan" });
+  fireEvent.click(within(choices).getByRole("button", { name: "Pro, $100 a year" }));
+  fireEvent.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "Switch plan" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("card didn't go through");
-  expect(screen.getByText("$8 a month")).toBeInTheDocument();
+  expect(screen.getByText("$10 a month")).toBeInTheDocument();
 });
 
-it("says a cancelled Misty+ goes back to Free and takes its Boosts back, not deleted", async () => {
+it("says a cancelled Pro goes back to Free, not deleted", async () => {
   stubBilling(json(active));
   fireEvent.click(await screen.findByRole("button", { name: "Cancel" }));
   const dialog = await screen.findByRole("alertdialog");
+  expect(dialog).toHaveTextContent("You keep Pro until");
   expect(dialog).toHaveTextContent("moves to Free");
-  expect(dialog).toHaveTextContent("included Boosts leave their spaces");
   expect(dialog).toHaveTextContent("Nothing is deleted");
 });

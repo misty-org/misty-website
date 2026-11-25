@@ -4,18 +4,16 @@ import { useState, type ReactNode } from "react";
 import { PublicPage } from "@/components/marketing";
 import { Button, Disclosure, DisclosureList, InlineLink, SkeletonControl, Text } from "@misty/ui";
 import { marketingCopy } from "@/content/marketing_copy";
-import { BOOSTS_SETTINGS_PATH, DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH, SUPPORT_EMAIL } from "@/lib/site";
+import { DISCORD_URL, SUBSCRIPTION_SETTINGS_PATH, SUPPORT_EMAIL } from "@/lib/site";
 import { usePlanCheckout } from "./use_plan_checkout";
 import {
-  boost,
+  checkoutPlan,
   includes,
-  levelRows,
   plans,
   pricingQuestions,
-  spaceLevels,
-  storagePerBoost,
   taglines,
   yearlySaving,
+  type PaidPlanId,
 } from "./plans";
 import { SiteLink } from "@/components/SiteLink";
 import { BillingToggle } from "@/components/BillingToggle";
@@ -125,7 +123,7 @@ function PricingQuestions() {
           </Question>
         ))}
         <Question question="How does billing work?">
-          Prices are in US dollars, plus tax where it applies. The{" "}
+          Prices are in US dollars, plus tax where it applies, and paid plans renew until you cancel. The{" "}
           <InlineLink asChild>
             <SiteLink to="/terms#cloud">Terms</SiteLink>
           </InlineLink>{" "}
@@ -140,26 +138,37 @@ function PricingQuestions() {
   );
 }
 
-function PlusAction({ checkout, yearly }: { checkout: ReturnType<typeof usePlanCheckout>; yearly: boolean }) {
+function PaidAction({
+  plan,
+  checkout,
+  yearly,
+}: {
+  plan: PaidPlanId;
+  checkout: ReturnType<typeof usePlanCheckout>;
+  yearly: boolean;
+}) {
   if (checkout.checking) {
     return <SkeletonControl kind="button" className="h-9 w-40" />;
   }
-  if (checkout.plan === "plus") {
+  if (checkout.plan === "pro" || checkout.plan === "max") {
     return (
       <Button size="lg" asChild>
-        <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>Manage subscription</SiteLink>
+        <SiteLink to={SUBSCRIPTION_SETTINGS_PATH}>
+          {checkout.plan === plan ? "Manage subscription" : `Switch to ${plans[plan].name}`}
+        </SiteLink>
       </Button>
     );
   }
+  const chosen = checkoutPlan(plan, yearly);
   return (
     <div className="flex flex-col items-start gap-2">
-      <Button variant="primary" size="lg"
+      <Button variant={plan === "pro" ? "primary" : "secondary"} size="lg"
         disabled={checkout.starting !== null}
-        onClick={() => void checkout.start(yearly ? "plus_yearly" : "plus")}
+        onClick={() => void checkout.start(chosen)}
       >
-        Get {plans.plus.name}
+        Get {plans[plan].name}
       </Button>
-      {checkout.error ? (
+      {checkout.error && checkout.failed === chosen ? (
         <p role="alert" className="text-page text-muted-foreground">
           {checkout.error}
         </p>
@@ -168,67 +177,12 @@ function PlusAction({ checkout, yearly }: { checkout: ReturnType<typeof usePlanC
   );
 }
 
-function SpaceLevels() {
-  return (
-    <section
-      aria-labelledby="space-levels"
-      className="mt-24 grid items-start gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.7fr)] md:gap-16"
-    >
-      <div className="grid gap-2">
-        <h2
-          id="space-levels"
-          className="text-xl font-medium tracking-[-0.02em] text-foreground sm:text-2xl"
-        >
-          Space levels
-        </h2>
-        <p className="text-page text-muted-foreground">
-          Boosts from everyone in a space add up. Each Boost past a level adds {storagePerBoost} more
-          shared storage.
-        </p>
-      </div>
-      <div className="overflow-x-auto rounded-xl border border-border">
-        <table className="w-full min-w-[32rem] text-left text-control">
-          <thead>
-            <tr className="border-b border-border">
-              <th scope="col" className="px-4 py-3 font-normal text-muted-foreground">
-                <span className="sr-only">Limit</span>
-              </th>
-              {spaceLevels.map((level) => (
-                <th key={level.name} scope="col" className="px-4 py-3 font-medium text-foreground">
-                  {level.name}
-                  <span className="block text-caption font-normal text-muted-foreground">
-                    {level.boosts ? `${level.boosts} Boosts` : "No Boosts"}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {levelRows.map((row) => (
-              <tr key={row.key} className="border-b border-border last:border-b-0">
-                <th scope="row" className="px-4 py-3 font-normal text-muted-foreground">
-                  {row.label}
-                </th>
-                {spaceLevels.map((level) => (
-                  <td key={level.name} className="px-4 py-3 text-foreground">
-                    {level[row.key]}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  );
-}
-
 export default function Pricing() {
   const checkout = usePlanCheckout();
   const [yearly, setYearly] = useState(false);
   const saving = Math.min(
-    yearlySaving(boost.price, boost.yearly),
-    yearlySaving(plans.plus.monthly, plans.plus.yearly),
+    yearlySaving(plans.pro.monthly, plans.pro.yearly),
+    yearlySaving(plans.max.monthly, plans.max.yearly),
   );
   return (
     <PublicPage>
@@ -265,31 +219,24 @@ export default function Pricing() {
             }
           />
           <PlanCard
-            name={boost.name}
-            tagline={taglines.boost}
-            price={`$${yearly ? boost.yearly : boost.price}`}
-            period={yearly ? "/year per Boost" : "/month per Boost"}
-            items={[...includes.boost]}
-            action={
-              <Button size="lg" asChild>
-                <SiteLink to={yearly ? `${BOOSTS_SETTINGS_PATH}?billing=yearly` : BOOSTS_SETTINGS_PATH}>
-                  Boost a space
-                </SiteLink>
-              </Button>
-            }
+            name={plans.pro.name}
+            tagline={taglines.pro}
+            price={`$${yearly ? plans.pro.yearly : plans.pro.monthly}`}
+            period={yearly ? "/year plus tax" : "/month plus tax"}
+            items={[...includes.pro]}
+            recommended
+            action={<PaidAction plan="pro" checkout={checkout} yearly={yearly} />}
           />
           <PlanCard
-            name={plans.plus.name}
-            tagline={taglines.plus}
-            price={`$${yearly ? plans.plus.yearly : plans.plus.monthly}`}
+            name={plans.max.name}
+            tagline={taglines.max}
+            price={`$${yearly ? plans.max.yearly : plans.max.monthly}`}
             period={yearly ? "/year plus tax" : "/month plus tax"}
-            items={[...includes.plus]}
-            recommended
-            action={<PlusAction checkout={checkout} yearly={yearly} />}
+            items={[...includes.max]}
+            action={<PaidAction plan="max" checkout={checkout} yearly={yearly} />}
           />
         </div>
 
-        <SpaceLevels />
         <PricingQuestions />
       </div>
     </PublicPage>

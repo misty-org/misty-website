@@ -1,7 +1,8 @@
 import { sessionFetch } from "../../lib/session_fetch";
 import { apiBase } from "../../lib/api_base";
 import { fetchAccountProof } from "../../lib/account_proof";
-import { ACCOUNT_BOOSTS_URL, ACCOUNT_SUBSCRIPTION_URL } from "../../lib/site";
+import { ACCOUNT_SUBSCRIPTION_URL } from "../../lib/site";
+import type { CheckoutPlan, PlanId } from "../Pricing/plans";
 
 export interface MeResponse {
   id: string;
@@ -45,45 +46,19 @@ export async function fetchInviteCode(): Promise<string> {
   return ((await res.json()) as { code: string }).code;
 }
 
-export interface AssignedBoosts {
-  space_id: string;
-  boosts: number;
-}
-
-export interface BoughtBoosts {
-  space_id: string;
-  quantity: number;
-  interval?: "month" | "year";
-  status: string;
-  current_period_end?: string;
-  cancel_at_period_end: boolean;
-}
-
-export interface BoostsState {
-  included: number;
-  assigned: AssignedBoosts[];
-  next_move_at?: string;
-  bought: BoughtBoosts[];
-}
-
 export interface SubscriptionState {
   subscribed: boolean;
-  plan?: "free" | "plus";
+  plan?: PlanId;
   interval?: "month" | "year";
   status?: string;
   current_period_end?: string;
   cancel_at_period_end: boolean;
-  boosts?: BoostsState;
 }
 
 export type BillingRefusalCode =
   | "payment_needed"
   | "payment_past_due"
   | "not_subscribed"
-  | "plus_required"
-  | "too_many_boosts"
-  | "move_wait"
-  | "not_a_member"
   | "other";
 
 export class PlanChangeRefused extends Error {
@@ -96,10 +71,6 @@ const knownRefusals = new Set<string>([
   "payment_needed",
   "payment_past_due",
   "not_subscribed",
-  "plus_required",
-  "too_many_boosts",
-  "move_wait",
-  "not_a_member",
 ]);
 
 async function postBilling(
@@ -132,45 +103,8 @@ export function changeSubscription(change: "cancel" | "resume"): Promise<Subscri
   return postBilling(`${ACCOUNT_SUBSCRIPTION_URL}/${change}`);
 }
 
-export function changePlan(plan: "plus" | "plus_yearly"): Promise<SubscriptionState> {
+export function changePlan(plan: CheckoutPlan): Promise<SubscriptionState> {
   return postBilling(`${ACCOUNT_SUBSCRIPTION_URL}/plan`, { plan });
-}
-
-export function assignBoosts(spaceId: string, boosts: number): Promise<SubscriptionState> {
-  return postBilling(`${ACCOUNT_BOOSTS_URL}/assign`, { space_id: spaceId, boosts: String(boosts) });
-}
-
-export function setBoughtBoosts(spaceId: string, quantity: number): Promise<SubscriptionState> {
-  return postBilling(`${ACCOUNT_BOOSTS_URL}/quantity`, { space_id: spaceId, quantity: String(quantity) });
-}
-
-export interface SpaceSummary {
-  id: string;
-  name: string;
-  is_default: boolean;
-}
-
-export async function fetchSpaces(): Promise<SpaceSummary[]> {
-  const res = await apiFetch("/spaces");
-  const body = (await res.json()) as { spaces?: SpaceSummary[] } | SpaceSummary[];
-  return Array.isArray(body) ? body : (body.spaces ?? []);
-}
-
-export interface SpaceBoostsState {
-  space_id: string;
-  enabled: boolean;
-  level?: {
-    level: number;
-    boosts: number;
-    next_level_boosts: number;
-    thresholds: number[];
-  };
-  boosters: { user_id: string; username: string; boosts: number }[];
-}
-
-export async function fetchSpaceBoosts(spaceId: string): Promise<SpaceBoostsState> {
-  const res = await apiFetch(`/spaces/${encodeURIComponent(spaceId)}/boosts`);
-  return res.json();
 }
 
 export async function logoutRequest(): Promise<void> {

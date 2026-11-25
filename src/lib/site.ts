@@ -13,10 +13,6 @@ export const CLOUD_CHECKOUT_URL = `${BILLING_URL}/checkout`;
 
 export const ACCOUNT_SUBSCRIPTION_URL = `${BILLING_URL}/account/subscription`;
 
-export const ACCOUNT_BOOSTS_URL = `${BILLING_URL}/account/boosts`;
-
-export const BOOSTS_SETTINGS_PATH = "/settings/boosts";
-
 export const ACCOUNT_PORTAL_URL = `${BILLING_URL}/account/portal`;
 
 export const SUBSCRIPTION_SETTINGS_PATH = "/settings/subscription";

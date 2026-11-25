@@ -96,7 +96,7 @@ const sections: LegalSectionDef[] = [
             </>,
             <>
               <strong className="font-medium text-foreground">Billing details:</strong>{" "}
-              if you subscribe to Misty+ or Boosts, Stripe collects your payment
+              if you subscribe to Pro or Max, Stripe collects your payment
               card and billing address, and uses the address to work out sales
               tax or VAT. We receive your email address and Stripe's records of
               your subscription, such as its status, billing date, and any
@@ -290,7 +290,7 @@ const sections: LegalSectionDef[] = [
             ["Mailjet", "Sending account email, such as setup keys, sign-in links, and space invitations", "Name, email address, email content"],
             [
               "Stripe",
-              "Payments and tax for Misty+ and Boosts",
+              "Payments and tax for Pro and Max",
               "Email address, billing details, payment card",
             ],
             ["Google", "Sign in with Google, if you use it", "Name, email, profile picture"],
@@ -372,7 +372,7 @@ const sections: LegalSectionDef[] = [
             "Your agents in a space: an agent's listing stays until you or the space's owner take it out. Its lines in the activity log stay with the space.",
             "Voice transcripts: until you ask us to delete them or you delete your account.",
             "After you delete your account: you can restore it for 30 days. After that, we delete your personal information or permanently anonymize it so it can't be linked to you.",
-            "After Misty+ or a Boost ends, whether cancelled or unpaid: the account and its spaces keep their data on the Free plan. To delete your account and its data, use your account settings or write to us.",
+            "After Pro or Max ends, whether cancelled or unpaid: the account and its spaces keep their data on the Free plan. To delete your account and its data, use your account settings or write to us.",
             "Backups: deleted data can remain in encrypted backups for up to 30 more days until they're overwritten.",
             "Content in shared spaces: content you added to a space other people still use stays with that space, attributed to a deleted user.",
             "Emails we send: our record of each one, with its address, is removed 30 days after it's sent.",
@@ -448,7 +448,7 @@ const sections: LegalSectionDef[] = [
           collected these categories of personal information, for the purposes
           in section 4: identifiers (name, email, IP address); internet
           activity limited to your use of Misty; commercial information, if you
-          subscribe to Misty+ or Boosts (your plan and payment history); audio
+          subscribe to Pro or Max (your plan and payment history); audio
           information, limited to the voice transcripts you save; and content
           you choose to store.
         </p>
@@ -532,7 +532,7 @@ export default function Privacy() {
         "Agent chats, prompts, and model calls stay on your computer and go only to the AI provider you chose. Our servers see only what your agents add to a space and what a space shows its members: each agent's name, what kind of work it's doing, and the files it's changing.",
         "Spaces, files, and voice transcripts are stored on the server you use. They aren't end-to-end encrypted.",
         "Misty hosts no model. Misty never charges for AI or sees your model keys.",
-        "If you subscribe to Misty+ or Boosts, Stripe handles your card. We never see the full number.",
+        "If you subscribe to Pro or Max, Stripe handles your card. We never see the full number.",
         "You can delete your account anytime in Account Settings, or email us for a copy of your data.",
       ]}
       sections={sections}

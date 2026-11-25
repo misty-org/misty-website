@@ -10,7 +10,7 @@ type Faq = { q: string; a: ReactNode };
 const START: Faq[] = [
   {
     q: "Is Misty free?",
-    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included, on Misty Cloud or your own server. Misty+ adds storage for $8 a month, and Boosts raise a space's level for $2 each. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
+    a: <>Yes. Misty is free and open source under the GNU AGPL-3.0, with every feature included, on Misty Cloud or your own server. Pro adds storage for $10 a month and Max for $20. AI is never charged for, because it runs on your own models. See <Link to="/pricing">pricing</Link>.</>,
   },
   {
     q: "Do I need an account?",

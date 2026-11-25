@@ -1,11 +1,10 @@
-import { CreditCard, Rocket, Shield, UserCircle, type LucideIcon } from "lucide-react";
+import { CreditCard, Shield, UserCircle, type LucideIcon } from "lucide-react";
 
-export type Tab = "account" | "subscription" | "boosts" | "privacy";
+export type Tab = "account" | "subscription" | "privacy";
 
 export const TABS: readonly { id: Tab; label: string; icon: LucideIcon }[] = [
   { id: "account", label: "Profile", icon: UserCircle },
   { id: "subscription", label: "Subscription", icon: CreditCard },
-  { id: "boosts", label: "Boosts", icon: Rocket },
   { id: "privacy", label: "Privacy", icon: Shield },
 ];
 

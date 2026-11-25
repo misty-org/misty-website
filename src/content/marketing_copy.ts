@@ -16,7 +16,7 @@ export const marketingCopy: MarketingCopy = {
   metadata: {
     home: "Chat, files and apps, all shared between you, your friends and your agents.",
     pricing:
-      "Misty is free with every feature, on Misty Cloud or a server you run yourself. Misty+ adds storage for $8 a month, Boosts raise a space's level for $2 each, and AI is never charged for.",
+      "Misty is free with every feature, on Misty Cloud or a server you run yourself. Pro adds storage for $10 a month and Max for $20, and AI is never charged for.",
     docs:
       "How Misty works, how to run your own Misty server, how to connect the app, and which models you can use.",
     download:
